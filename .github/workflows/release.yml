@@ -78,7 +78,7 @@ jobs:
         run: npm run licenses:notice
 
       - name: Upload Release Artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: release-${{ needs.validate.outputs.version }}
           path: |
