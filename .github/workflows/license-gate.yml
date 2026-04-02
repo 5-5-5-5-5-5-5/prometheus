@@ -7,7 +7,7 @@ on:
       - "package.json"
       - "package-lock.json"
   push:
-    branches: [main, develop]
+    branches: [main, dev]
     paths:
       - "package.json"
       - "package-lock.json"

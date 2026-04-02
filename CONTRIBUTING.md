@@ -36,7 +36,7 @@ git clone https://github.com/SEU-USUARIO/sensei.git
 cd sensei
 
 # Adicione o repositório upstream como remote
-git remote add upstream https://github.com/md-555/sensei.git
+git remote add upstream https://github.com/5-5-5-0-5-5-5/sensei.git
 ```
 
 ### 2. Instalação de Dependências
@@ -77,8 +77,8 @@ git checkout -b feature/sua-contribuicao-descritiva
 
 ### 🐛 Correção de Bugs
 
-- Issues com label [`bug`](https://github.com/md-555/sensei/labels/bug)
-- Issues com label [`good-first-issue`](https://github.com/md-555/sensei/labels/good-first-issue)
+- Issues com label [`bug`](https://github.com/5-5-5-0-5-5-5/sensei/labels/bug)
+- Issues com label [`good-first-issue`](https://github.com/5-5-5-0-5-5-5/sensei/labels/good-first-issue)
 - Priorize bugs críticos e regressions
 
 ### ✨ Novas Funcionalidades

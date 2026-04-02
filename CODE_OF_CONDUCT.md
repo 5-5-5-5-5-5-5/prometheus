@@ -46,7 +46,7 @@ Este Código de Conduta se aplica dentro de todos os espaços do projeto, e tamb
 Casos de comportamento abusivo, de assédio ou inaceitável podem ser relatados aos líderes da comunidade responsáveis pela execução através dos seguintes canais:
 
 - Abertura de uma issue no repositório GitHub com o título "[REPORT] Violação do Código de Conduta"
-- Envio de e-mail para: [ossmoralus@gmail.com(mailto:ossmoralus@gmail.com)
+- Envio de e-mail para: [5-5-5-0-5-5-5@gmail.com](mailto:5-5-5-0-5-5-5@gmail.com)
 - Contato direto com os mantenedores através dos perfis oficiais
 
 Todas as reclamações serão analisadas e investigadas de forma rápida e justa. Os líderes da comunidade são obrigados a respeitar a privacidade e a segurança do relator de qualquer incidente.

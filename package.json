@@ -3,7 +3,7 @@
   "version": "0.4.0",
   "type": "module",
   "description": "CLI modular para análise, diagnóstico e manutenção de projetos JavaScript/TypeScript",
-  "author": "Italo C Lopes",
+  "author": "5 5 5",
   "license": "MIT",
   "bin": {
     "sensei": "./dist/bin/index.js"
@@ -76,12 +76,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/md-555/sensei.git"
+    "url": "git+https://github.com/5-5-5-0-5-5-5/sensei.git"
   },
   "bugs": {
-    "url": "https://github.com/md-555/sensei/issues"
+    "url": "https://github.com/5-5-5-0-5-5-5/sensei/issues"
   },
-  "homepage": "https://github.com/md-555/sensei#readme",
+  "homepage": "https://github.com/5-5-5-0-5-5-5/sensei#readme",
   "files": [
     "dist",
     "README.md",

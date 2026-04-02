@@ -1,486 +1,302 @@
-# ⚙️ Guia de Configuração do Sensei
+# Guia de Configuração
 
-> Proveniência e Autoria: Este documento integra o projeto Sensei (licença MIT).
-> Última atualização: 15 de janeiro de 2026
+Este guia reflete a configuração observável no projeto atual, com base em [`sensei.config.json`](../../sensei.config.json), nos comandos da CLI e nas variáveis lidas durante a execução.
 
----
+## Arquivo Principal
 
-## 📋 Índice
+O arquivo de configuração versionado do projeto é:
 
-1. [Visão Geral](#visão-geral)
-2. [Arquivos de Configuração](#arquivos-de-configuração)
-3. [Variáveis de Ambiente](#variáveis-de-ambiente)
-4. [Filtros Include/Exclude](#filtros-includeexclude)
-5. [Configuração Granular de Regras](#configuração-granular-de-regras)
-6. [Configuração por Ambiente](#configuração-por-ambiente)
-7. [Exemplos Práticos](#exemplos-práticos)
-8. [Troubleshooting](#troubleshooting)
+- [`sensei.config.json`](../../sensei.config.json)
 
----
+Estrutura atual resumida:
 
-## Visão Geral
+```json
+{
+  "INCLUDE_EXCLUDE_RULES": {},
+  "nameConventions": {},
+  "ESTRUTURA_ARQUIVOS_RAIZ_MAX": 60,
+  "REPO_ARQUETIPO": "cli-modular",
+  "STRUCTURE_AUTO_FIX": false,
+  "REPORT_EXPORT_ENABLED": true,
+  "coverageGate": {},
+  "languageSupport": {},
+  "suppress": {},
+  "rules": {},
+  "testPatterns": {},
+  "fastMode": {}
+}
+```
 
-O Sensei oferece um sistema flexível de configuração que permite adaptar a análise às necessidades específicas de cada projeto. A configuração pode ser feita através de:
+## Blocos de Configuração
 
-- **Arquivos JSON** - Configuração persistente e versionável
-- **Variáveis de ambiente** - Configuração dinâmica para CI/CD
-- **Flags de linha de comando** - Configuração por execução
+### `INCLUDE_EXCLUDE_RULES`
 
-### Ordem de Precedência
+Controla exclusões globais de arquivos.
 
-A ordem de precedência (maior para menor prioridade):
-
-1. **Argumentos CLI** - `--timeout 60`
-2. **Variáveis de ambiente** - `SENSEI_ANALISE_TIMEOUT_POR_ANALISTA_MS=60000`
-3. **sensei.config.json** - Configuração local do projeto
-4. **sensei.config.safe.json** - Configurações de segurança
-5. **Valores padrão do código** - Defaults internos
-
----
-
-## Arquivos de Configuração
-
-### 1. sensei.config.json (Principal)
-
-Arquivo de configuração principal na raiz do projeto.
+Exemplo atual:
 
 ```json
 {
   "INCLUDE_EXCLUDE_RULES": {
     "globalExcludeGlob": [
       "node_modules/**",
-      "**/node_modules/**",
       "dist/**",
       "coverage/**",
-      "build/**",
+      "scripts/**",
+      ".deprecados/**",
       "**/*.log",
-      "**/*.lock"
-    ],
-    "globalInclude": [],
-    "globalExclude": [],
-    "dirRules": {}
-  },
-  "ESTRUTURA_ARQUIVOS_RAIZ_MAX": 50,
-  "REPO_ARQUETIPO": "meu-projeto",
-  "STRUCTURE_AUTO_FIX": false,
-  "REPORT_EXPORT_ENABLED": false,
+      ".git/**"
+    ]
+  }
+}
+```
+
+Uso prático:
+
+- reduzir ruído no `diagnosticar`
+- evitar análise sobre artefatos gerados
+- complementar com `--include` e `--exclude` na CLI
+
+### `nameConventions`
+
+Define nomes esperados de diretórios principais do repositório.
+
+Exemplo:
+
+```json
+{
+  "nameConventions": {
+    "srcDirectory": "src",
+    "distDirectory": "dist",
+    "docsDirectory": "docs",
+    "typesDirectory": "types",
+    "testsDirectory": "tests",
+    "configDirectory": "config"
+  }
+}
+```
+
+### `coverageGate`
+
+Mantém limiares de cobertura declarados no projeto.
+
+Exemplo atual:
+
+```json
+{
   "coverageGate": {
-    "lines": 80,
-    "functions": 80,
-    "branches": 75,
-    "statements": 80
-  },
-  "TYPE_SAFETY": {
-    "enabled": true,
-    "strictMode": false,
-    "autoFixMode": "conservative",
-    "skipLegitimate": true,
-    "confidenceThreshold": 95
+    "lines": 90,
+    "functions": 90,
+    "branches": 90,
+    "statements": 90
   }
 }
 ```
 
-#### Campos Principais
+### `languageSupport`
 
-| Campo                         | Tipo    | Descrição                                |
-| ----------------------------- | ------- | ---------------------------------------- |
-| `INCLUDE_EXCLUDE_RULES`       | object  | Controle de arquivos incluídos/excluídos |
-| `ESTRUTURA_ARQUIVOS_RAIZ_MAX` | number  | Máximo de arquivos raiz exibidos         |
-| `REPO_ARQUETIPO`              | string  | Arquétipo base do repositório            |
-| `STRUCTURE_AUTO_FIX`          | boolean | Ativa correções automáticas estruturais  |
-| `REPORT_EXPORT_ENABLED`       | boolean | Permite export de relatórios             |
-| `coverageGate`                | object  | Limiares de cobertura de testes          |
-| `TYPE_SAFETY`                 | object  | Configurações do sistema de type-safety  |
+Ativa ou desativa suporte heurístico por linguagem.
 
-### 2. sensei.config.safe.json (Modo Seguro)
-
-Configurações de segurança para ambientes de produção e CI/CD.
+Exemplo atual:
 
 ```json
 {
-  "SAFE_MODE": true,
-  "ALLOW_PLUGINS": false,
-  "ALLOW_EXEC": false,
-  "ALLOW_MUTATE_FS": false,
-  "STRUCTURE_AUTO_FIX": false,
-  "productionDefaults": {
-    "NODE_ENV": "production",
-    "WORKER_POOL_MAX_WORKERS": 2,
-    "REPORT_SILENCE_LOGS": true
+  "languageSupport": {
+    "javascript": { "enabled": true },
+    "typescript": { "enabled": true },
+    "html": { "enabled": true },
+    "css": { "enabled": true },
+    "xml": { "enabled": true },
+    "php": { "enabled": true },
+    "python": { "enabled": true }
   }
 }
 ```
 
-| Campo             | Valor Recomendado | Descrição                   |
-| ----------------- | ----------------- | --------------------------- |
-| `SAFE_MODE`       | `true`            | Ativa modo seguro global    |
-| `ALLOW_PLUGINS`   | `false`           | Desabilita plugins externos |
-| `ALLOW_EXEC`      | `false`           | Impede execução de comandos |
-| `ALLOW_MUTATE_FS` | `false`           | Bloqueia modificações no FS |
+### `suppress`
 
-### 3. sensei.repo.arquetipo.json (Perfil do Repositório)
+Suprime regras específicas no projeto.
 
-Define a estrutura esperada do projeto para análise de conformidade.
+Exemplo atual:
 
 ```json
 {
-  "arquetipoOficial": "cli-modular",
-  "descricao": "Projeto personalizado",
-  "estruturaPersonalizada": {
-    "arquivosChave": ["package.json", "README.md", "tsconfig.json"],
-    "diretorios": ["src", "tests", "docs"],
-    "padroesNomenclatura": {
-      "tests": "*.test.*"
-    }
+  "suppress": {
+    "rules": [
+      "weak-crypto",
+      "magic-constants",
+      "unhandled-async",
+      "missing-jsdoc",
+      "poor-naming",
+      "problemas-teste"
+    ],
+    "severity": {},
+    "paths": []
   }
 }
 ```
 
----
+### `rules`
 
-## Variáveis de Ambiente
+Customiza severidade e exceções por regra.
 
-### Exemplo de arquivo .env
-
-```bash
-# === Performance e Paralelização ===
-WORKER_POOL_ENABLED=true
-WORKER_POOL_MAX_WORKERS=auto
-WORKER_POOL_BATCH_SIZE=10
-WORKER_POOL_TIMEOUT_MS=30000
-
-# === Tempo de Análise ===
-SENSEI_ANALISE_TIMEOUT_POR_ANALISTA_MS=30000
-
-# === Pontuação Adaptativa ===
-PONTUACAO_MODO=padrao       # padrao | conservador | permissivo
-PONTUACAO_FATOR_ESCALA=1.5
-
-# === Logs e Saída ===
-LOG_LEVEL=info              # debug | info | warn | error
-LOG_ESTRUTURADO=false
-
-# === Type Safety ===
-TYPE_SAFETY_ENABLED=true
-TYPE_SAFETY_CONFIDENCE_THRESHOLD=95
-AUTO_FIX_MODE=conservative
-
-# === Segurança ===
-SAFE_MODE=false
-ALLOW_PLUGINS=false
-
-# === Cobertura (CI) ===
-COVERAGE_GATE_LINES=90
-COVERAGE_GATE_FUNCTIONS=90
-COVERAGE_GATE_BRANCHES=90
-COVERAGE_GATE_STATEMENTS=90
-```
-
----
-
-## Filtros Include/Exclude
-
-### Regras Fundamentais
-
-1. **`--include` TEM PRIORIDADE** sobre `--exclude` e ignores padrão
-2. **Múltiplos `--include`** funcionam como OR (união)
-3. **Padrões glob** seguem sintaxe [minimatch](https://github.com/isaacs/minimatch)
-
-### Sintaxe de Padrões Glob
-
-| Padrão  | Significado                  | Exemplo                                     |
-| ------- | ---------------------------- | ------------------------------------------- |
-| `*`     | Qualquer coisa (exceto /)    | `*.js` = todos .js no nível atual           |
-| `**`    | Qualquer coisa (incluindo /) | `src/**/*.ts` = todos .ts em src/ recursivo |
-| `?`     | Um caractere                 | `file?.ts` = file1.ts, fileA.ts             |
-| `[abc]` | Um de a, b ou c              | `file[123].ts` = file1.ts, file2.ts         |
-| `{a,b}` | Alternativas                 | `*.{js,ts}` = .js ou .ts                    |
-
-### Exemplos de Filtros CLI
-
-```bash
-# Apenas TypeScript
-sensei diagnosticar --include "**/*.ts" --include "**/*.tsx"
-
-# Apenas código fonte
-sensei diagnosticar --include "src/**"
-
-# Excluir testes
-sensei diagnosticar --exclude "**/*.test.*" --exclude "**/*.spec.*"
-
-# Código TypeScript sem testes
-sensei diagnosticar \
-  --include "src/**/*.ts" \
-  --exclude "**/*.test.ts"
-
-# Monorepo - apenas um pacote
-sensei diagnosticar --include "packages/my-package/**"
-```
-
-### Configuração de Filtros via JSON
-
-```json
-{
-  "INCLUDE_EXCLUDE_RULES": {
-    "globalExcludeGlob": ["node_modules/**", "dist/**", "coverage/**"],
-    "globalInclude": ["src/**/*.ts", "lib/**/*.ts"],
-    "globalExclude": ["**/*.test.ts"],
-    "dirRules": {
-      "src/legacy": {
-        "exclude": ["**/*"]
-      },
-      "src/experimental": {
-        "include": ["*.ts"],
-        "exclude": ["*.test.ts"]
-      }
-    }
-  }
-}
-```
-
----
-
-## Configuração Granular de Regras
-
-O sistema permite configurar regras de análise de forma granular:
-
-### Estrutura de Regras
+Exemplo atual:
 
 ```json
 {
   "rules": {
     "tipo-inseguro": {
       "severity": "error",
-      "exclude": ["test/**/*", "**/*.test.ts"]
+      "exclude": [
+        "test/**/*",
+        "tests/**/*",
+        "**/*.test.ts",
+        "**/*.spec.ts",
+        "**/__tests__/**"
+      ]
     },
     "arquivo-orfao": {
       "severity": "warning",
       "allowTestFiles": true
+    },
+    "dependencia-circular": {
+      "severity": "error",
+      "showFullPath": true
     }
-  },
-  "testPatterns": {
-    "files": ["**/*.test.*", "**/*.spec.*", "test/**/*"],
-    "allowAnyType": true,
-    "excludeFromOrphanCheck": true
   }
 }
 ```
 
-### Propriedades de Regra
+### `testPatterns`
 
-| Propriedade      | Tipo     | Descrição                                 |
-| ---------------- | -------- | ----------------------------------------- |
-| `severity`       | string   | `"error"`, `"warning"`, `"info"`, `"off"` |
-| `exclude`        | string[] | Padrões glob para excluir                 |
-| `allowTestFiles` | boolean  | Excluir automaticamente arquivos de teste |
+Centraliza padrões de teste usados pelo projeto.
 
-### Casos de Uso
-
-**Permitir `any` em testes:**
+Exemplo:
 
 ```json
 {
   "testPatterns": {
+    "files": [
+      "**/*.test.*",
+      "**/*.spec.*",
+      "test/**/*",
+      "tests/**/*",
+      "**/__tests__/**"
+    ],
+    "excludeFromOrphanCheck": true,
     "allowAnyType": true
-  },
-  "rules": {
-    "tipo-inseguro": {
-      "exclude": ["**/*.test.ts", "tests/**/*"]
-    }
   }
 }
 ```
 
-**Desabilitar regra para código legado:**
+### `fastMode`
+
+Define o recorte de analistas para execuções rápidas.
+
+Exemplo atual:
 
 ```json
 {
-  "rules": {
-    "tipo-inseguro": {
-      "exclude": ["src/legacy/**"]
-    }
+  "fastMode": {
+    "analystsInclude": [
+      "detector-dependencias",
+      "detector-estrutura",
+      "arquitetura",
+      "seguranca",
+      "detector-tipos-inseguros",
+      "todo-comments",
+      "analista-padroes-uso"
+    ],
+    "analystsExclude": [
+      "documentacao",
+      "duplicacoes",
+      "xml",
+      "performance",
+      "qualidade-testes"
+    ]
   }
 }
 ```
 
-**Severidade reduzida:**
+## Precedência
 
-```json
-{
-  "rules": {
-    "arquivo-orfao": {
-      "severity": "warning"
-    }
-  }
-}
-```
+Na prática, a ordem de aplicação é:
 
----
+1. flags da CLI
+2. variáveis de ambiente reconhecidas na execução
+3. `sensei.config.json`
+4. defaults internos do código
 
-## Configuração por Ambiente
-
-### Desenvolvimento Local
+Exemplos:
 
 ```bash
-# .env.development
-NODE_ENV=development
-DEBUG=true
-LOG_LEVEL=debug
-WORKER_POOL_MAX_WORKERS=2
-PONTUACAO_MODO=permissivo
-SAFE_MODE=false
+sensei diagnosticar --include "src/**" --exclude "**/*.test.ts"
+sensei formatar --engine auto --write
+sensei fix-types --confidence 90
 ```
 
-### CI/CD
+## Variáveis de Ambiente Observáveis
+
+As variáveis abaixo aparecem diretamente no código atual e afetam execução ou comportamento:
+
+- `NODE_ENV`
+- `SENSEI_DEBUG`
+- `SENSEI_ANALISE_TIMEOUT_POR_ANALISTA_MS`
+- `WORKER_POOL_MAX_WORKERS`
+- `GUARDIAN_IGNORE_PATTERNS`
+- `VITEST`
+
+Exemplos:
 
 ```bash
-# .env.ci
-NODE_ENV=production
-SAFE_MODE=true
-REPORT_SILENCE_LOGS=true
-LOG_ESTRUTURADO=true
-WORKER_POOL_MAX_WORKERS=4
-COVERAGE_GATE_LINES=90
-COVERAGE_GATE_FUNCTIONS=90
+SENSEI_DEBUG=true sensei diagnosticar --full
+SENSEI_ANALISE_TIMEOUT_POR_ANALISTA_MS=60000 sensei diagnosticar
+WORKER_POOL_MAX_WORKERS=4 sensei diagnosticar --fast
 ```
 
-### Produção
+## Filtros por CLI
+
+Além do arquivo JSON, o fluxo atual depende fortemente de filtros em linha de comando:
 
 ```bash
-# .env.production
-NODE_ENV=production
-SAFE_MODE=true
-ALLOW_PLUGINS=false
-ALLOW_EXEC=false
-REPORT_SILENCE_LOGS=true
+sensei diagnosticar --include "src/**"
+sensei diagnosticar --exclude "**/*.spec.ts"
+sensei diagnosticar --exclude-tests
+sensei formatar --include "src/**/*.ts"
+sensei fix-types --exclude "src/legacy/**"
 ```
 
----
+Regra prática:
 
-## Exemplos Práticos
+- use `sensei.config.json` para defaults do repositório
+- use flags para escopo da execução atual
 
-### Setup Inicial do Projeto
-
-```bash
-# 1. Criar configuração básica
-cat > sensei.config.json << 'EOF'
-{
-  "INCLUDE_EXCLUDE_RULES": {
-    "globalExcludeGlob": ["node_modules/**", "dist/**", "coverage/**"]
-  },
-  "REPO_ARQUETIPO": "meu-projeto",
-  "coverageGate": {
-    "lines": 80,
-    "functions": 80,
-    "branches": 75,
-    "statements": 80
-  }
-}
-EOF
-
-# 2. Criar .env
-cat > .env << 'EOF'
-WORKER_POOL_MAX_WORKERS=auto
-LOG_LEVEL=info
-TYPE_SAFETY_ENABLED=true
-EOF
-
-# 3. Adicionar ao .gitignore
-echo ".env" >> .gitignore
-```
-
-### Configuração para Monorepo
+## Exemplo Enxuto
 
 ```json
 {
   "INCLUDE_EXCLUDE_RULES": {
-    "globalInclude": ["packages/*/src/**/*.ts"],
-    "globalExclude": ["packages/*/dist/**"],
-    "dirRules": {
-      "packages/legacy": {
-        "exclude": ["**/*"]
-      }
-    }
-  }
-}
-```
-
-### Configuração para TypeScript Strict
-
-```json
-{
-  "TYPE_SAFETY": {
-    "enabled": true,
-    "strictMode": true,
-    "autoFixMode": "conservative",
-    "skipLegitimate": true,
-    "confidenceThreshold": 100
+    "globalExcludeGlob": [
+      "node_modules/**",
+      "dist/**",
+      "coverage/**"
+    ]
   },
-  "filtroConfig": {
-    "tipo-inseguro-any": {
-      "habilitado": true,
-      "nivelPadrao": "erro"
-    }
+  "REPO_ARQUETIPO": "cli-modular",
+  "REPORT_EXPORT_ENABLED": true,
+  "languageSupport": {
+    "javascript": { "enabled": true },
+    "typescript": { "enabled": true }
   }
 }
 ```
 
----
+## Validação Operacional
 
-## Troubleshooting
-
-### Configuração Não Carregada
+Depois de ajustar a configuração, valide com:
 
 ```bash
-# Verificar se arquivo existe
-ls -la sensei.config.json
-
-# Validar JSON
-cat sensei.config.json | jq .
-
-# Debug de carregamento
-DEBUG=config sensei diagnosticar
+sensei diagnosticar --full
+sensei diagnosticar --json --export
+sensei guardian --diff
 ```
-
-### Conflito de Variáveis
-
-```bash
-# Listar variáveis atuais
-env | grep SENSEI
-
-# Limpar todas env vars do Sensei
-unset $(env | grep SENSEI | cut -d= -f1)
-```
-
-### Debug de Filtros
-
-```bash
-# Visualizar arquivos que serão analisados
-sensei diagnosticar --verbose --scan-only
-
-# Modo debug mostra decisões de filtro
-sensei diagnosticar --debug --scan-only
-```
-
-### Armadilhas Comuns
-
-```bash
-# ❌ Errado - apenas nível raiz de src/
-sensei diagnosticar --include "src/*.ts"
-
-# ✅ Correto - recursivo em src/
-sensei diagnosticar --include "src/**/*.ts"
-```
-
----
-
-## Referências
-
-- [Guia de Comandos](GUIA-COMANDOS.md)
-- [Sistema de Type Safety](../arquitetura/TYPE-SAFETY.md)
-- [Segurança e Robustez](../arquitetura/SEGURANCA.md)
-
----
-
-**Última atualização:** 29 de dezembro de 2025
-**Versão:** 2.0.0

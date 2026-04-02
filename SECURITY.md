@@ -13,9 +13,9 @@ Se você descobrir uma vulnerabilidade de segurança no Sensei, por favor, repor
 
 ### Métodos de Relato:
 
-- **GitHub Security Advisories**: Use o [formulário de advisories do GitHub](https://github.com/md-555/sensei/security/advisories/new) para relatar vulnerabilidades de forma privada.
+- **GitHub Security Advisories**: Use o [formulário de advisories do GitHub](https://github.com/5-5-5-0-5-5-5/sensei/security/advisories/new) para relatar vulnerabilidades de forma privada.
 - **Issues Privadas**: Abra uma issue no repositório com o rótulo `security` e marque como privada, se possível. Evite incluir detalhes sensíveis no título ou descrição inicial.
-- **E-mail**: Contate o mantenedor diretamente via e-mail (consulte o perfil do GitHub de [@ossmoralus](https://github.com/md-555) para obter o e-mail).
+- **E-mail**: Contate o mantenedor diretamente via e-mail (consulte o perfil do GitHub de [@5-5-5-0-5-5-5](https://github.com/5-5-5-0-5-5-5) para obter o e-mail).
 
 Forneça o máximo de detalhes possível, incluindo:
 
@@ -45,7 +45,7 @@ Apenas a versão mais recente e as versões ativas de manutenção recebem corre
 
 Para questões relacionadas à segurança, entre em contato:
 
-- **Mantenedor**: Italo C Lopes ([@md-555](https://github.com/md-555))
-- **Repositório**: [https://github.com/md-555/sensei](https://github.com/md-555/sensei)
+- **Mantenedor**: 5 5 5 ([@5-5-5-0-5-5-5](https://github.com/5-5-5-0-5-5-5))
+- **Repositório**: [https://github.com/5-5-5-0-5-5-5/sensei](https://github.com/5-5-5-0-5-5-5/sensei)
 
 Obrigado por ajudar a manter o Sensei seguro!

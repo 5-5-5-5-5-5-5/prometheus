@@ -2,6 +2,7 @@
 *.local
 .vscode
 .legados
+.codex
 scripts/
 
 # Node modules
