@@ -1,0 +1,138 @@
+{
+  "name": "sensei",
+  "version": "0.4.0",
+  "type": "module",
+  "description": "CLI modular para análise, diagnóstico e manutenção de projetos JavaScript/TypeScript",
+  "author": "Italo C Lopes",
+  "license": "MIT",
+  "bin": {
+    "sensei": "./dist/bin/index.js"
+  },
+  "exports": {
+    ".": "./dist/bin/index.js"
+  },
+  "engines": {
+    "node": ">=24.12.0"
+  },
+  "scripts": {
+    "prebuild": "rimraf dist bin",
+    "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
+    "test": "vitest run --passWithNoTests",
+    "perf:baseline": "sensei perf snapshot --baseline || true",
+    "perf:compare": "sensei perf compare",
+    "perf:gate": "sensei perf compare --threshold 0",
+    "prepare": "npm run build",
+    "start": "sensei",
+    "diagnosticar": "sensei diagnosticar",
+    "diagnosticar:json": "sensei diagnosticar --json",
+    "formatar": "sensei formatar --write",
+    "reestruturar": "sensei reestruturar",
+    "podar": "sensei podar",
+    "fix-types": "sensei fix-types",
+    "name": "sensei names",
+    "rename": "sensei renames",
+    "scan": "sensei licencas scan",
+    "scan:root": "sensei licencas scan --root .",
+    "notices": "sensei licencas notices generate",
+    "adn": "sensei licencas disclaimer add",
+    "verify": "sensei licencas disclaimer verify",
+    "guardian": "sensei guardian",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint --ext .ts src",
+    "validate-aliases": "npm run typecheck && echo 'Aliases válidos!'",
+    "licenses:list": "license-checker-rseidelsohn --production --csv",
+    "licenses:json": "mkdir -p .sensei && license-checker-rseidelsohn --production --json > .sensei/licenses.json",
+    "licenses:auditar": "node scripts/auditar-licencas.mjs",
+    "licenses:notice": "node scripts/generate-notices.mjs",
+    "headers:spdx": "node scripts/add-spdx-headers.mjs",
+    "branch:protect:check": "node scripts/config-branch-protection.mjs check",
+    "branch:protect": "node scripts/config-branch-protection.mjs apply",
+    "md:fix-fences": "node scripts/fix-md-fences.mjs",
+    "md:add-disclaimer": "node scripts/add-disclaimer-md.js",
+    "md:verify-disclaimer": "node scripts/verificar-disclaimer-md.js",
+    "sync-aliases": "node scripts/sync-aliases.mjs",
+    "security:deps": "npm audit",
+    "security:lint": "eslint src --ext .ts",
+    "md:scan": "sensei diagnosticar --include '**/*.md'"
+  },
+  "keywords": [
+    "cli",
+    "code-analysis",
+    "linter",
+    "static-analysis",
+    "typescript",
+    "javascript",
+    "developer-tools",
+    "code-quality",
+    "architecture",
+    "refactoring",
+    "monorepo",
+    "project-analysis",
+    "technical-debt",
+    "devtools",
+    "maintenance",
+    "diagnostics",
+    "code-health"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/md-555/sensei.git"
+  },
+  "bugs": {
+    "url": "https://github.com/md-555/sensei/issues"
+  },
+  "homepage": "https://github.com/md-555/sensei#readme",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE*",
+    "THIRD-PARTY-NOTICES.txt",
+    "scripts/check-node-version.js"
+  ],
+  "dependencies": {
+    "@babel/parser": "^7.29.2",
+    "@babel/traverse": "^7.29.0",
+    "@babel/types": "^7.29.0",
+    "chalk": "^5.6.2",
+    "commander": "^14.0.3",
+    "css-tree": "^3.2.1",
+    "fast-xml-parser": "^5.5.9",
+    "htmlparser2": "^12.0.0",
+    "java-parser": "^3.0.1",
+    "micromatch": "^4.0.8",
+    "ora": "^9.3.0",
+    "p-limit": "^7.3.0",
+    "sensei": "file:sensei-0.4.0.tgz",
+    "xxhashjs": "^0.2.2"
+  },
+  "devDependencies": {
+    "@types/babel__generator": "^7.27.0",
+    "@types/babel__traverse": "^7.28.0",
+    "@types/micromatch": "^4.0.10",
+    "@types/node": "^25.5.0",
+    "@typescript-eslint/eslint-plugin": "^8.58.0",
+    "@typescript-eslint/parser": "^8.58.0",
+    "@vitest/coverage-istanbul": "^4.1.2",
+    "@vitest/coverage-v8": "^4.1.2",
+    "eslint": "^9.39.4",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-unused-imports": "^4.4.1",
+    "husky": "^9.1.7",
+    "license-checker-rseidelsohn": "^4.4.2",
+    "lint-staged": "^16.4.0",
+    "rimraf": "^6.1.3",
+    "tsc-alias": "^1.8.16",
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.2"
+  },
+  "overrides": {
+    "lodash": "4.17.23",
+    "lodash-es": "4.17.23"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix"
+    ]
+  }
+}

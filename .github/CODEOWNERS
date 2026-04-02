@@ -1,0 +1,50 @@
+# SPDX-License-Identifier: MIT
+
+# Code owners for Sensei
+
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owner for everything
+
+- @5-5-5-0-0
+
+# Core source code
+
+/src/ @5-5-5-0-0
+
+# CLI commands
+
+/src/cli/ @5-5-5-0-0
+
+# Analysts and detectors
+
+/src/analistas/ @5-5-5-0-0
+
+# Guardian integrity system
+
+/src/guardian/ @5-5-5-0-0
+
+# Tests
+
+/tests/ @5-5-5-0-0
+
+# Documentation
+
+/docs/ @5-5-5-0-0
+\*.md @5-5-5-0-0
+
+# Configuration files
+
+/_.json @5-5-5-0-0
+/_.ts @5-5-5-0-0
+/\*.js @5-5-5-0-0
+
+# CI/CD workflows
+
+/.github/ @5-5-5-0-0
+
+# Security-sensitive files
+
+/SECURITY.md @5-5-5-0-0
+/.github/workflows/release.yml @5-5-5-0-0
+/.github/workflows/compliance.yml @5-5-5-0-0
