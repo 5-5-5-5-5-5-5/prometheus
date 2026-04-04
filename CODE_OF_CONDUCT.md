@@ -1,9 +1,7 @@
-> **Proveniência e Autoria**: Este documento integra o projeto Sensei (licença MIT).
-> Nada aqui implica cessão de direitos morais/autorais.
-> Conteúdos de terceiros não licenciados de forma compatível não devem ser incluídos.
-> Referências a materiais externos devem ser linkadas e reescritas com palavras próprias.
+---
+Proveniência e Autoria: Este documento integra o projeto Sensei (licença MIT-0).
+---
 
-Arquivo gerado/atualizado automaticamente via `scripts/add-disclaimer-md.js`.
 
 # Código de Conduta do Projeto Sensei
 
@@ -86,3 +84,4 @@ Este Código de Conduta é adaptado do [Contributor Covenant][homepage], versão
 Diretrizes de Impacto na Comunidade foram inspiradas na [escalada de aplicação do código de conduta da Mozilla](https://github.com/mozilla/diversity).
 
 [homepage]: https://www.contributor-covenant.org
+

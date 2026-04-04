@@ -9,6 +9,7 @@ import {
   gerarRelatorioPodaMarkdown,
 } from '@relatorios/relatorio-poda.js';
 import { lerEstado, salvarEstado } from '@shared/persistence/persistencia.js';
+import { ensureDir } from '@shared/helpers/fs.js';
 import pLimit from 'p-limit';
 
 import type {
@@ -151,7 +152,7 @@ async function moverArquivos(
         const dest = path.join(base, DIR_ABANDONADOS, pend.arquivo);
         try {
           const fs = await import('node:fs');
-          await fs.promises.mkdir(path.dirname(dest), { recursive: true });
+          await ensureDir(dest);
           await fs.promises.rename(src, dest);
           historico.push({
             arquivo: pend.arquivo,

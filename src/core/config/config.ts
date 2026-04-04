@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 import path from 'node:path';
 
+import { LIMITES_PADRAO } from './limites.js';
 import { lerArquivoTexto } from '@shared/persistence/persistencia.js';
 
 import type { IncludeExcludeConfig } from '@';
@@ -98,14 +99,14 @@ export const configPadrao = {
   VIGIA_TOP_N: 10,
   ANALISE_LIMITES: {
     FUNCOES_LONGAS: {
-      MAX_LINHAS: 30,
-      MAX_PARAMETROS: 4,
-      MAX_ANINHAMENTO: 3
+      MAX_LINHAS: LIMITES_PADRAO.CODIGO.MAX_LINHAS_FUNCAO,
+      MAX_PARAMETROS: LIMITES_PADRAO.CODIGO.MAX_PARAMETROS_FUNCAO,
+      MAX_ANINHAMENTO: LIMITES_PADRAO.CODIGO.MAX_ANINHAMENTO_IF
     },
     CODIGO_FRAGIL: {
-      MAX_LINHAS_FUNCAO: 30,
-      MAX_PARAMETROS: 4,
-      MAX_NESTED_CALLBACKS: 2
+      MAX_LINHAS_FUNCAO: LIMITES_PADRAO.CODIGO.MAX_LINHAS_FUNCAO,
+      MAX_PARAMETROS: LIMITES_PADRAO.CODIGO.MAX_PARAMETROS_FUNCAO,
+      MAX_NESTED_CALLBACKS: LIMITES_PADRAO.CODIGO.MAX_NESTED_CALLBACKS
     }
   },
   ANALISE_AST_CACHE_ENABLED: true,
@@ -232,7 +233,7 @@ export const config: typeof configPadrao & {
     to: unknown;
     fonte: string;
   }>;
-} = JSON.parse(JSON.stringify(configPadrao));
+} = structuredClone(configPadrao);
 type DiffRegistro = {
   from: unknown;
   to: unknown;

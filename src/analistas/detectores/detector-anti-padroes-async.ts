@@ -29,10 +29,14 @@ const visitorAsync: Visitor<AsyncVisitorState> = {
       }
 
       // Checar se a função está marcada como async ou retorna Promise (heurística baseada em nomes comuns ou inferência raso)
-      // Como não temos tipo estático total na AST generica, podemos flagar se chamadas conhecidas não forem aguardadas.
-      // Exemplo heuristico: métodos começando com fetch, load, save, getAsync
       const funcName = getFunctionName(callee);
       if (funcName && isProbablyAsync(funcName)) {
+        // Se temos definição local, respeite se é async ou não
+        const binding = path.scope.getBinding(funcName);
+        if (binding && binding.path.isFunction() && !(binding.path.node as any).async) {
+          return; // Definida como síncrona localmente
+        }
+
         const occurrences: Msg[] = state.ocorrencias || [];
         occurrences.push({
           tipo: 'floating-promise',
@@ -83,9 +87,12 @@ function getFunctionName(node: Node): string | null {
 }
 
 function isProbablyAsync(name: string): boolean {
-  if (/^(fetch|request|query|mutate|save|load)[A-Z]/.test(name)) return true;
+  // Nomes que são quase certamente assíncronos
+  if (/^(fetch|request|axios|prisma|db\.|database\.|api\.)/.test(name)) return true;
   if (/Async$/.test(name)) return true;
-  if (['fetch', 'axios', 'insert', 'update', 'delete', 'query'].includes(name)) return true;
+  if (['fetch', 'axios', 'insert', 'mutate', 'query', 'save', 'load'].includes(name)) return true;
+
+  // Nomes comuns que podem ser síncronos (removidos: update, delete)
   return false;
 }
 

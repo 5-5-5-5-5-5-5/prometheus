@@ -4,6 +4,7 @@ import type { Node } from '@babel/types';
 import { DetectorAgregadosMensagens } from '@core/messages/analistas/detector-agregados-messages.js';
 import { detectarContextoProjeto } from '@shared/contexto-projeto.js';
 
+import { agruparPor } from '@shared/helpers/agrupar.js';
 import type { Analista, Ocorrencia, ProblemaTeste } from '@';
 import { criarOcorrencia } from '@';
 
@@ -36,7 +37,7 @@ export const analistaQualidadeTestes: Analista = {
       const ocorrencias: Ocorrencia[] = [];
 
       // Agrupar por severidade
-      const porSeveridade = agruparPorSeveridade(problemas);
+      const porSeveridade = agruparPor(problemas, p => p.severidade);
       for (const [severidade, items] of Object.entries(porSeveridade)) {
         if (items.length > 0) {
           const nivel = mapearSeveridadeParaNivel(severidade as ProblemaTeste['severidade']);
@@ -265,15 +266,6 @@ function analisarCodigoFonteComAST(ast: NodePath<Node>, problemas: ProblemaTeste
   } catch {
     // Ignorar erros de traverse
   }
-}
-function agruparPorSeveridade(problemas: ProblemaTeste[]): Record<string, ProblemaTeste[]> {
-  return problemas.reduce((acc, problema) => {
-    if (!acc[problema.severidade]) {
-      acc[problema.severidade] = [];
-    }
-    acc[problema.severidade].push(problema);
-    return acc;
-  }, {} as Record<string, ProblemaTeste[]>);
 }
 function mapearSeveridadeParaNivel(severidade: ProblemaTeste['severidade']): 'info' | 'aviso' | 'erro' {
   switch (severidade) {

@@ -6,6 +6,7 @@
 
 import { CliExibirMolduraMensagens } from '@core/messages/cli/cli-exibir-moldura-messages.js';
 import { log } from '@core/messages/index.js';
+import { normalizePath } from '@shared/helpers/path.js';
 
 /**
  * Exibe uma moldura formatada com fallback seguro
@@ -61,8 +62,8 @@ export function exibirMolduraPlano(movimentos: Array<{
   const linhas: string[] = [CliExibirMolduraMensagens.planoCabecalhoLinha1, CliExibirMolduraMensagens.planoCabecalhoLinha2];
   const primeiros = movimentos.slice(0, limite);
   for (const m of primeiros) {
-    const de = String(m.de).replace(/\\/g, '/').slice(0, 34).padEnd(34, ' ');
-    const para = String(m.para).replace(/\\/g, '/').slice(0, 39);
+    const de = normalizePath(String(m.de)).slice(0, 34).padEnd(34, ' ');
+    const para = normalizePath(String(m.para)).slice(0, 39);
     linhas.push(`${de}  → ${para}`);
   }
   if (movimentos.length > limite) {
@@ -89,7 +90,7 @@ export function exibirMolduraConflitos(conflitos: Array<{
   const linhas: string[] = [CliExibirMolduraMensagens.conflitosCabecalhoLinha1, CliExibirMolduraMensagens.conflitosCabecalhoLinha2];
   const primeiros = conflitos.slice(0, limite);
   for (const c of primeiros) {
-    const alvo = String((c && typeof c === 'object' && 'alvo' in c && c.alvo) ?? JSON.stringify(c)).replace(/\\/g, '/').slice(0, 31).padEnd(31, ' ');
+    const alvo = normalizePath(String((c && typeof c === 'object' && 'alvo' in c && c.alvo) ?? JSON.stringify(c))).slice(0, 31).padEnd(31, ' ');
     const motivo = String((c && typeof c === 'object' && 'motivo' in c && c.motivo) ?? '-').slice(0, 30);
     linhas.push(`${alvo}   ${motivo}`);
   }

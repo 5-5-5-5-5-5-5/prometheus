@@ -1,8 +1,5 @@
 ---
-Proveniência e Autoria: Este documento integra o projeto Sensei (licença MIT).
-Nada aqui implica cessão de direitos morais/autorais.
-Conteúdos de terceiros não licenciados de forma compatível não devem ser incluídos.
-Referências a materiais externos devem ser linkadas e reescritas com palavras próprias.
+Proveniência e Autoria: Este documento integra o projeto Sensei (licença MIT-0).
 ---
 
 
@@ -132,4 +129,5 @@ O projeto usa por padrão:
 
 - Consulte o [Guia de Comandos](./GUIA-COMANDOS.md) para todos os subcomandos.
 - Consulte o [Guia de Configuração](./GUIA-CONFIGURACAO.md) para ajustar regras, filtros e suporte de linguagem.
+
 

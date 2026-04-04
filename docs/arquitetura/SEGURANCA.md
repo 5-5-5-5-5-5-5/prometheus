@@ -1,7 +1,9 @@
-# 🛡️ Robustez e Segurança do Sensei
+---
+Proveniência e Autoria: Este documento integra o projeto Sensei (licença MIT-0).
+---
 
-> Proveniência e Autoria: Este documento integra o projeto Sensei (licença MIT).
-> Última atualização: 29 de novembro de 2025
+
+# 🛡️ Robustez e Segurança do Sensei
 
 ## 📋 Visão Geral
 
@@ -512,3 +514,4 @@ describe("timeout de analistas", () => {
 
 **Última atualização:** 29 de novembro de 2025
 **Versão:** 1.0.0
+

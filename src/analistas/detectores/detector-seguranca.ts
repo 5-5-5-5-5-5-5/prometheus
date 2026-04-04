@@ -6,6 +6,9 @@ import { traverse } from '@core/config/traverse.js';
 import { DetectorAgregadosMensagens } from '@core/messages/analistas/detector-agregados-messages.js';
 import { detectarContextoProjeto } from '@shared/contexto-projeto.js';
 import { detectarSegredosHardcoded } from '@shared/helpers/detectores-comuns.js';
+import { agruparPor } from '@shared/helpers/agrupar.js';
+import { splitLines } from '@shared/helpers/lines.js';
+import { criarErroAnalise } from '@shared/helpers/ocorrencias.js';
 import { filtrarOcorrenciasSuprimidas } from '@shared/helpers/suppressao.js';
 
 import type { Analista, Ocorrencia, ProblemaSeguranca } from '@';
@@ -39,7 +42,7 @@ export const analistaSeguranca: Analista = {
       const ocorrencias: Ocorrencia[] = [];
 
       // Agrupar por severidade
-      const porSeveridade = agruparPorSeveridade(problemas);
+      const porSeveridade = agruparPor(problemas, p => p.severidade);
       for (const [severidade, items] of Object.entries(porSeveridade)) {
         if (items.length > 0) {
           const nivel = mapearSeveridadeParaNivel(severidade as ProblemaSeguranca['severidade']);
@@ -60,18 +63,12 @@ export const analistaSeguranca: Analista = {
       // Aplicar supressões inline antes de retornar
       return filtrarOcorrenciasSuprimidas(ocorrencias, 'seguranca', src);
     } catch (erro) {
-      return [criarOcorrencia({
-        tipo: 'ERRO_ANALISE',
-        nivel: 'aviso',
-        mensagem: DetectorAgregadosMensagens.erroAnalisarSeguranca(erro),
-        relPath,
-        linha: 1
-      })];
+      return [criarErroAnalise(relPath, DetectorAgregadosMensagens.erroAnalisarSeguranca(erro))];
     }
   }
 };
 function detectarPadroesPerigosos(src: string, relPath: string, problemas: ProblemaSeguranca[]): void {
-  const linhas = src.split('\n');
+  const linhas = splitLines(src);
   function isLikelyHttpHeaderName(value: string): boolean {
     const headerValue = String(value || '').trim();
     if (!headerValue) return false;
@@ -188,13 +185,13 @@ function detectarPadroesPerigosos(src: string, relPath: string, problemas: Probl
     }
 
     // Insecure cookie settings
-    if (/\.cookie\s*\(/.test(linha) && !/httpOnly\s*:\s*true/.test(linha)) {
+    if (/\.cookie\s*\(/.test(linha) && !/req\.cookie|request\.cookie/.test(linha) && !/httpOnly\s*:\s*true/.test(linha)) {
       problemas.push({
         tipo: 'insecure-cookie',
-        descricao: 'Cookie configurado sem a flag httpOnly',
+        descricao: 'Cookie configurado sem a flag httpOnly (detectado via padrão de texto)',
         severidade: 'media',
         linha: numeroLinha,
-        sugestao: 'Sempre use httpOnly: true para evitar acesso via JavaScript (XSS)'
+        sugestao: 'Sempre use httpOnly: true para evitar acesso via JavaScript (XSS). Se estiver usando configuração multi-line, o detector AST cuidará da validação.'
       });
     }
 
@@ -312,7 +309,7 @@ function detectarPadroesPerigosos(src: string, relPath: string, problemas: Probl
  * Detecta uso de async/await sem tratamento adequado de erro
  */
 function detectarAsyncSemTryCatch(src: string, problemas: ProblemaSeguranca[]): void {
-  const lines = src.split('\n');
+  const lines = splitLines(src);
 
   // Contexto global do arquivo para detectar padrões do Next.js
   const isNextJsServerComponent = /^['"](use server|use client)['"]/.test(src.trim()) || /export\s+(default\s+)?async\s+function/.test(src);
@@ -373,9 +370,13 @@ function detectarProblemasAST(ast: NodePath<Node>, problemas: ProblemaSeguranca[
           });
         }
       },
-      // Detectar setTimeout/setInterval com strings
+      // Detectar chamadas perigosas
       CallExpression(path: NodePath<CallExpression>) {
-        if (path.node.callee.type === 'Identifier' && ['setTimeout', 'setInterval'].includes(path.node.callee.name) && path.node.arguments[0]?.type === 'StringLiteral') {
+        const callee = path.node.callee;
+        const args = path.node.arguments;
+
+        // 1. setTimeout/setInterval com strings
+        if (callee.type === 'Identifier' && ['setTimeout', 'setInterval'].includes(callee.name) && args[0]?.type === 'StringLiteral') {
           problemas.push({
             tipo: 'eval-usage',
             descricao: 'setTimeout/setInterval com string executa código dinâmico',
@@ -384,20 +385,73 @@ function detectarProblemasAST(ast: NodePath<Node>, problemas: ProblemaSeguranca[
             sugestao: 'Use função ao invés de string'
           });
         }
+
+        // 2. res.cookie() sem httpOnly
+        if (callee.type === 'MemberExpression' &&
+            callee.property.type === 'Identifier' &&
+            callee.property.name === 'cookie') {
+
+          const object = callee.object;
+          const isRequest = object.type === 'Identifier' && (object.name === 'req' || object.name === 'request');
+
+          if (!isRequest) {
+            // Heurística: assume-se que se não é req/request, é provável ser a resposta (res)
+            const options = args[2];
+            let hasHttpOnly = false;
+            if (options && options.type === 'ObjectExpression') {
+              hasHttpOnly = options.properties.some(prop =>
+                prop.type === 'ObjectProperty' &&
+                prop.key.type === 'Identifier' &&
+                prop.key.name === 'httpOnly' &&
+                (prop.value.type === 'BooleanLiteral' ? prop.value.value === true : false)
+              );
+            }
+
+            if (!hasHttpOnly) {
+              problemas.push({
+                tipo: 'insecure-cookie',
+                descricao: 'Cookie configurado sem a flag httpOnly',
+                severidade: 'media',
+                linha: path.node.loc?.start.line || 0,
+                sugestao: 'Sempre use httpOnly: true para evitar acesso via JavaScript (XSS)'
+              });
+            }
+          }
+        }
+
+        // 3. SQL Injection (básico via AST)
+        if (callee.type === 'MemberExpression' &&
+            callee.property.type === 'Identifier' &&
+            ['query', 'execute', 'raw', 'queryRaw', 'executeRaw'].includes(callee.property.name)) {
+
+          const firstArg = args[0];
+          // Se o primeiro argumento é uma TemplateLiteral com expressões ou uma BinaryExpression (+)
+          const isUnsafe = firstArg && (
+            (firstArg.type === 'TemplateLiteral' && firstArg.expressions.length > 0) ||
+            (firstArg.type === 'BinaryExpression' && firstArg.operator === '+')
+          );
+
+          if (isUnsafe) {
+            // Verificar se parece usar parâmetros de qualquer forma
+            const code = firstArg.type === 'TemplateLiteral' ? firstArg.quasis.map(q => q.value.raw).join('') : '';
+            const temParametros = /['"`].*(\?|\$\d|:\w+).*['"`]/.test(code);
+
+            if (!temParametros) {
+              problemas.push({
+                tipo: 'sql-injection',
+                descricao: 'Possível SQL Injection detectada via AST (concatenação no primeiro argumento)',
+                severidade: 'critica',
+                linha: path.node.loc?.start.line || 0,
+                sugestao: 'Use queries parametrizadas ao invés de concatenar strings ou template literals com variáveis'
+              });
+            }
+          }
+        }
       }
     });
   } catch {
     // Ignorar erros de traverse para não quebrar a análise
   }
-}
-function agruparPorSeveridade(problemas: ProblemaSeguranca[]): Record<string, ProblemaSeguranca[]> {
-  return problemas.reduce((acc, problema) => {
-    if (!acc[problema.severidade]) {
-      acc[problema.severidade] = [];
-    }
-    acc[problema.severidade].push(problema);
-    return acc;
-  }, {} as Record<string, ProblemaSeguranca[]>);
 }
 function mapearSeveridadeParaNivel(severidade: ProblemaSeguranca['severidade']): 'info' | 'aviso' | 'erro' {
   switch (severidade) {

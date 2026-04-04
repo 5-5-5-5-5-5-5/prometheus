@@ -4,6 +4,8 @@ import path from 'node:path';
 
 import { config } from '@core/config/config.js';
 import { log } from '@core/messages/index.js';
+import { ensureDir } from '@shared/helpers/fs.js';
+import { normalizePath } from '@shared/helpers/path.js';
 import micromatch from 'micromatch';
 
 import type { FileEntry } from '@';
@@ -42,9 +44,7 @@ export async function scanSystemIntegrity(fileEntries: FileEntry[], options?: {
   baselineModificado?: boolean;
 }> {
   const agora = new Date().toISOString();
-  await fs.mkdir(path.dirname(LINHA_BASE_CAMINHO), {
-    recursive: true
-  });
+  await ensureDir(LINHA_BASE_CAMINHO);
   let baselineAnterior: Snapshot | null = null;
   try {
     baselineAnterior = await carregarBaseline();
@@ -57,7 +57,7 @@ export async function scanSystemIntegrity(fileEntries: FileEntry[], options?: {
   // Filtra entradas conforme padrões ignorados específicos do Guardian
   const ignorados = config.INCLUDE_EXCLUDE_RULES && config.INCLUDE_EXCLUDE_RULES.globalExcludeGlob || [];
   const filtrados = fileEntries.filter(f => {
-    const rel = f.relPath.replace(/\\/g, '/');
+    const rel = normalizePath(f.relPath);
     return !micromatch.isMatch(rel, ignorados);
   });
   if (config.DEV_MODE) {
@@ -137,12 +137,10 @@ export async function acceptNewBaseline(fileEntries: FileEntry[]): Promise<void>
   // Preferir configuração dinâmica quando disponível
   const ignoradosDyn = config.INCLUDE_EXCLUDE_RULES && config.INCLUDE_EXCLUDE_RULES.globalExcludeGlob || ignorados;
   const filtrados = fileEntries.filter(f => {
-    const rel = f.relPath.replace(/\\/g, '/');
+    const rel = normalizePath(f.relPath);
     return !micromatch.isMatch(rel, ignoradosDyn);
   });
   const snapshotAtual = construirSnapshot(filtrados);
-  await fs.mkdir(path.dirname(LINHA_BASE_CAMINHO), {
-    recursive: true
-  });
+  await ensureDir(LINHA_BASE_CAMINHO);
   await salvarBaseline(snapshotAtual);
 }

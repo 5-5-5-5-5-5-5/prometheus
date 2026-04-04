@@ -14,7 +14,8 @@ import { categorizarUnknown, extractVariableName, isAnyInGenericFunction, isInSt
 import type { NodePath } from '@babel/traverse';
 import type { Node } from '@babel/types';
 import { config } from '@core/config/config.js';
-import { shouldSuppressOccurrence } from '@shared/helpers/rule-config.js';
+import { isTestArquivo, shouldSuppressOccurrence } from '@shared/helpers/rule-config.js';
+import { splitLines } from '@shared/helpers/lines.js';
 
 import type { Analista, Ocorrencia } from '@';
 
@@ -33,16 +34,12 @@ const ANALISTA: Analista = {
     // Ver: docs/reports/DEBUG-TYPE-SAFETY-DETECTOR-2025-11-03.md
     const src = srcParam.replace(/\r\n/g, '\n');
 
-    // Ignorar arquivos de teste quando permitido na configuração
-    const isTestArquivo = (p: string) => {
-      const rel = p.replace(/\\/g, '/').toLowerCase();
-      return /(^|\/)tests?(\/|\.)/.test(rel) || /__tests__/.test(rel) || /\.(test|spec)\.(ts|tsx|js|jsx)$/.test(rel);
-    };
     const allowAnyInTests = Boolean((config as unknown as {
       testPadroes?: {
         allowAnyType?: boolean;
       };
     }).testPadroes?.allowAnyType);
+
     if (allowAnyInTests && isTestArquivo(fullCaminho || relPath)) {
       return ocorrencias;
     }
@@ -75,8 +72,8 @@ const ANALISTA: Analista = {
 
       // Extrair nome da variável e contexto
       const varNome = extractVariableName(anyMatch, src);
-      const linha = src.substring(0, position).split('\n').length;
-      const lineContext = src.split('\n')[linha - 1]?.trim() || '';
+      const linha = splitLines(src.substring(0, position)).length;
+      const lineContext = splitLines(src)[linha - 1]?.trim() || '';
 
       // Análise contextual para any
       let mensagem = '';
@@ -140,8 +137,8 @@ const ANALISTA: Analista = {
       const position = matchFraco.index || 0;
       if (isInStringOrComment(src, position)) continue;
 
-      const linha = src.substring(0, position).split('\n').length;
-      const lineContext = src.split('\n')[linha - 1]?.trim() || '';
+      const linha = splitLines(src.substring(0, position)).length;
+      const lineContext = splitLines(src)[linha - 1]?.trim() || '';
       const tipo = matchFraco[1];
 
       const mensagem = `Tipo '${tipo}' é muito permissivo e pouco útil para type safety`;
@@ -169,8 +166,8 @@ const ANALISTA: Analista = {
       if (isInStringOrComment(src, position)) {
         continue;
       }
-      const linha = src.substring(0, position).split('\n').length;
-      const lineContext = src.split('\n')[linha - 1]?.trim() || '';
+      const linha = splitLines(src.substring(0, position)).length;
+      const lineContext = splitLines(src)[linha - 1]?.trim() || '';
 
       // Extrair contexto da expressão
       const after = src.substring(position, Math.min(src.length, position + 50));
@@ -214,8 +211,8 @@ const ANALISTA: Analista = {
       if (isInStringOrComment(src, position)) {
         continue;
       }
-      const linha = src.substring(0, position).split('\n').length;
-      const lineContext = src.split('\n')[linha - 1]?.trim() || '';
+      const linha = splitLines(src.substring(0, position)).length;
+      const lineContext = splitLines(src)[linha - 1]?.trim() || '';
       const mensagemCompleta = "Type casting '<any>' (sintaxe legada) desabilita type safety | 💡 Use sintaxe 'as' moderna e tipo específico | 🚨 CRÍTICO: Migrar para sintaxe moderna e tipo correto | 🔍 Revisão manual obrigatória";
 
       // Verifica se regra está suprimida para este arquivo
@@ -249,8 +246,8 @@ const ANALISTA: Analista = {
       }
 
       // Análise contextual inteligente
-      const linha = src.substring(0, position).split('\n').length;
-      const lineContext = src.split('\n')[linha - 1]?.trim() || '';
+      const linha = splitLines(src.substring(0, position)).length;
+      const lineContext = splitLines(src)[linha - 1]?.trim() || '';
       const categorizacao = categorizarUnknown(src, fullCaminho || relPath, lineContext);
 
       // Extrair nome da variável

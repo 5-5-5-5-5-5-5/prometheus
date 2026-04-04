@@ -5,6 +5,7 @@ import { traverse } from '@core/config/traverse.js';
 import { DetectorConstrucoesSintaticasMensagens } from '@core/messages/analistas/detector-construcoes-sintaticas-messages.js';
 
 import { type Analista, type ConstrucaoSintatica, criarOcorrencia, type Ocorrencia } from '@';
+import { criarErroAnalise } from '@shared/helpers/ocorrencias.js';
 
 export const analistaConstrucoesSintaticas: Analista = {
   nome: 'construcoes-sintaticas',
@@ -152,12 +153,7 @@ export const analistaConstrucoesSintaticas: Analista = {
         linha: 1
       })];
     } catch (erro) {
-      return [criarOcorrencia({
-        tipo: 'ERRO_ANALISE',
-        nivel: 'aviso',
-        mensagem: DetectorConstrucoesSintaticasMensagens.erroAnalisar(erro),
-        relPath
-      })];
+      return [criarErroAnalise(relPath, DetectorConstrucoesSintaticasMensagens.erroAnalisar(erro))];
     }
   }
 };

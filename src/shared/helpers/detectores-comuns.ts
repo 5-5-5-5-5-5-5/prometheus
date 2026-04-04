@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+import { LIMITES_PADRAO } from '@core/config/limites.js';
 import { isContextoDocumentacao } from '@shared/contexto-projeto.js';
 
 import type { ResultadoSegredo } from '../../types/analistas/detectores.js';
@@ -62,7 +63,7 @@ export function detectarSegredosHardcoded(src: string, relPath: string): Resulta
       if (padroesNomenclatura.some(p => valor.toLowerCase().includes(p.toLowerCase()))) return;
 
       const entropia = calcularEntropia(valor);
-      const temAltaEntropia = entropia > 3.5;
+      const temAltaEntropia = entropia > LIMITES_PADRAO.SEGURANCA.ENTROPIA_SHANNON_ALTA;
 
       // Heurística de confiança: tokens longos com alta entropia tendem a ser reais
       if (valor.length > 20 && temAltaEntropia) {

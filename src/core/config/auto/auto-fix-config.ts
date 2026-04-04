@@ -4,13 +4,15 @@
 // Merged auto-fix configuration: keep compatibility with both older
 // AUTO_FIX_CONFIG_DEFAULTS and the newer DEFAULT_AUTO_FIX_CONFIG surface.
 
+import { LIMITES_PADRAO } from '../limites.js';
+
 import type { AutoFixConfig } from '@';
 
 // Re-exporta o tipo para compatibilidade
 export type { AutoFixConfig };
 export const PADRAO_AUTO_CORRECAO_CONFIGURACAO: AutoFixConfig = {
   mode: 'balanced',
-  minConfidence: 75,
+  minConfidence: LIMITES_PADRAO.AUTO_FIX.CONFIANCA_MINIMA,
   allowedCategories: ['security', 'performance', 'style', 'documentation'],
   excludePadroes: ['**/node_modules/**', '**/dist/**', '**/build/**', '**/coverage/**', '**/*.min.js', '**/src/nucleo/configuracao/**', '**/src/shared/persistence/**', '**/operario-estrutura.ts', '**/corretor-estrutura.ts', '**/mapa-reversao.ts', '**/quick-fix-registry.ts', '**/config.ts', '**/executor.ts'],
   excludeFunctionPatterns: ['planejar', 'aplicar', 'corrigir', 'executar', 'processar', 'salvar.*Estado', 'ler.*Estado', 'gerarPlano.*', 'detectar.*', 'analisar.*', 'validar.*'],

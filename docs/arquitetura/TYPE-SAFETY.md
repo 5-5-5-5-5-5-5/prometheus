@@ -1,7 +1,9 @@
-# 🔒 Sistema de Type Safety do Sensei
+---
+Proveniência e Autoria: Este documento integra o projeto Sensei (licença MIT-0).
+---
 
-> Proveniência e Autoria: Este documento integra o projeto Sensei (licença MIT).
-> Documentação atualizada em: 29 de novembro de 2025
+
+# 🔒 Sistema de Type Safety do Sensei
 
 ## 📋 Visão Geral
 
@@ -577,3 +579,4 @@ Para contribuir com melhorias no sistema de type-safety:
 **Última atualização:** 29 de novembro de 2025
 **Versão do documento:** 1.0.0
 **Autor:** Equipe Sensei
+

@@ -1,9 +1,9 @@
-# Sistema de Relatório de Erros Detalhado
+---
+Proveniência e Autoria: Este documento integra o projeto Sensei (licença MIT-0).
+---
 
-> Proveniência e Autoria: Este documento integra o projeto Sensei (licença MIT).
-> Nada aqui implica cessão de direitos morais/autorais.
-> Conteúdos de terceiros não licenciados de forma compatível não devem ser incluídos.
-> Referências a materiais externos devem ser linkadas e reescritas com palavras próprias.
+
+# Sistema de Relatório de Erros Detalhado
 
 ## Visão Geral
 
@@ -357,3 +357,4 @@ Para melhorar o sistema de erros:
 **Implementado em:** Fase 6
 **Problema resolvido:** #7 do feedback - Mensagens de erro genéricas
 **Status:** ✅ Completo e testado
+

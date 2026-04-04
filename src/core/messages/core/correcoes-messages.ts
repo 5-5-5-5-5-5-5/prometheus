@@ -18,7 +18,7 @@ export const MENSAGENS_CORRECAO_TIPOS = {
   // Títulos e descrições de quick fixes
   fixAny: {
     title: 'Substituir any por tipos seguros',
-    description: `Analisa uso de any e infere/cria tipos corretos em ${getTypesDirectoryDisplay()}`
+    get description() { return `Analisa uso de any e infere/cria tipos corretos em ${getTypesDirectoryDisplay()}` }
   },
   fixUnknown: {
     title: 'Substituir unknown por tipos específicos',

@@ -4,6 +4,7 @@ import path from 'node:path';
 import { config } from '@core/config/config.js';
 import { log } from '@core/messages/index.js';
 import { lerEstado, salvarEstado } from '@shared/persistence/persistencia.js';
+import { ensureDir } from '@shared/helpers/fs.js';
 
 import type { FileEntry, RegistroIntegridade } from '@';
 
@@ -28,7 +29,7 @@ export async function salvarRegistros(
   }
 
   const fs = await import('node:fs');
-  await fs.promises.mkdir(path.dirname(destino), { recursive: true });
+  await ensureDir(destino);
   await salvarEstado(destino, registros);
   log.sucesso(`??? Registro de integridade salvo em: ${destino}`);
 }

@@ -7,6 +7,8 @@
  */
 import path from 'node:path';
 
+import { normalizePath } from '@shared/helpers/path.js';
+
 import type { ImportReescrito } from '@';
 
 // Re-exporta o tipo para compatibilidade
@@ -16,7 +18,7 @@ export type { ImportReescrito };
  * Normaliza o caminho de import para uma chave consistente (POSIX).
  */
 export function normalizarPosix(p: string): string {
-  return path.posix.normalize((p || '').replace(/\\/g, '/'));
+  return path.posix.normalize(normalizePath(p || ''));
 }
 
 /**
@@ -110,7 +112,7 @@ export function reescreverImports(conteudo: string, arquivoDe: string, arquivoPa
 } {
   // Suporta import/export from e require simples
   const padrao = /(import\s+[^'";]+from\s*['"]([^'"\n]+)['"]\s*;?|export\s+\*?\s*from\s*['"]([^'"\n]+)['"];?|require\(\s*['"]([^'"\n]+)['"]\s*\))/g;
-  const norm = (p: string) => path.posix.normalize(p.replace(/\\/g, '/'));
+  const norm = (p: string) => path.posix.normalize(normalizePath(p));
   const baseDe = path.posix.dirname(norm(arquivoDe));
   const basePara = path.posix.dirname(norm(arquivoPara));
   // raízes calculadas anteriormente não são usadas; mantemos somente baseDe/basePara

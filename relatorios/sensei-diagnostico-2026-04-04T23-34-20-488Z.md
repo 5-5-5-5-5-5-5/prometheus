@@ -4,8 +4,8 @@
 
 ## [STATS] Estatísticas do Relatório
 
-- **Total de ocorrências**: 503
-- **Arquivos afetados**: 197
+- **Total de ocorrências**: 470
+- **Arquivos afetados**: 195
 - **Problemas prioritários**: 2
 - **Problemas agrupados**: 2
 
@@ -13,15 +13,15 @@
 
 ### ?? Arquivos Sem Testes
 
-**Quantidade**: 95 ocorrências
-**Resumo**: 95 ocorrências detectadas
+**Quantidade**: 90 ocorrências
+**Resumo**: 90 ocorrências detectadas
 **Ação Sugerida**: Implementar testes unitários para melhorar cobertura
 
 **Exemplos:**
-- `src/analistas/arquitetos/analista-estrutura.ts:1`: Problemas de teste (alta): missing-tests
+- `src/analistas/arquitetos/analista-estrutura.ts:1`: Problemas de teste (baixa): missing-tests
 - `src/analistas/arquitetos/diagnostico-projeto.ts:1`: Problemas de teste (baixa): missing-tests
-- `src/analistas/corrections/auto-fix-engine.ts:1`: Problemas de teste (alta): missing-tests
-- ... e mais 92 ocorrências
+- `src/analistas/corrections/mapa-reversao.ts:1`: Problemas de teste (baixa): missing-tests
+- ... e mais 87 ocorrências
 
 ### ?? Documentação Ausente
 
@@ -39,4 +39,4 @@
 
 ?? **Dica**: Para ver todos os detalhes, gere o relatório completo em modo normal.
 
-**Relatório gerado em**: 02/04/2026, 00:15:58
+**Relatório gerado em**: 04/04/2026, 20:34:20

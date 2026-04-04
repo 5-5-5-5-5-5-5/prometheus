@@ -11,6 +11,7 @@
 
 import path from 'node:path';
 
+import { normalizePath } from '@shared/helpers/path.js';
 import { lerEstado } from '@shared/persistence/persistencia.js';
 
 import type { NomeacaoEstilo, OpcoesEstrategista, ParseNomeResultado } from '@';
@@ -73,18 +74,15 @@ export const PRESETS: Record<string, Partial<typeof PADRAO_OPCOES> & {
     }
   }
 };
-export function normalizarRel(p: string): string {
-  return p.replace(/\\/g, '/');
-}
 export function deveIgnorar(rel: string, ignorar: string[]): boolean {
-  const norm = normalizarRel(rel);
+  const norm = normalizePath(rel);
   // Ignora se qualquer padrão ocorrer em qualquer nível do caminho (não apenas na raiz)
   // Exemplos suportados:
   //  - 'node_modules' casa 'node_modules/...', 'a/b/node_modules/...'
   //  - 'dist' casa 'dist/...', 'x/dist/...'
   //  - padrões com subpastas ('coverage/html') ainda casam por substring segmentada
   return ignorar.some(raw => {
-    const pat = normalizarRel(raw);
+    const pat = normalizePath(raw);
     if (!pat) return false;
     if (norm === pat) return true;
     if (norm.startsWith(`${pat}/`)) return true;
@@ -146,7 +144,7 @@ export function destinoPara(relPath: string, raizCodigo: string, criarSubpastasP
   destinoDir: string | null;
   motivo?: string;
 } {
-  const baseNome = path.posix.basename(normalizarRel(relPath));
+  const baseNome = path.posix.basename(normalizePath(relPath));
   const {
     entidade,
     categoria
@@ -177,6 +175,9 @@ export function destinoPara(relPath: string, raizCodigo: string, criarSubpastasP
     destinoDir: path.posix.join(raizCodigo, pastaFinal),
     motivo: `categoria ${categoria} organizada por camada`
   };
+}
+export function normalizarRel(relPath: string): string {
+  return normalizePath(relPath);
 }
 export async function carregarConfigEstrategia(baseDir: string, overrides?: OpcoesEstrategista): Promise<Required<typeof PADRAO_OPCOES>> {
   const caminho = path.join(baseDir, '.sensei', 'estrutura.json');

@@ -9,6 +9,7 @@
  */
 
 import { config } from '@core/config/config.js';
+import { normalizePath } from '@shared/helpers/path.js';
 import { minimatch } from 'minimatch';
 
 import type { RuleConfig, RuleOverride } from '@';
@@ -70,17 +71,31 @@ export function isRuleSuppressed(ruleName: string, fileCaminho: string): boolean
   }
   return false;
 } /**
-  * Verifica se um arquivo é de teste baseado nos padrões configurados
-  */
-function isTestArquivo(fileCaminho: string, configData: {
-  testPadroes?: {
-    files?: string[];
-  };
-}): boolean {
-  const testPadroes = configData.testPadroes?.files || ['**/*.test.*', '**/*.spec.*', 'test/**/*', 'tests/**/*', '**/__tests__/**'];
-  return testPadroes.some(pattern => minimatch(fileCaminho, pattern, {
-    dot: true
-  }));
+ * Verifica se um arquivo é de teste baseado nos padrões configurados
+ */
+export function isTestArquivo(
+  fileCaminho: string,
+  configData?: {
+    testPadroes?: {
+      files?: string[];
+    };
+  }
+): boolean {
+  const data = configData || (config as unknown as any);
+  const testPadroes =
+    data.testPadroes?.files || [
+      '**/*.test.*',
+      '**/*.spec.*',
+      'test/**/*',
+      'tests/**/*',
+      '**/__tests__/**',
+    ];
+  const normalizedCaminho = fileCaminho.replace(/\\/g, '/');
+  return testPadroes.some((pattern: string) =>
+    minimatch(normalizedCaminho, pattern, {
+      dot: true,
+    }),
+  );
 }
 
 /**

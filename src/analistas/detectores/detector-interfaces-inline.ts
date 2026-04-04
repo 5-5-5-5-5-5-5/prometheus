@@ -15,6 +15,7 @@ import type { Node } from '@babel/types';
 import { getTypesDirectoryDisplay, isInsideTypesDirectory } from '@core/config/conventions.js';
 import { DetectorInterfacesInlineMensagens } from '@core/messages/analistas/detector-interfaces-inline-messages.js';
 
+import { isInStringOrComment } from '@shared/helpers/context-utils.js';
 import type { Analista, InterfaceInlineDetection, Ocorrencia } from '@';
 
 import type { DuplicateEntry,InlineTypeOccurrence } from '../../types/analistas/detectores.js';
@@ -499,33 +500,4 @@ function extractTypeDefinition(afterEquals: string): string | null {
   return null;
 }
 
-/**
- * Verifica se posição está dentro de string ou comentário
- */
-function isInStringOrComment(src: string, position: number): boolean {
-  const beforePosition = src.substring(0, position);
-  const linha = beforePosition.split('\n').pop() || '';
-
-  // Comentário de linha
-  if (linha.includes('//')) {
-    const commentPos = linha.indexOf('//');
-    const posInLine = beforePosition.length - beforePosition.lastIndexOf('\n') - 1;
-    if (posInLine > commentPos) {
-      return true;
-    }
-  }
-
-  // Comentário de bloco
-  const lastBlockCommentInicio = beforePosition.lastIndexOf('/*');
-  const lastBlockCommentFim = beforePosition.lastIndexOf('*/');
-  if (lastBlockCommentInicio > lastBlockCommentFim) {
-    return true;
-  }
-
-  // String (aspas simples ou duplas)
-  const singleQuotes = (beforePosition.match(/'/g) || []).length;
-  const doubleQuotes = (beforePosition.match(/"/g) || []).length;
-  const backticks = (beforePosition.match(/`/g) || []).length;
-  return singleQuotes % 2 !== 0 || doubleQuotes % 2 !== 0 || backticks % 2 !== 0;
-}
 export default ANALISTA;

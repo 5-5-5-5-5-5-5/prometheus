@@ -3,6 +3,7 @@
  * License normalizer ported from original JS implementation.
  */
 
+import { log } from '@core/messages/index.js';
 import type { SpdxCorrectFn,SpdxParseFn } from '../types/core/config/config.js';
 
 export type { SpdxCorrectFn,SpdxParseFn };
@@ -18,14 +19,21 @@ async function tryLoadSpdx(): Promise<void> {
   spdxLoaded = true;
   try {
     spdxParse = (await import('spdx-expression-parse')).default || (await import('spdx-expression-parse'));
-  } catch {}
+  } catch (err) {
+    log.debug('Erro ao carregar spdx-expression-parse: ' + (err instanceof Error ? err.message : String(err)));
+  }
   try {
     spdxCorrect = (await import('spdx-correct')).default || (await import('spdx-correct'));
-  } catch {}
+  } catch (err) {
+    log.debug('Erro ao carregar spdx-correct: ' + (err instanceof Error ? err.message : String(err)));
+  }
   try {
     spdxLicencaList = (await import('spdx-license-list')).default || (await import('spdx-license-list'));
-  } catch {}
+  } catch (err) {
+    log.debug('Erro ao carregar spdx-license-list: ' + (err instanceof Error ? err.message : String(err)));
+  }
 }
+
 function fallbackNormalize(raw: unknown): string {
   if (raw == null) return 'UNKNOWN';
   if (Array.isArray(raw)) return raw.map(r => fallbackNormalize(r)).join(' OR ');
@@ -52,7 +60,9 @@ function fallbackNormalize(raw: unknown): string {
     let token = p.trim();
     try {
       if (spdxCorrect) token = spdxCorrect(token) ?? token;
-    } catch {}
+    } catch (err) {
+      log.debug('Erro ao executar spdxCorrect em fallbackNormalize: ' + (err instanceof Error ? err.message : String(err)));
+    }
     try {
       if (spdxLicencaList) {
         const id = String(token).trim();
@@ -62,7 +72,9 @@ function fallbackNormalize(raw: unknown): string {
         const matchByNome = Object.entries(spdxLicencaList).find(([, v]) => v && typeof v === 'object' && v.name && String(v.name).toLowerCase() === String(token).toLowerCase());
         if (matchByNome) return matchByNome[0];
       }
-    } catch {}
+    } catch (err) {
+      log.debug('Erro ao buscar na spdxLicencaList em fallbackNormalize: ' + (err instanceof Error ? err.message : String(err)));
+    }
     return token;
   }).join(' ');
 }
@@ -82,7 +94,8 @@ export async function normalizeLicense(raw: unknown): Promise<string> {
       if (Array.isArray(raw)) return raw.map(r => awaitOrFallback(r)).join(' OR ');
       if (typeof raw === 'object') raw = (raw as Record<string, unknown>).type ?? raw;
       return awaitOrFallback(raw);
-    } catch {
+    } catch (err) {
+      log.debug('Erro ao normalizar licença complexa em normalizeLicense: ' + (err instanceof Error ? err.message : String(err)));
       // fallthrough
     }
   }
@@ -95,12 +108,14 @@ export async function normalizeLicense(raw: unknown): Promise<string> {
         try {
           const parsed = spdxParse(corrected);
           return astToExpression(parsed);
-        } catch {
+        } catch (err) {
+          log.debug('Erro ao parsear licença corrigida em awaitOrFallback: ' + (err instanceof Error ? err.message : String(err)));
           return corrected;
         }
       }
       return corrected;
-    } catch {
+    } catch (err) {
+      log.debug('Erro em awaitOrFallback (' + String(value) + '): ' + (err instanceof Error ? err.message : String(err)));
       return fallbackNormalize(value);
     }
   }

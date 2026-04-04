@@ -1,9 +1,9 @@
-# Guia de Centralização de Mensagens e Logs
+---
+Proveniência e Autoria: Este documento integra o projeto Sensei (licença MIT-0).
+---
 
-> Proveniência e Autoria: Este documento integra o projeto Sensei (licença MIT).
-> Nada aqui implica cessão de direitos morais/autorais.
-> Conteúdos de terceiros não licenciados de forma compatível não devem ser incluídos.
-> Referências a materiais externos devem ser linkadas e reescritas com palavras próprias.
+
+# Guia de Centralização de Mensagens e Logs
 
 Este guia documenta como produzir saídas consistentes no Sensei usando os módulos centralizados de mensagens e a API de logs.
 
@@ -72,3 +72,4 @@ log.erro(MENSAGENS_ERRO.modulosNaoEncontrados(modulos));
 - Expandir `CABECALHOS` para outros domínios (guardian, atualizar, reverter)
 - Consolidar mensagens comuns de warning/info em catálogos
 - Aplicar um sweep de lint para ordenar importações e remover duplicidades
+

@@ -1,7 +1,7 @@
-> **Proveniência e Autoria**: Este documento integra o projeto Sensei (licença MIT).
-> Nada aqui implica cessão de direitos morais/autorais.
-> Conteúdos de terceiros não licenciados de forma compatível não devem ser incluídos.
-> Referências a materiais externos devem ser linkadas e reescritas com palavras próprias.
+---
+Proveniência e Autoria: Este documento integra o projeto Sensei (licença MIT-0).
+---
+
 
 # 🤝 Guia de Contribuição para o Projeto Sensei
 
@@ -310,3 +310,4 @@ Ao contribuir para este projeto, você concorda que suas contribuições serão 
 ---
 
 **Obrigado por contribuir para o Sensei!**
+

@@ -1,7 +1,7 @@
-> **Proveniência e Autoria**: Este documento integra o projeto Sensei (licença MIT).
-> Nada aqui implica cessão de direitos morais/autorais.
-> Conteúdos de terceiros não licenciados de forma compatível não devem ser incluídos.
-> Referências a materiais externos devem ser linkadas e reescritas com palavras próprias.
+---
+Proveniência e Autoria: Este documento integra o projeto Sensei (licença MIT-0).
+---
+
 
 # Política de Segurança
 
@@ -49,3 +49,4 @@ Para questões relacionadas à segurança, entre em contato:
 - **Repositório**: [https://github.com/5-5-5-0-5-5-5/sensei](https://github.com/5-5-5-0-5-5-5/sensei)
 
 Obrigado por ajudar a manter o Sensei seguro!
+

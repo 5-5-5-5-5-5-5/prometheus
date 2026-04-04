@@ -38,7 +38,9 @@ async function getSalvarEstado(): Promise<(caminho: string, dados: unknown) => P
         salvarEstado = mod.salvarEstado as (c: string, d: unknown) => Promise<void>;
         break;
       }
-    } catch {}
+    } catch (err) {
+      log.debug('Erro em getSalvarEstado (importação dinâmica): ' + (err instanceof Error ? err.message : String(err)));
+    }
   }
 
   // Fallback: importar pelo alias oficial
@@ -76,7 +78,9 @@ async function detectarArquetiposComTimeout(ctx: Parameters<typeof detectarArque
             erro: Function;
           }).erro(`Falha detector arquetipos: ${msg}`);
         }
-      } catch {}
+      } catch (err) {
+        log.debug('Erro em detectarArquetiposComTimeout (log de erro): ' + (err instanceof Error ? err.message : String(err)));
+      }
       return undefined;
     });
     const timeoutPromise = new Promise<undefined>(resolve => setTimeout(() => resolve(undefined), DETECTAR_TEMPO_LIMITE_MS));
@@ -212,9 +216,13 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
               if (parsed && typeof parsed.name === 'string' && parsed.name.trim()) {
                 nomeProjeto = parsed.name.trim();
               }
-            } catch {}
+            } catch (err) {
+              log.debug('Erro ao ler package.json (fallback): ' + (err instanceof Error ? err.message : String(err)));
+            }
           }
-        } catch {}
+        } catch (err) {
+          log.debug('Erro ao obter nome do projeto do package.json: ' + (err instanceof Error ? err.message : String(err)));
+        }
         const estruturaDetectada = Array.from(dirSet);
         const {
           criarTemplateArquetipoPersonalizado,
@@ -399,7 +407,9 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
     try {
       const verifyCycles = Boolean((opts as unknown as Record<string, unknown>)['verifyCycles'] || (config as unknown as Record<string, unknown>)['SPECIAL_VERIFY_CYCLES']);
       (config as unknown as Record<string, unknown>)['SPECIAL_VERIFY_CYCLES'] = verifyCycles;
-    } catch {}
+    } catch (err) {
+      log.debug('Erro ao configurar flags especiais (verifyCycles): ' + (err instanceof Error ? err.message : String(err)));
+    }
     const resultadoExecucao = await executarInquisicao(fileEntriesComAst, tecnicas, baseDir, converterResultadoGuardian(guardianResultado), {
       verbose: config.VERBOSE,
       compact: config.COMPACT_MODE,
@@ -430,7 +440,9 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
             return !cobertas.some(r => r.test(regra));
           });
         }
-      } catch {}
+      } catch (err) {
+        log.debug('Erro em processarDiagnostico (trustCompiler): ' + (err instanceof Error ? err.message : String(err)));
+      }
     }
     // Conciliação simples entre analistas: rebaixa severidade em casos de conflito
     try {
@@ -464,7 +476,9 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
           }
         }
       }
-    } catch {}
+    } catch (err) {
+      log.debug('Erro em processarDiagnostico (conciliação analistas): ' + (err instanceof Error ? err.message : String(err)));
+    }
     // Aplicar supressões configuradas em sensei.config.json
     ocorrenciasFiltradas = aplicarSupressaoOcorrencias(ocorrenciasFiltradas, config as unknown as FiltrosConfig || undefined);
     const totalOcorrenciasProcessadas = ocorrenciasFiltradas.length;
@@ -891,7 +905,9 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
       if (!opts.json && !config.SCAN_ONLY && totalOcorrencias === 0) {
         logRelatorio.repositorioImpecavel();
       }
-    } catch {}
+    } catch (err) {
+      log.debug('Erro ao emitir log de repositório impecável: ' + (err instanceof Error ? err.message : String(err)));
+    }
 
     // Em ambiente de testes (Vitest) também invocar via import dinâmico o módulo
     // que os testes normalmente mockam (`../../src/nucleo/constelacao/log.js`).
@@ -1056,7 +1072,9 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
           (log as {
             debug: Function;
           }).debug(CliProcessamentoDiagnosticoMensagens.debugAboutToEmitJson(JSON.stringify(opts)));
-        } catch {}
+        } catch (err) {
+          log.debug('Erro ao emitir log de debug sobre JSON: ' + (err instanceof Error ? err.message : String(err)));
+        }
       }
       if (opts.json) {
         // Agregar ocorrências de TODO_PENDENTE por arquivo

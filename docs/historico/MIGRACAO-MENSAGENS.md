@@ -1,9 +1,9 @@
-# Resumo do Trabalho: Migração e Centralização de Mensagens
+---
+Proveniência e Autoria: Este documento integra o projeto Sensei (licença MIT-0).
+---
 
-> Proveniência e Autoria: Este documento integra o projeto Sensei (licença MIT).
-> Nada aqui implica cessão de direitos morais/autorais.
-> Conteúdos de terceiros não licenciados de forma compatível não devem ser incluídos.
-> Referências a materiais externos devem ser linkadas e reescritas com palavras próprias.
+
+# Resumo do Trabalho: Migração e Centralização de Mensagens
 
 Data: 2025-11-30
 
@@ -57,3 +57,4 @@ Unificar e centralizar todas as mensagens e ícones do CLI em `src/core/messages
 - `src/core/messages/diagnostico-messages.ts`
 - `src/core/messages/fix-types-messages.ts`
 - Comandos em `src/cli/commands/*`
+

@@ -7,6 +7,7 @@ import { config } from '@core/config/config.js';
 import { traverse } from '@core/config/traverse.js';
 import { DetectorDependenciasMensagens } from '@core/messages/analistas/detector-dependencias-messages.js';
 import { normalizarPosix, resolverModulo } from '@shared/helpers/imports.js';
+import { normalizePath } from '@shared/helpers/path.js';
 
 import type { ContextoExecucao, Ocorrencia, TecnicaAplicarResultado } from '@';
 
@@ -77,21 +78,21 @@ function detectarCicloComplexo(inicio: string, grafo: Map<string, Set<string>>, 
   const caminho: string[] = [];
 
   // Normaliza o caminho inicial
-  const inicioNormalizado = path.normalize(inicio).replace(/\\/g, '/');
+  const inicioNormalizado = normalizePath(inicio, true);
 
   // Helper para resolver caminho relativo a partir de um arquivo
   function resolverCaminho(from: string, to: string): string {
     if (to.startsWith('.')) {
       const fromDir = path.dirname(from);
       const resolved = path.join(fromDir, to);
-      return path.normalize(resolved).replace(/\\/g, '/');
+      return normalizePath(resolved, true);
     }
-    return path.normalize(to).replace(/\\/g, '/');
+    return normalizePath(to, true);
   }
 
   // Helper para encontrar dependências no grafo mesmo com paths diferentes
   function buscarDependencias(arquivo: string): Set<string> | undefined {
-    const normalizado = path.normalize(arquivo).replace(/\\/g, '/');
+    const normalizado = normalizePath(arquivo, true);
 
     // Tenta buscar diretamente
     if (grafo.has(arquivo)) return grafo.get(arquivo);
@@ -99,7 +100,7 @@ function detectarCicloComplexo(inicio: string, grafo: Map<string, Set<string>>, 
 
     // Tenta encontrar chave equivalente no grafo
     for (const [chave, deps] of grafo.entries()) {
-      if (path.normalize(chave).replace(/\\/g, '/') === normalizado) {
+      if (normalizePath(chave, true) === normalizado) {
         return deps;
       }
     }
@@ -109,10 +110,10 @@ function detectarCicloComplexo(inicio: string, grafo: Map<string, Set<string>>, 
     if (profundidade > maxProfundidade) return false;
 
     // Normaliza o caminho atual para comparação consistente
-    const atualNormalizado = path.normalize(atual).replace(/\\/g, '/');
+    const atualNormalizado = normalizePath(atual, true);
     if (pilha.has(atualNormalizado)) {
       // Ciclo encontrado - verificar se é real
-      const indiceCiclo = caminho.findIndex(p => path.normalize(p).replace(/\\/g, '/') === atualNormalizado);
+      const indiceCiclo = caminho.findIndex(p => normalizePath(p, true) === atualNormalizado);
       if (indiceCiclo >= 0) {
         // Adiciona o nó atual para fechar o ciclo
         caminho.push(atualNormalizado);
@@ -144,14 +145,14 @@ function detectarCicloComplexo(inicio: string, grafo: Map<string, Set<string>>, 
   if (dfs(inicioNormalizado, 0)) {
     // Extrai apenas a parte cíclica do caminho
     const ultimoNo = caminho[caminho.length - 1];
-    const indiceCiclo = caminho.findIndex(p => path.normalize(p).replace(/\\/g, '/') === ultimoNo);
+    const indiceCiclo = caminho.findIndex(p => normalizePath(p, true) === ultimoNo);
     if (indiceCiclo >= 0) {
       const cicloCompleto = caminho.slice(indiceCiclo);
 
       // Valida que todos os nós do ciclo existem no grafo
       const cicloValido = cicloCompleto.every(no => {
-        const normalizado = path.normalize(no).replace(/\\/g, '/');
-        return grafo.has(no) || grafo.has(normalizado) || Array.from(grafo.keys()).some(k => path.normalize(k).replace(/\\/g, '/') === normalizado);
+        const normalizado = normalizePath(no, true);
+        return grafo.has(no) || grafo.has(normalizado) || Array.from(grafo.keys()).some(k => normalizePath(k, true) === normalizado);
       });
       return cicloValido ? cicloCompleto : [];
     }
@@ -413,7 +414,7 @@ export const detectorDependencias = {
       // Remove caminhos base para deixar mais legível
       const caminhoLimpo = ciclo.map(p => {
         const relativo = path.relative(process.cwd(), p) || p;
-        return relativo.replace(/\\/g, '/');
+        return normalizePath(relativo);
       });
       const caminhoCompleto = caminhoLimpo.join(' → ');
       ocorrencias.push({

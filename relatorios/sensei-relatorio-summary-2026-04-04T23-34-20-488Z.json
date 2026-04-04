@@ -3,149 +3,161 @@
   "metricas": {
     "analistas": [
       {
-        "duracaoTotalMs": 261.49,
-        "execucoes": 680,
+        "duracaoTotalMs": 264.86,
+        "execucoes": 692,
         "nome": "documentacao",
-        "ocorrenciasTotal": 258
+        "ocorrenciasTotal": 252
       },
       {
-        "duracaoTotalMs": 85.58,
-        "execucoes": 340,
+        "duracaoTotalMs": 87.35,
+        "execucoes": 346,
         "nome": "qualidade-testes",
-        "ocorrenciasTotal": 192
+        "ocorrenciasTotal": 180
       },
       {
-        "duracaoTotalMs": 296.71,
-        "execucoes": 340,
-        "nome": "seguranca",
-        "ocorrenciasTotal": 34
-      },
-      {
-        "duracaoTotalMs": 82.43,
-        "execucoes": 335,
+        "duracaoTotalMs": 75.27,
+        "execucoes": 341,
         "nome": "detector-tipos-inseguros",
-        "ocorrenciasTotal": 8
+        "ocorrenciasTotal": 26
       },
       {
-        "duracaoTotalMs": 558.54,
+        "duracaoTotalMs": 271.28,
         "execucoes": 1,
         "nome": "sugestoes-contextuais",
         "ocorrenciasTotal": 7
       },
       {
-        "duracaoTotalMs": 7.42,
+        "duracaoTotalMs": 7.82,
         "execucoes": 1,
         "nome": "detector-estrutura",
         "ocorrenciasTotal": 2
       },
       {
-        "duracaoTotalMs": 184.64,
-        "execucoes": 235,
-        "nome": "detector-interfaces-inline",
+        "duracaoTotalMs": 300.4,
+        "execucoes": 346,
+        "nome": "seguranca",
         "ocorrenciasTotal": 2
       },
       {
-        "duracaoTotalMs": 467.88,
-        "execucoes": 46,
+        "duracaoTotalMs": 171.76,
+        "execucoes": 241,
+        "nome": "detector-interfaces-inline",
+        "ocorrenciasTotal": 1
+      },
+      {
+        "duracaoTotalMs": 82.7,
+        "execucoes": 45,
         "nome": "analista-formatador",
         "ocorrenciasTotal": 0
       },
       {
-        "duracaoTotalMs": 30.45,
-        "execucoes": 36,
+        "duracaoTotalMs": 26.39,
+        "execucoes": 34,
         "nome": "detector-markdown",
         "ocorrenciasTotal": 0
       },
       {
-        "duracaoTotalMs": 42.16,
-        "execucoes": 340,
+        "duracaoTotalMs": 41.28,
+        "execucoes": 346,
         "nome": "construcoes-sintaticas",
         "ocorrenciasTotal": 0
       },
       {
-        "duracaoTotalMs": 41.03,
-        "execucoes": 340,
+        "duracaoTotalMs": 40.53,
+        "execucoes": 346,
         "nome": "codigo-fragil",
         "ocorrenciasTotal": 0
       },
       {
-        "duracaoTotalMs": 40.76,
-        "execucoes": 340,
+        "duracaoTotalMs": 39.66,
+        "execucoes": 346,
         "nome": "detector-duplicacoes",
         "ocorrenciasTotal": 0
       },
       {
-        "duracaoTotalMs": 41.08,
-        "execucoes": 340,
+        "duracaoTotalMs": 40.1,
+        "execucoes": 346,
         "nome": "arquitetura",
         "ocorrenciasTotal": 0
       },
       {
-        "duracaoTotalMs": 47.4,
-        "execucoes": 340,
+        "duracaoTotalMs": 45.67,
+        "execucoes": 346,
         "nome": "analista-css-in-js",
         "ocorrenciasTotal": 0
       },
       {
-        "duracaoTotalMs": 18.98,
-        "execucoes": 340,
+        "duracaoTotalMs": 18.34,
+        "execucoes": 346,
         "nome": "quick-fixes",
         "ocorrenciasTotal": 0
       },
       {
-        "duracaoTotalMs": 46.82,
-        "execucoes": 339,
+        "duracaoTotalMs": 47.3,
+        "execucoes": 345,
         "nome": "detector-dependencias",
         "ocorrenciasTotal": 0
       },
       {
-        "duracaoTotalMs": 58.34,
-        "execucoes": 339,
+        "duracaoTotalMs": 62.84,
+        "execucoes": 345,
         "nome": "analista-funcoes-longas",
         "ocorrenciasTotal": 0
       },
       {
-        "duracaoTotalMs": 57.26,
-        "execucoes": 339,
+        "duracaoTotalMs": 63.15,
+        "execucoes": 345,
         "nome": "analista-padroes-uso",
         "ocorrenciasTotal": 0
       },
       {
-        "duracaoTotalMs": 54.62,
-        "execucoes": 339,
+        "duracaoTotalMs": 59.61,
+        "execucoes": 345,
         "nome": "analista-comandos-cli",
         "ocorrenciasTotal": 0
       },
       {
-        "duracaoTotalMs": 82.66,
-        "execucoes": 339,
+        "duracaoTotalMs": 40.26,
+        "execucoes": 345,
+        "nome": "anti-padroes-async",
+        "ocorrenciasTotal": 0
+      },
+      {
+        "duracaoTotalMs": 40.04,
+        "execucoes": 345,
+        "nome": "vazamento-memoria",
+        "ocorrenciasTotal": 0
+      },
+      {
+        "duracaoTotalMs": 92.86,
+        "execucoes": 345,
         "nome": "analista-react-hooks",
         "ocorrenciasTotal": 0
       },
       {
-        "duracaoTotalMs": 98.22,
-        "execucoes": 339,
+        "duracaoTotalMs": 93.05,
+        "execucoes": 345,
         "nome": "analista-react",
         "ocorrenciasTotal": 0
       },
       {
-        "duracaoTotalMs": 64.59,
-        "execucoes": 339,
+        "duracaoTotalMs": 62.89,
+        "execucoes": 345,
         "nome": "analista-tailwind",
         "ocorrenciasTotal": 0
       },
       {
-        "duracaoTotalMs": 60.67,
-        "execucoes": 318,
+        "duracaoTotalMs": 65,
+        "execucoes": 323,
         "nome": "todo-comments",
         "ocorrenciasTotal": 0
       }
     ],
     "cacheAstHits": 0,
-    "cacheAstMiss": 335,
-    "tempoAnaliseMs": 4103,
-    "tempoParsingMs": 774,
-    "totalArquivos": 392
+    "cacheAstMiss": 341,
+    "tempoAnaliseMs": 2792,
+    "tempoParsingMs": 776,
+    "totalArquivos": 397
   },
   "ocorrencias": [
     {
@@ -205,16 +217,9 @@
       "tipo": "problema-documentacao"
     },
     {
-      "linha": 48,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal",
-      "nivel": "info",
-      "relPath": "src/analistas/arquitetos/analista-estrutura.ts",
-      "tipo": "vulnerabilidade-seguranca"
-    },
-    {
       "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
-      "nivel": "aviso",
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
       "relPath": "src/analistas/arquitetos/analista-estrutura.ts",
       "tipo": "problemas-teste"
     },
@@ -261,8 +266,8 @@
       "tipo": "problemas-teste"
     },
     {
-      "linha": 14,
-      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+6 mais)",
+      "linha": 111,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
       "nivel": "info",
       "relPath": "src/analistas/corrections/analista-pontuacao.ts",
       "tipo": "problema-documentacao"
@@ -279,20 +284,6 @@
       "mensagem": "Problemas de teste (baixa): test-smells",
       "nivel": "info",
       "relPath": "src/analistas/corrections/analista-quick-fixes.ts",
-      "tipo": "problemas-teste"
-    },
-    {
-      "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
-      "nivel": "aviso",
-      "relPath": "src/analistas/corrections/auto-fix-engine.ts",
-      "tipo": "problemas-teste"
-    },
-    {
-      "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
-      "nivel": "aviso",
-      "relPath": "src/analistas/corrections/corretor-estrutura.ts",
       "tipo": "problemas-teste"
     },
     {
@@ -331,38 +322,17 @@
       "tipo": "problemas-teste"
     },
     {
-      "linha": 89,
-      "mensagem": "Problemas de teste (alta): flaky-test, missing-tests",
-      "nivel": "aviso",
-      "relPath": "src/analistas/corrections/poda.ts",
-      "tipo": "problemas-teste"
-    },
-    {
-      "linha": 6,
+      "linha": 7,
       "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+5 mais)",
       "nivel": "info",
-      "relPath": "src/analistas/corrections/pontuacao-fix.ts",
+      "relPath": "src/analistas/corrections/pontuacao-shared.ts",
       "tipo": "problema-documentacao"
     },
     {
       "linha": 1,
       "mensagem": "Problemas de teste (baixa): test-smells",
       "nivel": "info",
-      "relPath": "src/analistas/corrections/pontuacao-fix.ts",
-      "tipo": "problemas-teste"
-    },
-    {
-      "linha": 6,
-      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+5 mais)",
-      "nivel": "info",
-      "relPath": "src/analistas/corrections/pontuacao.ts",
-      "tipo": "problema-documentacao"
-    },
-    {
-      "linha": 1,
-      "mensagem": "Problemas de teste (baixa): test-smells",
-      "nivel": "info",
-      "relPath": "src/analistas/corrections/pontuacao.ts",
+      "relPath": "src/analistas/corrections/pontuacao-shared.ts",
       "tipo": "problemas-teste"
     },
     {
@@ -374,8 +344,8 @@
     },
     {
       "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
-      "nivel": "aviso",
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
       "relPath": "src/analistas/corrections/quick-fixes/fix-any-to-proper-type.ts",
       "tipo": "problemas-teste"
     },
@@ -388,17 +358,10 @@
     },
     {
       "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
-      "nivel": "aviso",
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
       "relPath": "src/analistas/corrections/quick-fixes/fix-unknown-to-specific-type.ts",
       "tipo": "problemas-teste"
-    },
-    {
-      "linha": 42,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal, unsafe-regex-literal, unsafe-regex-literal (+2 mais)",
-      "nivel": "info",
-      "relPath": "src/analistas/corrections/reescrever-testes-aliases.ts",
-      "tipo": "vulnerabilidade-seguranca"
     },
     {
       "linha": 1,
@@ -406,13 +369,6 @@
       "nivel": "info",
       "relPath": "src/analistas/corrections/reescrever-testes-aliases.ts",
       "tipo": "problemas-teste"
-    },
-    {
-      "linha": 196,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal, unsafe-regex-literal",
-      "nivel": "info",
-      "relPath": "src/analistas/corrections/type-safety/context-analyzer.ts",
-      "tipo": "vulnerabilidade-seguranca"
     },
     {
       "linha": 1,
@@ -427,13 +383,6 @@
       "nivel": "info",
       "relPath": "src/analistas/corrections/type-safety/type-analyzer.ts",
       "tipo": "problema-documentacao"
-    },
-    {
-      "linha": 173,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal",
-      "nivel": "aviso",
-      "relPath": "src/analistas/corrections/type-safety/type-creator.ts",
-      "tipo": "vulnerabilidade-seguranca"
     },
     {
       "linha": 1,
@@ -451,8 +400,8 @@
     },
     {
       "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
-      "nivel": "aviso",
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
       "relPath": "src/analistas/corrections/type-safety/type-inference.ts",
       "tipo": "problemas-teste"
     },
@@ -465,8 +414,8 @@
     },
     {
       "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
-      "nivel": "aviso",
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
       "relPath": "src/analistas/corrections/type-safety/type-validator.ts",
       "tipo": "problemas-teste"
     },
@@ -485,36 +434,8 @@
       "tipo": "problemas-teste"
     },
     {
-      "linha": 100,
-      "mensagem": "Problemas de documentação (media): missing-types",
-      "nivel": "info",
-      "relPath": "src/analistas/detectores/detector-anti-padroes-async.ts",
-      "tipo": "problema-documentacao"
-    },
-    {
-      "linha": 100,
-      "mensagem": "Tipo 'any' em 'ast' desabilita verificação de tipos | 💡 Analise uso da variável e defina tipo específico ou use unknown com type guards | 🔍 Revisão manual obrigatória",
-      "nivel": "aviso",
-      "relPath": "src/analistas/detectores/detector-anti-padroes-async.ts",
-      "tipo": "tipo-inseguro-any"
-    },
-    {
-      "linha": 96,
-      "mensagem": "Type assertion 'as any' desabilita verificação de tipos completamente | 💡 Substitua por tipo específico ou use unknown com validação runtime | 🚨 CRÍTICO: Type safety completamente desabilitado | 🔍 Revisão manual obrigatória",
-      "nivel": "erro",
-      "relPath": "src/analistas/detectores/detector-anti-padroes-async.ts",
-      "tipo": "tipo-inseguro-any-assertion"
-    },
-    {
-      "linha": 111,
-      "mensagem": "Type assertion 'as any' desabilita verificação de tipos completamente | 💡 Substitua por tipo específico ou use unknown com validação runtime | 🚨 CRÍTICO: Type safety completamente desabilitado | 🔍 Revisão manual obrigatória",
-      "nivel": "erro",
-      "relPath": "src/analistas/detectores/detector-anti-padroes-async.ts",
-      "tipo": "tipo-inseguro-any-assertion"
-    },
-    {
-      "linha": 116,
-      "mensagem": "Type assertion 'as any' desabilita verificação de tipos completamente | 💡 Type assertion em parâmetro - definir tipo correto na assinatura da função chamada | 🚨 CRÍTICO: Type safety completamente desabilitado | 🔍 Revisão manual obrigatória",
+      "linha": 36,
+      "mensagem": "Type assertion 'as any' desabilita verificação de tipos completamente | 💡 Evite cast de propriedade - definir tipo correto no objeto pai | 🚨 CRÍTICO: Type safety completamente desabilitado | 🔍 Revisão manual obrigatória",
       "nivel": "erro",
       "relPath": "src/analistas/detectores/detector-anti-padroes-async.ts",
       "tipo": "tipo-inseguro-any-assertion"
@@ -555,22 +476,15 @@
       "tipo": "problemas-teste"
     },
     {
-      "linha": 219,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal",
-      "nivel": "info",
-      "relPath": "src/analistas/detectores/detector-codigo-fragil.ts",
-      "tipo": "vulnerabilidade-seguranca"
-    },
-    {
-      "linha": 18,
-      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+2 mais)",
+      "linha": 36,
+      "mensagem": "Problemas de documentação (media): missing-types, missing-types, missing-types (+3 mais)",
       "nivel": "info",
       "relPath": "src/analistas/detectores/detector-codigo-fragil.ts",
       "tipo": "problema-documentacao"
     },
     {
-      "linha": 33,
-      "mensagem": "Problemas de documentação (media): missing-types, missing-types, missing-types (+4 mais)",
+      "linha": 157,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
       "nivel": "info",
       "relPath": "src/analistas/detectores/detector-codigo-fragil.ts",
       "tipo": "problema-documentacao"
@@ -639,14 +553,7 @@
       "tipo": "problemas-teste"
     },
     {
-      "linha": 16,
-      "mensagem": "Problemas de documentação (baixa): magic-constants",
-      "nivel": "info",
-      "relPath": "src/analistas/detectores/detector-fantasmas.ts",
-      "tipo": "problema-documentacao"
-    },
-    {
-      "linha": 88,
+      "linha": 76,
       "mensagem": "Problemas de teste (alta): flaky-test",
       "nivel": "aviso",
       "relPath": "src/analistas/detectores/detector-fantasmas.ts",
@@ -660,21 +567,14 @@
       "tipo": "problemas-teste"
     },
     {
-      "linha": 57,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal, unsafe-regex-literal, unsafe-regex-literal (+2 mais)",
-      "nivel": "info",
-      "relPath": "src/analistas/detectores/detector-interfaces-inline.ts",
-      "tipo": "vulnerabilidade-seguranca"
-    },
-    {
-      "linha": 115,
+      "linha": 116,
       "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+3 mais)",
       "nivel": "info",
       "relPath": "src/analistas/detectores/detector-interfaces-inline.ts",
       "tipo": "problema-documentacao"
     },
     {
-      "linha": 350,
+      "linha": 351,
       "mensagem": "Problemas de documentação (media): poor-naming",
       "nivel": "info",
       "relPath": "src/analistas/detectores/detector-interfaces-inline.ts",
@@ -688,11 +588,18 @@
       "tipo": "problemas-teste"
     },
     {
-      "linha": 182,
+      "linha": 164,
       "mensagem": "Problemas de documentação (baixa): magic-constants",
       "nivel": "info",
       "relPath": "src/analistas/detectores/detector-performance.ts",
       "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 195,
+      "mensagem": "Type casting '<any>' (sintaxe legada) desabilita type safety | 💡 Use sintaxe 'as' moderna e tipo específico | 🚨 CRÍTICO: Migrar para sintaxe moderna e tipo correto | 🔍 Revisão manual obrigatória",
+      "nivel": "erro",
+      "relPath": "src/analistas/detectores/detector-performance.ts",
+      "tipo": "tipo-inseguro-any-cast"
     },
     {
       "linha": 1,
@@ -702,14 +609,14 @@
       "tipo": "problemas-teste"
     },
     {
-      "linha": 87,
+      "linha": 84,
       "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+1 mais)",
       "nivel": "info",
       "relPath": "src/analistas/detectores/detector-seguranca.ts",
       "tipo": "problema-documentacao"
     },
     {
-      "linha": 212,
+      "linha": 209,
       "mensagem": "Problemas de teste (alta): flaky-test, flaky-test",
       "nivel": "aviso",
       "relPath": "src/analistas/detectores/detector-seguranca.ts",
@@ -723,14 +630,7 @@
       "tipo": "problemas-teste"
     },
     {
-      "linha": 56,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal, unsafe-regex-literal",
-      "nivel": "info",
-      "relPath": "src/analistas/detectores/detector-tipos-inseguros.ts",
-      "tipo": "vulnerabilidade-seguranca"
-    },
-    {
-      "linha": 33,
+      "linha": 34,
       "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+2 mais)",
       "nivel": "info",
       "relPath": "src/analistas/detectores/detector-tipos-inseguros.ts",
@@ -744,53 +644,25 @@
       "tipo": "problemas-teste"
     },
     {
-      "linha": 82,
-      "mensagem": "Problemas de documentação (media): missing-types",
-      "nivel": "info",
-      "relPath": "src/analistas/detectores/detector-vazamentos-memoria.ts",
-      "tipo": "problema-documentacao"
-    },
-    {
-      "linha": 82,
-      "mensagem": "Tipo 'any' em 'ast' desabilita verificação de tipos | 💡 Analise uso da variável e defina tipo específico ou use unknown com type guards | 🔍 Revisão manual obrigatória",
-      "nivel": "aviso",
-      "relPath": "src/analistas/detectores/detector-vazamentos-memoria.ts",
-      "tipo": "tipo-inseguro-any"
-    },
-    {
-      "linha": 78,
-      "mensagem": "Type assertion 'as any' desabilita verificação de tipos completamente | 💡 Substitua por tipo específico ou use unknown com validação runtime | 🚨 CRÍTICO: Type safety completamente desabilitado | 🔍 Revisão manual obrigatória",
-      "nivel": "erro",
-      "relPath": "src/analistas/detectores/detector-vazamentos-memoria.ts",
-      "tipo": "tipo-inseguro-any-assertion"
-    },
-    {
-      "linha": 99,
-      "mensagem": "Type assertion 'as any' desabilita verificação de tipos completamente | 💡 Substitua por tipo específico ou use unknown com validação runtime | 🚨 CRÍTICO: Type safety completamente desabilitado | 🔍 Revisão manual obrigatória",
-      "nivel": "erro",
-      "relPath": "src/analistas/detectores/detector-vazamentos-memoria.ts",
-      "tipo": "tipo-inseguro-any-assertion"
-    },
-    {
-      "linha": 118,
-      "mensagem": "Type assertion 'as any' desabilita verificação de tipos completamente | 💡 Type assertion em parâmetro - definir tipo correto na assinatura da função chamada | 🚨 CRÍTICO: Type safety completamente desabilitado | 🔍 Revisão manual obrigatória",
-      "nivel": "erro",
-      "relPath": "src/analistas/detectores/detector-vazamentos-memoria.ts",
-      "tipo": "tipo-inseguro-any-assertion"
-    },
-    {
-      "linha": 12,
-      "mensagem": "Interface 'MemoriaVisitorState' deve estar em types/",
-      "nivel": "aviso",
-      "relPath": "src/analistas/detectores/detector-vazamentos-memoria.ts",
-      "tipo": "interface-inline-exportada"
-    },
-    {
       "linha": 1,
       "mensagem": "Problemas de teste (baixa): test-smells",
       "nivel": "info",
       "relPath": "src/analistas/detectores/detector-vazamentos-memoria.ts",
       "tipo": "problemas-teste"
+    },
+    {
+      "linha": 43,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/analistas/estrategistas/operario-estrutura.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 80,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/analistas/estrategistas/operario-estrutura.ts",
+      "tipo": "tipo-permissivo-object"
     },
     {
       "linha": 1,
@@ -808,8 +680,8 @@
     },
     {
       "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
-      "nivel": "aviso",
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
       "relPath": "src/analistas/estrategistas/sugestoes-contextuais.ts",
       "tipo": "problemas-teste"
     },
@@ -842,6 +714,55 @@
       "tipo": "problemas-teste"
     },
     {
+      "linha": 16,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/analistas/js-ts/analista-padroes-uso.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 17,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/analistas/js-ts/analista-padroes-uso.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 18,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/analistas/js-ts/analista-padroes-uso.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 19,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/analistas/js-ts/analista-padroes-uso.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 20,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/analistas/js-ts/analista-padroes-uso.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 21,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/analistas/js-ts/analista-padroes-uso.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 22,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/analistas/js-ts/analista-padroes-uso.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
       "linha": 1,
       "mensagem": "Problemas de teste (baixa): missing-tests",
       "nivel": "info",
@@ -864,8 +785,8 @@
     },
     {
       "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
-      "nivel": "aviso",
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
       "relPath": "src/analistas/js-ts/arquetipos-personalizados.ts",
       "tipo": "problemas-teste"
     },
@@ -884,18 +805,18 @@
       "tipo": "problemas-teste"
     },
     {
-      "linha": 53,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal, unsafe-regex-literal",
-      "nivel": "info",
-      "relPath": "src/analistas/plugins/analista-css.ts",
-      "tipo": "vulnerabilidade-seguranca"
-    },
-    {
       "linha": 164,
       "mensagem": "Problemas de documentação (media): poor-naming, poor-naming, poor-naming",
       "nivel": "info",
       "relPath": "src/analistas/plugins/analista-css.ts",
       "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 47,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/analistas/plugins/analista-css.ts",
+      "tipo": "tipo-permissivo-object"
     },
     {
       "linha": 1,
@@ -912,13 +833,6 @@
       "tipo": "problemas-teste"
     },
     {
-      "linha": 277,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal, unsafe-regex-literal",
-      "nivel": "info",
-      "relPath": "src/analistas/plugins/analista-html.ts",
-      "tipo": "vulnerabilidade-seguranca"
-    },
-    {
       "linha": 30,
       "mensagem": "Problemas de documentação (media): poor-naming, poor-naming",
       "nivel": "info",
@@ -931,13 +845,6 @@
       "nivel": "info",
       "relPath": "src/analistas/plugins/analista-html.ts",
       "tipo": "problemas-teste"
-    },
-    {
-      "linha": 106,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal",
-      "nivel": "info",
-      "relPath": "src/analistas/plugins/analista-python.ts",
-      "tipo": "vulnerabilidade-seguranca"
     },
     {
       "linha": 1,
@@ -966,13 +873,6 @@
       "nivel": "info",
       "relPath": "src/analistas/plugins/analista-react-hooks.ts",
       "tipo": "problemas-teste"
-    },
-    {
-      "linha": 65,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal, unsafe-regex-literal",
-      "nivel": "info",
-      "relPath": "src/analistas/plugins/analista-react.ts",
-      "tipo": "vulnerabilidade-seguranca"
     },
     {
       "linha": 71,
@@ -1010,25 +910,11 @@
       "tipo": "problemas-teste"
     },
     {
-      "linha": 67,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal",
-      "nivel": "info",
-      "relPath": "src/analistas/plugins/analista-svg.ts",
-      "tipo": "vulnerabilidade-seguranca"
-    },
-    {
       "linha": 1,
       "mensagem": "Problemas de teste (baixa): test-smells",
       "nivel": "info",
       "relPath": "src/analistas/plugins/analista-svg.ts",
       "tipo": "problemas-teste"
-    },
-    {
-      "linha": 93,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal, unsafe-regex-literal, unsafe-regex-literal",
-      "nivel": "info",
-      "relPath": "src/analistas/plugins/analista-tailwind.ts",
-      "tipo": "vulnerabilidade-seguranca"
     },
     {
       "linha": 13,
@@ -1129,32 +1015,18 @@
       "tipo": "problemas-teste"
     },
     {
-      "linha": 56,
-      "mensagem": "Problemas de teste (baixa): test-smells, test-smells, test-smells (+16 mais)",
-      "nivel": "info",
-      "relPath": "src/bin/cli.ts",
-      "tipo": "problemas-teste"
-    },
-    {
-      "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
+      "linha": 33,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
       "nivel": "aviso",
       "relPath": "src/bin/cli.ts",
-      "tipo": "problemas-teste"
+      "tipo": "tipo-permissivo-object"
     },
     {
-      "linha": 49,
-      "mensagem": "Problemas de teste (baixa): test-smells, test-smells, test-smells (+1 mais)",
-      "nivel": "info",
-      "relPath": "src/bin/index.ts",
-      "tipo": "problemas-teste"
-    },
-    {
-      "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
+      "linha": 128,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
       "nivel": "aviso",
-      "relPath": "src/bin/index.ts",
-      "tipo": "problemas-teste"
+      "relPath": "src/bin/cli.ts",
+      "tipo": "tipo-permissivo-object"
     },
     {
       "linha": 1,
@@ -1164,6 +1036,13 @@
       "tipo": "problemas-teste"
     },
     {
+      "linha": 26,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/cli/commands/comando-atualizar.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
       "linha": 1,
       "mensagem": "Problemas de teste (baixa): missing-tests",
       "nivel": "info",
@@ -1171,18 +1050,25 @@
       "tipo": "problemas-teste"
     },
     {
+      "linha": 58,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/cli/commands/comando-diagnosticar.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 59,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/cli/commands/comando-diagnosticar.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
       "linha": 1,
       "mensagem": "Problemas de teste (baixa): missing-tests",
       "nivel": "info",
       "relPath": "src/cli/commands/comando-diagnosticar.ts",
       "tipo": "problemas-teste"
-    },
-    {
-      "linha": 137,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal",
-      "nivel": "aviso",
-      "relPath": "src/cli/commands/comando-fix-types.ts",
-      "tipo": "vulnerabilidade-seguranca"
     },
     {
       "linha": 20,
@@ -1213,11 +1099,25 @@
       "tipo": "problema-documentacao"
     },
     {
+      "linha": 77,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/cli/commands/comando-formatar.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
       "linha": 1,
       "mensagem": "Problemas de teste (baixa): test-smells",
       "nivel": "info",
       "relPath": "src/cli/commands/comando-formatar.ts",
       "tipo": "problemas-teste"
+    },
+    {
+      "linha": 28,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/cli/commands/comando-guardian.ts",
+      "tipo": "tipo-permissivo-object"
     },
     {
       "linha": 1,
@@ -1241,6 +1141,13 @@
       "tipo": "problemas-teste"
     },
     {
+      "linha": 32,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/cli/commands/comando-names.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
       "linha": 1,
       "mensagem": "Problemas de teste (baixa): missing-tests",
       "nivel": "info",
@@ -1253,6 +1160,13 @@
       "nivel": "info",
       "relPath": "src/cli/commands/comando-otimizar-svg.ts",
       "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 62,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/cli/commands/comando-otimizar-svg.ts",
+      "tipo": "tipo-permissivo-object"
     },
     {
       "linha": 1,
@@ -1269,18 +1183,18 @@
       "tipo": "problema-documentacao"
     },
     {
-      "linha": 60,
-      "mensagem": "Problemas de teste (alta): flaky-test, missing-tests",
-      "nivel": "aviso",
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
       "relPath": "src/cli/commands/comando-perf.ts",
       "tipo": "problemas-teste"
     },
     {
-      "linha": 114,
-      "mensagem": "Problemas de teste (baixa): test-smells, test-smells, test-smells",
-      "nivel": "info",
-      "relPath": "src/cli/commands/comando-perf.ts",
-      "tipo": "problemas-teste"
+      "linha": 31,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/cli/commands/comando-podar.ts",
+      "tipo": "tipo-permissivo-object"
     },
     {
       "linha": 1,
@@ -1297,9 +1211,16 @@
       "tipo": "problemas-teste"
     },
     {
-      "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
+      "linha": 64,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
       "nivel": "aviso",
+      "relPath": "src/cli/commands/comando-rename.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
       "relPath": "src/cli/commands/comando-rename.ts",
       "tipo": "problemas-teste"
     },
@@ -1353,13 +1274,6 @@
       "tipo": "problemas-teste"
     },
     {
-      "linha": 49,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal",
-      "nivel": "info",
-      "relPath": "src/cli/diagnostico/exporters/svg-otimizacao-exporter.ts",
-      "tipo": "vulnerabilidade-seguranca"
-    },
-    {
       "linha": 14,
       "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+3 mais)",
       "nivel": "info",
@@ -1372,13 +1286,6 @@
       "nivel": "info",
       "relPath": "src/cli/diagnostico/exporters/svg-otimizacao-exporter.ts",
       "tipo": "problemas-teste"
-    },
-    {
-      "linha": 31,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal, unsafe-regex-literal, unsafe-regex-literal",
-      "nivel": "info",
-      "relPath": "src/cli/diagnostico/filtros.ts",
-      "tipo": "vulnerabilidade-seguranca"
     },
     {
       "linha": 1,
@@ -1409,16 +1316,9 @@
       "tipo": "problema-documentacao"
     },
     {
-      "linha": 37,
-      "mensagem": "Problemas de teste (baixa): test-smells, test-smells, test-smells (+3 mais)",
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
       "nivel": "info",
-      "relPath": "src/cli/diagnostico/handlers/auto-fix-handler.ts",
-      "tipo": "problemas-teste"
-    },
-    {
-      "linha": 89,
-      "mensagem": "Problemas de teste (alta): flaky-test, missing-tests",
-      "nivel": "aviso",
       "relPath": "src/cli/diagnostico/handlers/auto-fix-handler.ts",
       "tipo": "problemas-teste"
     },
@@ -1444,7 +1344,7 @@
       "tipo": "problema-documentacao"
     },
     {
-      "linha": 64,
+      "linha": 65,
       "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+1 mais)",
       "nivel": "info",
       "relPath": "src/cli/helpers/exibir-moldura.ts",
@@ -1459,15 +1359,15 @@
     },
     {
       "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
-      "nivel": "aviso",
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
       "relPath": "src/cli/helpers/exit-codes.ts",
       "tipo": "problemas-teste"
     },
     {
       "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
-      "nivel": "aviso",
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
       "relPath": "src/cli/helpers/flags-helpers.ts",
       "tipo": "problemas-teste"
     },
@@ -1477,13 +1377,6 @@
       "nivel": "info",
       "relPath": "src/cli/helpers/get-files-src.ts",
       "tipo": "problemas-teste"
-    },
-    {
-      "linha": 27,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal",
-      "nivel": "info",
-      "relPath": "src/cli/helpers/pattern-helpers.ts",
-      "tipo": "vulnerabilidade-seguranca"
     },
     {
       "linha": 1,
@@ -1500,28 +1393,21 @@
       "tipo": "problemas-teste"
     },
     {
-      "linha": 383,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal",
-      "nivel": "info",
-      "relPath": "src/cli/processamento-diagnostico.ts",
-      "tipo": "vulnerabilidade-seguranca"
-    },
-    {
-      "linha": 60,
+      "linha": 62,
       "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+15 mais)",
       "nivel": "info",
       "relPath": "src/cli/processamento-diagnostico.ts",
       "tipo": "problema-documentacao"
     },
     {
-      "linha": 82,
+      "linha": 86,
       "mensagem": "Problemas de teste (alta): flaky-test",
       "nivel": "aviso",
       "relPath": "src/cli/processamento-diagnostico.ts",
       "tipo": "problemas-teste"
     },
     {
-      "linha": 309,
+      "linha": 317,
       "mensagem": "Problemas de teste (baixa): test-smells, test-smells, test-smells (+16 mais)",
       "nivel": "info",
       "relPath": "src/cli/processamento-diagnostico.ts",
@@ -1542,13 +1428,6 @@
       "tipo": "problemas-teste"
     },
     {
-      "linha": 14,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal, unsafe-regex-literal, unsafe-regex-literal",
-      "nivel": "info",
-      "relPath": "src/cli/processing/filters.ts",
-      "tipo": "vulnerabilidade-seguranca"
-    },
-    {
       "linha": 1,
       "mensagem": "Problemas de teste (baixa): test-smells",
       "nivel": "info",
@@ -1556,8 +1435,8 @@
       "tipo": "problemas-teste"
     },
     {
-      "linha": 13,
-      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants",
+      "linha": 30,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants",
       "nivel": "info",
       "relPath": "src/core/config/auto/auto-fix-config.ts",
       "tipo": "problema-documentacao"
@@ -1568,13 +1447,6 @@
       "nivel": "info",
       "relPath": "src/core/config/auto/auto-fix-config.ts",
       "tipo": "problemas-teste"
-    },
-    {
-      "linha": 61,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal, unsafe-regex-literal, unsafe-regex-literal (+5 mais)",
-      "nivel": "info",
-      "relPath": "src/core/config/auto/fix-config.ts",
-      "tipo": "vulnerabilidade-seguranca"
     },
     {
       "linha": 63,
@@ -1605,15 +1477,8 @@
       "tipo": "problema-documentacao"
     },
     {
-      "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
-      "nivel": "aviso",
-      "relPath": "src/core/config/auto/validacao.ts",
-      "tipo": "problemas-teste"
-    },
-    {
-      "linha": 47,
-      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+8 mais)",
+      "linha": 48,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+6 mais)",
       "nivel": "info",
       "relPath": "src/core/config/config.ts",
       "tipo": "problema-documentacao"
@@ -1661,18 +1526,18 @@
       "tipo": "problema-documentacao"
     },
     {
+      "linha": 11,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+7 mais)",
+      "nivel": "info",
+      "relPath": "src/core/config/limites.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
       "linha": 1,
       "mensagem": "Problemas de teste (baixa): test-smells",
       "nivel": "info",
       "relPath": "src/core/config/paths.ts",
       "tipo": "problemas-teste"
-    },
-    {
-      "linha": 17,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal",
-      "nivel": "info",
-      "relPath": "src/core/config/seguranca.ts",
-      "tipo": "vulnerabilidade-seguranca"
     },
     {
       "linha": 1,
@@ -1815,16 +1680,9 @@
       "tipo": "problema-documentacao"
     },
     {
-      "linha": 126,
-      "mensagem": "Problemas de teste (baixa): test-smells, test-smells",
-      "nivel": "info",
-      "relPath": "src/core/messages/log/log-engine.ts",
-      "tipo": "problemas-teste"
-    },
-    {
       "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
-      "nivel": "aviso",
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
       "relPath": "src/core/messages/log/log-engine.ts",
       "tipo": "problemas-teste"
     },
@@ -1836,18 +1694,11 @@
       "tipo": "problema-documentacao"
     },
     {
-      "linha": 71,
-      "mensagem": "Problemas de teste (alta): flaky-test, missing-tests",
-      "nivel": "aviso",
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
       "relPath": "src/core/messages/log/log-helper.ts",
       "tipo": "problemas-teste"
-    },
-    {
-      "linha": 70,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal, unsafe-regex-literal, unsafe-regex-literal (+1 mais)",
-      "nivel": "info",
-      "relPath": "src/core/messages/log/log.ts",
-      "tipo": "vulnerabilidade-seguranca"
     },
     {
       "linha": 184,
@@ -1879,8 +1730,8 @@
     },
     {
       "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
-      "nivel": "aviso",
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
       "relPath": "src/core/messages/relatorios/json-messages.ts",
       "tipo": "problemas-teste"
     },
@@ -1953,13 +1804,6 @@
       "nivel": "info",
       "relPath": "src/core/parsing/filters.ts",
       "tipo": "problemas-teste"
-    },
-    {
-      "linha": 105,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal, unsafe-regex-literal, unsafe-regex-literal (+2 mais)",
-      "nivel": "info",
-      "relPath": "src/core/parsing/parser.ts",
-      "tipo": "vulnerabilidade-seguranca"
     },
     {
       "linha": 233,
@@ -2082,8 +1926,8 @@
     },
     {
       "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
-      "nivel": "aviso",
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
       "relPath": "src/guardian/hash.ts",
       "tipo": "problemas-teste"
     },
@@ -2131,13 +1975,13 @@
     },
     {
       "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
-      "nivel": "aviso",
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
       "relPath": "src/licensas/generate-notices.ts",
       "tipo": "problemas-teste"
     },
     {
-      "linha": 36,
+      "linha": 44,
       "mensagem": "Problemas de documentação (media): poor-naming, poor-naming",
       "nivel": "info",
       "relPath": "src/licensas/normalizer.ts",
@@ -2158,11 +2002,11 @@
       "tipo": "problema-documentacao"
     },
     {
-      "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
+      "linha": 17,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
       "nivel": "aviso",
-      "relPath": "src/node.loader.ts",
-      "tipo": "problemas-teste"
+      "relPath": "src/licensas/scanner.ts",
+      "tipo": "tipo-permissivo-object"
     },
     {
       "linha": 74,
@@ -2249,13 +2093,6 @@
       "tipo": "problemas-teste"
     },
     {
-      "linha": 72,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal",
-      "nivel": "info",
-      "relPath": "src/shared/contexto-projeto.ts",
-      "tipo": "vulnerabilidade-seguranca"
-    },
-    {
       "linha": 24,
       "mensagem": "Problemas de documentação (media): poor-naming",
       "nivel": "info",
@@ -2279,14 +2116,14 @@
     {
       "linha": 90,
       "mensagem": "Problemas de documentação (media): poor-naming, missing-jsdoc",
-      "nivel": "info",
+      "nivel": "aviso",
       "relPath": "src/shared/data-processing/fragmentar-relatorio.ts",
       "tipo": "problema-documentacao"
     },
     {
       "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
-      "nivel": "aviso",
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
       "relPath": "src/shared/data-processing/fragmentar-relatorio.ts",
       "tipo": "problemas-teste"
     },
@@ -2333,11 +2170,11 @@
       "tipo": "problemas-teste"
     },
     {
-      "linha": 59,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal",
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
       "nivel": "info",
-      "relPath": "src/shared/helpers/detectores-comuns.ts",
-      "tipo": "vulnerabilidade-seguranca"
+      "relPath": "src/shared/helpers/context-utils.ts",
+      "tipo": "problemas-teste"
     },
     {
       "linha": 1,
@@ -2347,16 +2184,9 @@
       "tipo": "problemas-teste"
     },
     {
-      "linha": 104,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal, unsafe-regex-literal, unsafe-regex-literal",
-      "nivel": "info",
-      "relPath": "src/shared/helpers/estrutura.ts",
-      "tipo": "vulnerabilidade-seguranca"
-    },
-    {
       "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
-      "nivel": "aviso",
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
       "relPath": "src/shared/helpers/estrutura.ts",
       "tipo": "problemas-teste"
     },
@@ -2375,14 +2205,7 @@
       "tipo": "problemas-teste"
     },
     {
-      "linha": 112,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal",
-      "nivel": "info",
-      "relPath": "src/shared/helpers/imports.ts",
-      "tipo": "vulnerabilidade-seguranca"
-    },
-    {
-      "linha": 36,
+      "linha": 38,
       "mensagem": "Problemas de documentação (media): poor-naming, poor-naming, poor-naming",
       "nivel": "info",
       "relPath": "src/shared/helpers/imports.ts",
@@ -2412,14 +2235,14 @@
     {
       "linha": 19,
       "mensagem": "Problemas de documentação (media): poor-naming",
-      "nivel": "info",
+      "nivel": "aviso",
       "relPath": "src/shared/helpers/line-lookup.ts",
       "tipo": "problema-documentacao"
     },
     {
       "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
-      "nivel": "aviso",
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
       "relPath": "src/shared/helpers/line-lookup.ts",
       "tipo": "problemas-teste"
     },
@@ -2438,13 +2261,6 @@
       "tipo": "problemas-teste"
     },
     {
-      "linha": 124,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal",
-      "nivel": "aviso",
-      "relPath": "src/shared/helpers/masking.ts",
-      "tipo": "vulnerabilidade-seguranca"
-    },
-    {
       "linha": 1,
       "mensagem": "Problemas de teste (baixa): missing-tests",
       "nivel": "info",
@@ -2452,25 +2268,32 @@
       "tipo": "problemas-teste"
     },
     {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/shared/helpers/ocorrencias.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/shared/helpers/path.ts",
+      "tipo": "problemas-teste"
+    },
+    {
       "linha": 25,
       "mensagem": "Problemas de documentação (media): poor-naming",
-      "nivel": "info",
+      "nivel": "aviso",
       "relPath": "src/shared/helpers/suppressao.ts",
       "tipo": "problema-documentacao"
     },
     {
       "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
-      "nivel": "aviso",
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
       "relPath": "src/shared/helpers/suppressao.ts",
       "tipo": "problemas-teste"
-    },
-    {
-      "linha": 36,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal, unsafe-regex-literal, unsafe-regex-literal (+5 mais)",
-      "nivel": "info",
-      "relPath": "src/shared/impar/formater.ts",
-      "tipo": "vulnerabilidade-seguranca"
     },
     {
       "linha": 41,
@@ -2573,19 +2396,33 @@
     {
       "linha": 1,
       "mensagem": "Problemas de documentação (media): missing-jsdoc",
-      "nivel": "info",
+      "nivel": "aviso",
       "relPath": "src/shared/memory.ts",
       "tipo": "problema-documentacao"
     },
     {
-      "linha": 112,
-      "mensagem": "Problemas de teste (alta): flaky-test, missing-tests",
+      "linha": 70,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
       "nivel": "aviso",
+      "relPath": "src/shared/memory.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 83,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/shared/memory.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
       "relPath": "src/shared/memory.ts",
       "tipo": "problemas-teste"
     },
     {
-      "linha": 78,
+      "linha": 84,
       "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants",
       "nivel": "info",
       "relPath": "src/shared/persistence/persistencia.ts",
@@ -2597,13 +2434,6 @@
       "nivel": "info",
       "relPath": "src/shared/persistence/persistencia.ts",
       "tipo": "problemas-teste"
-    },
-    {
-      "linha": 271,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal, unsafe-regex-literal, unsafe-regex-literal (+3 mais)",
-      "nivel": "info",
-      "relPath": "src/shared/plugins/core-plugin.ts",
-      "tipo": "vulnerabilidade-seguranca"
     },
     {
       "linha": 1,
@@ -2663,13 +2493,6 @@
     },
     {
       "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
-      "nivel": "aviso",
-      "relPath": "src/types/core/config/config.ts",
-      "tipo": "problemas-teste"
-    },
-    {
-      "linha": 1,
       "mensagem": "Problemas de teste (baixa): missing-tests",
       "nivel": "info",
       "relPath": "src/types/guardian/resultado.ts",
@@ -2690,16 +2513,9 @@
       "tipo": "problema-documentacao"
     },
     {
-      "linha": 244,
-      "mensagem": "Problemas de teste (baixa): test-smells",
-      "nivel": "info",
-      "relPath": "src/types/shared/validacao.ts",
-      "tipo": "problemas-teste"
-    },
-    {
       "linha": 1,
-      "mensagem": "Problemas de teste (alta): missing-tests",
-      "nivel": "aviso",
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
       "relPath": "src/types/shared/validacao.ts",
       "tipo": "problemas-teste"
     },
@@ -2711,25 +2527,11 @@
       "tipo": "problema-documentacao"
     },
     {
-      "linha": 98,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal",
-      "nivel": "info",
-      "relPath": "src/zeladores/zelador-imports.ts",
-      "tipo": "vulnerabilidade-seguranca"
-    },
-    {
       "linha": 295,
       "mensagem": "Problemas de teste (baixa): test-smells, test-smells",
       "nivel": "info",
       "relPath": "src/zeladores/zelador-imports.ts",
       "tipo": "problemas-teste"
-    },
-    {
-      "linha": 245,
-      "mensagem": "Problemas de segurança (media): unsafe-regex-literal",
-      "nivel": "info",
-      "relPath": "vitest.config.ts",
-      "tipo": "vulnerabilidade-seguranca"
     },
     {
       "linha": 293,
@@ -2753,6 +2555,6 @@
       "tipo": "problemas-teste"
     }
   ],
-  "timestamp": "2026-04-02T03:15:58.113Z",
-  "totalOcorrencias": 55
+  "timestamp": "2026-04-04T23:34:20.493Z",
+  "totalOcorrencias": 38
 }

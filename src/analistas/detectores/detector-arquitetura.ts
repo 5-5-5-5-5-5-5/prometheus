@@ -420,7 +420,8 @@ function calcularMetricas(estatisticas: EstatisticasArquivo[]): AnaliseArquitetu
   }, 0);
   const acoplamento = totalDeps > 0 ? depsExternas / totalDeps : 0;
 
-  // Coesão = exports / imports (simplificado)
+  // Coesão balanceada: penaliza tanto o excesso de exports (módulos "god")
+  // quanto o excesso de imports (módulos "cola"), buscando um equilíbrio saudável.
   const totalExports = estatisticas.reduce((sum, s) => {
     if (Array.isArray(s.exports)) {
       return sum + s.exports.length;
@@ -429,7 +430,8 @@ function calcularMetricas(estatisticas: EstatisticasArquivo[]): AnaliseArquitetu
     }
     return sum;
   }, 0);
-  const coesao = totalImports > 0 ? Math.min(totalExports / totalImports, 1) : 0;
+  const ratio = totalImports > 0 ? totalExports / totalImports : 0;
+  const coesao = ratio > 0 ? Math.min(ratio, 1 / ratio) : 0;
 
   // Complexidade média
   const complexidadeMedia = estatisticas.reduce((sum, s) => sum + (s.complexidade ?? 0), 0) / estatisticas.length;

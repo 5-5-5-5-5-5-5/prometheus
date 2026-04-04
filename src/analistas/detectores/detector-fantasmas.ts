@@ -4,8 +4,11 @@ import path from 'node:path';
 
 import { grafoDependencias } from '@analistas/detectores/detector-dependencias.js';
 import { config } from '@core/config/config.js';
+import { LIMITES_PADRAO } from '@core/config/limites.js';
 import { isInsideSrc } from '@core/config/paths.js';
 import { scanRepository } from '@core/execution/scanner.js';
+import { isTestArquivo } from '@shared/helpers/rule-config.js';
+import { normalizePath } from '@shared/helpers/path.js';
 import { minimatch } from 'minimatch';
 
 import type { ArquivoFantasma, FileMap } from '@';
@@ -13,33 +16,18 @@ import type { ArquivoFantasma, FileMap } from '@';
 const EXTENSOES_ALVO = ['.js', '.ts', '.jsx', '.tsx', '.mjs', '.cjs'];
 
 // Janela de inatividade mínima para considerar fantasma (default mais conservador)
-const INATIVIDADE_DIAS = Number(process.env.GHOST_DAYS) || 45;
+const INATIVIDADE_DIAS = Number(process.env.GHOST_DAYS) || LIMITES_PADRAO.GUARDIAN.DIAS_INATIVIDADE_GHOST;
 const MILIS_POR_DIA = 86_400_000;
 
 // Padrões de entrypoints comuns que NÃO devem ser considerados órfãos
 const ENTRYPOINT_PADROES = [/^(src\/)?index\.(ts|js|tsx|jsx|mjs|cjs)$/i, /^(src\/)?main\.(ts|js|tsx|jsx|mjs|cjs)$/i, /^(src\/)?server\.(ts|js|tsx|jsx|mjs|cjs)$/i, /^(src\/)?app\.(ts|js|tsx|jsx|mjs|cjs)$/i, /^(src\/)?cli\.(ts|js|tsx|jsx|mjs|cjs)$/i, /(^|\/)bin\/[^/]+\.(ts|js|mjs|cjs)$/i, /\/index\.(ts|js|tsx|jsx|mjs|cjs)$/i, /config\.(ts|js|cjs|mjs)$/i, /\.config\.(ts|js|cjs|mjs)$/i, /\.d\.ts$/i];
 
-/**
- * Verifica se o arquivo é de teste usando a configuração centralizada
- */
-function isTestFileFromConfig(relPath: string): boolean {
-  const testConfiguracao = (config as unknown as {
-    testPadroes?: {
-      files?: string[];
-    };
-  }).testPadroes;
-  const patterns = testConfiguracao?.files || ['**/*.test.*', '**/*.spec.*', 'test/**/*', 'tests/**/*', '**/__tests__/**'];
-  const normalized = relPath.replace(/\\/g, '/');
-  return patterns.some(p => minimatch(normalized, p, {
-    dot: true
-  }));
-}
 
 /**
  * Verifica se é um entrypoint conhecido (bin, cli, main, index, etc.)
  */
 function isEntrypoint(relPath: string): boolean {
-  const normalized = relPath.replace(/\\/g, '/');
+  const normalized = normalizePath(relPath);
   return ENTRYPOINT_PADROES.some(p => p.test(normalized));
 }
 
@@ -47,7 +35,7 @@ function isEntrypoint(relPath: string): boolean {
  * Verifica se o arquivo está sendo referenciado por outro arquivo no grafo
  */
 function estaSendoReferenciado(relPath: string, grafo: Map<string, Set<string>>): boolean {
-  const normalized = relPath.replace(/\\/g, '/');
+  const normalized = normalizePath(relPath);
   // Variações que podem existir no grafo (com/sem extensão, etc.)
   const variations = new Set<string>([normalized]);
   const ext = path.posix.extname(normalized);
@@ -61,7 +49,7 @@ function estaSendoReferenciado(relPath: string, grafo: Map<string, Set<string>>)
   }
   for (const dependencias of grafo.values()) {
     for (const dep of dependencias) {
-      const depNorm = dep.replace(/\\/g, '/');
+      const depNorm = normalizePath(dep);
       if (variations.has(depNorm)) return true;
     }
   }
@@ -72,9 +60,9 @@ function estaSendoReferenciado(relPath: string, grafo: Map<string, Set<string>>)
  * Verifica se o arquivo importa outros (é um consumidor, não apenas consumido)
  */
 function importaOutros(relPath: string, grafo: Map<string, Set<string>>): boolean {
-  const normalized = relPath.replace(/\\/g, '/');
+  const normalized = normalizePath(relPath);
   for (const [chave, deps] of grafo.entries()) {
-    if (chave.replace(/\\/g, '/') === normalized && deps.size > 0) {
+    if (normalizePath(chave) === normalized && deps.size > 0) {
       return true;
     }
   }
@@ -105,7 +93,7 @@ export async function detectarFantasmas(baseDir: string = process.cwd()): Promis
     if (!EXTENSOES_ALVO.includes(ext)) continue;
 
     // 1. Ignora arquivos de teste (usando config centralizada)
-    if (excludeTestsFromOrphan && isTestFileFromConfig(relPath)) {
+    if (excludeTestsFromOrphan && isTestArquivo(relPath)) {
       continue;
     }
 

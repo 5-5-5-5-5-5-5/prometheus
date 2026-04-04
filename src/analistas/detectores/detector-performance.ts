@@ -4,6 +4,9 @@ import type { CallExpression, ForStatement, Node } from '@babel/types';
 import { traverse } from '@core/config/traverse.js';
 import { DetectorAgregadosMensagens } from '@core/messages/analistas/detector-agregados-messages.js';
 import { detectarContextoProjeto } from '@shared/contexto-projeto.js';
+import { agruparPor } from '@shared/helpers/agrupar.js';
+import { splitLines } from '@shared/helpers/lines.js';
+import { criarErroAnalise } from '@shared/helpers/ocorrencias.js';
 import { filtrarOcorrenciasSuprimidas } from '@shared/helpers/suppressao.js';
 
 import type { Analista, Ocorrencia, ProblemaPerformance } from '@';
@@ -37,7 +40,7 @@ export const analistaDesempenho: Analista = {
       const ocorrencias: Ocorrencia[] = [];
 
       // Agrupar por impacto
-      const porImpacto = agruparPorImpacto(problemas);
+      const porImpacto = agruparPor(problemas, p => p.impacto || 'medio');
       for (const [impacto, items] of Object.entries(porImpacto)) {
         if (items.length > 0) {
           const nivel = mapearImpactoParaNivel(impacto as ProblemaPerformance['impacto']);
@@ -58,43 +61,22 @@ export const analistaDesempenho: Analista = {
       // Aplicar supressões inline antes de retornar
       return filtrarOcorrenciasSuprimidas(ocorrencias, 'performance', src);
     } catch (erro) {
-      return [criarOcorrencia({
-        tipo: 'ERRO_ANALISE',
-        nivel: 'aviso',
-        mensagem: DetectorAgregadosMensagens.erroAnalisarPerformance(erro),
-        relPath,
-        linha: 1
-      })];
+      return [criarErroAnalise(relPath, DetectorAgregadosMensagens.erroAnalisarPerformance(erro))];
     }
   }
 };
 function detectarPadroesPerformance(src: string, problemas: ProblemaPerformance[], relPath: string): void {
-  const linhas = src.split('\n');
+  const linhas = splitLines(src);
   let dentroLoop = 0;
+  const loopOpen = /\b(for|while)\s*\(/;
+  const loopClose = /^\s*\}/;
+
   linhas.forEach((linha, index) => {
     const numeroLinha = index + 1;
 
-    // Detectar entrada de loops
-    if (/\b(for|while)\s*\(/.test(linha)) {
-      dentroLoop++;
-
-      // Se já estamos em um loop e encontramos outro, é loop aninhado
-      if (dentroLoop > 1) {
-        problemas.push({
-          tipo: 'inefficient-loop',
-          descricao: 'Loops aninhados podem causar problemas de performance O(n²)',
-          impacto: 'alto',
-          linha: numeroLinha,
-          coluna: linha.indexOf('for') !== -1 ? linha.indexOf('for') + 1 : linha.indexOf('while') + 1,
-          sugestao: 'Considere usar Map, Set ou otimizar algoritmo para complexidade linear'
-        });
-      }
-    }
-
-    // Detectar saída de loops (simplificado)
-    if (/^\s*}/.test(linha) && dentroLoop > 0) {
-      dentroLoop = Math.max(0, dentroLoop - 1);
-    }
+    // Track loop nesting
+    if (loopOpen.test(linha)) dentroLoop++;
+    if (loopClose.test(linha) && dentroLoop > 0) dentroLoop--;
 
     // Operações síncronas bloqueantes
     if (/\b(readFileSync|writeFileSync|execSync)\s*\(/.test(linha)) {
@@ -208,35 +190,41 @@ function detectarPadroesPerformance(src: string, problemas: ProblemaPerformance[
 }
 function detectarProblemasPerformanceAST(ast: NodePath<Node>, problemas: ProblemaPerformance[], relPath: string): void {
   try {
-    traverse(ast.node, {
-      // Detectar loops aninhados via AST (mais preciso)
-      ForStatement(path: NodePath<ForStatement>) {
-        let parent = path.parent;
-        while (parent) {
-          if (parent.type === 'ForStatement' || parent.type === 'WhileStatement' || parent.type === 'DoWhileStatement') {
-            problemas.push({
-              tipo: 'inefficient-loop',
-              descricao: 'Loop aninhado detectado via AST - pode causar performance O(n²)',
-              impacto: 'alto',
-              linha: path.node.loc?.start.line || 0,
-              coluna: path.node.loc?.start.column || 0,
-              sugestao: 'Considere restruturar algoritmo para evitar complexidade quadrática'
-            });
-            break;
-          }
-          parent = (parent as NodePath).parent; // Parent NodePath
+    const isLoop = (type: string) => ['ForStatement', 'WhileStatement', 'DoWhileStatement', 'ForInStatement', 'ForOfStatement'].includes(type);
+
+    const checkNesting = (path: NodePath<any>) => {
+      let parent = path.parentPath;
+      while (parent) {
+        if (isLoop(parent.type)) {
+          problemas.push({
+            tipo: 'inefficient-loop',
+            descricao: 'Loop aninhado detectado via AST - pode causar performance O(n²)',
+            impacto: 'alto',
+            linha: path.node.loc?.start.line || 0,
+            coluna: path.node.loc?.start.column || 0,
+            sugestao: 'Considere usar Map, Set ou otimizar algoritmo para complexidade linear'
+          });
+          break;
         }
-      },
+        parent = parent.parentPath;
+      }
+    };
+
+    traverse(ast.node, {
+      ForStatement: checkNesting,
+      WhileStatement: checkNesting,
+      DoWhileStatement: checkNesting,
+      ForInStatement: checkNesting,
+      ForOfStatement: checkNesting,
+
       // Detectar função setTimeout/setInterval sem cleanup
       CallExpression(path: NodePath<CallExpression>) {
         if (path.node.callee.type === 'Identifier' && (path.node.callee.name === 'setTimeout' || path.node.callee.name === 'setInterval')) {
-          // Verificar se há clearTimeout/clearInterval no escopo
-          const binding = path.scope.getBinding(path.node.callee.name);
-          if (!binding) return;
-
           // Heurística simples: se não há clear* na mesma função/arquivo
           const parentFunction = path.getFunctionParent();
-          if (parentFunction && !parentFunction.toString().includes('clear') && !relPath.includes('test')) {
+          const context = parentFunction ? parentFunction.toString() : ast.toString();
+
+          if (!context.includes('clear') && !relPath.includes('test')) {
             problemas.push({
               tipo: 'memory-leak',
               descricao: `${path.node.callee.name} sem cleanup pode causar vazamento`,
@@ -252,18 +240,6 @@ function detectarProblemasPerformanceAST(ast: NodePath<Node>, problemas: Problem
   } catch {
     // Ignorar erros de traverse
   }
-}
-function agruparPorImpacto(problemas: ProblemaPerformance[]): Record<string, ProblemaPerformance[]> {
-  return problemas.reduce((acc, problema) => {
-    const impacto = problema.impacto;
-    if (impacto) {
-      if (!acc[impacto]) {
-        acc[impacto] = [];
-      }
-      acc[impacto].push(problema);
-    }
-    return acc;
-  }, {} as Record<string, ProblemaPerformance[]>);
 }
 function mapearImpactoParaNivel(impacto: ProblemaPerformance['impacto']): 'info' | 'aviso' | 'erro' {
   switch (impacto) {

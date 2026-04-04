@@ -2,11 +2,14 @@
 import type { NodePath } from '@babel/traverse';
 import type { ArrowFunctionExpression, CatchClause, FunctionDeclaration, FunctionExpression, Node, NumericLiteral, TSAnyKeyword } from '@babel/types';
 import { config } from '@core/config/config.js';
+import { LIMITES_PADRAO } from '@core/config/limites.js';
 import { traverse } from '@core/config/traverse.js';
 import { DetectorCodigoFragilMensagens } from '@core/messages/analistas/detector-codigo-fragil-messages.js';
 import { detectarComentariosPendentes, detectarLogsDebug } from '@shared/helpers/detectores-comuns.js';
 import { detectarFrameworks } from '@shared/helpers/framework-detector.js';
 import { isWhitelistedConstant } from '@shared/helpers/magic-constants-whitelist.js';
+import { agruparPor } from '@shared/helpers/agrupar.js';
+import { splitLines } from '@shared/helpers/lines.js';
 import { filtrarOcorrenciasSuprimidas } from '@shared/helpers/suppressao.js';
 
 import type { Analista, Fragilidade, Ocorrencia } from '@';
@@ -15,14 +18,14 @@ import { criarOcorrencia } from '@';
 // Cache de frameworks detectados (evita múltiplas leituras do package.json)
 let frameworksDetectados: string[] | null = null;
 const LIMITES = {
-  LINHAS_FUNCAO: 30,
-  PARAMETROS_FUNCAO: 4,
-  MAX_PARAMETROS_CRITICO: 6,
-  CALLBACKS_ANINHADOS: 2,
-  COMPLEXIDADE_COGNITIVA: 15,
-  REGEX_COMPLEXA_LENGTH: 50,
-  MAX_ANINHAMENTO_IF: 3,
-  MAX_LINHAS_ARQUIVO: 300
+  LINHAS_FUNCAO: LIMITES_PADRAO.CODIGO.MAX_LINHAS_FUNCAO,
+  PARAMETROS_FUNCAO: LIMITES_PADRAO.CODIGO.MAX_PARAMETROS_FUNCAO,
+  MAX_PARAMETROS_CRITICO: LIMITES_PADRAO.CODIGO.MAX_PARAMETROS_CRITICO,
+  CALLBACKS_ANINHADOS: LIMITES_PADRAO.CODIGO.MAX_NESTED_CALLBACKS,
+  COMPLEXIDADE_COGNITIVA: LIMITES_PADRAO.CODIGO.MAX_COMPLEXIDADE_COGNITIVA,
+  REGEX_COMPLEXA_LENGTH: LIMITES_PADRAO.CODIGO.MAX_REGEX_LENGTH,
+  MAX_ANINHAMENTO_IF: LIMITES_PADRAO.CODIGO.MAX_ANINHAMENTO_IF,
+  MAX_LINHAS_ARQUIVO: LIMITES_PADRAO.CODIGO.MAX_LINHAS_ARQUIVO
 } as const;
 
 /**
@@ -154,7 +157,7 @@ export const analistaCodigoFragil: Analista = {
       fragilidades.push({ tipo: 'todo-comment', linha: todo.linha, coluna: 0, severidade: 'baixa', contexto: `Comentário ${todo.tipo} encontrado: ${todo.texto.substring(0, 30)}...` });
     });
 
-    const lines = src.split('\n');
+    const lines = splitLines(src);
     if (lines.length > LIMITES.MAX_LINHAS_ARQUIVO) {
       fragilidades.push({ tipo: 'arquivo-muito-grande', linha: 1, coluna: 0, severidade: 'media', contexto: `Arquivo com ${lines.length} linhas (máx sugerido: ${LIMITES.MAX_LINHAS_ARQUIVO})` });
     }
@@ -174,7 +177,7 @@ export const analistaCodigoFragil: Analista = {
 
     // Converter para ocorrências Sensei
     const ocorrencias: Ocorrencia[] = [];
-    const porSeveridade = agruparPorSeveridade(fragilidades);
+    const porSeveridade = agruparPor(fragilidades, f => f.severidade || 'media');
     for (const [severidade, items] of Object.entries(porSeveridade)) {
       if (items.length > 0) {
         const nivel = severidade === 'critica' || severidade === 'alta' ? 'erro' : severidade === 'media' ? 'aviso' : 'info';
@@ -208,7 +211,7 @@ export const analistaCodigoFragil: Analista = {
  * Heurísticas avançadas baseadas em padrões de texto
  */
 function detectarProblemasAvancados(src: string, fragilidades: Fragilidade[]): void {
-  const lines = src.split('\n');
+  const lines = splitLines(src);
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     // .then() sem .catch()
@@ -226,7 +229,7 @@ function detectarProblemasAvancados(src: string, fragilidades: Fragilidade[]): v
 }
 
 function detectarComplexidadeCognitiva(src: string, fragilidades: Fragilidade[]): void {
-  const lines = src.split('\n');
+  const lines = splitLines(src);
   let score = 0;
   let nesting = 0;
   for (let i = 0; i < lines.length; i++) {
@@ -246,11 +249,3 @@ function isSingleConsoleLog(stmt: Node): boolean {
 }
 function isInVariableDeclarator(path: NodePath): boolean { return !!path.findParent(p => p.isVariableDeclarator()); }
 function isInArrayIndex(path: NodePath): boolean { return !!path.findParent(p => p.isMemberExpression() && (p.node as any).computed); }
-function agruparPorSeveridade(fragilidades: Fragilidade[]): Record<string, Fragilidade[]> {
-  return fragilidades.reduce((acc, f) => {
-    const s = f.severidade || 'media';
-    if (!acc[s]) acc[s] = [];
-    acc[s].push(f);
-    return acc;
-  }, {} as Record<string, Fragilidade[]>);
-}
