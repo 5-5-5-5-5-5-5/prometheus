@@ -3,13 +3,13 @@
 .vscode
 .legados
 .codex
-scripts/
+scripts
 
 # Node modules
-node_modules/
+node_modules
 
-# pnpm store / pnp
-.pnpm-store/
+# pnpm store  pnp
+.pnpm-store
 .pnp.cjs
 .pnp.loader.mjs
 
@@ -17,15 +17,15 @@ node_modules/
 
 
 # build output
-build/
-dist/
+build
+dist
 
 # coverage
-coverage/
-.nyc_output/
+coverage
+.nyc_output
 
-# Sensei runtime / caches / reports
-.sensei/
+# Sensei runtime  caches  reports
+.sensei
 # TypeScript
 *.tsbuildinfo
 
@@ -39,13 +39,13 @@ yarn-error.log*
 Thumbs.db
 
 # Editor settings
-.vscode/
-.idea/
+.vscode
+.idea
 
-# temp / test artifacts
+# temp  test artifacts
 tmp-
-tmp*/
-tests/tmp/
+tmp*
+teststmp
 
 # lockfiles (do not commit lockfiles for library modules)
 yarn.lock
