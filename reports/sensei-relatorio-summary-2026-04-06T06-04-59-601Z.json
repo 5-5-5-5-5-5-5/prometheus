@@ -1,0 +1,3064 @@
+{
+  "baselineModificado": false,
+  "metricas": {
+    "analistas": [
+      {
+        "duracaoTotalMs": 297.05,
+        "execucoes": 894,
+        "nome": "documentacao",
+        "ocorrenciasTotal": 326
+      },
+      {
+        "duracaoTotalMs": 99.15,
+        "execucoes": 447,
+        "nome": "qualidade-testes",
+        "ocorrenciasTotal": 219
+      },
+      {
+        "duracaoTotalMs": 79.64,
+        "execucoes": 442,
+        "nome": "detector-tipos-inseguros",
+        "ocorrenciasTotal": 24
+      },
+      {
+        "duracaoTotalMs": 332.96,
+        "execucoes": 447,
+        "nome": "seguranca",
+        "ocorrenciasTotal": 3
+      },
+      {
+        "duracaoTotalMs": 8.03,
+        "execucoes": 1,
+        "nome": "detector-estrutura",
+        "ocorrenciasTotal": 2
+      },
+      {
+        "duracaoTotalMs": 23.57,
+        "execucoes": 34,
+        "nome": "detector-markdown",
+        "ocorrenciasTotal": 2
+      },
+      {
+        "duracaoTotalMs": 231.95,
+        "execucoes": 1,
+        "nome": "sugestoes-contextuais",
+        "ocorrenciasTotal": 1
+      },
+      {
+        "duracaoTotalMs": 206.31,
+        "execucoes": 337,
+        "nome": "detector-interfaces-inline",
+        "ocorrenciasTotal": 1
+      },
+      {
+        "duracaoTotalMs": 24.18,
+        "execucoes": 40,
+        "nome": "analista-formatador",
+        "ocorrenciasTotal": 0
+      },
+      {
+        "duracaoTotalMs": 44.42,
+        "execucoes": 447,
+        "nome": "construcoes-sintaticas",
+        "ocorrenciasTotal": 0
+      },
+      {
+        "duracaoTotalMs": 43.77,
+        "execucoes": 447,
+        "nome": "codigo-fragil",
+        "ocorrenciasTotal": 0
+      },
+      {
+        "duracaoTotalMs": 43.06,
+        "execucoes": 447,
+        "nome": "detector-duplicacoes",
+        "ocorrenciasTotal": 0
+      },
+      {
+        "duracaoTotalMs": 43.92,
+        "execucoes": 447,
+        "nome": "arquitetura",
+        "ocorrenciasTotal": 0
+      },
+      {
+        "duracaoTotalMs": 49.27,
+        "execucoes": 447,
+        "nome": "analista-css-in-js",
+        "ocorrenciasTotal": 0
+      },
+      {
+        "duracaoTotalMs": 21.41,
+        "execucoes": 447,
+        "nome": "quick-fixes",
+        "ocorrenciasTotal": 0
+      },
+      {
+        "duracaoTotalMs": 50.53,
+        "execucoes": 446,
+        "nome": "detector-dependencias",
+        "ocorrenciasTotal": 0
+      },
+      {
+        "duracaoTotalMs": 70.83,
+        "execucoes": 446,
+        "nome": "analista-funcoes-longas",
+        "ocorrenciasTotal": 0
+      },
+      {
+        "duracaoTotalMs": 70.8,
+        "execucoes": 446,
+        "nome": "analista-padroes-uso",
+        "ocorrenciasTotal": 0
+      },
+      {
+        "duracaoTotalMs": 65.55,
+        "execucoes": 446,
+        "nome": "analista-comandos-cli",
+        "ocorrenciasTotal": 0
+      },
+      {
+        "duracaoTotalMs": 43.58,
+        "execucoes": 446,
+        "nome": "anti-padroes-async",
+        "ocorrenciasTotal": 0
+      },
+      {
+        "duracaoTotalMs": 42.15,
+        "execucoes": 446,
+        "nome": "vazamento-memoria",
+        "ocorrenciasTotal": 0
+      },
+      {
+        "duracaoTotalMs": 94.94,
+        "execucoes": 446,
+        "nome": "analista-react-hooks",
+        "ocorrenciasTotal": 0
+      },
+      {
+        "duracaoTotalMs": 99.53,
+        "execucoes": 446,
+        "nome": "analista-react",
+        "ocorrenciasTotal": 0
+      },
+      {
+        "duracaoTotalMs": 68.6,
+        "execucoes": 446,
+        "nome": "analista-tailwind",
+        "ocorrenciasTotal": 0
+      },
+      {
+        "duracaoTotalMs": 71.15,
+        "execucoes": 423,
+        "nome": "todo-comments",
+        "ocorrenciasTotal": 0
+      }
+    ],
+    "cacheAstHits": 0,
+    "cacheAstMiss": 442,
+    "tempoAnaliseMs": 2744,
+    "tempoParsingMs": 835,
+    "totalArquivos": 491
+  },
+  "ocorrencias": [
+    {
+      "linha": 1,
+      "mensagem": "Arquivos de configuração detectados: tsconfig.json",
+      "nivel": "info",
+      "relPath": "[raiz do projeto]",
+      "tipo": "estrutura-config"
+    },
+    {
+      "linha": 0,
+      "mensagem": "Projeto possui múltiplos entrypoints (agrupados por diretório): src/bin (2), src/analistas/corrections (1), src/analistas/corrections/quick-fixes (1), src/analistas/corrections/type-safety (1), src/analistas/plugins (1), src/cli/commands (1), src/core/messages (1), src/core/messages/en (1), src/core/messages/en/analistas (1), src/core/messages/en/cli (1) … (+29 dirs, +29 entrypoints ocultos)",
+      "nivel": "aviso",
+      "relPath": "[raiz do projeto]",
+      "tipo": "estrutura-entrypoints"
+    },
+    {
+      "linha": 0,
+      "mensagem": "Não foi possível identificar um arquétipo específico. Considere adicionar mais estrutura ao projeto.",
+      "nivel": "info",
+      "relPath": "",
+      "tipo": "sugestoes_arquitetura"
+    },
+    {
+      "mensagem": "Arquivo não possui aviso de Proveniência e Autoria nas primeiras linhas",
+      "nivel": "erro",
+      "relPath": "AGENTS.md",
+      "sugestao": "Adicione o aviso usando scripts/add-disclaimer-md.js",
+      "tipo": "markdown-falta-proveniencia"
+    },
+    {
+      "linha": 19,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "eslint.config.js",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/analistas/arquitetos/analista-estrutura.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 7,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+2 mais)",
+      "nivel": "info",
+      "relPath": "src/analistas/arquitetos/diagnostico-projeto.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/analistas/arquitetos/diagnostico-projeto.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/arquitetos/estrategista-estrutura.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 179,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/analistas/arquitetos/sinais-projeto-avancados.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/arquitetos/sinais-projeto-avancados.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/arquitetos/sinais-projeto.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 111,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "src/analistas/corrections/analista-pontuacao.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/corrections/analista-pontuacao.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/corrections/analista-quick-fixes.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 5,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "src/analistas/corrections/fix-md-fences.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/corrections/fix-md-fences.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/corrections/index.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 18,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "src/analistas/corrections/mapa-reversao.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/analistas/corrections/mapa-reversao.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 8,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+5 mais)",
+      "nivel": "info",
+      "relPath": "src/analistas/corrections/pontuacao-shared.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/corrections/pontuacao-shared.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 21,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/analistas/corrections/quick-fixes/fix-any-to-proper-type.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/analistas/corrections/quick-fixes/fix-any-to-proper-type.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 26,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+1 mais)",
+      "nivel": "info",
+      "relPath": "src/analistas/corrections/quick-fixes/fix-unknown-to-specific-type.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/analistas/corrections/quick-fixes/fix-unknown-to-specific-type.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/corrections/reescrever-testes-aliases.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/corrections/type-safety/context-analyzer.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 52,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/analistas/corrections/type-safety/type-analyzer.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/analistas/corrections/type-safety/type-creator.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 30,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+6 mais)",
+      "nivel": "info",
+      "relPath": "src/analistas/corrections/type-safety/type-inference.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/analistas/corrections/type-safety/type-inference.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 47,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+1 mais)",
+      "nivel": "info",
+      "relPath": "src/analistas/corrections/type-safety/type-validator.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/analistas/corrections/type-safety/type-validator.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 119,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+3 mais)",
+      "nivel": "info",
+      "relPath": "src/analistas/corrections/type-safety/usage-analyzer.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/analistas/corrections/type-safety/usage-analyzer.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-anti-padroes-async.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 26,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+10 mais)",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-arquetipos.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 237,
+      "mensagem": "Problemas de documentação (media): poor-naming",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-arquitetura.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 286,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+6 mais)",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-arquitetura.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-arquitetura.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 36,
+      "mensagem": "Problemas de documentação (media): missing-types, missing-types, missing-types (+3 mais)",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-codigo-fragil.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 162,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-codigo-fragil.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-codigo-fragil.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-construcoes-sintaticas.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 413,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-contexto-inteligente.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 273,
+      "mensagem": "Problemas de teste (baixa): test-smells, test-smells, test-smells (+1 mais)",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-contexto-inteligente.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-dependencias.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 16,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+4 mais)",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-duplicacoes.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-duplicacoes.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 127,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-estrutura.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-estrutura.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 75,
+      "mensagem": "Problemas de teste (alta): flaky-test",
+      "nivel": "aviso",
+      "relPath": "src/analistas/detectores/detector-fantasmas.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-fantasmas.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 116,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+3 mais)",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-interfaces-inline.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 351,
+      "mensagem": "Problemas de documentação (media): poor-naming",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-interfaces-inline.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-interfaces-inline.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 164,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-performance.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-performance.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 84,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+1 mais)",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-seguranca.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 209,
+      "mensagem": "Problemas de teste (alta): flaky-test, flaky-test",
+      "nivel": "aviso",
+      "relPath": "src/analistas/detectores/detector-seguranca.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-seguranca.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 34,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+2 mais)",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-tipos-inseguros.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-tipos-inseguros.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/detectores/detector-vazamentos-memoria.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 45,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/analistas/estrategistas/operario-estrutura.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 82,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/analistas/estrategistas/operario-estrutura.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/analistas/estrategistas/operario-estrutura.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 65,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/analistas/estrategistas/sugestoes-contextuais.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/analistas/estrategistas/sugestoes-contextuais.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 46,
+      "mensagem": "Problemas de documentação (media): poor-naming, poor-naming",
+      "nivel": "info",
+      "relPath": "src/analistas/js-ts/analista-comandos-cli.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/js-ts/analista-comandos-cli.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 15,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "src/analistas/js-ts/analista-funcoes-longas.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/analistas/js-ts/analista-funcoes-longas.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 16,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/analistas/js-ts/analista-padroes-uso.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 17,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/analistas/js-ts/analista-padroes-uso.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 18,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/analistas/js-ts/analista-padroes-uso.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 19,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/analistas/js-ts/analista-padroes-uso.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 20,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/analistas/js-ts/analista-padroes-uso.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 21,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/analistas/js-ts/analista-padroes-uso.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 22,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/analistas/js-ts/analista-padroes-uso.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/analistas/js-ts/analista-padroes-uso.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 50,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "src/analistas/js-ts/analista-todo-comments.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/js-ts/analista-todo-comments.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/analistas/js-ts/arquetipos-personalizados.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/analistas/js-ts/orquestrador-arquetipos.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/analista-css-in-js.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 164,
+      "mensagem": "Problemas de documentação (media): poor-naming, poor-naming, poor-naming",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/analista-css.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 47,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/analistas/plugins/analista-css.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/analista-css.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/analista-formater.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 30,
+      "mensagem": "Problemas de documentação (media): poor-naming, poor-naming",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/analista-html.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/analista-html.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/analista-python.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 88,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/analista-react-hooks.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 112,
+      "mensagem": "Problemas de documentação (media): poor-naming",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/analista-react-hooks.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/analista-react-hooks.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 71,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/analista-react.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 157,
+      "mensagem": "Problemas de documentação (media): poor-naming, poor-naming, poor-naming",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/analista-react.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/analista-react.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/analista-shell.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/analista-sql.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/analista-svg.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 13,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/analista-tailwind.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/analista-tailwind.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/analista-xml.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/detector-documentacao.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 56,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+3 mais)",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/detector-markdown.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/detector-markdown.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/detector-node.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/detector-qualidade-testes.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 20,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+3 mais)",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/detector-xml.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/analistas/plugins/detector-xml.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 7,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+64 mais)",
+      "nivel": "info",
+      "relPath": "src/analistas/pontuadores/pontuador.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/pontuadores/pontuador.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/analistas/registry/autodiscovery.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/analistas/registry/registry.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 35,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/bin/cli.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 130,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/bin/cli.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/commands/comando-analistas.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 29,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/cli/commands/comando-atualizar.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/commands/comando-atualizar.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 60,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/cli/commands/comando-diagnosticar.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 61,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/cli/commands/comando-diagnosticar.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/commands/comando-diagnosticar.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 22,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+14 mais)",
+      "nivel": "info",
+      "relPath": "src/cli/commands/comando-fix-types.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/commands/comando-fix-types.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 76,
+      "mensagem": "Problemas de segurança (media): unhandled-async, unhandled-async, unhandled-async",
+      "nivel": "info",
+      "relPath": "src/cli/commands/comando-formatar.ts",
+      "tipo": "vulnerabilidade-seguranca"
+    },
+    {
+      "linha": 159,
+      "mensagem": "Problemas de documentação (media): poor-naming",
+      "nivel": "info",
+      "relPath": "src/cli/commands/comando-formatar.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 79,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/cli/commands/comando-formatar.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/cli/commands/comando-formatar.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 30,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/cli/commands/comando-guardian.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/commands/comando-guardian.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/commands/comando-licensas.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/commands/comando-metricas.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 32,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/cli/commands/comando-names.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/commands/comando-names.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 61,
+      "mensagem": "Problemas de segurança (media): unhandled-async",
+      "nivel": "info",
+      "relPath": "src/cli/commands/comando-otimizar-svg.ts",
+      "tipo": "vulnerabilidade-seguranca"
+    },
+    {
+      "linha": 24,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+1 mais)",
+      "nivel": "info",
+      "relPath": "src/cli/commands/comando-otimizar-svg.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 64,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/cli/commands/comando-otimizar-svg.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/cli/commands/comando-otimizar-svg.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 89,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/cli/commands/comando-perf.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/commands/comando-perf.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 34,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/cli/commands/comando-podar.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/commands/comando-podar.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/commands/comando-reestruturar.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 68,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/cli/commands/comando-rename.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/commands/comando-rename.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/commands/comando-reverter.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 2,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+3 mais)",
+      "nivel": "info",
+      "relPath": "src/cli/diagnostico/exporters/json-exporter.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/diagnostico/exporters/json-exporter.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 2,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+2 mais)",
+      "nivel": "info",
+      "relPath": "src/cli/diagnostico/exporters/markdown-exporter.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/diagnostico/exporters/markdown-exporter.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 2,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/cli/diagnostico/exporters/sharded-exporter.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/diagnostico/exporters/sharded-exporter.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 14,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+3 mais)",
+      "nivel": "info",
+      "relPath": "src/cli/diagnostico/exporters/svg-otimizacao-exporter.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/cli/diagnostico/exporters/svg-otimizacao-exporter.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/cli/diagnostico/filtros.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 28,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/cli/diagnostico/handlers/arquetipo-handler.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/diagnostico/handlers/arquetipo-handler.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 2,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+3 mais)",
+      "nivel": "info",
+      "relPath": "src/cli/diagnostico/handlers/auto-fix-handler.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/diagnostico/handlers/auto-fix-handler.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/diagnostico/handlers/guardian-handler.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/diagnostico/normalizar-ocorrencias-json.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 49,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+7 mais)",
+      "nivel": "info",
+      "relPath": "src/cli/handlers/fix-types-exporter.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 67,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+1 mais)",
+      "nivel": "info",
+      "relPath": "src/cli/helpers/exibir-moldura.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/helpers/exibir-moldura.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/helpers/exit-codes.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/helpers/flags-helpers.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/helpers/get-files-src.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/cli/helpers/pattern-helpers.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/options/flags-validator.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 64,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+15 mais)",
+      "nivel": "info",
+      "relPath": "src/cli/processamento-diagnostico.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 88,
+      "mensagem": "Problemas de teste (alta): flaky-test",
+      "nivel": "aviso",
+      "relPath": "src/cli/processamento-diagnostico.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 319,
+      "mensagem": "Problemas de teste (baixa): test-smells, test-smells, test-smells (+16 mais)",
+      "nivel": "info",
+      "relPath": "src/cli/processamento-diagnostico.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 39,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+9 mais)",
+      "nivel": "info",
+      "relPath": "src/cli/processing/display.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/cli/processing/display.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/cli/processing/filters.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 30,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/core/config/auto/auto-fix-config.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/core/config/auto/auto-fix-config.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 63,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/core/config/auto/fix-config.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 98,
+      "mensagem": "Problemas de documentação (media): poor-naming, poor-naming, poor-naming (+3 mais)",
+      "nivel": "info",
+      "relPath": "src/core/config/auto/fix-config.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/core/config/auto/fix-config.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 65,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/core/config/auto/validacao.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 49,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+6 mais)",
+      "nivel": "info",
+      "relPath": "src/core/config/config.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/core/config/config.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 15,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+13 mais)",
+      "nivel": "info",
+      "relPath": "src/core/config/configuracao-pontuacao.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 26,
+      "mensagem": "Problemas de documentação (media): poor-naming",
+      "nivel": "info",
+      "relPath": "src/core/config/conventions.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/core/config/conventions.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 209,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "src/core/config/excludes-padrao.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 12,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+7 mais)",
+      "nivel": "info",
+      "relPath": "src/core/config/format.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 11,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+7 mais)",
+      "nivel": "info",
+      "relPath": "src/core/config/limites.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/core/config/paths.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/core/config/seguranca.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 83,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+11 mais)",
+      "nivel": "info",
+      "relPath": "src/core/execution/executor.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 335,
+      "mensagem": "Problemas de documentação (media): poor-naming",
+      "nivel": "info",
+      "relPath": "src/core/execution/executor.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 109,
+      "mensagem": "Problemas de teste (alta): flaky-test, flaky-test, flaky-test (+3 mais)",
+      "nivel": "aviso",
+      "relPath": "src/core/execution/executor.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/core/execution/executor.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 398,
+      "mensagem": "Problemas de documentação (media): poor-naming",
+      "nivel": "info",
+      "relPath": "src/core/execution/inquisidor.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 426,
+      "mensagem": "Problemas de teste (alta): flaky-test",
+      "nivel": "aviso",
+      "relPath": "src/core/execution/inquisidor.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/core/execution/inquisidor.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 63,
+      "mensagem": "Problemas de documentação (media): poor-naming",
+      "nivel": "info",
+      "relPath": "src/core/execution/scanner.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 407,
+      "mensagem": "Problemas de teste (alta): flaky-test",
+      "nivel": "aviso",
+      "relPath": "src/core/execution/scanner.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/core/execution/scanner.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/analistas/analista-comandos-cli-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/analistas/analista-padroes-uso-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/en/analistas/arquetipos-extra-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/analistas/arquetipos-extra-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/en/analistas/corretor-estrutura-extra-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/analistas/corretor-estrutura-extra-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/analistas/detector-agregados-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 17,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/analistas/detector-arquitetura-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/analistas/detector-arquitetura-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/analistas/detector-codigo-fragil-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/analistas/detector-construcoes-sintaticas-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/en/analistas/detector-contexto-extra-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/analistas/detector-dependencias-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/analistas/detector-estrutura-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/analistas/detector-interfaces-inline-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/en/analistas/mapa-reversao-extra-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/cli/cli-comando-atualizar-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/cli/cli-comando-diagnosticar-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/cli/cli-comando-names-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/cli/cli-comando-reestruturar-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/cli/cli-comando-rename-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/cli/cli-processamento-diagnostico-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 83,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/core/correcoes-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/core/correcoes-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 104,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+1 mais)",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/core/diagnostico-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/core/diagnostico-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/core/excecoes-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/en/core/executor-extra-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/core/executor-extra-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 19,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+3 mais)",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/core/fix-types-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/core/fix-types-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/en/core/inquisidor-extra-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/core/inquisidor-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/en/core/parser-extra-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 159,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/core/plugin-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/core/plugin-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/en/guardian/vigia-oculta-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/en/licensas/licensas-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/licensas/licensas-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 71,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+2 mais)",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/log/log-helper.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/log/log-helper.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/log/log-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 184,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+2 mais)",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/log/log.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 222,
+      "mensagem": "Problemas de documentação (media): poor-naming",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/log/log.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 260,
+      "mensagem": "Problemas de teste (baixa): test-smells, test-smells, test-smells (+8 mais)",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/log/log.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 14,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/relatorios/json-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/relatorios/json-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/en/relatorios/relatorio-async-patterns-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/relatorios/relatorio-async-patterns-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/relatorios/relatorio-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 79,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/relatorios/relatorio-templates.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/relatorios/relatorio-templates.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/en/relatorios/relatorio-zelador-saude-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/en/shared/plugin-core-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/en/shared/plugin-registry-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/shared/plugin-registry-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/ui/filtro-config.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/ui/sugestoes-contextuais-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 213,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/ui/sugestoes.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/ui/sugestoes.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 162,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+3 mais)",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/zeladores/zelador-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/en/zeladores/zelador-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/index.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/analistas/analista-comandos-cli-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/pt/analistas/arquetipos-extra-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/pt/analistas/corretor-estrutura-extra-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 17,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/analistas/detector-arquitetura-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/pt/analistas/detector-contexto-extra-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/pt/analistas/mapa-reversao-extra-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 83,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/core/correcoes-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 104,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+1 mais)",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/core/diagnostico-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/core/diagnostico-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/pt/core/executor-extra-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 19,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+3 mais)",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/core/fix-types-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/pt/core/inquisidor-extra-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/pt/core/parser-extra-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 159,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/core/plugin-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/core/plugin-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/pt/guardian/vigia-oculta-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/pt/licensas/licensas-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 43,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+4 mais)",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/log/log-engine.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/log/log-engine.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 71,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+2 mais)",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/log/log-helper.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/log/log-helper.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 184,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+2 mais)",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/log/log.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 222,
+      "mensagem": "Problemas de documentação (media): poor-naming",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/log/log.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 260,
+      "mensagem": "Problemas de teste (baixa): test-smells, test-smells, test-smells (+8 mais)",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/log/log.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 14,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/relatorios/json-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/relatorios/json-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/pt/relatorios/relatorio-async-patterns-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/relatorios/relatorio-async-patterns-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/relatorios/relatorio-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 79,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/relatorios/relatorio-templates.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/relatorios/relatorio-templates.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/pt/relatorios/relatorio-zelador-saude-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/pt/shared/plugin-core-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/core/messages/pt/shared/plugin-registry-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/ui/filtro-config.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 213,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/ui/sugestoes.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/ui/sugestoes.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 162,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+3 mais)",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/zeladores/zelador-messages.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/pt/zeladores/zelador-messages.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/messages/shared/icons.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/core/parsing/filters.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 235,
+      "mensagem": "Problemas de documentação (media): poor-naming",
+      "nivel": "info",
+      "relPath": "src/core/parsing/parser.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 303,
+      "mensagem": "Problemas de teste (alta): flaky-test",
+      "nivel": "aviso",
+      "relPath": "src/core/parsing/parser.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/core/parsing/parser.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/registry/file-registry.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/reporting/default-reporter.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 23,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "src/core/schema/version.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/schema/version.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/core/utils/exec-safe.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 137,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "src/core/workers/worker-executor.js",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 44,
+      "mensagem": "Problemas de teste (alta): flaky-test, flaky-test, flaky-test (+4 mais)",
+      "nivel": "aviso",
+      "relPath": "src/core/workers/worker-executor.js",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/core/workers/worker-executor.js",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 46,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+2 mais)",
+      "nivel": "info",
+      "relPath": "src/core/workers/worker-pool.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 167,
+      "mensagem": "Problemas de documentação (media): poor-naming",
+      "nivel": "info",
+      "relPath": "src/core/workers/worker-pool.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 204,
+      "mensagem": "Problemas de teste (alta): flaky-test, flaky-test, flaky-test",
+      "nivel": "aviso",
+      "relPath": "src/core/workers/worker-pool.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/core/workers/worker-pool.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/guardian/diff.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 26,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/guardian/hash.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/guardian/hash.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/guardian/verificador.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 46,
+      "mensagem": "Problemas de documentação (media): poor-naming",
+      "nivel": "info",
+      "relPath": "src/licensas/disclaimer.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 81,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/licensas/disclaimer.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/licensas/disclaimer.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/licensas/fs-utils.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 19,
+      "mensagem": "Interface 'HeaderOptions' deve estar em types/",
+      "nivel": "aviso",
+      "relPath": "src/licensas/generate-notices.ts",
+      "tipo": "interface-inline-exportada"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/licensas/generate-notices.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 47,
+      "mensagem": "Problemas de documentação (media): poor-naming, poor-naming",
+      "nivel": "info",
+      "relPath": "src/licensas/normalizer.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/licensas/normalizer.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 38,
+      "mensagem": "Problemas de documentação (media): poor-naming",
+      "nivel": "aviso",
+      "relPath": "src/licensas/scanner.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 17,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/licensas/scanner.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 76,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "src/relatorios/analise-async-patterns.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 20,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/relatorios/conselheiro-senseial.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/relatorios/conselheiro-senseial.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 17,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/relatorios/filtro-inteligente.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/relatorios/filtro-inteligente.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 86,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "src/relatorios/gerador-relatorio.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/relatorios/relatorio-arquetipos.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/relatorios/relatorio-estrutura.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 25,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/relatorios/relatorio-padroes-uso.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/relatorios/relatorio-padroes-uso.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 30,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+3 mais)",
+      "nivel": "info",
+      "relPath": "src/relatorios/relatorio-zelador-saude.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/relatorios/relatorio-zelador-saude.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 24,
+      "mensagem": "Problemas de documentação (media): poor-naming",
+      "nivel": "info",
+      "relPath": "src/shared/contexto-projeto.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/shared/contexto-projeto.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 26,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/shared/data-processing/fragmentar-relatorio.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 90,
+      "mensagem": "Problemas de documentação (media): poor-naming, missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/shared/data-processing/fragmentar-relatorio.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/shared/data-processing/fragmentar-relatorio.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 33,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+2 mais)",
+      "nivel": "info",
+      "relPath": "src/shared/data-processing/json.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/shared/data-processing/json.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/shared/data-processing/ocorrencias.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/shared/helpers/analista-wrapper.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/shared/helpers/ast-visitor-utils.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/shared/helpers/context-utils.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/shared/helpers/detectores-comuns.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/shared/helpers/estrutura.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/shared/helpers/framework-detector.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/shared/helpers/helpers-analistas.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 38,
+      "mensagem": "Problemas de documentação (media): poor-naming, poor-naming, poor-naming",
+      "nivel": "info",
+      "relPath": "src/shared/helpers/imports.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/shared/helpers/imports.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 33,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/shared/helpers/json.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/shared/helpers/json.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 19,
+      "mensagem": "Problemas de documentação (media): poor-naming",
+      "nivel": "aviso",
+      "relPath": "src/shared/helpers/line-lookup.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/shared/helpers/line-lookup.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 24,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+23 mais)",
+      "nivel": "info",
+      "relPath": "src/shared/helpers/magic-constants-whitelist.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/shared/helpers/magic-constants-whitelist.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/shared/helpers/masking.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/shared/helpers/ocorrencias.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/shared/helpers/path.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 25,
+      "mensagem": "Problemas de documentação (media): poor-naming",
+      "nivel": "aviso",
+      "relPath": "src/shared/helpers/suppressao.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/shared/helpers/suppressao.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 41,
+      "mensagem": "Problemas de documentação (media): poor-naming, poor-naming, poor-naming (+25 mais)",
+      "nivel": "info",
+      "relPath": "src/shared/impar/formater.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 438,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "src/shared/impar/formater.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/shared/impar/formater.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 17,
+      "mensagem": "Problemas de documentação (media): poor-naming, missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/shared/impar/formatter-registry.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/shared/impar/formatter-registry.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 78,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/shared/impar/stylelint.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 187,
+      "mensagem": "Problemas de documentação (media): poor-naming",
+      "nivel": "info",
+      "relPath": "src/shared/impar/stylelint.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/shared/impar/stylelint.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 10,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/shared/impar/svgs.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "info",
+      "relPath": "src/shared/impar/svgs.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/shared/impar/svgs.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 53,
+      "mensagem": "Problemas de documentação (media): poor-naming, missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/shared/impar/syntax-map.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/shared/impar/syntax-map.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 72,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/shared/memory.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de documentação (media): missing-jsdoc",
+      "nivel": "aviso",
+      "relPath": "src/shared/memory.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 70,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/shared/memory.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 83,
+      "mensagem": "Tipo '{}' é muito permissivo e pouco útil para type safety | 💡 Use Record<string, never> para objetos vazios ou interface específica",
+      "nivel": "aviso",
+      "relPath": "src/shared/memory.ts",
+      "tipo": "tipo-permissivo-object"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/shared/memory.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 86,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants",
+      "nivel": "info",
+      "relPath": "src/shared/persistence/persistencia.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/shared/persistence/persistencia.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/shared/plugins/core-plugin.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/shared/plugins/registry.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 67,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "src/shared/validation/validacao.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/shared/validation/validacao.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 65,
+      "mensagem": "Problemas de segurança (media): unhandled-async",
+      "nivel": "info",
+      "relPath": "src/types/comum/analistas.ts",
+      "tipo": "vulnerabilidade-seguranca"
+    },
+    {
+      "linha": 31,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "src/types/comum/analistas.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "src/types/comum/analistas.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 14,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "src/types/core/config/config.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/types/guardian/resultado.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 3,
+      "mensagem": "Problemas de documentação (media): missing-types",
+      "nivel": "aviso",
+      "relPath": "src/types/postcss-scss.d.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 92,
+      "mensagem": "Problemas de documentação (media): missing-types",
+      "nivel": "aviso",
+      "relPath": "src/types/relatorios/index.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): missing-tests",
+      "nivel": "info",
+      "relPath": "src/types/shared/validacao.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 13,
+      "mensagem": "Problemas de documentação (baixa): magic-constants",
+      "nivel": "info",
+      "relPath": "src/types/zeladores/pontuacao.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 297,
+      "mensagem": "Problemas de teste (baixa): test-smells, test-smells",
+      "nivel": "info",
+      "relPath": "src/zeladores/zelador-imports.ts",
+      "tipo": "problemas-teste"
+    },
+    {
+      "linha": 293,
+      "mensagem": "Problemas de documentação (baixa): magic-constants, magic-constants, magic-constants (+4 mais)",
+      "nivel": "info",
+      "relPath": "vitest.config.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 322,
+      "mensagem": "Problemas de documentação (media): poor-naming",
+      "nivel": "info",
+      "relPath": "vitest.config.ts",
+      "tipo": "problema-documentacao"
+    },
+    {
+      "linha": 1,
+      "mensagem": "Problemas de teste (baixa): test-smells",
+      "nivel": "info",
+      "relPath": "vitest.config.ts",
+      "tipo": "problemas-teste"
+    }
+  ],
+  "timestamp": "2026-04-06T06:04:59.606Z",
+  "totalOcorrencias": 32
+}
