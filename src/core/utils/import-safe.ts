@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: MIT
 import { config } from '@core/config/config.js';
 import { resolverPluginSeguro } from '@core/config/seguranca.js';
-import { ExcecoesMensagens } from '@core/messages/pt/core/excecoes-messages.js';
+import { messages } from '@core/messages/index.js';
 
 export async function importarModuloSeguro(baseDir: string, pluginRel: string): Promise<unknown> {
   if (config.SAFE_MODE && !config.ALLOW_PLUGINS) {
-    throw new Error(ExcecoesMensagens.pluginsDesabilitadosSafeMode);
+    throw new Error(messages.ExcecoesMensagens.pluginsDesabilitadosSafeMode);
   }
   const resolvido = resolverPluginSeguro(baseDir, pluginRel);
-  if (resolvido.erro) throw new Error(ExcecoesMensagens.pluginBloqueado(resolvido.erro));
-  if (!resolvido.caminho) throw new Error(ExcecoesMensagens.caminhoPluginNaoResolvido);
+  if (resolvido.erro) throw new Error(messages.ExcecoesMensagens.pluginBloqueado(resolvido.erro));
+  if (!resolvido.caminho) throw new Error(messages.ExcecoesMensagens.caminhoPluginNaoResolvido);
   // permite que o chamador capture exceções do plugin
   return import(resolvido.caminho);
 }

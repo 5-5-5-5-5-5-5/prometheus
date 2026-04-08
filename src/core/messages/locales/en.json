@@ -1,0 +1,34 @@
+{
+  "analistas": {
+    "title": "Analysts",
+    "description": "System analysts for code evaluation."
+  },
+  "cli": {
+    "title": "Command Line Interface",
+    "description": "CLI commands and handlers."
+  },
+  "core": {
+    "title": "Core System",
+    "description": "Main logic and execution engine."
+  },
+  "guardian": {
+    "title": "Guardian",
+    "description": "Integrity and security monitoring."
+  },
+  "licensas": {
+    "title": "Licenses",
+    "description": "License scanning and management."
+  },
+  "relatorios": {
+    "title": "Reports",
+    "description": "Generation of project health reports."
+  },
+  "ui": {
+    "title": "User Interface",
+    "description": "UI components and interactions."
+  },
+  "zeladores": {
+    "title": "Caretakers",
+    "description": "Maintenance and cleanup utilities."
+  }
+}

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// @sensei-disable tipo-literal-inline-complexo
+// @prometheus-disable tipo-literal-inline-complexo
 // Justificativa: tipos inline para opções de comando CLI são locais e não precisam de extração
 // Importar handler modular do Guardian (Sprint 2)
 import { registroAnalistas } from '@analistas/registry/registry.js';
@@ -7,18 +7,17 @@ import { executarGuardian as executarGuardianModular, type GuardianOptions } fro
 import { ExitCode, sair } from '@cli/helpers/exit-codes.js';
 import { config } from '@core/config/config.js';
 import { iniciarInquisicao } from '@core/execution/inquisidor.js';
-import { getMessages } from '@core/messages/index.js';
-import { CliComandoGuardianMensagens } from '@core/messages/pt/cli/cli-comando-guardian-messages.js';
+import { messages } from '@core/messages/index.js';
 import { acceptNewBaseline } from '@guardian/sentinela.js';
 import { Command } from 'commander';
 
 import type { FileEntry, FileEntryWithAst, Tecnica } from '@';
 import { asTecnicas, extrairMensagemErro, IntegridadeStatus } from '@';
 
-const { log, logGuardian } = getMessages();
+const { log, logGuardian } = messages;
 
 export function comandoGuardian(aplicarFlagsGlobais: (opts: Record<string, unknown>) => void): Command {
-  return new Command('guardian').description('Gerencia e verifica a integridade do ambiente do Sensei.')
+  return new Command('guardian').description('Gerencia e verifica a integridade do ambiente do Prometheus.')
   // Alinhar com comportamento tolerante usado em outros comandos/testes
   .allowUnknownOption(true).allowExcessArguments(true).option('-a, --accept-baseline', 'Aceita o baseline atual como o novo baseline de integridade').option('-d, --diff', 'Mostra as diferenças entre o estado atual e o baseline').option('--full-scan', 'Executa verificação sem aplicar GUARDIAN_IGNORE_PATTERNS (não persistir baseline)').option('--json', 'Saída em JSON estruturado (para CI/integracoes)').action(async function (this: Command, opts: {
     acceptBaseline?: boolean;
@@ -56,7 +55,7 @@ export function comandoGuardian(aplicarFlagsGlobais: (opts: Record<string, unkno
       }
       if (opts.acceptBaseline) {
         if (opts.fullScan) {
-          log.aviso(CliComandoGuardianMensagens.baselineNaoPermitidoFullScan);
+          log.aviso(messages.CliComandoGuardianMensagens.baselineNaoPermitidoFullScan);
           (config as unknown as {
             GUARDIAN_IGNORE_PATTERNS: string[];
           }).GUARDIAN_IGNORE_PATTERNS = ignoradosOriginais;
@@ -98,8 +97,8 @@ export function comandoGuardian(aplicarFlagsGlobais: (opts: Record<string, unkno
               }));
             } else {
               logGuardian.diferencasDetectadas();
-              log.aviso(CliComandoGuardianMensagens.diffMudancasDetectadas(guardianResultado.drift));
-              log.aviso(CliComandoGuardianMensagens.diffComoAceitarMudancas);
+              log.aviso(messages.CliComandoGuardianMensagens.diffMudancasDetectadas(guardianResultado.drift));
+              log.aviso(messages.CliComandoGuardianMensagens.diffComoAceitarMudancas);
             }
             sair(ExitCode.Failure);
             return;
@@ -121,25 +120,25 @@ export function comandoGuardian(aplicarFlagsGlobais: (opts: Record<string, unkno
               if (opts.json) console.log(JSON.stringify({
                 status: 'ok',
                 cacheDiffHits: (globalThis as unknown as {
-                  __SENSEI_DIFF_CACHE_HITS__?: number;
-                }).__SENSEI_DIFF_CACHE_HITS__ || 0
+                  __PROMETHEUS_DIFF_CACHE_HITS__?: number;
+                }).__PROMETHEUS_DIFF_CACHE_HITS__ || 0
               }));else logGuardian.integridadeOk();
               break;
             case IntegridadeStatus.Criado:
               if (opts.json) console.log(JSON.stringify({
                 status: 'baseline-criado',
                 cacheDiffHits: (globalThis as unknown as {
-                  __SENSEI_DIFF_CACHE_HITS__?: number;
-                }).__SENSEI_DIFF_CACHE_HITS__ || 0
+                  __PROMETHEUS_DIFF_CACHE_HITS__?: number;
+                }).__PROMETHEUS_DIFF_CACHE_HITS__ || 0
               }));else logGuardian.baselineCriadoConsole();
-              log.aviso(CliComandoGuardianMensagens.baselineCriadoComoAceitar);
+              log.aviso(messages.CliComandoGuardianMensagens.baselineCriadoComoAceitar);
               break;
             case IntegridadeStatus.Aceito:
               if (opts.json) console.log(JSON.stringify({
                 status: 'baseline-aceito',
                 cacheDiffHits: (globalThis as unknown as {
-                  __SENSEI_DIFF_CACHE_HITS__?: number;
-                }).__SENSEI_DIFF_CACHE_HITS__ || 0
+                  __PROMETHEUS_DIFF_CACHE_HITS__?: number;
+                }).__PROMETHEUS_DIFF_CACHE_HITS__ || 0
               }));else logGuardian.baselineAtualizado();
               break;
             case IntegridadeStatus.AlteracoesDetectadas:

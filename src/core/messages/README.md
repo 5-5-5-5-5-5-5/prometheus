@@ -1,8 +1,8 @@
-> Proveniência e Autoria: Este documento integra o projeto Sensei (licença MIT).
+> Proveniência e Autoria: Este documento integra o projeto Prometheus (licença MIT).
 
-# Sistema de Mensagens Centralizado do Sensei
+# Sistema de Mensagens Centralizado do Prometheus
 
-Este diretório centraliza **TODAS** as mensagens, logs, ícones e sugestões do Sensei.
+Este diretório centraliza **TODAS** as mensagens, logs, ícones e sugestões do Prometheus.
 
 ## Arquitetura
 

@@ -11,12 +11,10 @@ import { config } from '@core/config/config.js';
 import { isInsideConfigDirectory, isInsideTestsDirectory } from '@core/config/conventions.js';
 import { isInsideSrc } from '@core/config/paths.js';
 import { executarInquisicao, iniciarInquisicao, prepararComAst, registrarUltimasMetricas } from '@core/execution/inquisidor.js';
-import { getMessages } from '@core/messages/index.js';
-import { CliProcessamentoDiagnosticoMensagens } from '@core/messages/pt/cli/cli-processamento-diagnostico-messages.js';
-import { ExcecoesMensagens } from '@core/messages/pt/core/excecoes-messages.js';
+import { messages } from '@core/messages/index.js';
 import { aplicarSupressaoOcorrencias } from '@core/parsing/filters.js';
 import { scanSystemIntegrity } from '@guardian/sentinela.js';
-import { emitirConselhoSenseial } from '@relatorios/conselheiro-senseial.js';
+import { emitirConselhoPrometheus } from '@relatorios/conselheiro-prometheus.js';
 import { gerarRelatorioMarkdown } from '@relatorios/gerador-relatorio.js';
 import fragmentarRelatorio from '@shared/data-processing/fragmentar-relatorio.js';
 import { stringifyJsonEscaped } from '@shared/data-processing/json.js';
@@ -25,7 +23,7 @@ import { dedupeOcorrencias } from '@shared/data-processing/ocorrencias.js';
 // Importar tipos centralizados (consolidado)
 import { asTecnicas, converterResultadoGuardian, type FileEntry, type FileEntryWithAst, type FiltrosConfig, IntegridadeStatus, type LinguagensJson, type LogExtensions, type OpcoesProcessamentoDiagnostico, type ParseErrosJson, type ResultadoGuardian, type ResultadoInquisicaoCompleto, type ResultadoProcessamentoDiagnostico, type SaidaJsonDiagnostico } from '@';
 
-const { log, logGuardian, logRelatorio, logSistema, MENSAGENS_AUTOFIX, CliProcessamentoExtraMensagens } = getMessages();
+const { log, logGuardian, logRelatorio, logSistema, MENSAGENS_AUTOFIX, CliProcessamentoExtraMensagens } = messages;
 
 // Persistência: usar helper centralizado, mas com resolver dinâmico para compat com mocks de teste
 let salvarEstado: (caminho: string, dados: unknown) => Promise<void>;
@@ -234,7 +232,7 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
         if (opts.salvarArquetipo) {
           await salvarArquetipoPersonalizado(arquetipo, baseDir);
         } else if (config.VERBOSE) {
-          log.info(CliProcessamentoDiagnosticoMensagens.templateArquetipoPreview);
+          log.info(messages.CliProcessamentoDiagnosticoMensagens.templateArquetipoPreview);
         }
       } catch (e) {
         log.aviso(`Falha ao gerar/salvar arquétipo personalizado: ${e instanceof Error ? e.message : String(e)}`);
@@ -244,7 +242,7 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
     // Executar Guardian se solicitado
     if (config.GUARDIAN_ENABLED) {
       // Usa optional chaining para evitar erro quando o mock não prover `fase`
-      (log as typeof log & LogExtensions).fase?.('Verificando integridade do Sensei');
+      (log as typeof log & LogExtensions).fase?.('Verificando integridade do Prometheus');
       try {
         const resultado = await scanSystemIntegrity(fileEntries, {
           suppressLogs: true
@@ -281,7 +279,7 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
             } catch (e) {
               throw e;
             }
-            throw new Error(ExcecoesMensagens.exit1);
+            throw new Error(messages.ExcecoesMensagens.exit1);
           }
         } else {
           logGuardian.modoPermissivo();
@@ -296,12 +294,12 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
       if (config.REPORT_EXPORT_ENABLED) {
         try {
           const ts = new Date().toISOString().replace(/[:.]/g, '-');
-          const dir = typeof config.REPORT_OUTPUT_DIR === 'string' ? config.REPORT_OUTPUT_DIR : path.join(baseDir, 'sensei-reports');
+          const dir = typeof config.REPORT_OUTPUT_DIR === 'string' ? config.REPORT_OUTPUT_DIR : path.join(baseDir, 'prometheus-reports');
           const fs = await import('node:fs');
           await fs.promises.mkdir(dir, {
             recursive: true
           });
-          const nome = `sensei-scan-${ts}`;
+          const nome = `prometheus-scan-${ts}`;
           const resumo = {
             modo: 'scan-only',
             totalArquivos: fileEntries.length,
@@ -309,9 +307,9 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
           };
           const salvar = await getSalvarEstado();
           await salvar(path.join(dir, `${nome}.json`), resumo);
-          log.sucesso(CliProcessamentoDiagnosticoMensagens.relatorioScanSalvo(dir));
+          log.sucesso(messages.CliProcessamentoDiagnosticoMensagens.relatorioScanSalvo(dir));
         } catch (e) {
-          const msg = CliProcessamentoDiagnosticoMensagens.falhaExportarRelatorioScanOnly((e as Error).message);
+          const msg = messages.CliProcessamentoDiagnosticoMensagens.falhaExportarRelatorioScanOnly((e as Error).message);
           log.erro(msg);
         }
       }
@@ -481,7 +479,7 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
     } catch (err) {
       log.debug(`Erro em processarDiagnostico (conciliação analistas): ${  err instanceof Error ? err.message : String(err)}`);
     }
-    // Aplicar supressões configuradas em sensei.config.json
+    // Aplicar supressões configuradas em prometheus.config.json
     ocorrenciasFiltradas = aplicarSupressaoOcorrencias(ocorrenciasFiltradas, config as unknown as FiltrosConfig || undefined);
     const totalOcorrenciasProcessadas = ocorrenciasFiltradas.length;
 
@@ -520,7 +518,7 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
         if (autoCorrecaoMode === 'conservative') {
           log.info(MENSAGENS_AUTOFIX.logs.modoConservador);
         } else if (autoCorrecaoMode === 'aggressive') {
-          log.aviso(CliProcessamentoDiagnosticoMensagens.autoFixModoAgressivo);
+          log.aviso(messages.CliProcessamentoDiagnosticoMensagens.autoFixModoAgressivo);
         }
 
         // Encontrar arquivos com quick fixes disponíveis
@@ -617,7 +615,7 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
             logSistema.autoFixEstatisticas(estatisticas);
 
             // Validação ESLint pós-auto-fix para harmonia total
-            if (process.env.SENSEI_ESLINT_VALIDATION !== '0' && autoCorrecaoConfiguracao.validateAfterFix) {
+            if (process.env.PROMETHEUS_ESLINT_VALIDATION !== '0' && autoCorrecaoConfiguracao.validateAfterFix) {
               try {
                 log.info(MENSAGENS_AUTOFIX.logs.validacaoEslint);
                 const {
@@ -710,17 +708,17 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
             }
           }
           const topArquivos = Array.from(arquivoContagem.entries()).sort((a, b) => b[1] - a[1]).slice(0, 5);
-          const header = CliProcessamentoDiagnosticoMensagens.resumoExecutivoHeader(total, criticos, altos);
+          const header = messages.CliProcessamentoDiagnosticoMensagens.resumoExecutivoHeader(total, criticos, altos);
           if (typeof (log as typeof log & LogExtensions).imprimirBloco === 'function') {
-            const linhas = [CliProcessamentoDiagnosticoMensagens.resumoExecutivoCriticos(criticos), CliProcessamentoDiagnosticoMensagens.resumoExecutivoAltos(altos), CliProcessamentoDiagnosticoMensagens.linhaEmBranco, CliProcessamentoDiagnosticoMensagens.resumoExecutivoTopArquivosErrosAltos, ...topArquivos.map(([f, c]) => CliProcessamentoDiagnosticoMensagens.resumoExecutivoBulletTopArquivo(f, c)), CliProcessamentoDiagnosticoMensagens.linhaEmBranco, CliProcessamentoDiagnosticoMensagens.resumoExecutivoAcaoSugerida];
+            const linhas = [messages.CliProcessamentoDiagnosticoMensagens.resumoExecutivoCriticos(criticos), messages.CliProcessamentoDiagnosticoMensagens.resumoExecutivoAltos(altos), messages.CliProcessamentoDiagnosticoMensagens.linhaEmBranco, messages.CliProcessamentoDiagnosticoMensagens.resumoExecutivoTopArquivosErrosAltos, ...topArquivos.map(([f, c]) => messages.CliProcessamentoDiagnosticoMensagens.resumoExecutivoBulletTopArquivo(f, c)), messages.CliProcessamentoDiagnosticoMensagens.linhaEmBranco, messages.CliProcessamentoDiagnosticoMensagens.resumoExecutivoAcaoSugerida];
             (log as typeof log & LogExtensions).imprimirBloco(header, linhas);
           } else {
             log.info(header);
             if (topArquivos.length > 0) {
-              log.info(CliProcessamentoDiagnosticoMensagens.resumoExecutivoTopArquivosErrosAltos);
-              topArquivos.forEach(([f, c]) => log.info(CliProcessamentoDiagnosticoMensagens.resumoExecutivoBulletTopArquivo(f, c)));
+              log.info(messages.CliProcessamentoDiagnosticoMensagens.resumoExecutivoTopArquivosErrosAltos);
+              topArquivos.forEach(([f, c]) => log.info(messages.CliProcessamentoDiagnosticoMensagens.resumoExecutivoBulletTopArquivo(f, c)));
             }
-            log.info(CliProcessamentoDiagnosticoMensagens.resumoExecutivoAcaoSugerida);
+            log.info(messages.CliProcessamentoDiagnosticoMensagens.resumoExecutivoAcaoSugerida);
           }
         } catch {
           // não crítico
@@ -732,10 +730,10 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
 
         // Top 5 tipos mais comuns
         const topTipos = Array.from(tiposOcorrencias.entries()).sort((a, b) => b[1] - a[1]).slice(0, 5);
-        console.log(CliProcessamentoDiagnosticoMensagens.linhaEmBranco);
-        console.log(CliProcessamentoDiagnosticoMensagens.principaisTiposTitulo);
+        console.log(messages.CliProcessamentoDiagnosticoMensagens.linhaEmBranco);
+        console.log(messages.CliProcessamentoDiagnosticoMensagens.principaisTiposTitulo);
         topTipos.forEach(([tipo, count]) => {
-          console.log(CliProcessamentoDiagnosticoMensagens.principaisTiposLinha(tipo, count));
+          console.log(messages.CliProcessamentoDiagnosticoMensagens.principaisTiposLinha(tipo, count));
         });
 
         // Mini top arquivos (5) para ação rápida
@@ -747,14 +745,14 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
           }
           const topArquivos = Array.from(arquivoContagem.entries()).sort((a, b) => b[1] - a[1]).slice(0, 5);
           if (topArquivos.length > 0) {
-            console.log(CliProcessamentoDiagnosticoMensagens.linhaEmBranco);
-            console.log(CliProcessamentoDiagnosticoMensagens.topArquivosTitulo);
-            topArquivos.forEach(([f, c]) => console.log(CliProcessamentoDiagnosticoMensagens.topArquivosLinha(f, c)));
+            console.log(messages.CliProcessamentoDiagnosticoMensagens.linhaEmBranco);
+            console.log(messages.CliProcessamentoDiagnosticoMensagens.topArquivosTitulo);
+            topArquivos.forEach(([f, c]) => console.log(messages.CliProcessamentoDiagnosticoMensagens.topArquivosLinha(f, c)));
           }
         } catch {
           /* ignore */
         }
-        console.log(CliProcessamentoDiagnosticoMensagens.linhaEmBranco);
+        console.log(messages.CliProcessamentoDiagnosticoMensagens.linhaEmBranco);
         logSistema.processamentoDicasContextuais();
 
         // Dicas baseadas no conteúdo real encontrado
@@ -796,16 +794,16 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
         logSistema.processamentoDetalhamentoOcorrencias(totalOcorrenciasProcessadas);
 
         // Mostrar por tipo
-        log.info(CliProcessamentoDiagnosticoMensagens.porTipoTitulo);
+        log.info(messages.CliProcessamentoDiagnosticoMensagens.porTipoTitulo);
         Array.from(tiposOcorrencias.entries()).sort((a, b) => b[1] - a[1]).forEach(([tipo, count]) => {
-          log.info(CliProcessamentoDiagnosticoMensagens.porTipoLinha(tipo, count));
+          log.info(messages.CliProcessamentoDiagnosticoMensagens.porTipoLinha(tipo, count));
         });
 
         // Mostrar por nível de severidade
-        log.info(CliProcessamentoDiagnosticoMensagens.porSeveridadeTitulo);
+        log.info(messages.CliProcessamentoDiagnosticoMensagens.porSeveridadeTitulo);
         Array.from(nivelOcorrencias.entries()).sort((a, b) => b[1] - a[1]).forEach(([nivel, count]) => {
           const emoji = nivel === 'erro' ? '🔴' : nivel === 'aviso' ? '🟡' : '🔵';
-          log.info(CliProcessamentoDiagnosticoMensagens.porSeveridadeLinha(emoji, nivel, count));
+          log.info(messages.CliProcessamentoDiagnosticoMensagens.porSeveridadeLinha(emoji, nivel, count));
         });
 
         // Adicionar top arquivos com contagem (útil para investigação)
@@ -818,11 +816,11 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
           const topArquivosAll = Array.from(arquivosContagem.entries()).sort((a, b) => b[1] - a[1]).slice(0, 10);
           if (topArquivosAll.length) {
             if (typeof (log as typeof log & LogExtensions).imprimirBloco === 'function') {
-              const linhas = [CliProcessamentoDiagnosticoMensagens.topArquivosPorOcorrenciasTitulo, ...topArquivosAll.map(([f, c]) => CliProcessamentoDiagnosticoMensagens.resumoExecutivoBulletTopArquivo(f, c))];
-              (log as typeof log & LogExtensions).imprimirBloco(CliProcessamentoDiagnosticoMensagens.arquivosMaisOcorrenciasTitulo, linhas);
+              const linhas = [messages.CliProcessamentoDiagnosticoMensagens.topArquivosPorOcorrenciasTitulo, ...topArquivosAll.map(([f, c]) => messages.CliProcessamentoDiagnosticoMensagens.resumoExecutivoBulletTopArquivo(f, c))];
+              (log as typeof log & LogExtensions).imprimirBloco(messages.CliProcessamentoDiagnosticoMensagens.arquivosMaisOcorrenciasTitulo, linhas);
             } else {
-              log.info(CliProcessamentoDiagnosticoMensagens.topArquivosPorOcorrenciasTitulo);
-              topArquivosAll.forEach(([f, c]) => log.info(CliProcessamentoDiagnosticoMensagens.resumoExecutivoBulletTopArquivo(f, c)));
+              log.info(messages.CliProcessamentoDiagnosticoMensagens.topArquivosPorOcorrenciasTitulo);
+              topArquivosAll.forEach(([f, c]) => log.info(messages.CliProcessamentoDiagnosticoMensagens.resumoExecutivoBulletTopArquivo(f, c)));
             }
           }
 
@@ -857,14 +855,14 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
             if (typeof (log as typeof log & LogExtensions).imprimirBloco === 'function') {
               const linhas = topCriticos.map(c => {
                 const pos = typeof c.linha === 'number' ? `:${c.linha}${typeof c.coluna === 'number' ? `:${c.coluna}` : ''}` : '';
-                return CliProcessamentoDiagnosticoMensagens.topCriticosLinha(c.nivel.toUpperCase(), c.tipo, c.arquivo, pos);
+                return messages.CliProcessamentoDiagnosticoMensagens.topCriticosLinha(c.nivel.toUpperCase(), c.tipo, c.arquivo, pos);
               });
-              (log as typeof log & LogExtensions).imprimirBloco(CliProcessamentoDiagnosticoMensagens.topCriticosTitulo, linhas);
+              (log as typeof log & LogExtensions).imprimirBloco(messages.CliProcessamentoDiagnosticoMensagens.topCriticosTitulo, linhas);
             } else {
-              log.info(CliProcessamentoDiagnosticoMensagens.topCriticosTituloComDoisPontos);
+              log.info(messages.CliProcessamentoDiagnosticoMensagens.topCriticosTituloComDoisPontos);
               topCriticos.forEach(c => {
                 const pos = typeof c.linha === 'number' ? `:${c.linha}${typeof c.coluna === 'number' ? `:${c.coluna}` : ''}` : '';
-                log.info(CliProcessamentoDiagnosticoMensagens.topCriticosLinha(c.nivel.toUpperCase(), c.tipo, c.arquivo, pos));
+                log.info(messages.CliProcessamentoDiagnosticoMensagens.topCriticosLinha(c.nivel.toUpperCase(), c.tipo, c.arquivo, pos));
               });
             }
           }
@@ -874,13 +872,13 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
           const sample = ocorrenciasFiltradas.slice(0, SAMPLE_MAX).map(o => `${o.relPath}:${o.linha ?? ''} [${o.nivel ?? ''}] ${String(o.mensagem ?? '').replace(/\n/g, ' ')}`);
           if (sample.length) {
             if (typeof (log as typeof log & LogExtensions).imprimirBloco === 'function') {
-              (log as typeof log & LogExtensions).imprimirBloco(CliProcessamentoDiagnosticoMensagens.amostraBlocoTitulo(sample.length), sample.slice(0, 20));
+              (log as typeof log & LogExtensions).imprimirBloco(messages.CliProcessamentoDiagnosticoMensagens.amostraBlocoTitulo(sample.length), sample.slice(0, 20));
             } else {
-              log.info(CliProcessamentoDiagnosticoMensagens.amostraOcorrenciasTitulo);
-              sample.slice(0, 20).forEach(s => log.info(CliProcessamentoDiagnosticoMensagens.amostraLinhaIndentada(s)));
+              log.info(messages.CliProcessamentoDiagnosticoMensagens.amostraOcorrenciasTitulo);
+              sample.slice(0, 20).forEach(s => log.info(messages.CliProcessamentoDiagnosticoMensagens.amostraLinhaIndentada(s)));
             }
             if (ocorrenciasFiltradas.length > SAMPLE_MAX) {
-              log.info(CliProcessamentoDiagnosticoMensagens.amostraMaisLinhas(SAMPLE_MAX, ocorrenciasFiltradas.length));
+              log.info(messages.CliProcessamentoDiagnosticoMensagens.amostraMaisLinhas(SAMPLE_MAX, ocorrenciasFiltradas.length));
             }
           }
         } catch {
@@ -896,7 +894,7 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
           const analistasComOcorrencias = resultadoExecucao.metricas.analistas.filter(a => (a.ocorrencias ?? 0) > 0);
           logSistema.processamentoAnalistasProblemas(analistasComOcorrencias.length);
           analistasComOcorrencias.forEach(analista => {
-            log.info(CliProcessamentoDiagnosticoMensagens.analistaOcorrenciasLinha(analista.nome, analista.ocorrencias, analista.duracaoMs.toFixed(1)));
+            log.info(messages.CliProcessamentoDiagnosticoMensagens.analistaOcorrenciasLinha(analista.nome, analista.ocorrencias, analista.duracaoMs.toFixed(1)));
           });
         }
       }
@@ -920,7 +918,7 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
 
     // Log de diagnóstico concluído para testes
     if (process.env.VITEST && !opts.json) {
-      log.info(CliProcessamentoDiagnosticoMensagens.diagnosticoConcluido);
+      log.info(messages.CliProcessamentoDiagnosticoMensagens.diagnosticoConcluido);
     }
 
     // Processar arquétipos se disponível
@@ -928,18 +926,18 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
       // Lógica de processamento de arquétipos seria implementada aqui
       // Por enquanto, apenas log se verbose
       if (config.VERBOSE && arquetiposResultado.candidatos?.length > 0) {
-        log.info(CliProcessamentoDiagnosticoMensagens.arquetiposDetectados(arquetiposResultado.candidatos.length));
+        log.info(messages.CliProcessamentoDiagnosticoMensagens.arquetiposDetectados(arquetiposResultado.candidatos.length));
       }
 
       // Em modo compacto, mostrar informação resumida sobre arquétipos
       if (!config.VERBOSE && config.COMPACT_MODE && arquetiposResultado.candidatos?.length > 0) {
         const topCandidato = arquetiposResultado.candidatos[0];
-        log.info(CliProcessamentoDiagnosticoMensagens.arquetiposCompact(topCandidato.nome, topCandidato.confidence));
+        log.info(messages.CliProcessamentoDiagnosticoMensagens.arquetiposCompact(topCandidato.nome, topCandidato.confidence));
       }
 
       // Exibir informações sobre candidatos mesmo quando não verbose (para testes)
       if (!config.VERBOSE && arquetiposResultado.candidatos?.length > 0) {
-        log.info(CliProcessamentoDiagnosticoMensagens.arquetiposCandidatosEncontrados(arquetiposResultado.candidatos.length));
+        log.info(messages.CliProcessamentoDiagnosticoMensagens.arquetiposCandidatosEncontrados(arquetiposResultado.candidatos.length));
       }
 
       // Exibir informações detalhadas dos arquetipos se verbose
@@ -947,47 +945,47 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
         const candidatoTop = arquetiposResultado.candidatos[0];
 
         // Log dos candidatos
-        log.info(CliProcessamentoDiagnosticoMensagens.arquetiposCandidatosTitulo);
+        log.info(messages.CliProcessamentoDiagnosticoMensagens.arquetiposCandidatosTitulo);
         for (const candidato of arquetiposResultado.candidatos.slice(0, 3)) {
-          log.info(CliProcessamentoDiagnosticoMensagens.arquetiposCandidatoLinha(candidato.nome, candidato.confidence));
+          log.info(messages.CliProcessamentoDiagnosticoMensagens.arquetiposCandidatoLinha(candidato.nome, candidato.confidence));
         }
 
         // Log do planoSugestao se existir
         if (candidatoTop.planoSugestao) {
           const plano = candidatoTop.planoSugestao;
           if (plano.mover && plano.mover.length > 0) {
-            log.info(CliProcessamentoDiagnosticoMensagens.planoSugestaoMove(plano.mover.length));
+            log.info(messages.CliProcessamentoDiagnosticoMensagens.planoSugestaoMove(plano.mover.length));
           } else {
-            log.info(CliProcessamentoDiagnosticoMensagens.planoSugestaoNenhumMove);
+            log.info(messages.CliProcessamentoDiagnosticoMensagens.planoSugestaoNenhumMove);
           }
           if (plano.conflitos && plano.conflitos.length > 0) {
-            log.info(CliProcessamentoDiagnosticoMensagens.conflitos(plano.conflitos.length));
+            log.info(messages.CliProcessamentoDiagnosticoMensagens.conflitos(plano.conflitos.length));
           }
         }
 
         // Log de anomalias se existirem
         if (candidatoTop.anomalias && candidatoTop.anomalias.length > 0) {
-          const tituloAnomalias = CliProcessamentoDiagnosticoMensagens.anomaliasTitulo;
+          const tituloAnomalias = messages.CliProcessamentoDiagnosticoMensagens.anomaliasTitulo;
           const linhasAnomalias: string[] = [];
           for (const anomalia of candidatoTop.anomalias.slice(0, 8)) {
-            linhasAnomalias.push(CliProcessamentoDiagnosticoMensagens.anomaliaLinha(anomalia.path, anomalia.motivo));
+            linhasAnomalias.push(messages.CliProcessamentoDiagnosticoMensagens.anomaliaLinha(anomalia.path, anomalia.motivo));
           }
           if (candidatoTop.anomalias.length > 8) {
-            linhasAnomalias.push(CliProcessamentoDiagnosticoMensagens.anomaliasMais(candidatoTop.anomalias.length - 8));
+            linhasAnomalias.push(messages.CliProcessamentoDiagnosticoMensagens.anomaliasMais(candidatoTop.anomalias.length - 8));
           }
           if (typeof (log as typeof log & LogExtensions).imprimirBloco === 'function') {
             (log as typeof log & LogExtensions).imprimirBloco(tituloAnomalias, linhasAnomalias);
           } else {
             // Fallback para logs simples se imprimirBloco não estiver disponível
-            log.info(CliProcessamentoDiagnosticoMensagens.anomaliasTituloComDoisPontos);
+            log.info(messages.CliProcessamentoDiagnosticoMensagens.anomaliasTituloComDoisPontos);
             for (const linha of linhasAnomalias) {
-              log.info(CliProcessamentoDiagnosticoMensagens.amostraLinhaIndentada(linha));
+              log.info(messages.CliProcessamentoDiagnosticoMensagens.amostraLinhaIndentada(linha));
             }
           }
 
           // Log adicional sobre anomalias ocultas se houver mais de 8
           if (candidatoTop.anomalias.length > 8) {
-            log.aviso(CliProcessamentoDiagnosticoMensagens.anomaliasOcultasAviso(candidatoTop.anomalias.length - 8));
+            log.aviso(messages.CliProcessamentoDiagnosticoMensagens.anomaliasOcultasAviso(candidatoTop.anomalias.length - 8));
           }
         }
 
@@ -995,17 +993,17 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
         if (arquetiposResultado.drift) {
           const drift = arquetiposResultado.drift;
           if (drift.alterouArquetipo) {
-            log.info(CliProcessamentoDiagnosticoMensagens.driftAlterou(drift.anterior, drift.atual));
+            log.info(messages.CliProcessamentoDiagnosticoMensagens.driftAlterou(drift.anterior, drift.atual));
           } else {
-            log.info(CliProcessamentoDiagnosticoMensagens.driftMantido(drift.atual));
+            log.info(messages.CliProcessamentoDiagnosticoMensagens.driftMantido(drift.atual));
           }
           if (drift.arquivosRaizNovos && drift.arquivosRaizNovos.length > 0) {
             const novosStr = drift.arquivosRaizNovos.length > 3 ? `${drift.arquivosRaizNovos.slice(0, 3).join(', ')}…` : drift.arquivosRaizNovos.join(', ');
-            log.info(CliProcessamentoDiagnosticoMensagens.driftNovos(novosStr));
+            log.info(messages.CliProcessamentoDiagnosticoMensagens.driftNovos(novosStr));
           }
           if (drift.arquivosRaizRemovidos && drift.arquivosRaizRemovidos.length > 0) {
             const removidosStr = drift.arquivosRaizRemovidos.length > 3 ? `${drift.arquivosRaizRemovidos.slice(0, 3).join(', ')}…` : drift.arquivosRaizRemovidos.join(', ');
-            log.info(CliProcessamentoDiagnosticoMensagens.driftRemovidos(removidosStr));
+            log.info(messages.CliProcessamentoDiagnosticoMensagens.driftRemovidos(removidosStr));
           }
         }
       } else if (config.VERBOSE) {
@@ -1019,32 +1017,32 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
         const linhasEstrutura: string[] = [];
         if (arquetiposResultado.baseline) {
           const baseline = arquetiposResultado.baseline;
-          linhasEstrutura.push(CliProcessamentoDiagnosticoMensagens.baselineArquetipo(baseline.arquetipo, baseline.confidence));
-          linhasEstrutura.push(CliProcessamentoDiagnosticoMensagens.baselineCriadoEm(new Date(baseline.timestamp).toLocaleString('pt-BR')));
+          linhasEstrutura.push(messages.CliProcessamentoDiagnosticoMensagens.baselineArquetipo(baseline.arquetipo, baseline.confidence));
+          linhasEstrutura.push(messages.CliProcessamentoDiagnosticoMensagens.baselineCriadoEm(new Date(baseline.timestamp).toLocaleString('pt-BR')));
         } else {
           // Log de aviso quando não há baseline
-          log.aviso(CliProcessamentoDiagnosticoMensagens.baselineDesconhecidoAviso);
-          linhasEstrutura.push(CliProcessamentoDiagnosticoMensagens.baselineArquetipoDesconhecido);
+          log.aviso(messages.CliProcessamentoDiagnosticoMensagens.baselineDesconhecidoAviso);
+          linhasEstrutura.push(messages.CliProcessamentoDiagnosticoMensagens.baselineArquetipoDesconhecido);
         }
         if (arquetiposResultado.drift) {
           const drift = arquetiposResultado.drift;
           if (drift.alterouArquetipo) {
-            linhasEstrutura.push(CliProcessamentoDiagnosticoMensagens.driftDetectado(drift.anterior, drift.atual));
+            linhasEstrutura.push(messages.CliProcessamentoDiagnosticoMensagens.driftDetectado(drift.anterior, drift.atual));
           } else {
-            linhasEstrutura.push(CliProcessamentoDiagnosticoMensagens.arquetipoMantido(drift.atual));
+            linhasEstrutura.push(messages.CliProcessamentoDiagnosticoMensagens.arquetipoMantido(drift.atual));
           }
           if (drift.arquivosRaizNovos && drift.arquivosRaizNovos.length > 0) {
-            linhasEstrutura.push(CliProcessamentoDiagnosticoMensagens.novosArquivosRaiz(drift.arquivosRaizNovos.join(', ')));
+            linhasEstrutura.push(messages.CliProcessamentoDiagnosticoMensagens.novosArquivosRaiz(drift.arquivosRaizNovos.join(', ')));
           }
           if (drift.arquivosRaizRemovidos && drift.arquivosRaizRemovidos.length > 0) {
-            linhasEstrutura.push(CliProcessamentoDiagnosticoMensagens.arquivosRemovidosRaiz(drift.arquivosRaizRemovidos.join(', ')));
+            linhasEstrutura.push(messages.CliProcessamentoDiagnosticoMensagens.arquivosRemovidosRaiz(drift.arquivosRaizRemovidos.join(', ')));
           }
         }
         if (arquetiposResultado.candidatos && arquetiposResultado.candidatos.length > 0) {
           const top = arquetiposResultado.candidatos[0];
-          linhasEstrutura.push(CliProcessamentoDiagnosticoMensagens.candidatoPrincipal(top.nome, top.confidence));
+          linhasEstrutura.push(messages.CliProcessamentoDiagnosticoMensagens.candidatoPrincipal(top.nome, top.confidence));
         }
-        const tituloEstrutura = CliProcessamentoDiagnosticoMensagens.resumoEstruturaTitulo;
+        const tituloEstrutura = messages.CliProcessamentoDiagnosticoMensagens.resumoEstruturaTitulo;
         if (typeof (log as typeof log & LogExtensions).imprimirBloco === 'function') {
           // Calcular largura como nos outros blocos
           let larguraEstrutura: number | undefined;
@@ -1073,7 +1071,7 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
         try {
           (log as {
             debug: Function;
-          }).debug(CliProcessamentoDiagnosticoMensagens.debugAboutToEmitJson(JSON.stringify(opts)));
+          }).debug(messages.CliProcessamentoDiagnosticoMensagens.debugAboutToEmitJson(JSON.stringify(opts)));
         } catch (err) {
           log.debug(`Erro ao emitir log de debug sobre JSON: ${  err instanceof Error ? err.message : String(err)}`);
         }
@@ -1108,7 +1106,7 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
           } else if (todos.length > 1) {
             // Criar ocorrência agregada
             const primeira = todos[0];
-            const mensagemAgregada = CliProcessamentoDiagnosticoMensagens.todosPendentesEncontrados(todos.length);
+            const mensagemAgregada = messages.CliProcessamentoDiagnosticoMensagens.todosPendentesEncontrados(todos.length);
             todosAgregados.push({
               ...primeira,
               mensagem: mensagemAgregada,
@@ -1150,8 +1148,8 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
         }
 
         // Ler parse erros das variáveis globais (para testes e cenários especiais)
-        const parseErrosGlobais = (globalThis as Record<string, unknown>).__SENSEI_PARSE_ERROS__ as unknown[] || [];
-        const parseErrosOriginais = (globalThis as Record<string, unknown>).__SENSEI_PARSE_ERROS_ORIGINAIS__ as number || 0;
+        const parseErrosGlobais = (globalThis as Record<string, unknown>).__PROMETHEUS_PARSE_ERROS__ as unknown[] || [];
+        const parseErrosOriginais = (globalThis as Record<string, unknown>).__PROMETHEUS_PARSE_ERROS_ORIGINAIS__ as number || 0;
 
         // Adicionar parse erros globais à contagem
         if (parseErrosGlobais.length > 0 || parseErrosOriginais > 0) {
@@ -1243,7 +1241,7 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
           // Adicionar metadados de versão do schema e timestamp para compatibilidade
           const schemaMeta = {
             schemaVersion: '1.0.0',
-            senseiVersion: '0.0.0',
+            prometheusVersion: '0.0.0',
             timestamp: new Date().toISOString()
           };
           const saidaComMeta = {
@@ -1257,8 +1255,8 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
           }));
           _jsonEmitted = true;
         } catch (e) {
-          console.error(CliProcessamentoDiagnosticoMensagens.errorGeneratingJson, e);
-          console.log(CliProcessamentoDiagnosticoMensagens.fallbackJson, JSON.stringify(saidaJson));
+          console.error(messages.CliProcessamentoDiagnosticoMensagens.errorGeneratingJson, e);
+          console.log(messages.CliProcessamentoDiagnosticoMensagens.fallbackJson, JSON.stringify(saidaJson));
           _jsonEmitted = true;
         }
         // Exit codes padronizados: 0=ok/avisos, 1=erros, 2=critico (parse erros fatais)
@@ -1281,16 +1279,16 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
             const resumoExec = gerarResumoExecutivo(ocorrenciasFiltradas);
             if (resumoExec.detalhes.length > 0) {
               const linhasExec = resumoExec.detalhes.map(problema => `${problema.icone} ${problema.titulo.padEnd(25)} ${problema.quantidade.toString().padStart(6)}`);
-              const tituloExec = CliProcessamentoDiagnosticoMensagens.resumoExecutivoTitulo(resumoExec.problemasCriticos + resumoExec.problemasAltos);
-              const cabecalhoExec = [`${CliProcessamentoDiagnosticoMensagens.cabecalhoExecProblema.padEnd(30)}${CliProcessamentoDiagnosticoMensagens.cabecalhoExecQtd.padStart(6)}`];
+              const tituloExec = messages.CliProcessamentoDiagnosticoMensagens.resumoExecutivoTitulo(resumoExec.problemasCriticos + resumoExec.problemasAltos);
+              const cabecalhoExec = [`${messages.CliProcessamentoDiagnosticoMensagens.cabecalhoExecProblema.padEnd(30)}${messages.CliProcessamentoDiagnosticoMensagens.cabecalhoExecQtd.padStart(6)}`];
               if ('imprimirBloco' in log && typeof log.imprimirBloco === 'function') {
                 log.imprimirBloco(tituloExec, [...cabecalhoExec, ...linhasExec]);
               }
-              console.log(CliProcessamentoDiagnosticoMensagens.dicaUseFull(totalOcorrencias));
+              console.log(messages.CliProcessamentoDiagnosticoMensagens.dicaUseFull(totalOcorrencias));
             } else {
-              console.log(CliProcessamentoDiagnosticoMensagens.projetoBomEstado(totalOcorrencias));
+              console.log(messages.CliProcessamentoDiagnosticoMensagens.projetoBomEstado(totalOcorrencias));
               if (resumoExec.quickFixes > 0) {
-                console.log(CliProcessamentoDiagnosticoMensagens.quickFixesDisponiveis(resumoExec.quickFixes));
+                console.log(messages.CliProcessamentoDiagnosticoMensagens.quickFixesDisponiveis(resumoExec.quickFixes));
               }
             }
           } else {
@@ -1301,8 +1299,8 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
               tiposResumo[tipo] = (tiposResumo[tipo] || 0) + 1;
             }
             const linhasResumo = Object.entries(tiposResumo).map(([tipo, qtd]) => `${tipo.padEnd(20)} ${qtd.toString().padStart(8)}`);
-            const tituloResumo = CliProcessamentoDiagnosticoMensagens.resumoTiposTitulo;
-            const cabecalho = [`${CliProcessamentoDiagnosticoMensagens.cabecalhoResumoTipo.padEnd(20)}${CliProcessamentoDiagnosticoMensagens.cabecalhoResumoQuantidade.padStart(8)}`];
+            const tituloResumo = messages.CliProcessamentoDiagnosticoMensagens.resumoTiposTitulo;
+            const cabecalho = [`${messages.CliProcessamentoDiagnosticoMensagens.cabecalhoResumoTipo.padEnd(20)}${messages.CliProcessamentoDiagnosticoMensagens.cabecalhoResumoQuantidade.padStart(8)}`];
             if ('imprimirBloco' in log && typeof log.imprimirBloco === 'function') {
               log.imprimirBloco(tituloResumo, [...cabecalho, ...linhasResumo]);
             }
@@ -1311,14 +1309,14 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
 
         // Mensagem final
         // Emitir 'Tudo pronto' apenas uma vez
-        if (!config.COMPACT_MODE && !process.env.__SENSEI_TUDO_PRONTO_EMITIDO) {
-          log.info(CliProcessamentoDiagnosticoMensagens.tudoPronto);
-          (process.env as unknown as Record<string, string>).__SENSEI_TUDO_PRONTO_EMITIDO = '1';
+        if (!config.COMPACT_MODE && !process.env.__PROMETHEUS_TUDO_PRONTO_EMITIDO) {
+          log.info(messages.CliProcessamentoDiagnosticoMensagens.tudoPronto);
+          (process.env as unknown as Record<string, string>).__PROMETHEUS_TUDO_PRONTO_EMITIDO = '1';
         }
 
         // Log de diagnóstico concluído para testes
         if (process.env.VITEST) {
-          log.info(CliProcessamentoDiagnosticoMensagens.diagnosticoConcluido);
+          log.info(messages.CliProcessamentoDiagnosticoMensagens.diagnosticoConcluido);
         }
       }
     }
@@ -1334,15 +1332,15 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
           totalOcorrenciasAnaliticas: totalOcorrencias,
           integridadeGuardian: guardianResultado?.status || 'nao-verificado'
         };
-        emitirConselhoSenseial(contextoConselho);
+        emitirConselhoPrometheus(contextoConselho);
         if (config.REPORT_EXPORT_ENABLED) {
           const ts = new Date().toISOString().replace(/[:.]/g, '-');
-          const dir = typeof config.REPORT_OUTPUT_DIR === 'string' ? config.REPORT_OUTPUT_DIR : path.join(baseDir, 'sensei-reports');
+          const dir = typeof config.REPORT_OUTPUT_DIR === 'string' ? config.REPORT_OUTPUT_DIR : path.join(baseDir, 'prometheus-reports');
           const fs = await import('node:fs');
           await fs.promises.mkdir(dir, {
             recursive: true
           });
-          const outputCaminho = path.join(dir, `sensei-diagnostico-${ts}.md`);
+          const outputCaminho = path.join(dir, `prometheus-diagnostico-${ts}.md`);
           const resultadoCompleto = {
             ...resultadoExecucao,
             fileEntries: fileEntriesComAst,
@@ -1416,7 +1414,7 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
               ocorrencias: ocorrenciasLimpas
             };
             const salvar = await getSalvarEstado();
-            await salvar(path.join(dir, `sensei-relatorio-summary-${ts}.json`), relatorioResumo);
+            await salvar(path.join(dir, `prometheus-relatorio-summary-${ts}.json`), relatorioResumo);
 
             // Se exportação full estiver ativa, grava também o payload completo em arquivo separado
             let fragmentResultado: {
@@ -1439,10 +1437,10 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
                   maxFileEntriesPerShard: config.REPORT_FRAGMENT_FILEENTRIES
                 });
                 // Registrar no log onde está o manifest
-                log.info(CliProcessamentoDiagnosticoMensagens.relatorioFullFragmentado(fragmentResultado.manifestFile));
+                log.info(messages.CliProcessamentoDiagnosticoMensagens.relatorioFullFragmentado(fragmentResultado.manifestFile));
               } catch {
                 // Fallback: salvar como único arquivo caso a fragmentação falhe
-                await salvar(path.join(dir, `sensei-relatorio-full-${ts}.json`), relatorioFull);
+                await salvar(path.join(dir, `prometheus-relatorio-full-${ts}.json`), relatorioFull);
               }
             }
 
@@ -1455,7 +1453,7 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
                 hadFull: Boolean(fragmentResultado)
               });
             } catch (e) {
-              log.aviso(CliProcessamentoDiagnosticoMensagens.falhaGerarRelatorioMarkdownMetadados((e as Error).message));
+              log.aviso(messages.CliProcessamentoDiagnosticoMensagens.falhaGerarRelatorioMarkdownMetadados((e as Error).message));
               // Tenta gerar sem opções como fallback
               await gerarRelatorioMarkdown(resultadoCompleto, outputCaminho, !opts.full);
             }
@@ -1473,13 +1471,13 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
             } catch {
               // Não crítico — export adicional não deve falhar o diagnóstico
             }
-            log.sucesso(CliProcessamentoDiagnosticoMensagens.relatoriosExportadosPara(dir));
+            log.sucesso(messages.CliProcessamentoDiagnosticoMensagens.relatoriosExportadosPara(dir));
           } catch (e) {
-            log.erro(CliProcessamentoDiagnosticoMensagens.falhaSalvarRelatorioJson((e as Error).message));
+            log.erro(messages.CliProcessamentoDiagnosticoMensagens.falhaSalvarRelatorioJson((e as Error).message));
           }
         }
       } catch (e) {
-        log.erro(CliProcessamentoDiagnosticoMensagens.falhaExportarRelatorios((e as Error).message));
+        log.erro(messages.CliProcessamentoDiagnosticoMensagens.falhaExportarRelatorios((e as Error).message));
       }
     }
 
@@ -1494,15 +1492,15 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
             tiposResumo[tipo] = (tiposResumo[tipo] || 0) + 1;
           }
           const linhasResumo = Object.entries(tiposResumo).map(([tipo, qtd]) => `${tipo.padEnd(20)} ${qtd.toString().padStart(8)}`);
-          const tituloResumo = CliProcessamentoDiagnosticoMensagens.resumoTiposTitulo;
-          const cabecalho = [`${CliProcessamentoDiagnosticoMensagens.cabecalhoResumoTipo.padEnd(20)}${CliProcessamentoDiagnosticoMensagens.cabecalhoResumoQuantidade.padStart(8)}`];
+          const tituloResumo = messages.CliProcessamentoDiagnosticoMensagens.resumoTiposTitulo;
+          const cabecalho = [`${messages.CliProcessamentoDiagnosticoMensagens.cabecalhoResumoTipo.padEnd(20)}${messages.CliProcessamentoDiagnosticoMensagens.cabecalhoResumoQuantidade.padStart(8)}`];
           if ('imprimirBloco' in log && typeof log.imprimirBloco === 'function') {
             log.imprimirBloco(tituloResumo, [...cabecalho, ...linhasResumo]);
           }
         }
-        if (!config.COMPACT_MODE && !process.env.__SENSEI_TUDO_PRONTO_EMITIDO) {
-          log.info(CliProcessamentoDiagnosticoMensagens.tudoPronto);
-          (process.env as unknown as Record<string, string>).__SENSEI_TUDO_PRONTO_EMITIDO = '1';
+        if (!config.COMPACT_MODE && !process.env.__PROMETHEUS_TUDO_PRONTO_EMITIDO) {
+          log.info(messages.CliProcessamentoDiagnosticoMensagens.tudoPronto);
+          (process.env as unknown as Record<string, string>).__PROMETHEUS_TUDO_PRONTO_EMITIDO = '1';
         }
       } catch {}
     }
@@ -1536,7 +1534,7 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
       for (const [, todos] of todosPorArquivo) {
         if (todos.length === 1) todosAgregados.push(todos[0]);else if (todos.length > 1) {
           const primeira = todos[0];
-          const mensagemAgregada = CliProcessamentoDiagnosticoMensagens.todosPendentesEncontrados(todos.length);
+          const mensagemAgregada = messages.CliProcessamentoDiagnosticoMensagens.todosPendentesEncontrados(todos.length);
           todosAgregados.push({
             ...primeira,
             mensagem: mensagemAgregada,
@@ -1567,8 +1565,8 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
           parseErros.totalExibidos++;
         }
       }
-      const parseErrosGlobais = (globalThis as Record<string, unknown>).__SENSEI_PARSE_ERROS__ as unknown[] || [];
-      const parseErrosOriginais = (globalThis as Record<string, unknown>).__SENSEI_PARSE_ERROS_ORIGINAIS__ as number || 0;
+      const parseErrosGlobais = (globalThis as Record<string, unknown>).__PROMETHEUS_PARSE_ERROS__ as unknown[] || [];
+      const parseErrosOriginais = (globalThis as Record<string, unknown>).__PROMETHEUS_PARSE_ERROS_ORIGINAIS__ as number || 0;
       if (parseErrosGlobais.length > 0 || parseErrosOriginais > 0) {
         parseErros.totalOriginais = Math.max(parseErros.totalOriginais, parseErrosOriginais);
         if (parseErrosGlobais.length > 0) {
@@ -1637,7 +1635,7 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
           } catch {}
           const schemaMeta = {
             schemaVersion: '1.0.0',
-            senseiVersion: pkgVersion,
+            prometheusVersion: pkgVersion,
             timestamp: new Date().toISOString()
           };
           const saidaComMeta = {
@@ -1654,21 +1652,21 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
           if (config.REPORT_EXPORT_ENABLED) {
             try {
               const ts = new Date().toISOString().replace(/[:.]/g, '-');
-              const dir = typeof config.REPORT_OUTPUT_DIR === 'string' ? config.REPORT_OUTPUT_DIR : path.join(baseDir, 'sensei-reports');
+              const dir = typeof config.REPORT_OUTPUT_DIR === 'string' ? config.REPORT_OUTPUT_DIR : path.join(baseDir, 'prometheus-reports');
               const fs = await import('node:fs');
               await fs.promises.mkdir(dir, {
                 recursive: true
               });
               const salvar = await getSalvarEstado();
-              await salvar(path.join(dir, `sensei-diagnostico-${ts}.json`), saidaComMeta);
-              log.sucesso(CliProcessamentoDiagnosticoMensagens.relatoriosExportadosPara(dir));
+              await salvar(path.join(dir, `prometheus-diagnostico-${ts}.json`), saidaComMeta);
+              log.sucesso(messages.CliProcessamentoDiagnosticoMensagens.relatoriosExportadosPara(dir));
             } catch (e) {
-              log.erro(CliProcessamentoDiagnosticoMensagens.falhaSalvarRelatorioJson((e as Error).message));
+              log.erro(messages.CliProcessamentoDiagnosticoMensagens.falhaSalvarRelatorioJson((e as Error).message));
             }
           }
         } catch (e) {
-          console.error(CliProcessamentoDiagnosticoMensagens.errorGeneratingJson, e);
-          console.log(CliProcessamentoDiagnosticoMensagens.fallbackJson, JSON.stringify(saidaJson));
+          console.error(messages.CliProcessamentoDiagnosticoMensagens.errorGeneratingJson, e);
+          console.log(messages.CliProcessamentoDiagnosticoMensagens.fallbackJson, JSON.stringify(saidaJson));
           _jsonEmitted = true;
         }
       }
@@ -1703,7 +1701,7 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
         return String(error);
       }
     })();
-    log.erro(CliProcessamentoDiagnosticoMensagens.erroFatalDiagnostico(errMsg));
+    log.erro(messages.CliProcessamentoDiagnosticoMensagens.erroFatalDiagnostico(errMsg));
 
     // Em modo de desenvolvimento, mostrar stack trace
     if (config.DEV_MODE) {

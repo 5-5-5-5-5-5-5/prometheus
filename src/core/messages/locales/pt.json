@@ -1,0 +1,34 @@
+{
+  "analistas": {
+    "title": "Analistas",
+    "description": "Analistas de sistema para avaliação de código."
+  },
+  "cli": {
+    "title": "Interface de Linha de Comando",
+    "description": "Comandos e manipuladores da CLI."
+  },
+  "core": {
+    "title": "Núcleo do Sistema",
+    "description": "Lógica principal e motor de execução."
+  },
+  "guardian": {
+    "title": "Guardião",
+    "description": "Monitoramento de integridade e segurança."
+  },
+  "licensas": {
+    "title": "Licenças",
+    "description": "Digitalização e gerenciamento de licenças."
+  },
+  "relatorios": {
+    "title": "Relatórios",
+    "description": "Geração de relatórios de saúde do projeto."
+  },
+  "ui": {
+    "title": "Interface do Usuário",
+    "description": "Componentes e interações da IU."
+  },
+  "zeladores": {
+    "title": "Zeladores",
+    "description": "Utilitários de manutenção e limpeza."
+  }
+}

@@ -53,7 +53,7 @@ export async function scanAndApplyFixMdFences(root: string): Promise<number> {
     for (const entry of entries) {
       const fullCaminho = path.join(dir, entry.name);
       if (entry.isDirectory()) {
-        if (/^(node_modules|dist|coverage|pre-public|preview-sensei|\.git)$/i.test(entry.name)) continue;
+        if (/^(node_modules|dist|coverage|pre-public|preview-prometheus|\.git)$/i.test(entry.name)) continue;
         out.push(...(await listMarkdown(fullCaminho)));
       } else if (entry.isFile() && entry.name.toLowerCase().endsWith('.md')) {
         out.push(fullCaminho);

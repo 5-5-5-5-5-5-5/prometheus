@@ -9,8 +9,7 @@
  * - Formata resultados
  */
 
-import { MENSAGENS_GUARDIAN } from '@core/messages/pt/core/diagnostico-messages.js';
-import { logGuardian } from '@core/messages/pt/log/log-helper.js';
+import { messages } from '@core/messages/index.js';
 import { scanSystemIntegrity } from '@guardian/sentinela.js';
 
 import type {
@@ -42,16 +41,16 @@ export async function executarGuardian(
   try {
     // Log de início (se não silencioso)
     if (!options.silent) {
-      logGuardian.info(MENSAGENS_GUARDIAN.iniciando);
+      messages.logGuardian.info(messages.MENSAGENS_GUARDIAN.iniciando);
 
       if (options.fullScan) {
-        logGuardian.info(`  ${MENSAGENS_GUARDIAN.fullScan}`);
+        messages.logGuardian.info(`  ${messages.MENSAGENS_GUARDIAN.fullScan}`);
       } else {
-        logGuardian.info(`  ${MENSAGENS_GUARDIAN.baseline}`);
+        messages.logGuardian.info(`  ${messages.MENSAGENS_GUARDIAN.baseline}`);
       }
 
       if (options.saveBaseline) {
-        logGuardian.info(`  ${MENSAGENS_GUARDIAN.saveBaseline}`);
+        messages.logGuardian.info(`  ${messages.MENSAGENS_GUARDIAN.saveBaseline}`);
       }
     }
 
@@ -67,19 +66,19 @@ export async function executarGuardian(
     if (!options.silent) {
       switch (status) {
         case IntegridadeStatus.Ok:
-          logGuardian.info(MENSAGENS_GUARDIAN.status.verde);
+          messages.logGuardian.info(messages.MENSAGENS_GUARDIAN.status.verde);
           break;
         case IntegridadeStatus.AlteracoesDetectadas:
-          logGuardian.aviso(MENSAGENS_GUARDIAN.status.amarelo);
+          messages.logGuardian.aviso(messages.MENSAGENS_GUARDIAN.status.amarelo);
           break;
         case IntegridadeStatus.Criado:
         case IntegridadeStatus.Aceito:
-          logGuardian.info(MENSAGENS_GUARDIAN.status.verde);
+          messages.logGuardian.info(messages.MENSAGENS_GUARDIAN.status.verde);
           break;
       }
 
       if (drift > 0) {
-        logGuardian.info(`  ${MENSAGENS_GUARDIAN.drift(drift)}`);
+        messages.logGuardian.info(`  ${messages.MENSAGENS_GUARDIAN.drift(drift)}`);
       }
     }
 
@@ -94,7 +93,7 @@ export async function executarGuardian(
     const mensagem = erro instanceof Error ? erro.message : String(erro);
 
     if (!options.silent) {
-      logGuardian.aviso(`Erro no Guardian: ${mensagem}`);
+      messages.logGuardian.aviso(`Erro no Guardian: ${mensagem}`);
     }
 
     return {

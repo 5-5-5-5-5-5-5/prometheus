@@ -102,7 +102,7 @@ export async function gerarRelatorioJson(resultado: ResultadoInquisicaoCompleto,
   } = await import('@core/schema/version.js');
 
   // Criar relatório versionado (mantemos metadados, mas salvamos os dados brutos para compatibilidade)
-  const relatorioVersionado = criarRelatorioComVersao(resultado, undefined, 'Relatório completo de diagnóstico do Sensei');
+  const relatorioVersionado = criarRelatorioComVersao(resultado, undefined, 'Relatório completo de diagnóstico do Prometheus');
   const {
     salvarEstado
   } = await import('@shared/persistence/persistencia.js');

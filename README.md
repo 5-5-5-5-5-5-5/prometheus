@@ -1,15 +1,15 @@
 ---
-Proveniência e Autoria: Este documento integra o projeto Sensei (licença MIT-0).
+Proveniência e Autoria: Este documento integra o projeto Prometheus (licença MIT-0).
 ---
 
 
-# Sensei
+# Prometheus
 
 CLI modular para análise, diagnóstico e manutenção de projetos JavaScript/TypeScript com suporte heurístico adicional para HTML, CSS, XML, Python e PHP.
 
 ## Visão Geral
 
-O Sensei foi projetado para operar como ferramenta de análise estática e manutenção assistida de repositórios. O projeto combina:
+O Prometheus foi projetado para operar como ferramenta de análise estática e manutenção assistida de repositórios. O projeto combina:
 
 - diagnóstico de qualidade e estrutura via `diagnosticar`
 - verificação de integridade via `guardian`
@@ -27,8 +27,8 @@ Licença: `MIT`
 ### Uso local no repositório
 
 ```bash
-git clone https://github.com/5-5-5-5-5-5-5/sensei.git
-cd sensei
+git clone https://github.com/5-5-5-5-5-5-5/prometheus.git
+cd prometheus
 npm install
 npm run build
 node dist/bin/index.js --help
@@ -40,14 +40,14 @@ node dist/bin/index.js --help
 npm install
 npm run build
 npm link
-sensei --help
+prometheus --help
 ```
 
 ### Como dependência de desenvolvimento
 
 ```bash
-npm install --save-dev /caminho/para/sensei
-npx sensei --help
+npm install --save-dev /caminho/para/prometheus
+npx prometheus --help
 ```
 
 ## Fluxo Recomendado
@@ -55,31 +55,31 @@ npx sensei --help
 ### 1. Diagnóstico inicial
 
 ```bash
-sensei diagnosticar --full
+prometheus diagnosticar --full
 ```
 
 ### 2. Exportação para auditoria ou CI
 
 ```bash
-sensei diagnosticar --json --export
+prometheus diagnosticar --json --export
 ```
 
 ### 3. Verificação de integridade do workspace
 
 ```bash
-sensei guardian --diff
+prometheus guardian --diff
 ```
 
 ### 4. Correção assistida de tipos inseguros
 
 ```bash
-sensei fix-types --dry-run --verbose
+prometheus fix-types --dry-run --verbose
 ```
 
 ### 5. Reorganização estrutural em modo plano
 
 ```bash
-sensei reestruturar --somente-plano --preset sensei
+prometheus reestruturar --somente-plano --preset prometheus
 ```
 
 ## Comandos Disponíveis
@@ -92,7 +92,7 @@ Os comandos abaixo foram confirmados pela CLI atual:
 - `otimizar-svg`: otimização de SVGs
 - `podar`: remoção de arquivos órfãos e lixo
 - `reestruturar`: aplicação de plano estrutural
-- `atualizar`: atualização segura do Sensei
+- `atualizar`: atualização segura do Prometheus
 - `analistas`: catálogo de analistas registrados
 - `metricas`: histórico e agregados de execuções
 - `fix-types`: correção de `any` e `unknown`
@@ -105,7 +105,7 @@ Os comandos abaixo foram confirmados pela CLI atual:
 Para ajuda detalhada:
 
 ```bash
-sensei <comando> --help
+prometheus <comando> --help
 ```
 
 ## Diagnóstico
@@ -115,15 +115,15 @@ O comando principal da ferramenta é `diagnosticar`.
 Exemplos reais suportados pela CLI:
 
 ```bash
-sensei diagnosticar --compact
-sensei diagnosticar --full
-sensei diagnosticar --executive
-sensei diagnosticar --json --export
-sensei diagnosticar --include "src/**" --exclude "**/*.test.ts"
-sensei diagnosticar --exclude-tests
-sensei diagnosticar --fast --trust-compiler
-sensei diagnosticar --guardian-check
-sensei diagnosticar --fix-safe
+prometheus diagnosticar --compact
+prometheus diagnosticar --full
+prometheus diagnosticar --executive
+prometheus diagnosticar --json --export
+prometheus diagnosticar --include "src/**" --exclude "**/*.test.ts"
+prometheus diagnosticar --exclude-tests
+prometheus diagnosticar --fast --trust-compiler
+prometheus diagnosticar --guardian-check
+prometheus diagnosticar --fix-safe
 ```
 
 Flags relevantes:
@@ -137,7 +137,7 @@ Flags relevantes:
 
 ## Configuração
 
-O arquivo principal de configuração é [`sensei.config.json`](./sensei.config.json).
+O arquivo principal de configuração é [`prometheus.config.json`](./prometheus.config.json).
 
 Hoje ele expõe, entre outros, os seguintes blocos:
 
@@ -202,7 +202,7 @@ npm run fix-types
 
 ## Repositório
 
-- Código-fonte: `https://github.com/5-5-5-5-5-5-5/sensei`
-- Issues: `https://github.com/5-5-5-5-5-5-5/sensei/issues`
+- Código-fonte: `https://github.com/5-5-5-5-5-5-5/prometheus`
+- Issues: `https://github.com/5-5-5-5-5-5-5/prometheus/issues`
 
 

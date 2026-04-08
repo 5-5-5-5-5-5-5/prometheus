@@ -2,7 +2,7 @@
 import type { NodePath } from '@babel/traverse';
 import type { CallExpression, Node } from '@babel/types';
 import { traverse } from '@core/config/traverse.js';
-import { DetectorAgregadosMensagens } from '@core/messages/pt/analistas/detector-agregados-messages.js';
+import { messages } from '@core/messages/index.js';
 import { detectarContextoProjeto } from '@shared/contexto-projeto.js';
 import { agruparPor } from '@shared/helpers/agrupar.js';
 import { splitLines } from '@shared/helpers/lines.js';
@@ -51,7 +51,7 @@ export const analistaDesempenho: Analista = {
           ocorrencias.push(criarOcorrencia({
             tipo: 'PROBLEMA_PERFORMANCE',
             nivel: nivelAjustado,
-            mensagem: DetectorAgregadosMensagens.problemasPerformanceResumo(impacto, resumo, items.length),
+            mensagem: messages.DetectorAgregadosMensagens.problemasPerformanceResumo(impacto, resumo, items.length),
             relPath,
             linha: items[0].linha
           }));
@@ -61,7 +61,7 @@ export const analistaDesempenho: Analista = {
       // Aplicar supressões inline antes de retornar
       return filtrarOcorrenciasSuprimidas(ocorrencias, 'performance', src);
     } catch (erro) {
-      return [criarErroAnalise(relPath, DetectorAgregadosMensagens.erroAnalisarPerformance(erro))];
+      return [criarErroAnalise(relPath, messages.DetectorAgregadosMensagens.erroAnalisarPerformance(erro))];
     }
   }
 };

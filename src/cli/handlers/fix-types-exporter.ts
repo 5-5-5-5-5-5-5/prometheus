@@ -8,12 +8,11 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
 import { config } from '@core/config/config.js';
-import { getMessages } from '@core/messages/index.js';
-import { CliExportersMensagens } from '@core/messages/pt/cli/cli-exporters-messages.js';
+import { messages } from '@core/messages/index.js';
 
 import type { CasoTipoInseguro, FixTypesExportOptions, FixTypesExportResult } from '@';
 
-const { log } = getMessages();
+const log = messages.log;
 
 // Re-export para compatibilidade
 export type { CasoTipoInseguro, FixTypesExportOptions, FixTypesExportResult };
@@ -108,7 +107,7 @@ async function gerarRelatorioMarkdown(caminho: string, options: FixTypesExportOp
   lines.push('# Relatório de Análise de Tipos Inseguros');
   lines.push('');
   lines.push(`**Gerado em:** ${new Date().toISOString()}`);
-  lines.push(`**Comando:** \`sensei fix-types\``);
+  lines.push(`**Comando:** \`prometheus fix-types\``);
   lines.push(`**Confiança Mínima:** ${minConfidence}%`);
   lines.push('');
 
@@ -257,7 +256,7 @@ export async function exportarRelatoriosFixTypes(options: FixTypesExportOptions)
 
     // Gerar timestamp único para os arquivos
     const ts = new Date().toISOString().replace(/[:.]/g, '-');
-    const nomeBase = `sensei-fix-types-${ts}`;
+    const nomeBase = `prometheus-fix-types-${ts}`;
 
     // Gerar relatório Markdown
     const caminhoMd = path.join(dir, `${nomeBase}.md`);
@@ -268,16 +267,16 @@ export async function exportarRelatoriosFixTypes(options: FixTypesExportOptions)
     await gerarRelatorioJson(caminhoJson, options);
 
     // Log de sucesso
-    log.sucesso(CliExportersMensagens.fixTypes.relatoriosExportadosTitulo);
-    log.info(CliExportersMensagens.fixTypes.caminhoMarkdown(caminhoMd));
-    log.info(CliExportersMensagens.fixTypes.caminhoJson(caminhoJson));
+    log.sucesso(messages.CliExportersMensagens.fixTypes.relatoriosExportadosTitulo);
+    log.info(messages.CliExportersMensagens.fixTypes.caminhoMarkdown(caminhoMd));
+    log.info(messages.CliExportersMensagens.fixTypes.caminhoJson(caminhoJson));
     return {
       markdown: caminhoMd,
       json: caminhoJson,
       dir
     };
   } catch (error) {
-    log.erro(CliExportersMensagens.fixTypes.falhaExportar((error as Error).message));
+    log.erro(messages.CliExportersMensagens.fixTypes.falhaExportar((error as Error).message));
     return null;
   }
 }

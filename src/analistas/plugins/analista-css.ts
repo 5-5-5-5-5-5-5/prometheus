@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-import { AnalystOrigens, AnalystTipos, CssMensagens, SeverityNiveis } from '@core/messages/pt/core/plugin-messages.js';
+import { messages } from '@core/messages/index.js';
 import { isLikelyIntentionalDuplicate, lintCssLikeStylelint } from '@shared/impar/stylelint.js';
 import postcss, { type AtRule, type Container, type Declaration, type Root, type Rule, type Syntax } from 'postcss';
 import postcssSass from 'postcss-sass';
@@ -11,16 +11,16 @@ const disableEnv = (globalThis as {
   process?: {
     env?: Record<string, string | undefined>;
   };
-}).process?.env?.SENSEI_DISABLE_PLUGIN_CSS === '1';
+}).process?.env?.PROMETHEUS_DISABLE_PLUGIN_CSS === '1';
 type Msg = ReturnType<typeof criarOcorrencia>;
-function warn(message: string, relPath: string, line?: number, nivelArg: (typeof SeverityNiveis)[keyof typeof SeverityNiveis] = SeverityNiveis.warning): Msg {
+function warn(message: string, relPath: string, line?: number, nivelArg: (typeof messages.SeverityNiveis)[keyof typeof messages.SeverityNiveis] = messages.SeverityNiveis.warning): Msg {
   return criarOcorrencia({
     relPath,
     mensagem: message,
     linha: line,
     nivel: nivelArg,
-    origem: AnalystOrigens.css,
-    tipo: AnalystTipos.css
+    origem: messages.AnalystOrigens.css,
+    tipo: messages.AnalystTipos.css
   });
 }
 function collectCssIssues(src: string, relPath: string): Msg[] {
@@ -63,10 +63,10 @@ function collectCssIssues(src: string, relPath: string): Msg[] {
             // Duplicata legítima (fallback vendor, viewport, cor, etc)
           } else if (prev.value === value) {
             // Mesma propriedade, mesmo valor = erro claro
-            ocorrencias.push(warn(CssMensagens.duplicatePropertySame(prop), relPath, line));
+            ocorrencias.push(warn(messages.CssMensagens.duplicatePropertySame(prop), relPath, line));
           } else {
             // Valores diferentes sem padrão claro = possível erro
-            ocorrencias.push(warn(CssMensagens.duplicatePropertyDifferent(prop, prev.value, value), relPath, line));
+            ocorrencias.push(warn(messages.CssMensagens.duplicatePropertyDifferent(prop, prev.value, value), relPath, line));
           }
         } else {
           current.props[prop] = {
@@ -79,17 +79,17 @@ function collectCssIssues(src: string, relPath: string): Msg[] {
 
     // !important
     if (/!important/.test(trimmed)) {
-      ocorrencias.push(warn(CssMensagens.importantUsage, relPath, line));
+      ocorrencias.push(warn(messages.CssMensagens.importantUsage, relPath, line));
     }
 
     // @import/http
     if (/^@import\s+[^;]*http:\/\//i.test(trimmed)) {
-      ocorrencias.push(warn(CssMensagens.httpImport, relPath, line));
+      ocorrencias.push(warn(messages.CssMensagens.httpImport, relPath, line));
     }
 
     // url(http:)
     if (/url\(\s*['"]?http:\/\//i.test(trimmed)) {
-      ocorrencias.push(warn(CssMensagens.httpUrl, relPath, line));
+      ocorrencias.push(warn(messages.CssMensagens.httpUrl, relPath, line));
     }
 
     // Fecha blocos depois de processar a linha
@@ -107,7 +107,7 @@ function collectCssIssuesLikeStylelint(src: string, relPath: string): Msg[] | nu
   });
   if (!warnings.length) return null;
   return warnings.map(w => {
-    const nivel = w.severity === 'error' ? SeverityNiveis.error : SeverityNiveis.warning;
+    const nivel = w.severity === 'error' ? messages.SeverityNiveis.error : messages.SeverityNiveis.warning;
     return warn(w.text, relPath, w.line, nivel);
   });
 }
@@ -285,9 +285,9 @@ function collectCssIssuesFromPostCssAst(root: Root, relPath: string): Msg[] {
           if (isLikelyIntentionalDuplicate(propChave, prev.value, value, ctx)) {
             // duplicata intencional
           } else if (prev.value === value) {
-            pushOnce(warn(CssMensagens.duplicatePropertySame(propRaw), relPath, line));
+            pushOnce(warn(messages.CssMensagens.duplicatePropertySame(propRaw), relPath, line));
           } else {
-            pushOnce(warn(CssMensagens.duplicatePropertyDifferent(propRaw, prev.value, value), relPath, line));
+            pushOnce(warn(messages.CssMensagens.duplicatePropertyDifferent(propRaw, prev.value, value), relPath, line));
           }
         }
         props[propChave] = {
@@ -297,19 +297,19 @@ function collectCssIssuesFromPostCssAst(root: Root, relPath: string): Msg[] {
 
         // Validação de propriedade inválida
         if (!isValidCssProperty(propRaw)) {
-          pushOnce(warn(CssMensagens.invalidProperty(propRaw), relPath, line));
+          pushOnce(warn(messages.CssMensagens.invalidProperty(propRaw), relPath, line));
         }
 
         // Detecta hacks CSS
         const hack = detectCssHacks(String(decl.value || ''));
         if (hack) {
-          pushOnce(warn(CssMensagens.cssHackDetected(hack), relPath, line));
+          pushOnce(warn(messages.CssMensagens.cssHackDetected(hack), relPath, line));
         }
         if (decl.important) {
-          pushOnce(warn(CssMensagens.importantUsage, relPath, line));
+          pushOnce(warn(messages.CssMensagens.importantUsage, relPath, line));
         }
         if (/url\(\s*['"]?http:\/\//i.test(String(decl.value || ''))) {
-          pushOnce(warn(CssMensagens.httpUrl, relPath, line));
+          pushOnce(warn(messages.CssMensagens.httpUrl, relPath, line));
         }
       }
     });
@@ -335,7 +335,7 @@ function collectCssIssuesFromPostCssAst(root: Root, relPath: string): Msg[] {
 
         // Detecta regras vazias
         if (decls.length === 0) {
-          pushOnce(warn(CssMensagens.emptyRule, relPath, getNodeLine(rule)));
+          pushOnce(warn(messages.CssMensagens.emptyRule, relPath, getNodeLine(rule)));
         }
         const {
           signature,
@@ -361,10 +361,10 @@ function collectCssIssuesFromPostCssAst(root: Root, relPath: string): Msg[] {
           // Tenta parsear o seletor com uma regex simples
           const invalidChars = /[{}[\]()]/;
           if (invalidChars.test(selectorText)) {
-            pushOnce(warn(CssMensagens.malformedSelector(selectorText.trim()), relPath, getNodeLine(rule)));
+            pushOnce(warn(messages.CssMensagens.malformedSelector(selectorText.trim()), relPath, getNodeLine(rule)));
           }
         } catch {
-          pushOnce(warn(CssMensagens.malformedSelector(selectorText.trim()), relPath, getNodeLine(rule)));
+          pushOnce(warn(messages.CssMensagens.malformedSelector(selectorText.trim()), relPath, getNodeLine(rule)));
         }
       }
     }
@@ -378,7 +378,7 @@ function collectCssIssuesFromPostCssAst(root: Root, relPath: string): Msg[] {
 
         // @import http://...
         if (name === 'import' && /^\s*(url\()?\s*['"]?http:\/\//i.test(String(at.params || ''))) {
-          pushOnce(warn(CssMensagens.httpImport, relPath, line));
+          pushOnce(warn(messages.CssMensagens.httpImport, relPath, line));
         }
 
         // Alguns at-rules tem bloco e nós internos; outros são só linha.
@@ -404,10 +404,10 @@ function collectCssIssuesFromPostCssAst(root: Root, relPath: string): Msg[] {
     const selectors = [...new Set(hits.map(h => h.selector))];
     if (selectors.length < 2) continue;
     const line = hits.map(h => h.line).filter((n): n is number => typeof n === 'number' && Number.isFinite(n)).sort((a, b) => a - b)[0];
-    pushOnce(warn(CssMensagens.unifySelectors(selectors, declCount), relPath, line));
+    pushOnce(warn(messages.CssMensagens.unifySelectors(selectors, declCount), relPath, line));
     const ids = selectors.filter(s => s.startsWith('#'));
     ids.slice(0, 3).forEach(idSel => {
-      pushOnce(warn(CssMensagens.idSelectorPreferClass(idSel), relPath, line, SeverityNiveis.info));
+      pushOnce(warn(messages.CssMensagens.idSelectorPreferClass(idSel), relPath, line, messages.SeverityNiveis.info));
     });
   }
   return ocorrencias;
@@ -415,7 +415,7 @@ function collectCssIssuesFromPostCssAst(root: Root, relPath: string): Msg[] {
 export const analistaCss = criarAnalista({
   nome: 'analista-css',
   categoria: 'estilo',
-  descricao: 'Lint de CSS do Sensei (com fallback heurístico).',
+  descricao: 'Lint de CSS do Prometheus (com fallback heurístico).',
   global: false,
   test: (relPath: string): boolean => /\.(css|scss|sass)$/i.test(relPath),
   aplicar: async (src, relPath): Promise<Msg[] | null> => {
@@ -424,7 +424,7 @@ export const analistaCss = criarAnalista({
     const roots = parseWithPostCssRoots(src, relPath);
     const astIssues = roots ? roots.flatMap(r => collectCssIssuesFromPostCssAst(r, relPath)) : [];
 
-    // Mantém regras stylelint-like para CSS puro (pipeline atual do Sensei).
+    // Mantém regras stylelint-like para CSS puro (pipeline atual do Prometheus).
     const cssLint = isCss ? collectCssIssuesLikeStylelint(src, relPath) ?? [] : [];
     const seen = new Set<string>();
     const merged: Msg[] = [];

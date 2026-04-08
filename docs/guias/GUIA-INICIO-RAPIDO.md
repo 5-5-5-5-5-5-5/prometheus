@@ -1,11 +1,11 @@
 ---
-Proveniência e Autoria: Este documento integra o projeto Sensei (licença MIT-0).
+Proveniência e Autoria: Este documento integra o projeto Prometheus (licença MIT-0).
 ---
 
 
 # Guia de Início Rápido
 
-Este guia cobre o menor caminho para instalar, executar e validar o Sensei no estado atual do projeto.
+Este guia cobre o menor caminho para instalar, executar e validar o Prometheus no estado atual do projeto.
 
 ## Requisitos
 
@@ -18,8 +18,8 @@ Este guia cobre o menor caminho para instalar, executar e validar o Sensei no es
 ### Desenvolvimento local
 
 ```bash
-git clone https://github.com/5-5-5-0-5-5-5/sensei.git
-cd sensei
+git clone https://github.com/5-5-5-0-5-5-5/prometheus.git
+cd prometheus
 npm install
 npm run build
 ```
@@ -28,7 +28,7 @@ npm run build
 
 ```bash
 npm link
-sensei --help
+prometheus --help
 ```
 
 ### Uso sem link global
@@ -42,28 +42,28 @@ node dist/bin/index.js --help
 ### Diagnóstico básico
 
 ```bash
-sensei diagnosticar
+prometheus diagnosticar
 ```
 
 ### Diagnóstico detalhado
 
 ```bash
-sensei diagnosticar --full
+prometheus diagnosticar --full
 ```
 
 ### Saída JSON para automação
 
 ```bash
-sensei diagnosticar --json --export
+prometheus diagnosticar --json --export
 ```
 
 ## Filtros de análise
 
 ```bash
-sensei diagnosticar --include "src/**"
-sensei diagnosticar --exclude "**/*.test.ts"
-sensei diagnosticar --include "src/**" --exclude "**/*.spec.ts"
-sensei diagnosticar --exclude-tests
+prometheus diagnosticar --include "src/**"
+prometheus diagnosticar --exclude "**/*.test.ts"
+prometheus diagnosticar --include "src/**" --exclude "**/*.spec.ts"
+prometheus diagnosticar --exclude-tests
 ```
 
 ## Integridade com Guardian
@@ -71,19 +71,19 @@ sensei diagnosticar --exclude-tests
 ### Criar ou aceitar baseline
 
 ```bash
-sensei guardian --accept-baseline
+prometheus guardian --accept-baseline
 ```
 
 ### Verificar diferenças
 
 ```bash
-sensei guardian --diff
+prometheus guardian --diff
 ```
 
 ### Verificação estruturada para CI
 
 ```bash
-sensei guardian --diff --json
+prometheus guardian --diff --json
 ```
 
 ## Correções e manutenção
@@ -91,30 +91,30 @@ sensei guardian --diff --json
 ### Quick fixes no diagnóstico
 
 ```bash
-sensei diagnosticar --show-fixes
-sensei diagnosticar --fix-safe
+prometheus diagnosticar --show-fixes
+prometheus diagnosticar --fix-safe
 ```
 
 ### Correção específica de tipos inseguros
 
 ```bash
-sensei fix-types --dry-run
-sensei fix-types --target src --confidence 90
+prometheus fix-types --dry-run
+prometheus fix-types --target src --confidence 90
 ```
 
 ### Reestruturação em modo seguro
 
 ```bash
-sensei reestruturar --somente-plano --preset sensei
+prometheus reestruturar --somente-plano --preset prometheus
 ```
 
 ## Formatação e SVG
 
 ```bash
-sensei formatar --check
-sensei formatar --write
-sensei otimizar-svg --dry
-sensei otimizar-svg --write
+prometheus formatar --check
+prometheus formatar --write
+prometheus otimizar-svg --dry
+prometheus otimizar-svg --write
 ```
 
 ## Arquivos gerados
@@ -122,7 +122,7 @@ sensei otimizar-svg --write
 O projeto usa por padrão:
 
 - `relatorios/` para exportações de diagnóstico e `fix-types`
-- `sensei.config.json` para configuração versionada
+- `prometheus.config.json` para configuração versionada
 - baseline do Guardian conforme o fluxo do comando `guardian`
 
 ## Próximos passos

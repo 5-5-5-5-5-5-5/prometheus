@@ -4,13 +4,13 @@ import { parse as babelParse } from '@babel/parser';
 import type { NodePath, Visitor } from '@babel/traverse';
 import traverse from '@babel/traverse';
 import * as t from '@babel/types';
-import { AnalystOrigens, AnalystTipos, ReactMensagens, SeverityNiveis } from '@core/messages/pt/core/plugin-messages.js';
+import { messages } from '@core/messages/index.js';
 import { createLineLookup } from '@shared/helpers/line-lookup.js';
 import { maskJsComments } from '@shared/helpers/masking.js';
 
 import { criarAnalista, criarOcorrencia } from '@';
 
-const disableEnv = process.env.SENSEI_DISABLE_PLUGIN_REACT === '1';
+const disableEnv = process.env.PROMETHEUS_DISABLE_PLUGIN_REACT === '1';
 type Msg = ReturnType<typeof criarOcorrencia>;
 function hasJSX(src: string): boolean {
   // Evita falsos positivos com genéricos TypeScript (ex.: foo<Bar>(...)).
@@ -21,14 +21,14 @@ function hasJSX(src: string): boolean {
   return hasTagLike || hasFragment || /React\.createElement/.test(src);
 }
 const traverseFn = traverse as unknown as typeof import('@babel/traverse').default;
-function warn(message: string, relPath: string, line?: number, nivel = SeverityNiveis.warning): Msg {
+function warn(message: string, relPath: string, line?: number, nivel = messages.SeverityNiveis.warning): Msg {
   return criarOcorrencia({
     relPath,
     mensagem: message,
     linha: line,
     nivel,
-    origem: AnalystOrigens.react,
-    tipo: AnalystTipos.react
+    origem: messages.AnalystOrigens.react,
+    tipo: messages.AnalystTipos.react
   });
 }
 function collectReactIssues(src: string, relPath: string): Msg[] {
@@ -40,14 +40,14 @@ function collectReactIssues(src: string, relPath: string): Msg[] {
     const hasRelSafe = /rel=['"][^'"]*(noopener|noreferrer)[^'"]*['"]/i.test(match[0]);
     if (!hasRelSafe) {
       const line = lineOf(match.index);
-      ocorrencias.push(warn(ReactMensagens.linkTargetBlank, relPath, line));
+      ocorrencias.push(warn(messages.ReactMensagens.linkTargetBlank, relPath, line));
     }
   }
 
   // dangerouslySetInnerHTML
   for (const match of src.matchAll(/dangerouslySetInnerHTML/gi)) {
     const line = lineOf(match.index);
-    ocorrencias.push(warn(ReactMensagens.dangerouslySetInnerHTML, relPath, line));
+    ocorrencias.push(warn(messages.ReactMensagens.dangerouslySetInnerHTML, relPath, line));
   }
 
   // <img> sem alt
@@ -57,14 +57,14 @@ function collectReactIssues(src: string, relPath: string): Msg[] {
     const rolePresentation = /\srole=['"](presentation|none)['"]/i.test(match[0]);
     if (!hasAlt && !ariaHidden && !rolePresentation) {
       const line = lineOf(match.index);
-      ocorrencias.push(warn(ReactMensagens.imgWithoutAlt, relPath, line));
+      ocorrencias.push(warn(messages.ReactMensagens.imgWithoutAlt, relPath, line));
     }
   }
 
   // fetch/axios com HTTP (inseguro)
   for (const match of src.matchAll(/\b(fetch|axios\.get|axios\.post|axios\.[a-z]+)\s*\(\s*['"]http:\/\//gi)) {
     const line = lineOf(match.index);
-    ocorrencias.push(warn(ReactMensagens.httpFetch, relPath, line));
+    ocorrencias.push(warn(messages.ReactMensagens.httpFetch, relPath, line));
   }
 
   // Hardcoded secrets (heurística)
@@ -72,7 +72,7 @@ function collectReactIssues(src: string, relPath: string): Msg[] {
     const valor = match[2] || '';
     if (valor.length < 24 || /^https?:\/\//i.test(valor)) continue;
     const line = lineOf(match.index);
-    ocorrencias.push(warn(ReactMensagens.hardcodedCredential, relPath, line));
+    ocorrencias.push(warn(messages.ReactMensagens.hardcodedCredential, relPath, line));
   }
 
   // Redirecionamento direto via location.href em handlers
@@ -90,7 +90,7 @@ function collectReactIssues(src: string, relPath: string): Msg[] {
 
     // Só reportar se for atribuição dinâmica (potencialmente de input do usuário)
     if (!isStaticString && !isInternalNavigation && !usesNextRouter) {
-      ocorrencias.push(warn(ReactMensagens.locationHrefRedirect, relPath, line));
+      ocorrencias.push(warn(messages.ReactMensagens.locationHrefRedirect, relPath, line));
     }
   }
   return ocorrencias;
@@ -175,7 +175,7 @@ function parseReactWithBabel(scan: string, relPath: string): Msg[] | null {
               const rel = findAttr(attrs, 'rel');
               const relVal = normalizeStringValue(rel?.value);
               const safe = /(noopener|noreferrer)/i.test(relVal);
-              if (!safe) pushOnce(warn(ReactMensagens.linkTargetBlank, relPath, locLine));
+              if (!safe) pushOnce(warn(messages.ReactMensagens.linkTargetBlank, relPath, locLine));
             }
           }
           if (tag.toLowerCase() === 'img') {
@@ -187,11 +187,11 @@ function parseReactWithBabel(scan: string, relPath: string): Msg[] | null {
             const decorative = ariaHiddenVal === 'true' || /^(presentation|none)$/i.test(roleVal);
             // Considerar alt presente se há atributo alt, mesmo se valor é expressão
             if (!alt && !decorative) {
-              pushOnce(warn(ReactMensagens.imgWithoutAlt, relPath, locLine));
+              pushOnce(warn(messages.ReactMensagens.imgWithoutAlt, relPath, locLine));
             }
           }
           if (findAttr(attrs, 'dangerouslySetInnerHTML')) {
-            pushOnce(warn(ReactMensagens.dangerouslySetInnerHTML, relPath, locLine));
+            pushOnce(warn(messages.ReactMensagens.dangerouslySetInnerHTML, relPath, locLine));
           }
 
           // Inline Styles
@@ -200,7 +200,7 @@ function parseReactWithBabel(scan: string, relPath: string): Msg[] | null {
             // Heurística: se o estilo tem mais de 2 propriedades, sugere mover para CSS/Styled
             const numProps = (styleAttr.value.match(/:/g) || []).length;
             if (numProps > 2) {
-              pushOnce(warn(ReactMensagens.complexInlineStyles, relPath, locLine, SeverityNiveis.warning));
+              pushOnce(warn(messages.ReactMensagens.complexInlineStyles, relPath, locLine, messages.SeverityNiveis.warning));
             }
           }
 
@@ -212,14 +212,14 @@ function parseReactWithBabel(scan: string, relPath: string): Msg[] | null {
               if (a.value && t.isJSXExpressionContainer(a.value)) {
                 const expr = a.value.expression;
                 if (t.isArrowFunctionExpression(expr) || t.isFunctionExpression(expr)) {
-                  pushOnce(warn(ReactMensagens.inlineHandlerJsx, relPath, locLine));
+                  pushOnce(warn(messages.ReactMensagens.inlineHandlerJsx, relPath, locLine));
                 }
 
                 // Detectar uso de índice como key (key={i} / key={index})
                 if (attrNome === 'key' && t.isJSXExpressionContainer(a.value) && t.isIdentifier(a.value.expression)) {
                   const id = a.value.expression.name;
                   if (['i', 'index', 'idx'].includes(id)) {
-                    pushOnce(warn(ReactMensagens.indexAsKey, relPath, locLine));
+                    pushOnce(warn(messages.ReactMensagens.indexAsKey, relPath, locLine));
                   }
                 }
               }
@@ -238,7 +238,7 @@ function parseReactWithBabel(scan: string, relPath: string): Msg[] | null {
             const name = key.name;
             const deprecated = ['componentWillMount', 'componentWillReceiveProps', 'componentWillUpdate'];
             if (deprecated.includes(name)) {
-              pushOnce(warn(ReactMensagens.deprecatedLifecycleMethod(name), relPath, path.node.loc?.start?.line, SeverityNiveis.warning));
+              pushOnce(warn(messages.ReactMensagens.deprecatedLifecycleMethod(name), relPath, path.node.loc?.start?.line, messages.SeverityNiveis.warning));
             }
           }
         } catch {
@@ -253,7 +253,7 @@ function parseReactWithBabel(scan: string, relPath: string): Msg[] | null {
           const first = args[0];
           const firstStr = t.isStringLiteral(first) ? String(first.value) : '';
           if (t.isIdentifier(node.callee) && node.callee.name === 'fetch') {
-            if (/^http:\/\//i.test(firstStr)) pushOnce(warn(ReactMensagens.httpFetch, relPath, locLine));
+            if (/^http:\/\//i.test(firstStr)) pushOnce(warn(messages.ReactMensagens.httpFetch, relPath, locLine));
             return;
           }
           if (t.isMemberExpression(node.callee)) {
@@ -262,7 +262,7 @@ function parseReactWithBabel(scan: string, relPath: string): Msg[] | null {
             const objNome = t.isIdentifier(obj) ? String(obj.name) : '';
             const propNome = t.isIdentifier(prop) ? String(prop.name) : '';
             if (objNome === 'axios' && propNome) {
-              if (/^http:\/\//i.test(firstStr)) pushOnce(warn(ReactMensagens.httpFetch, relPath, locLine));
+              if (/^http:\/\//i.test(firstStr)) pushOnce(warn(messages.ReactMensagens.httpFetch, relPath, locLine));
             }
 
             // Detectar Array#map com callback retornando JSX sem key
@@ -275,11 +275,11 @@ function parseReactWithBabel(scan: string, relPath: string): Msg[] | null {
                     if (t.isJSXElement(jsx)) {
                       const hasChave = jsx.openingElement.attributes.some(a => t.isJSXAttribute(a) && t.isJSXIdentifier(a.name) && String(a.name.name) === 'key');
                       if (!hasChave) {
-                        pushOnce(warn(ReactMensagens.listItemNoKey, relPath, jsx.loc?.start?.line ?? locLine));
+                        pushOnce(warn(messages.ReactMensagens.listItemNoKey, relPath, jsx.loc?.start?.line ?? locLine));
                       }
                     } else {
                       // JSXFragment (<>...</>) não aceita atributo key - tratar como sem key
-                      pushOnce(warn(ReactMensagens.listItemNoKey, relPath, jsx.loc?.start?.line ?? locLine));
+                      pushOnce(warn(messages.ReactMensagens.listItemNoKey, relPath, jsx.loc?.start?.line ?? locLine));
                     }
                   };
                   if (t.isJSXElement(body) || t.isJSXFragment(body)) {
@@ -324,7 +324,7 @@ function parseReactWithBabel(scan: string, relPath: string): Msg[] | null {
               isSafe = val.startsWith('/') || val.startsWith('./') || val.startsWith('../');
             }
             if (!isSafe) {
-              pushOnce(warn(ReactMensagens.locationHrefRedirect, relPath, locLine));
+              pushOnce(warn(messages.ReactMensagens.locationHrefRedirect, relPath, locLine));
             }
           }
         } catch {
@@ -343,7 +343,7 @@ function parseReactWithBabel(scan: string, relPath: string): Msg[] | null {
           const s = String(value.value || '');
           if (s.length < 24) return;
           if (/^https?:\/\//i.test(s)) return;
-          pushOnce(warn(ReactMensagens.hardcodedCredential, relPath, locLine));
+          pushOnce(warn(messages.ReactMensagens.hardcodedCredential, relPath, locLine));
         } catch {
           // ignora
         }

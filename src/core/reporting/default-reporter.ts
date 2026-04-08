@@ -6,7 +6,7 @@
  * formatadas usando os templates de mensagens dos detectores correspondentes.
  */
 
-import { DetectorArquiteturaMensagens } from '@core/messages/pt/analistas/detector-arquitetura-messages.js';
+import { messages } from '@core/messages/index.js';
 
 import type { Ocorrencia, ReportEvent } from '@';
 import { criarOcorrencia } from '@';
@@ -45,7 +45,7 @@ export function createDefaultReporter() {
       return criarOcorrencia({
         tipo,
         nivel,
-        mensagem: DetectorArquiteturaMensagens.padraoArquitetural(
+        mensagem: messages.DetectorArquiteturaMensagens.padraoArquitetural(
           padrao,
           confianca,
         ),
@@ -63,7 +63,7 @@ export function createDefaultReporter() {
       return criarOcorrencia({
         tipo,
         nivel,
-        mensagem: DetectorArquiteturaMensagens.caracteristicas(items),
+        mensagem: messages.DetectorArquiteturaMensagens.caracteristicas(items),
         relPath,
         linha,
         coluna,
@@ -76,7 +76,7 @@ export function createDefaultReporter() {
       return criarOcorrencia({
         tipo,
         nivel,
-        mensagem: DetectorArquiteturaMensagens.violacao(violacao),
+        mensagem: messages.DetectorArquiteturaMensagens.violacao(violacao),
         relPath,
         linha,
         coluna,
@@ -90,7 +90,7 @@ export function createDefaultReporter() {
       return criarOcorrencia({
         tipo,
         nivel,
-        mensagem: DetectorArquiteturaMensagens.metricas(acoplamento, coesao),
+        mensagem: messages.DetectorArquiteturaMensagens.metricas(acoplamento, coesao),
         relPath,
         linha,
         coluna,
@@ -102,7 +102,7 @@ export function createDefaultReporter() {
       return criarOcorrencia({
         tipo,
         nivel,
-        mensagem: DetectorArquiteturaMensagens.erroAnalisarArquitetura(data?.erro),
+        mensagem: messages.DetectorArquiteturaMensagens.erroAnalisarArquitetura(data?.erro),
         relPath,
         linha,
         coluna,

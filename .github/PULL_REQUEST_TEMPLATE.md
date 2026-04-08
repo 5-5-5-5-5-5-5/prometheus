@@ -1,4 +1,4 @@
-<!-- Proveniência e Autoria: Este documento integra o projeto Sensei (licença MIT). -->
+<!-- Proveniência e Autoria: Este documento integra o projeto Prometheus (licença MIT). -->
 
 ## 📋 Descrição
 

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// @sensei-disable tipo-literal-inline-complexo
+// @prometheus-disable tipo-literal-inline-complexo
 // Justification: inline types for logging system
 /**
  * Unified log helper system

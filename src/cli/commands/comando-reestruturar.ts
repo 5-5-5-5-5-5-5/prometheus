@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// @sensei-disable tipo-literal-inline-complexo
+// @prometheus-disable tipo-literal-inline-complexo
 // Justificativa: tipos inline para opções de comando CLI são locais e não precisam de extração
 import { OperarioEstrutura } from '@analistas/estrategistas/operario-estrutura.js';
 import { registroAnalistas as tecnicas } from '@analistas/registry/registry.js';
@@ -10,22 +10,21 @@ import { parsearCategorias } from '@cli/helpers/flags-helpers.js';
 import chalk from '@core/config/chalk-safe.js';
 import { config } from '@core/config/config.js';
 import { executarInquisicao, prepararComAst } from '@core/execution/inquisidor.js';
-import { CABECALHOS , getMessages } from '@core/messages/index.js';
-import { CliComandoReestruturarMensagens } from '@core/messages/pt/cli/cli-comando-reestruturar-messages.js';
+import { CABECALHOS, messages } from '@core/messages/index.js';
 import { Command } from 'commander';
 import ora from 'ora';
 
 import type { FileEntry, FileEntryWithAst, Ocorrencia, ResultadoInquisicao } from '@';
 import { extrairMensagemErro } from '@';
 
-const { log, CliReestruturarExtraMensagens } = getMessages();
+const { log, CliReestruturarExtraMensagens } = messages;
 
 /**
  * Comando para reestruturar o projeto
  * Aplica correções estruturais e otimizações ao repositório
  */
 export function comandoReestruturar(aplicarFlagsGlobais: (opts: Record<string, unknown>) => void): Command {
-  return new Command('reestruturar').description('Aplica correções estruturais e otimizações ao repositório.').option('-a, --auto', 'Aplica correções automaticamente sem confirmação (CUIDADO!)', false).option('--aplicar', 'Alias de --auto (deprecated futuramente)', false).option('--somente-plano', 'Exibe apenas o plano sugerido e sai (dry-run)', false).option('--domains', 'Organiza por domains/<entidade>/<categoria>s (opcional; preset sensei usa flat)', false).option('--flat', 'Organiza por src/<categoria>s (sem domains)', false).option('--prefer-estrategista', 'Força uso do estrategista (ignora plano de arquitetos)', false).option('--preset <nome>', 'Preset de estrutura (sensei|node-community|ts-lib). Se omitido, não sugere estrutura automaticamente.').option('--categoria <pair>', 'Override de categoria no formato chave=valor (ex.: controller=handlers). Pode repetir a flag.', (val: string, prev: string[]) => {
+  return new Command('reestruturar').description('Aplica correções estruturais e otimizações ao repositório.').option('-a, --auto', 'Aplica correções automaticamente sem confirmação (CUIDADO!)', false).option('--aplicar', 'Alias de --auto (deprecated futuramente)', false).option('--somente-plano', 'Exibe apenas o plano sugerido e sai (dry-run)', false).option('--domains', 'Organiza por domains/<entidade>/<categoria>s (opcional; preset prometheus usa flat)', false).option('--flat', 'Organiza por src/<categoria>s (sem domains)', false).option('--prefer-estrategista', 'Força uso do estrategista (ignora plano de arquitetos)', false).option('--preset <nome>', 'Preset de estrutura (prometheus|node-community|ts-lib). Se omitido, não sugere estrutura automaticamente.').option('--categoria <pair>', 'Override de categoria no formato chave=valor (ex.: controller=handlers). Pode repetir a flag.', (val: string, prev: string[]) => {
     prev.push(val);
     return prev;
   }, [] as string[]).option('--include <padrao>', 'Glob pattern a INCLUIR (pode repetir a flag ou usar vírgulas / espaços para múltiplos)', (val: string, prev: string[]) => {
@@ -53,17 +52,17 @@ export function comandoReestruturar(aplicarFlagsGlobais: (opts: Record<string, u
       sair(ExitCode.Failure);
       return;
     }
-    log.info(chalk.bold(CliComandoReestruturarMensagens.inicio));
+    log.info(chalk.bold(messages.CliComandoReestruturarMensagens.inicio));
     const spinner = ora({
-      text: CliComandoReestruturarMensagens.spinnerCalculandoPlano,
+      text: messages.CliComandoReestruturarMensagens.spinnerCalculandoPlano,
       spinner: 'dots'
     }).start();
     const baseDir = process.cwd();
     try {
-      // Caminho r�pido de teste: quando SENSEI_TEST_FAST=1 pulamos varredura e inquisicao pesadas.
+      // Caminho r�pido de teste: quando PROMETHEUS_TEST_FAST=1 pulamos varredura e inquisicao pesadas.
       // Mant�m apenas valida��o e gera��o de plano via Operario (mockado nos testes),
       // reduzindo drasticamente o tempo e riscos de timeouts RPC do Vitest.
-      if (process.env.SENSEI_TEST_FAST === '1') {
+      if (process.env.PROMETHEUS_TEST_FAST === '1') {
         const fileEntriesComAst: FileEntryWithAst[] = [];
         const map = parsearCategorias(opts.categoria);
         if (opts.domains && opts.flat) {
@@ -87,14 +86,14 @@ export function comandoReestruturar(aplicarFlagsGlobais: (opts: Record<string, u
           if (!plano.mover.length) {
             log.info(CABECALHOS.reestruturar.planoVazioFast);
           } else {
-            log.info(CliComandoReestruturarMensagens.planoSugeridoFast(origem, plano.mover.length));
+            log.info(messages.CliComandoReestruturarMensagens.planoSugeridoFast(origem, plano.mover.length));
           }
           if (plano.conflitos?.length) {
             log.aviso(CABECALHOS.reestruturar.conflitosDetectadosFast(plano.conflitos.length));
           }
         }
         if (opts.somentePlano) {
-          log.info(CliComandoReestruturarMensagens.dryRunFast);
+          log.info(messages.CliComandoReestruturarMensagens.dryRunFast);
           return;
         }
         if (!plano || !plano.mover.length) {
@@ -110,14 +109,14 @@ export function comandoReestruturar(aplicarFlagsGlobais: (opts: Record<string, u
         }).aplicar;
         if (aplicar) {
           await OperarioEstrutura.aplicar(OperarioEstrutura.toMapaMoves(plano), fileEntriesComAst, baseDir);
-          log.sucesso(CliComandoReestruturarMensagens.reestruturacaoConcluidaFast(plano.mover.length));
+          log.sucesso(messages.CliComandoReestruturarMensagens.reestruturacaoConcluidaFast(plano.mover.length));
           return;
         }
-        log.info(CliComandoReestruturarMensagens.planoCalculadoFastSemAplicar);
+        log.info(messages.CliComandoReestruturarMensagens.planoCalculadoFastSemAplicar);
         return;
       }
       // Aplica flags globais (inclui/exclude) no config
-      // O scanner centralizado j� respeita sensei.config.json e as flags
+      // O scanner centralizado j� respeita prometheus.config.json e as flags
       // O resultado j� vem filtrado
       let fileEntriesComAst: FileEntryWithAst[] = [];
       let analiseParaCorrecao: ResultadoInquisicao | {
@@ -177,7 +176,7 @@ if (typeof iniciarInquisicao === 'function') {
         }
       } catch (err) {
         // Captura erro de qualquer função mockada ou real
-        log.erro(CliComandoReestruturarMensagens.erroDuranteReestruturacao(typeof err === 'object' && err && 'message' in err ? (err as {
+        log.erro(messages.CliComandoReestruturarMensagens.erroDuranteReestruturacao(typeof err === 'object' && err && 'message' in err ? (err as {
           message: string;
         }).message : String(err)));
         if (config.DEV_MODE) {
@@ -214,18 +213,18 @@ if (typeof iniciarInquisicao === 'function') {
       });
       if (plano) {
         if (!plano.mover.length) {
-          spinner.info(CliComandoReestruturarMensagens.spinnerPlanoVazio);
+          spinner.info(messages.CliComandoReestruturarMensagens.spinnerPlanoVazio);
         } else {
-          spinner.succeed(CliComandoReestruturarMensagens.spinnerPlanoSugerido(origem, plano.mover.length));
+          spinner.succeed(messages.CliComandoReestruturarMensagens.spinnerPlanoSugerido(origem, plano.mover.length));
           exibirMolduraPlano(plano.mover, 10);
         }
         // Sempre exibir conflitos quando houver, mesmo com plano vazio
         if (plano.conflitos?.length) {
-          spinner.warn(CliComandoReestruturarMensagens.spinnerConflitosDetectados(plano.conflitos.length));
+          spinner.warn(messages.CliComandoReestruturarMensagens.spinnerConflitosDetectados(plano.conflitos.length));
           exibirMolduraConflitos(plano.conflitos, 10);
         }
       } else {
-        spinner.warn(CliComandoReestruturarMensagens.spinnerSemPlanoSugestao);
+        spinner.warn(messages.CliComandoReestruturarMensagens.spinnerSemPlanoSugestao);
       }
       if (opts.somentePlano) {
         // Exporta o plano sugerido em modo simulado
@@ -237,8 +236,8 @@ if (typeof iniciarInquisicao === 'function') {
           preset: opts.preset,
           conflitos: Array.isArray(plano?.conflitos) ? plano.conflitos.length : 0
         });
-        log.info(CliComandoReestruturarMensagens.dryRunCompleto);
-        log.info(chalk.yellow(CliComandoReestruturarMensagens.dicaParaAplicar));
+        log.info(messages.CliComandoReestruturarMensagens.dryRunCompleto);
+        log.info(chalk.yellow(messages.CliComandoReestruturarMensagens.dicaParaAplicar));
         return;
       }
       const fallbackOcorrencias = analiseParaCorrecao.ocorrencias as Ocorrencia[] | undefined;
@@ -251,15 +250,15 @@ if (typeof iniciarInquisicao === 'function') {
       if (plano && plano.mover.length) {
         mapaMoves = OperarioEstrutura.toMapaMoves(plano);
       } else if (usarFallback) {
-        log.aviso(CliComandoReestruturarMensagens.fallbackProblemasEstruturais(fallbackOcorrencias.length));
+        log.aviso(messages.CliComandoReestruturarMensagens.fallbackProblemasEstruturais(fallbackOcorrencias.length));
         fallbackOcorrencias.forEach((occ: Ocorrencia) => {
           const rel = occ.relPath ?? occ.arquivo ?? 'arquivo desconhecido';
-          log.info(CliComandoReestruturarMensagens.fallbackLinhaOcorrencia(occ.tipo ?? 'ocorrencia', rel, occ.mensagem ?? ''));
+          log.info(messages.CliComandoReestruturarMensagens.fallbackLinhaOcorrencia(occ.tipo ?? 'ocorrencia', rel, occ.mensagem ?? ''));
         });
         mapaMoves = OperarioEstrutura.ocorrenciasParaMapa(fallbackOcorrencias);
       }
       if (!mapaMoves.length) {
-        spinner.succeed(CliComandoReestruturarMensagens.nenhumNecessario);
+        spinner.succeed(messages.CliComandoReestruturarMensagens.nenhumNecessario);
         return;
       }
       const aplicar = opts.auto || (opts as {
@@ -269,7 +268,7 @@ if (typeof iniciarInquisicao === 'function') {
         let answer = '';
         if (process.env.VITEST) {
           // Permite simular resposta customizada via variável de ambiente
-          answer = process.env.SENSEI_REESTRUTURAR_ANSWER ?? 's';
+          answer = process.env.PROMETHEUS_REESTRUTURAR_ANSWER ?? 's';
         } else {
           try {
             const readline = await import('node:readline/promises');
@@ -281,7 +280,7 @@ if (typeof iniciarInquisicao === 'function') {
             rl.close();
           } catch {
             // Se readline falhar, cancela por segurança
-            log.info(CliComandoReestruturarMensagens.canceladoErroPrompt);
+            log.info(messages.CliComandoReestruturarMensagens.canceladoErroPrompt);
             if (process.env.VITEST) {
               throw new Error('exit:1');
             } else {
@@ -293,7 +292,7 @@ if (typeof iniciarInquisicao === 'function') {
         // Normaliza resposta: remove espaços e converte para minúsculo
         if (answer.trim().toLowerCase() !== 's') {
           // Emite log ANTES de rejeitar para garantir captura pelo mock
-          log.info(CliComandoReestruturarMensagens.canceladoUseAuto);
+          log.info(messages.CliComandoReestruturarMensagens.canceladoUseAuto);
           if (process.env.VITEST) {
             // Aguarda flush do log antes de rejeitar
             await new Promise(resolve => setTimeout(resolve, 10));
@@ -303,10 +302,10 @@ if (typeof iniciarInquisicao === 'function') {
           return;
         }
       }
-      spinner.start(CliComandoReestruturarMensagens.spinnerAplicando);
+      spinner.start(messages.CliComandoReestruturarMensagens.spinnerAplicando);
       await OperarioEstrutura.aplicar(mapaMoves, fileEntriesComAst, baseDir);
       const frase = usarFallback ? 'correções aplicadas' : 'movimentos solicitados';
-      spinner.succeed(CliComandoReestruturarMensagens.reestruturacaoConcluida(mapaMoves.length, frase));
+      spinner.succeed(messages.CliComandoReestruturarMensagens.reestruturacaoConcluida(mapaMoves.length, frase));
 
       // Exporta relatórios quando habilitado globalmente (--export)
       await exportarRelatoriosReestruturacao({
@@ -318,7 +317,7 @@ if (typeof iniciarInquisicao === 'function') {
       });
     } catch (error) {
       try {
-        ora().fail(CliComandoReestruturarMensagens.falhaReestruturacao);
+        ora().fail(messages.CliComandoReestruturarMensagens.falhaReestruturacao);
       } catch (err) {
         // Spinner é apenas uma melhoria de UX; falhas aqui não devem ser silenciosas.
         if (config.DEV_MODE) {
@@ -327,7 +326,7 @@ if (typeof iniciarInquisicao === 'function') {
           log.aviso(CliReestruturarExtraMensagens.falhaSpinnerReestruturacao);
         }
       }
-      log.erro(CliComandoReestruturarMensagens.erroDuranteReestruturacao(typeof error === 'object' && error && 'message' in error ? (error as {
+      log.erro(messages.CliComandoReestruturarMensagens.erroDuranteReestruturacao(typeof error === 'object' && error && 'message' in error ? (error as {
         message: string;
       }).message : String(error)));
       if (config.DEV_MODE) console.error(error);

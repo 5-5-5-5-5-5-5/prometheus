@@ -16,7 +16,7 @@ const { log, logCore } = getMessages();
 const localRequire = createRequire(import.meta.url);
 
 /**
- * Plugin core do Sensei - contém parsers para linguagens principais
+ * Plugin core do Prometheus - contém parsers para linguagens principais
  * JavaScript, TypeScript, HTML, CSS, XML
  */
 export class CorePlugin implements ParserPlugin {
@@ -315,7 +315,7 @@ export class CorePlugin implements ParserPlugin {
   }
 
   /**
-   * Wrapper para criar BabelFile compatível com senseiExtra
+   * Wrapper para criar BabelFile compatível com prometheusExtra
    */
   private wrapMinimal(lang: string, rawAst: unknown): BabelFileExtra {
     return {
@@ -328,7 +328,7 @@ export class CorePlugin implements ParserPlugin {
       },
       comments: [],
       tokens: [],
-      senseiExtra: { lang, rawAst: rawAst as RawAst },
+      prometheusExtra: { lang, rawAst: rawAst as RawAst },
     };
   }
 

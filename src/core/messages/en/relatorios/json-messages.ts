@@ -15,7 +15,7 @@ export const JsonMensagens = {
     },
     versao: {
       label: 'versao',
-      descricao: 'Version of Sensei that generated this report'
+      descricao: 'Version of Prometheus that generated this report'
     },
     schemaVersion: {
       label: 'schemaVersion',

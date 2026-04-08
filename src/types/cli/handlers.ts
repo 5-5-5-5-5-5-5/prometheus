@@ -125,7 +125,7 @@ export interface ReestruturacaoExportOptions {
   simulado: boolean;
   /** Origem do plano (estrategista, heurístico, etc) */
   origem?: string;
-  /** Preset usado (sensei, node-community, ts-lib) */
+  /** Preset usado (prometheus, node-community, ts-lib) */
   preset?: string;
   /** Número de conflitos detectados */
   conflitos?: number;

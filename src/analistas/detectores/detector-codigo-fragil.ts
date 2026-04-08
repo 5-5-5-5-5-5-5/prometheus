@@ -4,7 +4,7 @@ import type { CatchClause, FunctionDeclaration, Node, NumericLiteral } from '@ba
 import { config } from '@core/config/config.js';
 import { LIMITES_PADRAO } from '@core/config/limites.js';
 import { traverse } from '@core/config/traverse.js';
-import { DetectorCodigoFragilMensagens } from '@core/messages/pt/analistas/detector-codigo-fragil-messages.js';
+import { messages } from '@core/messages/index.js';
 import { agruparPor } from '@shared/helpers/agrupar.js';
 import { detectarComentariosPendentes, detectarLogsDebug } from '@shared/helpers/detectores-comuns.js';
 import { detectarFrameworks } from '@shared/helpers/framework-detector.js';
@@ -168,7 +168,7 @@ export const analistaCodigoFragil: Analista = {
     // Detecções de texto complementares (Heurísticas)
     detectarProblemasAvancados(src, fragilidades);
 
-    // Converter para ocorrências Sensei
+    // Converter para ocorrências Prometheus
     const ocorrencias: Ocorrencia[] = [];
     const porSeveridade = agruparPor(fragilidades, f => f.severidade || 'media');
     for (const [severidade, items] of Object.entries(porSeveridade)) {
@@ -184,7 +184,7 @@ export const analistaCodigoFragil: Analista = {
         ocorrencias.push(criarOcorrencia({
           tipo: 'codigo-fragil',
           nivel,
-          mensagem: DetectorCodigoFragilMensagens.fragilidadesResumo(severidade, resumo, {
+          mensagem: messages.DetectorCodigoFragilMensagens.fragilidadesResumo(severidade, resumo, {
             severidade,
             total: items.length,
             tipos,

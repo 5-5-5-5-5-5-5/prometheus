@@ -55,7 +55,7 @@ export const quickCorrecaoRegistro: PatternBasedQuickFix[] = [
 // Começamos por SVGs, pois a transformação é determinística e segura.
 {
   id: 'svg-optimize-svgo-like',
-  title: 'Otimizar SVG (Sensei)',
+  title: 'Otimizar SVG (Prometheus)',
   description: 'Remove prolog/doctype/comentários/metadata e colapsa whitespace entre tags para reduzir tamanho do SVG.',
   // Match único do arquivo inteiro
   pattern: /^[\s\S]+$/,

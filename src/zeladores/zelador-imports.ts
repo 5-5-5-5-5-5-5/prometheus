@@ -15,12 +15,11 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
-import { getMessages } from '@core/messages/index.js';
-import { ERROS_IMPORTS, gerarResumoImports, MENSAGENS_IMPORTS, PROGRESSO_IMPORTS } from '@core/messages/pt/zeladores/zelador-messages.js';
+import { messages } from '@core/messages/index.js';
 
 import type { AliasConfig, ImportCorrecao, ImportCorrecaoArquivo, ImportCorrecaoOptions } from '@';
 
-const { log } = getMessages();
+const log = messages.log;
 
 /**
  * Configuração padrão de aliases baseada em tsconfig.json
@@ -70,7 +69,7 @@ async function* walkDirectory(dir: string): AsyncGenerator<string> {
       }
     }
   } catch (error) {
-    log.erro(ERROS_IMPORTS.lerDiretorio(dir, error));
+    log.erro(messages.ERROS_IMPORTS.lerDiretorio(dir, error));
   }
 }
 
@@ -216,7 +215,7 @@ export async function executarZeladorImports(targetDirs: string[], options: Part
       await fs.access(fullCaminho);
     } catch {
       if (fullOpcoes.verbose) {
-        log.aviso(PROGRESSO_IMPORTS.diretorioNaoEncontrado(dir));
+        log.aviso(messages.PROGRESSO_IMPORTS.diretorioNaoEncontrado(dir));
       }
       continue;
     }
@@ -226,10 +225,10 @@ export async function executarZeladorImports(targetDirs: string[], options: Part
         resultados.push(resultado);
         if (fullOpcoes.verbose) {
           if (resultado.modificado) {
-            log.sucesso(PROGRESSO_IMPORTS.arquivoProcessado(resultado.arquivo, resultado.correcoes.length));
+            log.sucesso(messages.PROGRESSO_IMPORTS.arquivoProcessado(resultado.arquivo, resultado.correcoes.length));
           }
           if (resultado.erro) {
-            log.erro(PROGRESSO_IMPORTS.arquivoErro(resultado.arquivo, resultado.erro));
+            log.erro(messages.PROGRESSO_IMPORTS.arquivoErro(resultado.arquivo, resultado.erro));
           }
         }
       }
@@ -275,7 +274,7 @@ export function gerarRelatorioCorrecoes(resultados: ImportCorrecaoArquivo[]): st
  * Função principal para uso via CLI ou programático
  */
 export async function corrigirImports(dirs: string[] = ['src', 'tests'], options: Partial<ImportCorrecaoOptions> = {}): Promise<void> {
-  log.fase?.(MENSAGENS_IMPORTS.titulo);
+  log.fase?.(messages.MENSAGENS_IMPORTS.titulo);
   console.log(); // linha vazia para espaçamento
 
   const resultados = await executarZeladorImports(dirs, {
@@ -285,7 +284,7 @@ export async function corrigirImports(dirs: string[] = ['src', 'tests'], options
   const modificados = resultados.filter(r => r.modificado);
   const totalCorrecoes = modificados.reduce((sum, r) => sum + r.correcoes.length, 0);
   const comErro = resultados.filter(r => r.erro);
-  const resumo = gerarResumoImports({
+  const resumo = messages.gerarResumoImports({
     processados: resultados.length,
     modificados: modificados.length,
     totalCorrecoes,

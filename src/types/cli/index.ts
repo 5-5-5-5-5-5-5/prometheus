@@ -16,7 +16,7 @@ export type {
   OpcoesProcessamentoFiltros,
   OtimizarSvgOptions,
   ResultadoValidacao,
-  SenseiGlobalFlags,
+  PrometheusGlobalFlags,
 } from './options.js';
 
 // Handlers

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// @sensei-disable tipo-literal-inline-complexo
+// @prometheus-disable tipo-literal-inline-complexo
 // Justification: inline types for message helpers
 /**
  * Diagnose Command Messages
@@ -76,7 +76,7 @@ export const MENSAGENS_ERRO = {
  * Warning messages
  */
 export const MENSAGENS_AVISO = {
-  modoFast: `${ICONES_DIAGNOSTICO.info} Fast mode active (SENSEI_TEST_FAST=1)`,
+  modoFast: `${ICONES_DIAGNOSTICO.info} Fast mode active (PROMETHEUS_TEST_FAST=1)`,
   semMutateFS: `${ICONES_DIAGNOSTICO.aviso} Auto-fix disabled.`,
   guardianDesabilitado: `${ICONES_DIAGNOSTICO.info} Guardian not run`,
   arquetiposTimeout: `${ICONES_DIAGNOSTICO.aviso} Archetype detection expired (timeout)`

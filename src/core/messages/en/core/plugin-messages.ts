@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// @sensei-disable seguranca vulnerabilidade-seguranca
+// @prometheus-disable seguranca vulnerabilidade-seguranca
 /**
  * Plugin Analyst Messages
  *
@@ -123,7 +123,7 @@ export const XmlMensagens = {
 
 export const FormatadorMensagens = {
   naoFormatado: (parser: string, detalhes?: string) => {
-    const base = `File appears to be unformatted (parser: ${parser}). Consider normalizing with Sensei formatter.`;
+    const base = `File appears to be unformatted (parser: ${parser}). Consider normalizing with Prometheus formatter.`;
     if (!detalhes) return base;
     return `${base} (${detalhes})`;
   },

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// @sensei-disable problema-documentacao
+// @prometheus-disable problema-documentacao
 // Justificativa: types com any são propositais para tipagem genérica de wrappers
 /**
  * @fileoverview Tipos para funções de persistência e mocking de testes

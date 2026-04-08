@@ -1,17 +1,16 @@
 // SPDX-License-Identifier: MIT
-// @sensei-disable tipo-literal-inline-complexo
+// @prometheus-disable tipo-literal-inline-complexo
 // Justificativa: tipos inline para opções de comando CLI são locais e não precisam de extração
 import { optionsDiagnosticar } from '@cli/options-diagnosticar.js';
 import { processarDiagnostico } from '@cli/processamento-diagnostico.js';
-import { CABECALHOS , getMessages } from '@core/messages/index.js';
-import { CliComandoDiagnosticarMensagens } from '@core/messages/pt/cli/cli-comando-diagnosticar-messages.js';
+import { CABECALHOS, messages } from '@core/messages/index.js';
 import { ativarModoJson } from '@shared/helpers/json-mode.js';
 import { Command } from 'commander';
 import ora from 'ora';
 
 import type { ParentWithOpts } from '@';
 
-const { log } = getMessages();
+const log = messages.log;
 
 export function comandoDiagnosticar(aplicarFlagsGlobais: (opts: Record<string, unknown>) => void): Command {
   const cmd = new Command('diagnosticar').alias('diag').description('Executa uma análise completa do repositório');
@@ -75,13 +74,13 @@ export function comandoDiagnosticar(aplicarFlagsGlobais: (opts: Record<string, u
     }
 
     // Fast mode de teste: retorna estrutura mínima simulada sem executar análise completa
-    if (process.env.SENSEI_TEST_FAST === '1') {
+    if (process.env.PROMETHEUS_TEST_FAST === '1') {
       if (opts.json) {
         // Estrutura mínima para satisfazer consumidores dos testes
         console.log(JSON.stringify({
           meta: {
             fast: true,
-            tipo: CliComandoDiagnosticarMensagens.fastModeTipo
+            tipo: messages.CliComandoDiagnosticarMensagens.fastModeTipo
           },
           totalArquivos: 0,
           ocorrencias: []
@@ -115,47 +114,47 @@ export function comandoDiagnosticar(aplicarFlagsGlobais: (opts: Record<string, u
         // Mapear flags relevantes e adicionar detalhes úteis
         if (opts.json) {
           activeFlags.push('--json');
-          details.push(CliComandoDiagnosticarMensagens.detalheSaidaEstruturada);
+          details.push(messages.CliComandoDiagnosticarMensagens.detalheSaidaEstruturada);
         }
         if (opts.guardianCheck) {
           activeFlags.push('--guardian-check');
-          details.push(CliComandoDiagnosticarMensagens.detalheGuardian);
+          details.push(messages.CliComandoDiagnosticarMensagens.detalheGuardian);
         }
         if (opts.executive) {
           activeFlags.push('--executive');
-          details.push(CliComandoDiagnosticarMensagens.detalheExecutive);
+          details.push(messages.CliComandoDiagnosticarMensagens.detalheExecutive);
         }
         if (opts.full) {
           activeFlags.push('--full');
-          details.push(CliComandoDiagnosticarMensagens.detalheFull);
+          details.push(messages.CliComandoDiagnosticarMensagens.detalheFull);
         }
         if (opts.fast) {
           activeFlags.push('--fast');
-          details.push(CliComandoDiagnosticarMensagens.detalheFast);
+          details.push(messages.CliComandoDiagnosticarMensagens.detalheFast);
         }
         // Compact
         const localCompact = Boolean((opts as unknown as Record<string, unknown>)['compact']);
         const effectiveCompact = localCompact || !opts.full && !localCompact;
         if (effectiveCompact && !opts.full) {
           activeFlags.push('--compact');
-          details.push(CliComandoDiagnosticarMensagens.detalheCompact);
+          details.push(messages.CliComandoDiagnosticarMensagens.detalheCompact);
         }
         if (opts.listarAnalistas) {
           activeFlags.push('--listar-analistas');
         }
         if (opts.autoFix) {
           activeFlags.push('--auto-fix');
-          details.push(CliComandoDiagnosticarMensagens.detalheAutoFix);
+          details.push(messages.CliComandoDiagnosticarMensagens.detalheAutoFix);
         }
         if (opts.autoFixConservative) {
           activeFlags.push('--auto-fix-conservative');
-          details.push(CliComandoDiagnosticarMensagens.detalheAutoFixConservative);
+          details.push(messages.CliComandoDiagnosticarMensagens.detalheAutoFixConservative);
         }
         // include/exclude counts
         const includes = opts.include as string[] || [];
         const excludes = opts.exclude as string[] || [];
-        if (includes.length) details.push(CliComandoDiagnosticarMensagens.detalheIncludePatterns(includes.length, includes.join(', ')));
-        if (excludes.length) details.push(CliComandoDiagnosticarMensagens.detalheExcludePatterns(excludes.length, excludes.join(', ')));
+        if (includes.length) details.push(messages.CliComandoDiagnosticarMensagens.detalheIncludePatterns(includes.length, includes.join(', ')));
+        if (excludes.length) details.push(messages.CliComandoDiagnosticarMensagens.detalheExcludePatterns(excludes.length, excludes.join(', ')));
 
         // Export flags can be passed as parent/global flags
         const parentExport = Boolean(parentOpts && Object.prototype.hasOwnProperty.call(parentOpts, 'export') && Boolean(parentOpts['export']));
@@ -165,32 +164,32 @@ export function comandoDiagnosticar(aplicarFlagsGlobais: (opts: Record<string, u
         if (parentExport || localExport) {
           activeFlags.push('--export');
           const relDir = config && (config as Record<string, unknown>)['RELATORIOS_DIR'] || 'relatorios';
-          details.push(CliComandoDiagnosticarMensagens.detalheExport(String(relDir)));
+          details.push(messages.CliComandoDiagnosticarMensagens.detalheExport(String(relDir)));
         }
         if (parentExportFull || localExportFull) {
           activeFlags.push('--export-full');
           // manifest nome será gerado só durante execução; mencionar que shards serão criados
-          details.push(CliComandoDiagnosticarMensagens.detalheExportFull);
+          details.push(messages.CliComandoDiagnosticarMensagens.detalheExportFull);
         }
 
         // Log-level / debug mapping
         const resolvedParentLogNivel = parentOpts && Object.prototype.hasOwnProperty.call(parentOpts, 'logLevel') ? String(parentOpts['logLevel']) : undefined;
         const logNivel = opts.logNivel as string || resolvedParentLogNivel || 'info';
-        details.push(CliComandoDiagnosticarMensagens.detalheLogLevel(String(logNivel)));
+        details.push(messages.CliComandoDiagnosticarMensagens.detalheLogLevel(String(logNivel)));
 
         // Recomendações para flags redundantes ou legadas
-        details.push(CliComandoDiagnosticarMensagens.dicaPrefiraLogLevelDebug);
-        details.push(CliComandoDiagnosticarMensagens.dicaAutoFixConservative);
+        details.push(messages.CliComandoDiagnosticarMensagens.dicaPrefiraLogLevelDebug);
+        details.push(messages.CliComandoDiagnosticarMensagens.dicaAutoFixConservative);
 
         // Mostrar bloco apenas se houver conteúdo relevante
         if (activeFlags.length || details.length) {
-          const header = chalk.cyan(CliComandoDiagnosticarMensagens.sugestoesHeader);
-          const footer = chalk.cyan(CliComandoDiagnosticarMensagens.sugestoesFooter);
+          const header = chalk.cyan(messages.CliComandoDiagnosticarMensagens.sugestoesHeader);
+          const footer = chalk.cyan(messages.CliComandoDiagnosticarMensagens.sugestoesFooter);
           log.info(header);
-          if (activeFlags.length) log.info(chalk.yellow(`${CABECALHOS.diagnostico.flagsAtivas} `) + activeFlags.join(' '));else log.info(chalk.gray(CliComandoDiagnosticarMensagens.nenhumaFlagRelevante));
-          log.info(CliComandoDiagnosticarMensagens.linhaEmBranco);
+          if (activeFlags.length) log.info(chalk.yellow(`${CABECALHOS.diagnostico.flagsAtivas} `) + activeFlags.join(' '));else log.info(chalk.gray(messages.CliComandoDiagnosticarMensagens.nenhumaFlagRelevante));
+          log.info(messages.CliComandoDiagnosticarMensagens.linhaEmBranco);
           log.info(chalk.green(CABECALHOS.diagnostico.informacoesUteis));
-          for (const d of details) log.info(CliComandoDiagnosticarMensagens.detalheLinha(String(d)));
+          for (const d of details) log.info(messages.CliComandoDiagnosticarMensagens.detalheLinha(String(d)));
           log.info(footer);
         }
       } catch {
@@ -205,7 +204,7 @@ export function comandoDiagnosticar(aplicarFlagsGlobais: (opts: Record<string, u
       succeed: () => {},
       fail: () => {}
     } : ora({
-      text: CliComandoDiagnosticarMensagens.spinnerExecutando,
+      text: messages.CliComandoDiagnosticarMensagens.spinnerExecutando,
       spinner: 'dots'
     }).start();
     // Bridge de fases: atualizar texto do spinner conforme fases do processamento
@@ -215,7 +214,7 @@ export function comandoDiagnosticar(aplicarFlagsGlobais: (opts: Record<string, u
       };
       logWithFase.fase = (t: string) => {
         if (typeof t === 'string' && t.trim()) {
-          spinner.text = CliComandoDiagnosticarMensagens.spinnerFase(t);
+          spinner.text = messages.CliComandoDiagnosticarMensagens.spinnerFase(t);
         }
       };
     } catch {
@@ -224,9 +223,9 @@ export function comandoDiagnosticar(aplicarFlagsGlobais: (opts: Record<string, u
     try {
       // Delegar todo o processamento para a função modularizada
       await processarDiagnostico(opts as unknown as import('@').OpcoesProcessamentoDiagnostico);
-      spinner.succeed(CliComandoDiagnosticarMensagens.spinnerConcluido);
+      spinner.succeed(messages.CliComandoDiagnosticarMensagens.spinnerConcluido);
     } catch (err) {
-      spinner.fail(CliComandoDiagnosticarMensagens.spinnerFalhou);
+      spinner.fail(messages.CliComandoDiagnosticarMensagens.spinnerFalhou);
       throw err;
     }
   });

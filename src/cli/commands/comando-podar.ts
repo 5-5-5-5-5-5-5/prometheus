@@ -8,15 +8,13 @@ import { expandIncludePatterns, processPatternList } from '@cli/helpers/pattern-
 import chalk from '@core/config/chalk-safe.js';
 import { config } from '@core/config/config.js';
 import { iniciarInquisicao } from '@core/execution/inquisidor.js';
-import { getMessages } from '@core/messages/index.js';
-import { CliComandoPodarMensagens } from '@core/messages/pt/cli/cli-comando-podar-messages.js';
-import { ICONES_DIAGNOSTICO } from '@core/messages/shared/icons.js';
+import { messages } from '@core/messages/index.js';
 import { Command } from 'commander';
 
 import type { ArquivoFantasma, ResultadoPoda, Tecnica } from '@';
 import { asTecnicas } from '@';
 
-const { log, logSistema } = getMessages();
+const { log, logSistema } = messages;
 
 export function comandoPodar(aplicarFlagsGlobais: (opts: Record<string, unknown>) => void): Command {
   return new Command('podar').description('Remove arquivos órfãos e lixo do repositório.').option('-f, --force', 'Remove arquivos sem confirmação (CUIDADO!)', false).option('--include <padrao>', 'Glob pattern a INCLUIR (pode repetir a flag ou usar vírgulas / espaços para múltiplos)', (val: string, prev: string[]) => {
@@ -37,7 +35,7 @@ export function comandoPodar(aplicarFlagsGlobais: (opts: Record<string, unknown>
       sair(ExitCode.Failure);
       return;
     }
-    log.info(chalk.bold(CliComandoPodarMensagens.inicio));
+    log.info(chalk.bold(messages.CliComandoPodarMensagens.inicio));
     const baseDir = process.cwd();
     try {
       // Normaliza padrões de include/exclude para sincronizar filtros com o scanner
@@ -58,7 +56,7 @@ export function comandoPodar(aplicarFlagsGlobais: (opts: Record<string, unknown>
       }, tecnicas);
       const resultadoPoda: ResultadoPoda = await removerArquivosOrfaos(fileEntries);
       if (resultadoPoda.arquivosOrfaos.length === 0) {
-        log.sucesso(CliComandoPodarMensagens.nenhumaSujeira(ICONES_DIAGNOSTICO.sucesso));
+        log.sucesso(messages.CliComandoPodarMensagens.nenhumaSujeira(messages.ICONES_DIAGNOSTICO.sucesso));
         await exportarRelatoriosPoda({
           baseDir,
           podados: [],
@@ -67,9 +65,9 @@ export function comandoPodar(aplicarFlagsGlobais: (opts: Record<string, unknown>
         });
         return;
       }
-      log.aviso(CliComandoPodarMensagens.orfaosDetectados(resultadoPoda.arquivosOrfaos.length));
+      log.aviso(messages.CliComandoPodarMensagens.orfaosDetectados(resultadoPoda.arquivosOrfaos.length));
       resultadoPoda.arquivosOrfaos.forEach((file: ArquivoFantasma) => {
-        log.info(CliComandoPodarMensagens.linhaArquivoOrfao(file.arquivo));
+        log.info(messages.CliComandoPodarMensagens.linhaArquivoOrfao(file.arquivo));
       });
       if (!opts.force) {
         const readline = await import('node:readline/promises');
@@ -77,7 +75,7 @@ export function comandoPodar(aplicarFlagsGlobais: (opts: Record<string, unknown>
           input: process.stdin,
           output: process.stdout
         });
-        const answer = await rl.question(chalk.yellow(CliComandoPodarMensagens.confirmarRemocao));
+        const answer = await rl.question(chalk.yellow(messages.CliComandoPodarMensagens.confirmarRemocao));
         rl.close();
 
         // debug removido (usava console.log) – manter somente se modo debug ativo futuramente
@@ -109,7 +107,7 @@ export function comandoPodar(aplicarFlagsGlobais: (opts: Record<string, unknown>
       const errMsg = typeof error === 'object' && error && 'message' in error ? (error as {
         message: string;
       }).message : String(error);
-      log.erro(CliComandoPodarMensagens.erroDurantePoda(errMsg));
+      log.erro(messages.CliComandoPodarMensagens.erroDurantePoda(errMsg));
       if (config.DEV_MODE) console.error(error);
       sair(ExitCode.Failure);
       return;

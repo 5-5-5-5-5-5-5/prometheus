@@ -10,7 +10,7 @@ import { ICONES_ACAO, ICONES_COMANDO, ICONES_DIAGNOSTICO, ICONES_RELATORIO } fro
 export const RelatorioMensagens = {
   /* -------------------------- MAIN REPORT (gerador-relatorio.ts) -------------------------- */
   principal: {
-    titulo: `${ICONES_RELATORIO.resumo} Sensei Report`,
+    titulo: `${ICONES_RELATORIO.resumo} Prometheus Report`,
     secoes: {
       metadados: {
         data: 'Date',
@@ -104,7 +104,7 @@ export const RelatorioMensagens = {
       }
     },
     instrucoes: {
-      diagnosticoDetalhado: 'For detailed diagnostics, run: sensei diagnosticar --export',
+      diagnosticoDetalhado: 'For detailed diagnostics, run: prometheus diagnosticar --export',
       tabelasVerbosas: 'To see framed tables in the terminal (very verbose), use: --debug'
     }
   },
@@ -139,7 +139,7 @@ export const RelatorioMensagens = {
   },
   /* -------------------------- PRUNING REPORT -------------------------- */
   poda: {
-    titulo: `${ICONES_COMANDO.podar} Senseial Pruning Report`,
+    titulo: `${ICONES_COMANDO.podar} Prometheus Pruning Report`,
     secoes: {
       metadados: {
         data: 'Date',
@@ -191,7 +191,7 @@ export const RelatorioMensagens = {
   },
   /* -------------------------- RESTRUCTURING REPORT -------------------------- */
   reestruturar: {
-    titulo: `${ICONES_COMANDO.reestruturar} Senseial Restructuring Report`,
+    titulo: `${ICONES_COMANDO.reestruturar} Prometheus Restructuring Report`,
     secoes: {
       metadados: {
         data: 'Date',

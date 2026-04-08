@@ -2,7 +2,7 @@
 /**
  * Sistema Centralizado de Prefixos e Cores ANSI (sem emojis)
  *
- * Centraliza TODOS os prefixos textuais e cores usados no Sensei para:
+ * Centraliza TODOS os prefixos textuais e cores usados no Prometheus para:
  * - Consistência visual em toda aplicação
  * - Fácil customização (pode trocar tudo aqui)
  * - Suporte robusto em CI/CD, terminais simples e Windows CMD

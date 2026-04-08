@@ -1,13 +1,13 @@
 ---
-Proveniência e Autoria: Este documento integra o projeto Sensei (licença MIT-0).
+Proveniência e Autoria: Este documento integra o projeto Prometheus (licença MIT-0).
 ---
 
 
-# 🛡️ Robustez e Segurança do Sensei
+# 🛡️ Robustez e Segurança do Prometheus
 
 ## 📋 Visão Geral
 
-O Sensei implementa múltiplas camadas de segurança e robustez para garantir análises seguras e confiáveis em qualquer ambiente.
+O Prometheus implementa múltiplas camadas de segurança e robustez para garantir análises seguras e confiáveis em qualquer ambiente.
 
 ## 🔒 Modelo de Segurança
 
@@ -25,14 +25,14 @@ O Sensei implementa múltiplas camadas de segurança e robustez para garantir an
 
 ```bash
 # Via flag
-sensei diagnosticar --safe-mode
+prometheus diagnosticar --safe-mode
 
 # Via variável de ambiente
 export SAFE_MODE=true
-sensei diagnosticar
+prometheus diagnosticar
 
 # Via configuração
-# sensei.config.safe.json
+# prometheus.config.safe.json
 {
   "SAFE_MODE": true
 }
@@ -248,7 +248,7 @@ const TIMEOUT_PADRAO = 30000; // 30s
 
 async function executarAnalistaComTimeout(analista: Analista, arquivo: string) {
   const timeout =
-    process.env.SENSEI_ANALISE_TIMEOUT_POR_ANALISTA_MS || TIMEOUT_PADRAO;
+    process.env.PROMETHEUS_ANALISE_TIMEOUT_POR_ANALISTA_MS || TIMEOUT_PADRAO;
 
   return Promise.race([
     analista.aplicar(arquivo),
@@ -315,7 +315,7 @@ function monitorarMemoria() {
 
 ```yaml
 # .github/workflows/ci.yml
-- name: Análise Sensei
+- name: Análise Prometheus
   run: |
     npm run build
     node dist/bin/index.js diagnosticar \
@@ -502,7 +502,7 @@ describe("timeout de analistas", () => {
 
 - [README Principal](../README.md)
 - [Guia de Comandos](GUIA_COMANDOS.md)
-- [Configuração Local](CONFIGURAR-SENSEI-LOCAL.md)
+- [Configuração Local](CONFIGURAR-PROMETHEUS-LOCAL.md)
 
 ### Segurança Externa
 

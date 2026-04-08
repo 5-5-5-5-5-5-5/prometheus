@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
 /**
- * Configuração centralizada dos padrões de exclusão do Sensei
+ * Configuração centralizada dos padrões de exclusão do Prometheus
  *
  * Esta configuração define os padrões padrão de exclusão usados pelo sistema
  * de análise quando nenhum outro filtro é especificado.
  *
  * Precedência de configuração:
  * 1. Flags --include/--exclude (mais alta prioridade)
- * 2. sensei.config.json (configuração do projeto)
+ * 2. prometheus.config.json (configuração do projeto)
  * 3. Este arquivo (padrões do sistema)
  * 4. Fallback hardcoded (mais baixa prioridade)
  */
@@ -20,8 +20,8 @@ export type { ConfigExcludesPadrao };
 /**
  * Configuração padrão dos padrões de exclusão
  *
- * Estes são os padrões recomendados pelo Sensei para diferentes tipos de projeto.
- * Eles podem ser sobrescritos pelo usuário via sensei.config.json
+ * Estes são os padrões recomendados pelo Prometheus para diferentes tipos de projeto.
+ * Eles podem ser sobrescritos pelo usuário via prometheus.config.json
  */
 export const EXCLUDES_PADRAO: ConfigExcludesPadrao = {
   padroesSistema: [
@@ -39,10 +39,10 @@ export const EXCLUDES_PADRAO: ConfigExcludesPadrao = {
     'pnpm-lock.yaml',
     '**/.git/**',
     '.pnpm/**',
-    'sensei/**',
-    '**/.sensei/**',
-    'preview-sensei/**',
-    'sensei/PREVIEW*',
+    'prometheus/**',
+    '**/.prometheus/**',
+    'preview-prometheus/**',
+    'prometheus/PREVIEW*',
     'PREVIEW*',
     'tests/fixtures/**',
     'THIRD-PARTY-NOTICES.txt',
@@ -207,7 +207,7 @@ export const EXCLUDES_PADRAO: ConfigExcludesPadrao = {
   metadata: {
     versao: '1.0.0',
     ultimaAtualizacao: '2025-08-29',
-    descricao: 'Configuração padrão dos padrões de exclusão do Sensei',
+    descricao: 'Configuração padrão dos padrões de exclusão do Prometheus',
   },
 };
 
@@ -289,7 +289,7 @@ export function isPadraoExclusaoSeguro(padrao: string): boolean {
  * Função para mesclar configurações de exclusão com precedência
  *
  * Precedência (do mais alto para o mais baixo):
- * 1. Configuração do usuário via sensei.config.json
+ * 1. Configuração do usuário via prometheus.config.json
  * 2. Padrões recomendados baseados no tipo de projeto
  * 3. Padrões do sistema
  *

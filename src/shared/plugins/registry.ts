@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: MIT
-import { getMessages, PluginRegistryMensagens } from '@core/messages/index.js';
-import { ExcecoesMensagens } from '@core/messages/pt/core/excecoes-messages.js';
+import { messages } from '@core/messages/index.js';
 
 import type { GlobalComImport, ImportDinamico, LanguageSupport, ParserPlugin, PluginConfig } from '@';
 
-const { log, logCore } = getMessages();
+const { log, logCore } = messages;
 
 /**
  * Registry centralizado para gerenciamento de plugins de parser
@@ -21,7 +20,7 @@ export class PluginRegistry {
     this.config = {
       enabled: ['core'],
       autoload: true,
-      registry: '@sensei/plugins',
+      registry: '@prometheus/plugins',
       ...config
     };
     this.userConfiguredEnabled = !!config?.enabled;
@@ -44,12 +43,12 @@ export class PluginRegistry {
     for (const ext of plugin.extensions) {
       if (this.extensionMap.has(ext)) {
         const existing = this.extensionMap.get(ext);
-        const msg = PluginRegistryMensagens.extensaoSobrescrita;
+        const msg = messages.PluginRegistryMensagens.extensaoSobrescrita;
         log.debug(msg.replace('{ext}', ext).replace('{existente}', existing || '').replace('{novo}', plugin.name));
       }
       this.extensionMap.set(ext, plugin.name);
     }
-    const msgRegistrado = PluginRegistryMensagens.pluginRegistrado;
+    const msgRegistrado = messages.PluginRegistryMensagens.pluginRegistrado;
     log.debug(msgRegistrado.replace('{nome}', plugin.name).replace('{extensoes}', plugin.extensions.join(', ')));
   }
 
@@ -61,7 +60,7 @@ export class PluginRegistry {
     if (this.plugins.has(name)) {
       const plugin = this.plugins.get(name);
       if (!plugin) {
-        throw new Error(ExcecoesMensagens.pluginRegistradoNaoPodeSerObtido(name));
+        throw new Error(messages.ExcecoesMensagens.pluginRegistradoNaoPodeSerObtido(name));
       }
       return plugin;
     }
@@ -73,7 +72,7 @@ export class PluginRegistry {
     if (this.loadingPromises.has(name)) {
       const promise = this.loadingPromises.get(name);
       if (!promise) {
-        throw new Error(ExcecoesMensagens.pluginCarregandoPromiseNaoPodeSerObtida(name));
+        throw new Error(messages.ExcecoesMensagens.pluginCarregandoPromiseNaoPodeSerObtida(name));
       }
       return promise;
     }
@@ -95,7 +94,7 @@ export class PluginRegistry {
    * Implementação real do loading do plugin
    */
   private async doLoadPlugin(name: string): Promise<ParserPlugin> {
-    const msgCarregando = PluginRegistryMensagens.carregandoPlugin;
+    const msgCarregando = messages.PluginRegistryMensagens.carregandoPlugin;
     log.debug(msgCarregando.replace('{nome}', name));
     try {
       // Tenta carregar do registry configurado
@@ -111,7 +110,7 @@ export class PluginRegistry {
       return plugin;
     } catch (error) {
       logCore.erroCarregarPlugin(name, (error as Error).message);
-      throw new Error(ExcecoesMensagens.naoFoiPossivelCarregarPlugin(name, (error as Error).message));
+      throw new Error(messages.ExcecoesMensagens.naoFoiPossivelCarregarPlugin(name, (error as Error).message));
     }
   }
 
@@ -140,7 +139,7 @@ export class PluginRegistry {
     // Regra: se o usuário NÃO configurou a lista 'enabled', tratamos todos os plugins registrados como habilitados por padrão.
     // Só aplicamos o gate includes() quando houve configuração explícita de 'enabled'.
     if (this.userConfiguredEnabled && !this.config.enabled.includes(pluginNome)) {
-      const msgDesabilitado = PluginRegistryMensagens.pluginDesabilitado;
+      const msgDesabilitado = messages.PluginRegistryMensagens.pluginDesabilitado;
       log.debug(msgDesabilitado.replace('{nome}', pluginNome).replace('{extensao}', extension));
       return null;
     }
@@ -149,7 +148,7 @@ export class PluginRegistry {
     const langChave = extension.substring(1); // remove o ponto
     const langSuporte = this.languageSupport[langChave];
     if (langSuporte && !langSuporte.enabled) {
-      const msgLinguagem = PluginRegistryMensagens.linguagemDesabilitada;
+      const msgLinguagem = messages.PluginRegistryMensagens.linguagemDesabilitada;
       log.debug(msgLinguagem.replace('{linguagem}', langChave));
       return null;
     }
@@ -186,16 +185,16 @@ export class PluginRegistry {
    */
   private validatePlugin(plugin: ParserPlugin): void {
     if (!plugin.name || typeof plugin.name !== 'string') {
-      throw new Error(ExcecoesMensagens.pluginDeveTerNomeValido);
+      throw new Error(messages.ExcecoesMensagens.pluginDeveTerNomeValido);
     }
     if (!plugin.version || typeof plugin.version !== 'string') {
-      throw new Error(ExcecoesMensagens.pluginDeveTerVersaoValida);
+      throw new Error(messages.ExcecoesMensagens.pluginDeveTerVersaoValida);
     }
     if (!Array.isArray(plugin.extensions) || plugin.extensions.length === 0) {
-      throw new Error(ExcecoesMensagens.pluginDeveDefinirPeloMenosUmaExtensao);
+      throw new Error(messages.ExcecoesMensagens.pluginDeveDefinirPeloMenosUmaExtensao);
     }
     if (typeof plugin.parse !== 'function') {
-      throw new Error(ExcecoesMensagens.pluginDeveImplementarMetodoParse);
+      throw new Error(messages.ExcecoesMensagens.pluginDeveImplementarMetodoParse);
     }
   }
 
@@ -241,7 +240,7 @@ export class PluginRegistry {
     if (Object.prototype.hasOwnProperty.call(newConfig, 'enabled')) {
       this.userConfiguredEnabled = true;
     }
-    log.debug(PluginRegistryMensagens.configAtualizada);
+    log.debug(messages.PluginRegistryMensagens.configAtualizada);
   }
 
   /**
@@ -252,7 +251,7 @@ export class PluginRegistry {
       ...this.languageSupport,
       ...newSupport
     };
-    log.debug(PluginRegistryMensagens.suporteAtualizado);
+    log.debug(messages.PluginRegistryMensagens.suporteAtualizado);
   }
 
   /**
@@ -262,7 +261,7 @@ export class PluginRegistry {
     this.plugins.clear();
     this.extensionMap.clear();
     this.loadingPromises.clear();
-    log.debug(PluginRegistryMensagens.cacheLimpo);
+    log.debug(messages.PluginRegistryMensagens.cacheLimpo);
   }
 }
 

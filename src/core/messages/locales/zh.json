@@ -1,0 +1,34 @@
+{
+  "analistas": {
+    "title": "分析员",
+    "description": "用于代码评估的系统分析员。"
+  },
+  "cli": {
+    "title": "命令行界面",
+    "description": "CLI 命令和处理程序。"
+  },
+  "core": {
+    "title": "核心系统",
+    "description": "主要逻辑和执行引擎。"
+  },
+  "guardian": {
+    "title": "守护者",
+    "description": "完整性和安全性监控。"
+  },
+  "licensas": {
+    "title": "许可证",
+    "description": "许可证扫描和管理。"
+  },
+  "relatorios": {
+    "title": "报告",
+    "description": "项目健康报告生成。"
+  },
+  "ui": {
+    "title": "用户界面",
+    "description": "UI 组件和交互。"
+  },
+  "zeladores": {
+    "title": "维护者",
+    "description": "维护和清理实用程序。"
+  }
+}

@@ -11,13 +11,11 @@
 
 import { detectarArquetipos } from '@analistas/detectores/detector-arquetipos.js';
 import { config } from '@core/config/config.js';
-import { getMessages } from '@core/messages/index.js';
-import { CliArquetipoHandlerMensagens } from '@core/messages/pt/cli/cli-arquetipo-handler-messages.js';
-import { MENSAGENS_ARQUETIPOS } from '@core/messages/pt/core/diagnostico-messages.js';
+import { messages } from '@core/messages/index.js';
 
 import type { ArquetipoOptions, ArquetipoResult, FileEntryWithAst } from '@';
 
-const { log } = getMessages();
+const log = messages.log;
 
 // Re-export para compatibilidade
 export type { ArquetipoOptions, ArquetipoResult };
@@ -40,7 +38,7 @@ export async function executarDeteccaoArquetipos(entries: FileEntryWithAst[], ba
   try {
     // Log de início (se não silencioso)
     if (!options.silent) {
-      log.info(MENSAGENS_ARQUETIPOS.detectando);
+      log.info(messages.MENSAGENS_ARQUETIPOS.detectando);
     }
 
     // Preparar contexto
@@ -56,7 +54,7 @@ export async function executarDeteccaoArquetipos(entries: FileEntryWithAst[], ba
     // Se timeout ou erro, retorna resultado parcial
     if (!resultado) {
       if (!options.silent) {
-        log.aviso(CliArquetipoHandlerMensagens.timeoutDeteccao);
+        log.aviso(messages.CliArquetipoHandlerMensagens.timeoutDeteccao);
       }
       return {
         executado: true,
@@ -68,9 +66,9 @@ export async function executarDeteccaoArquetipos(entries: FileEntryWithAst[], ba
     const arquetipos = resultado.candidatos || [];
     const principal = arquetipos.length > 0 ? arquetipos[0] : undefined; // Log de resultado (se não silencioso)
     if (!options.silent && principal) {
-      log.info(MENSAGENS_ARQUETIPOS.identificado(principal.nome, principal.confidence));
+      log.info(messages.MENSAGENS_ARQUETIPOS.identificado(principal.nome, principal.confidence));
       if (arquetipos.length > 1) {
-        log.info(MENSAGENS_ARQUETIPOS.multiplos(arquetipos.length));
+        log.info(messages.MENSAGENS_ARQUETIPOS.multiplos(arquetipos.length));
       }
     }
 
@@ -95,12 +93,12 @@ export async function executarDeteccaoArquetipos(entries: FileEntryWithAst[], ba
   } catch (erro) {
     const mensagem = erro instanceof Error ? erro.message : String(erro);
     if (!options.silent) {
-      log.aviso(CliArquetipoHandlerMensagens.erroDeteccao(mensagem));
+      log.aviso(messages.CliArquetipoHandlerMensagens.erroDeteccao(mensagem));
     }
 
     // Em DEV_MODE, log mais detalhado
     if (config.DEV_MODE) {
-      console.error(CliArquetipoHandlerMensagens.devErroPrefixo, erro);
+      console.error(messages.CliArquetipoHandlerMensagens.devErroPrefixo, erro);
     }
     return {
       executado: true,
@@ -127,7 +125,7 @@ async function executarComTimeout<T>(promise: Promise<T>, timeoutMs: number): Pr
 async function salvarArquetipo(resultado: Awaited<ReturnType<typeof detectarArquetipos>>, baseDir: string, silent?: boolean): Promise<boolean> {
   try {
     if (!silent) {
-      log.info(MENSAGENS_ARQUETIPOS.salvando);
+      log.info(messages.MENSAGENS_ARQUETIPOS.salvando);
     }
 
     // Importação dinâmica para evitar dependências circulares
@@ -144,16 +142,16 @@ async function salvarArquetipo(resultado: Awaited<ReturnType<typeof detectarArqu
     };
 
     // Salvar em arquivo
-    const outputCaminho = path.join(baseDir, 'sensei.repo.arquetipo.json');
+    const outputCaminho = path.join(baseDir, 'prometheus.repo.arquetipo.json');
     await fs.writeFile(outputCaminho, JSON.stringify(arquetipo, null, 2), 'utf-8');
     if (!silent) {
-      log.sucesso(MENSAGENS_ARQUETIPOS.salvo(outputCaminho));
+      log.sucesso(messages.MENSAGENS_ARQUETIPOS.salvo(outputCaminho));
     }
     return true;
   } catch (erro) {
     const mensagem = erro instanceof Error ? erro.message : String(erro);
     if (!silent) {
-      log.aviso(CliArquetipoHandlerMensagens.falhaSalvar(mensagem));
+      log.aviso(messages.CliArquetipoHandlerMensagens.falhaSalvar(mensagem));
     }
     return false;
   }

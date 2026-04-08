@@ -4,11 +4,10 @@
  * Fornece fallback para ambientes onde log.bloco não está disponível
  */
 
-import { getMessages } from '@core/messages/index.js';
-import { CliExibirMolduraMensagens } from '@core/messages/pt/cli/cli-exibir-moldura-messages.js';
+import { messages } from '@core/messages/index.js';
 import { normalizePath } from '@shared/helpers/path.js';
 
-const { log } = getMessages();
+const log = messages.log;
 
 /**
  * Exibe uma moldura formatada com fallback seguro
@@ -45,7 +44,7 @@ export function exibirMolduraSegura(titulo: string, linhas: string[], fallbackFn
       fallbackFn();
     } else {
       // Fallback padrão: exibe linhas simples com log.info
-      linhas.forEach(linha => log.info(CliExibirMolduraMensagens.fallbackLinha(linha)));
+      linhas.forEach(linha => log.info(messages.CliExibirMolduraMensagens.fallbackLinha(linha)));
     }
     return false;
   }
@@ -61,7 +60,7 @@ export function exibirMolduraPlano(movimentos: Array<{
   de: string;
   para: string;
 }>, limite = 10): void {
-  const linhas: string[] = [CliExibirMolduraMensagens.planoCabecalhoLinha1, CliExibirMolduraMensagens.planoCabecalhoLinha2];
+  const linhas: string[] = [messages.CliExibirMolduraMensagens.planoCabecalhoLinha1, messages.CliExibirMolduraMensagens.planoCabecalhoLinha2];
   const primeiros = movimentos.slice(0, limite);
   for (const m of primeiros) {
     const de = normalizePath(String(m.de)).slice(0, 34).padEnd(34, ' ');
@@ -69,12 +68,12 @@ export function exibirMolduraPlano(movimentos: Array<{
     linhas.push(`${de}  → ${para}`);
   }
   if (movimentos.length > limite) {
-    linhas.push(CliExibirMolduraMensagens.planoOverflow(movimentos.length - limite));
+    linhas.push(messages.CliExibirMolduraMensagens.planoOverflow(movimentos.length - limite));
   }
-  exibirMolduraSegura(CliExibirMolduraMensagens.planoTitulo, linhas, () => {
-    primeiros.forEach(m => log.info(CliExibirMolduraMensagens.planoFallbackLinha(m.de, m.para)));
+  exibirMolduraSegura(messages.CliExibirMolduraMensagens.planoTitulo, linhas, () => {
+    primeiros.forEach(m => log.info(messages.CliExibirMolduraMensagens.planoFallbackLinha(m.de, m.para)));
     if (movimentos.length > limite) {
-      log.info(CliExibirMolduraMensagens.planoFallbackOverflow(movimentos.length - limite));
+      log.info(messages.CliExibirMolduraMensagens.planoFallbackOverflow(movimentos.length - limite));
     }
   });
 }
@@ -89,7 +88,7 @@ export function exibirMolduraConflitos(conflitos: Array<{
   alvo?: string;
   motivo?: string;
 } | unknown>, limite = 10): void {
-  const linhas: string[] = [CliExibirMolduraMensagens.conflitosCabecalhoLinha1, CliExibirMolduraMensagens.conflitosCabecalhoLinha2];
+  const linhas: string[] = [messages.CliExibirMolduraMensagens.conflitosCabecalhoLinha1, messages.CliExibirMolduraMensagens.conflitosCabecalhoLinha2];
   const primeiros = conflitos.slice(0, limite);
   for (const c of primeiros) {
     const alvo = normalizePath(String((c && typeof c === 'object' && 'alvo' in c && c.alvo) ?? JSON.stringify(c))).slice(0, 31).padEnd(31, ' ');
@@ -97,16 +96,16 @@ export function exibirMolduraConflitos(conflitos: Array<{
     linhas.push(`${alvo}   ${motivo}`);
   }
   if (conflitos.length > limite) {
-    linhas.push(CliExibirMolduraMensagens.conflitosOverflow(conflitos.length - limite));
+    linhas.push(messages.CliExibirMolduraMensagens.conflitosOverflow(conflitos.length - limite));
   }
-  exibirMolduraSegura(CliExibirMolduraMensagens.conflitosTitulo, linhas, () => {
+  exibirMolduraSegura(messages.CliExibirMolduraMensagens.conflitosTitulo, linhas, () => {
     primeiros.forEach(c => {
       const alvoStr = (c && typeof c === 'object' && 'alvo' in c && c.alvo) ?? 'alvo desconhecido';
       const motivoStr = (c && typeof c === 'object' && 'motivo' in c && c.motivo) ?? '-';
-      log.aviso(CliExibirMolduraMensagens.conflitosFallbackLinha(String(alvoStr), String(motivoStr)));
+      log.aviso(messages.CliExibirMolduraMensagens.conflitosFallbackLinha(String(alvoStr), String(motivoStr)));
     });
     if (conflitos.length > limite) {
-      log.aviso(CliExibirMolduraMensagens.conflitosFallbackOverflow(conflitos.length - limite));
+      log.aviso(messages.CliExibirMolduraMensagens.conflitosFallbackOverflow(conflitos.length - limite));
     }
   });
 }

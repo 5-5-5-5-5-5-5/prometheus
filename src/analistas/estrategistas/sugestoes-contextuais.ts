@@ -13,12 +13,11 @@
 import { detectarContextoInteligente } from '@analistas/detectores/detector-contexto-inteligente.js';
 import type { NodePath } from '@babel/traverse';
 import type { Node } from '@babel/types';
-import { getMessages } from '@core/messages/index.js';
-import { SugestoesContextuaisMensagens } from '@core/messages/pt/ui/sugestoes-contextuais-messages.js';
+import { messages } from '@core/messages/index.js';
 
 import type { Analista, ContextoExecucao, Ocorrencia, PackageJson } from '@';
 
-const { log } = getMessages();
+const log = messages.log;
 
 export const analistaSugestoesContextuais: Analista = {
   nome: 'sugestoes-contextuais',
@@ -55,7 +54,7 @@ export const analistaSugestoesContextuais: Analista = {
         ocorrencias.push({
           tipo: 'sugestoes_arquitetura',
           nivel: 'info',
-          mensagem: SugestoesContextuaisMensagens.arquetipoNaoIdentificado,
+          mensagem: messages.SugestoesContextuaisMensagens.arquetipoNaoIdentificado,
           relPath: '',
           linha: 0
         });
@@ -68,7 +67,7 @@ export const analistaSugestoesContextuais: Analista = {
       ocorrencias.push({
         tipo: 'identificacao_projeto',
         nivel: 'info',
-        mensagem: SugestoesContextuaisMensagens.projetoIdentificado(melhorResultado.tecnologia, confiancaPercent),
+        mensagem: messages.SugestoesContextuaisMensagens.projetoIdentificado(melhorResultado.tecnologia, confiancaPercent),
         relPath: '',
         linha: 0,
         detalhes: {
@@ -116,16 +115,16 @@ export const analistaSugestoesContextuais: Analista = {
         const nivel: 'info' | 'aviso' | 'erro' = 'info';
         switch (evidencia.tipo) {
           case 'dependencia':
-            mensagem = SugestoesContextuaisMensagens.evidenciaDependencia(evidencia.valor, melhorResultado.tecnologia);
+            mensagem = messages.SugestoesContextuaisMensagens.evidenciaDependencia(evidencia.valor, melhorResultado.tecnologia);
             break;
           case 'import':
-            mensagem = SugestoesContextuaisMensagens.evidenciaImport(evidencia.valor, evidencia.localizacao);
+            mensagem = messages.SugestoesContextuaisMensagens.evidenciaImport(evidencia.valor, evidencia.localizacao);
             break;
           case 'codigo':
-            mensagem = SugestoesContextuaisMensagens.evidenciaCodigo(evidencia.localizacao);
+            mensagem = messages.SugestoesContextuaisMensagens.evidenciaCodigo(evidencia.localizacao);
             break;
           case 'estrutura':
-            mensagem = SugestoesContextuaisMensagens.evidenciaEstrutura(evidencia.valor, melhorResultado.tecnologia);
+            mensagem = messages.SugestoesContextuaisMensagens.evidenciaEstrutura(evidencia.valor, melhorResultado.tecnologia);
             break;
           default:
             continue;
@@ -151,7 +150,7 @@ export const analistaSugestoesContextuais: Analista = {
         ocorrencias.push({
           tipo: 'tecnologias_alternativas',
           nivel: 'info',
-          mensagem: SugestoesContextuaisMensagens.tecnologiasAlternativas(alternativas),
+          mensagem: messages.SugestoesContextuaisMensagens.tecnologiasAlternativas(alternativas),
           relPath: '',
           linha: 0,
           detalhes: {
@@ -160,11 +159,11 @@ export const analistaSugestoesContextuais: Analista = {
         });
       }
     } catch (error) {
-      log.aviso(SugestoesContextuaisMensagens.erroAnaliseContextual(error instanceof Error ? error.message : String(error)));
+      log.aviso(messages.SugestoesContextuaisMensagens.erroAnaliseContextual(error instanceof Error ? error.message : String(error)));
       ocorrencias.push({
         tipo: 'erro_analise',
         nivel: 'aviso',
-        mensagem: SugestoesContextuaisMensagens.erroDuranteAnalise,
+        mensagem: messages.SugestoesContextuaisMensagens.erroDuranteAnalise,
         relPath: '',
         linha: 0
       });

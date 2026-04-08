@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 /**
- * Tipos para configuração do Sensei
+ * Tipos para configuração do Prometheus
  * Consolidação de: src/core/config/auto/*, src/core/config/*.ts
  */
 

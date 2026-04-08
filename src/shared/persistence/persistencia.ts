@@ -1,16 +1,15 @@
 // SPDX-License-Identifier: MIT
-// @sensei-disable tipo-inseguro-unknown
+// @prometheus-disable tipo-inseguro-unknown
 // Justificativa: unknown é usado para serialização genérica que aceita qualquer entrada
 import { promises as fs } from 'node:fs';
 import * as fsCb from 'node:fs';
 import path from 'node:path';
 
-import { getMessages } from '@core/messages/index.js';
-import { ExcecoesMensagens } from '@core/messages/pt/core/excecoes-messages.js';
+import { messages } from '@core/messages/index.js';
 
 import type { GlobalComVitest, SalvarBinarioFn, SalvarEstadoFn, VitestSpyWrapper } from '@';
 
-const getLog = () => getMessages().log;
+const getLog = () => messages.log;
 
 const RAIZ = process.cwd();
 const IS_TEST = (process.env.VITEST ?? '') !== '';
@@ -26,10 +25,10 @@ function safeGet<T extends object, K extends PropertyKey>(obj: T, key: K): unkno
 function assertInsideRoot(caminho: string): void {
   // Permite fora da raiz explicitamente em testes ou quando habilitado
   // Qualquer valor truthy em VITEST deve liberar a restrição (Vitest define VITEST="true")
-  if ((process.env.VITEST ?? '') !== '' || process.env.SENSEI_ALLOW_OUTSIDE_FS === '1') return;
+  if ((process.env.VITEST ?? '') !== '' || process.env.PROMETHEUS_ALLOW_OUTSIDE_FS === '1') return;
   const resolved = path.resolve(caminho);
   if (!resolved.startsWith(path.resolve(RAIZ))) {
-    throw new Error(ExcecoesMensagens.persistenciaNegadaForaRaizProjeto(caminho));
+    throw new Error(messages.ExcecoesMensagens.persistenciaNegadaForaRaizProjeto(caminho));
   }
 }
 type JSONValue = string | number | boolean | null | JSONValue[] | {
@@ -83,7 +82,7 @@ async function salvarEstadoImpl<T = unknown>(caminho: string, dados: T): Promise
   });
   const isString = typeof dados === 'string';
   const payload = isString ? dados as string : stableStringify(dados);
-  const tempArquivoCaminho = path.join(dir, `.tmp-bin-${Date.now()}-${Math.random().toString(16).slice(2)}.sensei`);
+  const tempArquivoCaminho = path.join(dir, `.tmp-bin-${Date.now()}-${Math.random().toString(16).slice(2)}.prometheus`);
   // Escreve diretamente com fs.promises para manter compat em ambientes mockados
   await writeFileSafe(tempArquivoCaminho, payload, {
     encoding: 'utf-8',
@@ -170,7 +169,7 @@ export async function salvarBinarioAtomico(caminho: string, dados: Buffer): Prom
     return;
   }
   if (IS_TEST) return;
-  throw new Error(ExcecoesMensagens.fsWriteFileBinaryIndisponivel);
+  throw new Error(messages.ExcecoesMensagens.fsWriteFileBinaryIndisponivel);
 }
 
 // Export reatribuível para permitir spies em testes
@@ -205,7 +204,7 @@ async function readFileSafe(pathname: string, encoding?: BufferEncoding): Promis
     });
   }
   // Em ambiente de teste com mock total de fs, deixe o caller lidar via try/catch
-  throw new Error(ExcecoesMensagens.fsReadFileIndisponivel);
+  throw new Error(messages.ExcecoesMensagens.fsReadFileIndisponivel);
 }
 async function writeFileSafe(pathname: string, data: string, options?: {
   encoding?: BufferEncoding;
@@ -236,7 +235,7 @@ async function writeFileSafe(pathname: string, data: string, options?: {
   }
   // Em testes com fs totalmente mockado, considere no-op para escrita
   if (IS_TEST) return;
-  throw new Error(ExcecoesMensagens.fsWriteFileIndisponivel);
+  throw new Error(messages.ExcecoesMensagens.fsWriteFileIndisponivel);
 }
 async function renameSafe(oldPath: string, newPath: string): Promise<void> {
   const p = fs as unknown as {
@@ -256,7 +255,7 @@ async function renameSafe(oldPath: string, newPath: string): Promise<void> {
     return;
   }
   if (IS_TEST) return;
-  throw new Error(ExcecoesMensagens.fsRenameIndisponivel);
+  throw new Error(messages.ExcecoesMensagens.fsRenameIndisponivel);
 }
 async function mkdirSafe(dirPath: string, options?: {
   recursive?: boolean;
@@ -285,5 +284,5 @@ async function mkdirSafe(dirPath: string, options?: {
     return;
   }
   if (IS_TEST) return;
-  throw new Error(ExcecoesMensagens.fsMkdirIndisponivel);
+  throw new Error(messages.ExcecoesMensagens.fsMkdirIndisponivel);
 }

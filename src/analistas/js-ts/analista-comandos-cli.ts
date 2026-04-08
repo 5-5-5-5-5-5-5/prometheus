@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
-// @sensei-disable tipo-inseguro-unknown
+// @prometheus-disable tipo-inseguro-unknown
 // Justificativa: unknown é usado para manipulação segura de nós AST com tipagem defensiva
 import type { NodePath } from '@babel/traverse';
 import type { ArrowFunctionExpression, BlockStatement, CallExpression, ClassDeclaration, ClassMethod, FunctionDeclaration, FunctionExpression, Identifier, ImportDeclaration, MemberExpression, NewExpression, Node, StringLiteral, VariableDeclaration, VariableDeclarator } from '@babel/types';
 import * as t from '@babel/types';
 import { traverse } from '@core/config/traverse.js';
-import { ComandosCliMensagens } from '@core/messages/pt/analistas/analista-comandos-cli-messages.js';
+import { messages } from '@core/messages/index.js';
 import { detectarContextoProjeto, isRelevanteParaAnalise } from '@shared/contexto-projeto.js';
 
 import type { ComandoRegistro, ContextoExecucao, HandlerInfo, Ocorrencia, TecnicaAplicarResultado } from '@';
@@ -300,7 +300,7 @@ export const analistaComandosCli = {
         ocorrencias.push({
           tipo: 'padrao-ausente',
           nivel: 'info',
-          mensagem: ComandosCliMensagens.padraoAusente,
+          mensagem: messages.ComandosCliMensagens.padraoAusente,
           relPath: arquivo,
           origem: 'analista-comandos-cli'
         });
@@ -311,7 +311,7 @@ export const analistaComandosCli = {
       ocorrencias.push({
         tipo: 'padrao-problematico',
         nivel: 'aviso',
-        mensagem: ComandosCliMensagens.comandosDuplicados(duplicados),
+        mensagem: messages.ComandosCliMensagens.comandosDuplicados(duplicados),
         relPath: arquivo,
         origem: 'analista-comandos-cli'
       });
@@ -352,7 +352,7 @@ export const analistaComandosCli = {
         ocorrencias.push({
           tipo: 'padrao-problematico',
           nivel: 'aviso',
-          mensagem: ComandosCliMensagens.handlerAnonimo(comandoNome),
+          mensagem: messages.ComandosCliMensagens.handlerAnonimo(comandoNome),
           relPath: arquivo,
           linha,
           origem: 'analista-comandos-cli'
@@ -363,7 +363,7 @@ export const analistaComandosCli = {
         ocorrencias.push({
           tipo: 'padrao-problematico',
           nivel: 'aviso',
-          mensagem: ComandosCliMensagens.handlerMuitosParametros(comandoNome, paramContagem),
+          mensagem: messages.ComandosCliMensagens.handlerMuitosParametros(comandoNome, paramContagem),
           relPath: arquivo,
           linha,
           origem: 'analista-comandos-cli'
@@ -373,7 +373,7 @@ export const analistaComandosCli = {
         ocorrencias.push({
           tipo: 'padrao-problematico',
           nivel: 'aviso',
-          mensagem: ComandosCliMensagens.handlerMuitoLongo(comandoNome, statements.length),
+          mensagem: messages.ComandosCliMensagens.handlerMuitoLongo(comandoNome, statements.length),
           relPath: arquivo,
           linha,
           origem: 'analista-comandos-cli'
@@ -385,7 +385,7 @@ export const analistaComandosCli = {
           ocorrencias.push({
             tipo: 'boa-pratica-ausente',
             nivel: 'aviso',
-            mensagem: ComandosCliMensagens.handlerSemTryCatch(comandoNome),
+            mensagem: messages.ComandosCliMensagens.handlerSemTryCatch(comandoNome),
             relPath: arquivo,
             linha,
             origem: 'analista-comandos-cli'
@@ -401,7 +401,7 @@ export const analistaComandosCli = {
             ocorrencias.push({
               tipo: 'boa-pratica-ausente',
               nivel: 'aviso',
-              mensagem: ComandosCliMensagens.handlerSemFeedback(comandoNome),
+              mensagem: messages.ComandosCliMensagens.handlerSemFeedback(comandoNome),
               relPath: arquivo,
               linha,
               origem: 'analista-comandos-cli'
@@ -414,7 +414,7 @@ export const analistaComandosCli = {
       ocorrencias.push({
         tipo: 'padrao-estrutural',
         nivel: 'info',
-        mensagem: ComandosCliMensagens.multiplosComandos(comandos.length),
+        mensagem: messages.ComandosCliMensagens.multiplosComandos(comandos.length),
         relPath: arquivo,
         origem: 'analista-comandos-cli'
       });

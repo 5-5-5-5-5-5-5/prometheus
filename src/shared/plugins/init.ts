@@ -23,12 +23,12 @@ export function getAvailablePlugins(): string[] {
 }
 
 /**
- * Configuração padrão de plugins para o Sensei
+ * Configuração padrão de plugins para o Prometheus
  */
 export const PADRAO_PLUGIN_CONFIGURACAO = {
   enabled: ['core'],
   autoload: true,
-  registry: '@sensei/plugins'
+  registry: '@prometheus/plugins'
 };
 
 /**

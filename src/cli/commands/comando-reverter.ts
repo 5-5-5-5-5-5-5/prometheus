@@ -1,16 +1,14 @@
 // SPDX-License-Identifier: MIT
 import { mapaReversao } from '@analistas/corrections/mapa-reversao.js';
 import { ExitCode, sair } from '@cli/helpers/exit-codes.js';
-import { getMessages } from '@core/messages/index.js';
-import { CliComandoReverterMensagens } from '@core/messages/pt/cli/cli-comando-reverter-messages.js';
-import { ICONES_DIAGNOSTICO } from '@core/messages/shared/icons.js';
+import { messages } from '@core/messages/index.js';
 import { Command } from 'commander';
 
-const { log, logAuto, logSistema } = getMessages();
+const { log, logAuto, logSistema } = messages;
 
 export function registrarComandoReverter(program: Command): void {
   program.command('reverter').description('Gerencia mapa de reversão para moves aplicados').hook('preAction', async () => {
-    if (process.env.SENSEI_TEST_FAST === '1') {
+    if (process.env.PROMETHEUS_TEST_FAST === '1') {
       try {
         await mapaReversao.carregar();
       } catch (err) {
@@ -75,7 +73,7 @@ export function registrarComandoReverter(program: Command): void {
         return;
       }
       await mapaReversao.limpar();
-      log.sucesso(CliComandoReverterMensagens.mapaLimpoComSucesso(ICONES_DIAGNOSTICO.sucesso));
+      log.sucesso(messages.CliComandoReverterMensagens.mapaLimpoComSucesso(messages.ICONES_DIAGNOSTICO.sucesso));
     } catch (err) {
       log.erro(`Falha ao limpar mapa: ${err instanceof Error ? err.message : String(err)}`);
       sair(ExitCode.Failure);
@@ -87,7 +85,7 @@ export function registrarComandoReverter(program: Command): void {
       if (moves.length > 0) {
         const ultimoMove = moves.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0];
         const dataPtBr = new Date(ultimoMove.timestamp).toLocaleString('pt-BR');
-        log.info(CliComandoReverterMensagens.ultimoMove(dataPtBr));
+        log.info(messages.CliComandoReverterMensagens.ultimoMove(dataPtBr));
       }
     } catch (err) {
       log.erro(`Falha ao obter status: ${err instanceof Error ? err.message : String(err)}`);

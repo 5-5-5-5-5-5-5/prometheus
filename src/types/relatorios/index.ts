@@ -13,9 +13,9 @@ export type PrioridadeNivel = 'critica' | 'alta' | 'media' | 'baixa';
 
 export type { AsyncAnalysisOptions, AsyncAnalysisReport, AsyncArquivoRanqueado, AsyncCategoria, AsyncCategoriaStats, AsyncCriticidade, AsyncIssuesArquivo } from './async-analysis.js';
 
-  /* -------------------------- CONSELHEIRO SENSEIAL -------------------------- */
+  /* -------------------------- CONSELHEIRO PROMETHEUS -------------------------- */
 
-export type { ConselhoContextoSenseial } from './conselheiro.js';
+export type { ConselhoContextoPrometheus } from './conselheiro.js';
 
   /* -------------------------- ESTRUTURA -------------------------- */
 
@@ -179,10 +179,10 @@ export interface AlinhamentoItem {
   razao?: string;
 }
 
-  /* -------------------------- CONSELHEIRO SENSEIAL -------------------------- */
+  /* -------------------------- CONSELHEIRO PROMETHEUS -------------------------- */
 
 /**
- * Contexto para geração de conselhos
+ * Contexto para emissão de conselhos prometheus
  */
 export interface ConselhoContexto {
   totalArquivos: number;
@@ -193,7 +193,7 @@ export interface ConselhoContexto {
 }
 
 /**
- * Conselho do sistema senseial
+ * Conselho do sistema prometheusal
  */
 export interface Conselho {
   categoria: 'seguranca' | 'qualidade' | 'performance' | 'manutencao' | 'arquitetura';

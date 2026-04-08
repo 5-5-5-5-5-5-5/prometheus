@@ -9,7 +9,7 @@ import { ICONES_ACAO, ICONES_ARQUIVO, ICONES_COMANDO, ICONES_DIAGNOSTICO, ICONES
 export const LogMensagens = {
   sistema: {
     inicializacao: {
-      sucesso: `${ICONES_FEEDBACK.foguete} Sensei initialized in {tempo}ms`,
+      sucesso: `${ICONES_FEEDBACK.foguete} Prometheus initialized in {tempo}ms`,
       falha: `${ICONES_STATUS.falha} Initialization failure: {erro}`,
       configuracao: `${ICONES_ARQUIVO.config} Configuration loaded: {fonte} ({campos} fields)`
     },
@@ -83,7 +83,7 @@ export const LogMensagens = {
       erros_criticos: `${ICONES_RELATORIO.error} {total} critical errors found - prioritize these first`,
       avisos_encontrados: `${ICONES_RELATORIO.warning} {total} warnings found`,
       quick_fixes_muitos: `${ICONES_ACAO.correcao} {total} automatic corrections available:`,
-      quick_fixes_comando: '   → SENSEI_ALLOW_MUTATE_FS=1 npm run diagnosticar --fix',
+      quick_fixes_comando: '   → PROMETHEUS_ALLOW_MUTATE_FS=1 npm run diagnosticar --fix',
       quick_fixes_executar: '   (command ready to run)',
       todos_muitos: `${ICONES_RELATORIO.lista} {total} TODOs found - consider --include to focus on a specific area`,
       todos_poucos: `${ICONES_RELATORIO.lista} {total} TODOs found - good control!`,
@@ -163,7 +163,7 @@ export const LogMensagens = {
     integridade_ok: `${ICONES_DIAGNOSTICO.guardian} ${ICONES_STATUS.ok} Guardian: integrity preserved.`,
     baseline_criado: `${ICONES_DIAGNOSTICO.guardian} ${ICONES_NIVEL.info} Guardian baseline created.`,
     baseline_aceito: `${ICONES_DIAGNOSTICO.guardian} ${ICONES_NIVEL.aviso} Guardian: new baseline accepted — run again.`,
-    alteracoes_detectadas: `${ICONES_DIAGNOSTICO.guardian} ${ICONES_NIVEL.erro} Guardian: suspicious changes detected! Consider running 'sensei guardian --diff'.`,
+    alteracoes_detectadas: `${ICONES_DIAGNOSTICO.guardian} ${ICONES_NIVEL.erro} Guardian: suspicious changes detected! Consider running 'prometheus guardian --diff'.`,
     bloqueado: `${ICONES_DIAGNOSTICO.guardian} ${ICONES_STATUS.falha} Guardian blocked: suspicious changes or fatal error.`,
     modo_permissivo: `${ICONES_DIAGNOSTICO.guardian} ${ICONES_NIVEL.aviso} Permissive mode: proceeding at your own risk.`,
     scan_only: `${ICONES_DIAGNOSTICO.guardian} ${ICONES_NIVEL.info} Scan-only mode: {arquivos} files mapped.`,
@@ -173,12 +173,12 @@ export const LogMensagens = {
     full_scan_warning_baseline: `${ICONES_NIVEL.aviso} --full-scan active, but baseline will be created with temporarily expanded scope.`,
     aceitando_baseline: `\n${ICONES_COMANDO.atualizar} Accepting new integrity baseline...\n`,
     baseline_aceito_sucesso: `${ICONES_STATUS.ok} New integrity baseline accepted successfully!`,
-    comparando_integridade: `\n${ICONES_DIAGNOSTICO.stats} Comparing Sensei integrity with baseline...\n`,
+    comparando_integridade: `\n${ICONES_DIAGNOSTICO.stats} Comparing Prometheus integrity with baseline...\n`,
     diferencas_detectadas: `${ICONES_RELATORIO.error} Differences detected:`,
     diferenca_item: '  - {diferenca}',
     comando_diff_recomendado: 'Run with --diff to show detailed differences or --accept to accept new baseline.',
     integridade_preservada: `${ICONES_STATUS.ok} No differences detected. Integrity preserved.`,
-    verificando_integridade: `\n${ICONES_DIAGNOSTICO.guardian} Checking Sensei integrity...\n`,
+    verificando_integridade: `\n${ICONES_DIAGNOSTICO.guardian} Checking Prometheus integrity...\n`,
     baseline_criado_console: `${ICONES_DIAGNOSTICO.guardian} Guardian baseline created`,
     baseline_atualizado: `${ICONES_DIAGNOSTICO.guardian} Baseline updated and accepted`,
     alteracoes_suspeitas: `${ICONES_DIAGNOSTICO.guardian} ${ICONES_NIVEL.erro} Suspicious changes detected!`,

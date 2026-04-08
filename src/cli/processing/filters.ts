@@ -38,7 +38,7 @@ export function expandIncludes(list: string[]): string[] {
 // Função para obter padrões de exclusão padrão do config
 
 export function getDefaultExcludes(): string[] {
-  // Primeiro tenta obter do sensei.config.json do usuário
+  // Primeiro tenta obter do prometheus.config.json do usuário
   const configIncluirExcluir = config.INCLUDE_EXCLUDE_RULES;
   if (configIncluirExcluir) {
     // Prioriza `globalExcludeGlob` (configuração moderna). Se não existir,
@@ -95,7 +95,7 @@ export function configurarFiltros(includeGroupsRaw: string[][], includeListFlat:
 
   // Configurar excludes com precedência clara:
   // 1. CLI --exclude (prioridade máxima)
-  // 2. sensei.config.json (configuração do usuário)
+  // 2. prometheus.config.json (configuração do usuário)
   // 3. Padrões do sistema (fallback)
   let finalExcluirPadroes: string[];
   if (excludeList.length > 0) {

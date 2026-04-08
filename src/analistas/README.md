@@ -1,11 +1,11 @@
-> Proveniência e Autoria: Este documento integra o projeto Sensei (licença MIT).
+> Proveniência e Autoria: Este documento integra o projeto Prometheus (licença MIT).
 > Nada aqui implica cessão de direitos morais/autorais.
 > Conteúdos de terceiros não licenciados de forma compatível não devem ser incluídos.
 > Referências a materiais externos devem ser linkadas e reescritas com palavras próprias.
 
 # Pasta `src/analistas`
 
-Este diretório concentra as técnicas de análise ("analistas") executadas pelo Sensei durante o comando `diagnosticar`.
+Este diretório concentra as técnicas de análise ("analistas") executadas pelo Prometheus durante o comando `diagnosticar`.
 
 ## O que é um Analista?
 

@@ -1,17 +1,17 @@
 ---
-Proveniência e Autoria: Este documento integra o projeto Sensei (licença MIT-0).
+Proveniência e Autoria: Este documento integra o projeto Prometheus (licença MIT-0).
 ---
 
 
 # Guia de Configuração
 
-Este guia reflete a configuração observável no projeto atual, com base em [`sensei.config.json`](../../sensei.config.json), nos comandos da CLI e nas variáveis lidas durante a execução.
+Este guia reflete a configuração observável no projeto atual, com base em [`prometheus.config.json`](../../prometheus.config.json), nos comandos da CLI e nas variáveis lidas durante a execução.
 
 ## Arquivo Principal
 
 O arquivo de configuração versionado do projeto é:
 
-- [`sensei.config.json`](../../sensei.config.json)
+- [`prometheus.config.json`](../../prometheus.config.json)
 
 Estrutura atual resumida:
 
@@ -229,15 +229,15 @@ Na prática, a ordem de aplicação é:
 
 1. flags da CLI
 2. variáveis de ambiente reconhecidas na execução
-3. `sensei.config.json`
+3. `prometheus.config.json`
 4. defaults internos do código
 
 Exemplos:
 
 ```bash
-sensei diagnosticar --include "src/**" --exclude "**/*.test.ts"
-sensei formatar --engine auto --write
-sensei fix-types --confidence 90
+prometheus diagnosticar --include "src/**" --exclude "**/*.test.ts"
+prometheus formatar --engine auto --write
+prometheus fix-types --confidence 90
 ```
 
 ## Variáveis de Ambiente Observáveis
@@ -245,8 +245,8 @@ sensei fix-types --confidence 90
 As variáveis abaixo aparecem diretamente no código atual e afetam execução ou comportamento:
 
 - `NODE_ENV`
-- `SENSEI_DEBUG`
-- `SENSEI_ANALISE_TIMEOUT_POR_ANALISTA_MS`
+- `PROMETHEUS_DEBUG`
+- `PROMETHEUS_ANALISE_TIMEOUT_POR_ANALISTA_MS`
 - `WORKER_POOL_MAX_WORKERS`
 - `GUARDIAN_IGNORE_PATTERNS`
 - `VITEST`
@@ -254,9 +254,9 @@ As variáveis abaixo aparecem diretamente no código atual e afetam execução o
 Exemplos:
 
 ```bash
-SENSEI_DEBUG=true sensei diagnosticar --full
-SENSEI_ANALISE_TIMEOUT_POR_ANALISTA_MS=60000 sensei diagnosticar
-WORKER_POOL_MAX_WORKERS=4 sensei diagnosticar --fast
+PROMETHEUS_DEBUG=true prometheus diagnosticar --full
+PROMETHEUS_ANALISE_TIMEOUT_POR_ANALISTA_MS=60000 prometheus diagnosticar
+WORKER_POOL_MAX_WORKERS=4 prometheus diagnosticar --fast
 ```
 
 ## Filtros por CLI
@@ -264,16 +264,16 @@ WORKER_POOL_MAX_WORKERS=4 sensei diagnosticar --fast
 Além do arquivo JSON, o fluxo atual depende fortemente de filtros em linha de comando:
 
 ```bash
-sensei diagnosticar --include "src/**"
-sensei diagnosticar --exclude "**/*.spec.ts"
-sensei diagnosticar --exclude-tests
-sensei formatar --include "src/**/*.ts"
-sensei fix-types --exclude "src/legacy/**"
+prometheus diagnosticar --include "src/**"
+prometheus diagnosticar --exclude "**/*.spec.ts"
+prometheus diagnosticar --exclude-tests
+prometheus formatar --include "src/**/*.ts"
+prometheus fix-types --exclude "src/legacy/**"
 ```
 
 Regra prática:
 
-- use `sensei.config.json` para defaults do repositório
+- use `prometheus.config.json` para defaults do repositório
 - use flags para escopo da execução atual
 
 ## Exemplo Enxuto
@@ -301,9 +301,9 @@ Regra prática:
 Depois de ajustar a configuração, valide com:
 
 ```bash
-sensei diagnosticar --full
-sensei diagnosticar --json --export
-sensei guardian --diff
+prometheus diagnosticar --full
+prometheus diagnosticar --json --export
+prometheus guardian --diff
 ```
 
 

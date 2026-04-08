@@ -10,7 +10,7 @@ export type MemoryMessage = {
   metadata?: Record<string, unknown>;
 };
 
-export type SenseiRunRecord = {
+export type PrometheusRunRecord = {
   id: string;
   timestamp: string;
   cwd: string;
@@ -22,9 +22,9 @@ export type SenseiRunRecord = {
   error?: string;
 };
 
-export type SenseiContextState = {
+export type PrometheusContextState = {
   schemaVersion: 1;
-  lastRuns: SenseiRunRecord[];
+  lastRuns: PrometheusRunRecord[];
   preferences: Record<string, unknown>;
 };
 

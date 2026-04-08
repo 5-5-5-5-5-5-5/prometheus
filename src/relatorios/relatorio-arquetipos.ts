@@ -1,13 +1,12 @@
 // SPDX-License-Identifier: MIT
 import path from 'node:path';
 
-import { getMessages } from '@core/messages/index.js';
-import { ExcecoesMensagens } from '@core/messages/pt/core/excecoes-messages.js';
+import { messages } from '@core/messages/index.js';
 import { lerArquivoTexto, salvarEstado } from '@shared/persistence/persistencia.js';
 
 import type { ResultadoDeteccaoArquetipo } from '@';
 
-const { RelatorioMensagens, log } = getMessages();
+const { RelatorioMensagens, log } = messages;
 
 export async function exportarRelatorioArquetiposMarkdown(destino: string, candidatos: ResultadoDeteccaoArquetipo[], contexto?: {
   origem?: string;
@@ -94,7 +93,7 @@ export async function exportarRelatorioArquetiposMarkdown(destino: string, candi
         try {
           const raw = await lerArquivoTexto(pkgCaminho);
           const pkg = raw ? JSON.parse(raw) : null;
-          if (!pkg) throw new Error(ExcecoesMensagens.semPkg);
+          if (!pkg) throw new Error(messages.ExcecoesMensagens.semPkg);
           if (pkg.dependencies) {
             for (const dep in pkg.dependencies) {
               // Simulação: destaca dependências com versão "0." ou "^0." como desatualizadas/vulneráveis

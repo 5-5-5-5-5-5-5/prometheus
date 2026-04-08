@@ -3,7 +3,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-const DIRS_IGNORADOS = new Set(['node_modules', 'dist', 'names', '.git', '.sensei']);
+const DIRS_IGNORADOS = new Set(['node_modules', 'dist', 'names', '.git', '.prometheus']);
 
 /**
  * Lista arquivos .ts e .js recursivamente sob `dir`, ignorando pastas comuns.

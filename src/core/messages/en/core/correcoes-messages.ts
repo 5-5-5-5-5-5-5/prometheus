@@ -97,7 +97,7 @@ export const MENSAGENS_RELATORIOS_ANALISE = {
     salvo: (caminho: string) => `${ICONES.nivel.sucesso} Async report saved at: ${caminho}`
   },
   fixTypes: {
-    analiseSalva: `${ICONES.arquivo.json} Detailed analysis saved at: .sensei/fix-types-analise.json`,
+    analiseSalva: `${ICONES.arquivo.json} Detailed analysis saved at: .prometheus/fix-types-analise.json`,
     possibilidades: `└─ ${ICONES.acao.analise} Alternative possibilities:`,
     sugestao: (texto: string) => `└─ ${ICONES.feedback.dica} ${texto}`,
     exportado: `${ICONES.arquivo.doc} Fix-types reports exported:`

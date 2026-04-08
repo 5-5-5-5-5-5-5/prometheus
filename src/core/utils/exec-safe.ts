@@ -18,7 +18,7 @@ export function executarShellSeguro(
   // only block if SAFE_MODE is explicitly true and ALLOW_EXEC is falsy
   if (config.SAFE_MODE === true && !config.ALLOW_EXEC) {
     throw new Error(
-      'Execução de comandos desabilitada em SAFE_MODE. Defina SENSEI_ALLOW_EXEC=1 para permitir.',
+      'Execução de comandos desabilitada em SAFE_MODE. Defina PROMETHEUS_ALLOW_EXEC=1 para permitir.',
     );
   }
   return execSync(cmd, opts);

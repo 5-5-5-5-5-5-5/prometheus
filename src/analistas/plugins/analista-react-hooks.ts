@@ -4,23 +4,23 @@ import { parse as babelParse } from '@babel/parser';
 import type { NodePath, Visitor } from '@babel/traverse';
 import traverse from '@babel/traverse';
 import * as t from '@babel/types';
-import { AnalystOrigens, AnalystTipos, ReactHooksMensagens, SeverityNiveis } from '@core/messages/pt/core/plugin-messages.js';
+import { messages } from '@core/messages/index.js';
 
 import { criarAnalista, criarOcorrencia } from '@';
 
-const disableEnv = process.env.SENSEI_DISABLE_PLUGIN_REACT_HOOKS === '1';
+const disableEnv = process.env.PROMETHEUS_DISABLE_PLUGIN_REACT_HOOKS === '1';
 type Msg = ReturnType<typeof criarOcorrencia>;
 function hasHooksUsage(src: string): boolean {
   return /use(State|Effect|Memo|Callback|Reducer|Ref|LayoutEffect|ImperativeHandle|Transition)/.test(src);
 }
-function warn(message: string, relPath: string, line?: number, nivel = SeverityNiveis.warning): Msg {
+function warn(message: string, relPath: string, line?: number, nivel = messages.SeverityNiveis.warning): Msg {
   return criarOcorrencia({
     relPath,
     mensagem: message,
     linha: line,
     nivel,
-    origem: AnalystOrigens.reactHooks,
-    tipo: AnalystTipos.reactHooks
+    origem: messages.AnalystOrigens.reactHooks,
+    tipo: messages.AnalystTipos.reactHooks
   });
 }
 
@@ -65,7 +65,7 @@ function collectHookIssues(src: string, relPath: string): Msg[] {
     const skip = /no-deps-ok|eslint-disable-next-line\s+react-hooks\/exhaustive-deps/i.test(fullCall);
     if (!hasDepsArg && !skip) {
       const line = src.slice(0, hookInicio).split(/\n/).length;
-      ocorrencias.push(warn(ReactHooksMensagens.useEffectNoDeps, relPath, line));
+      ocorrencias.push(warn(messages.ReactHooksMensagens.useEffectNoDeps, relPath, line));
     }
   });
 
@@ -80,7 +80,7 @@ function collectHookIssues(src: string, relPath: string): Msg[] {
     const skip = /no-deps-ok|eslint-disable-next-line\s+react-hooks\/exhaustive-deps/i.test(fullCall);
     if (!hasDepsArg && !skip) {
       const line = src.slice(0, hookInicio).split(/\n/).length;
-      ocorrencias.push(warn(ReactHooksMensagens.memoCallbackNoDeps, relPath, line));
+      ocorrencias.push(warn(messages.ReactHooksMensagens.memoCallbackNoDeps, relPath, line));
     }
   });
 
@@ -88,7 +88,7 @@ function collectHookIssues(src: string, relPath: string): Msg[] {
   const conditionalHooks = [...src.matchAll(/(if|for|while)\s*\([^)]*\)\s*\{[\s\S]{0,160}?use[A-Z][A-Za-z0-9_]*/g)];
   conditionalHooks.forEach(m => {
     const line = src.slice(0, m.index || 0).split(/\n/).length;
-    ocorrencias.push(warn(ReactHooksMensagens.hookInConditional, relPath, line));
+    ocorrencias.push(warn(messages.ReactHooksMensagens.hookInConditional, relPath, line));
   });
   return ocorrencias;
 }
@@ -145,13 +145,13 @@ function parseHooksWithBabel(src: string, relPath: string): Msg[] | null {
           const name = calleeInfo.name;
           const locLine: number | undefined = path.node.loc?.start?.line;
           if (isEffectLike(name) && path.node.arguments.length < 2) {
-            pushOnce(warn(ReactHooksMensagens.useEffectNoDeps, relPath, locLine));
+            pushOnce(warn(messages.ReactHooksMensagens.useEffectNoDeps, relPath, locLine));
           }
           if (isMemoLike(name) && path.node.arguments.length < 2) {
-            pushOnce(warn(ReactHooksMensagens.memoCallbackNoDeps, relPath, locLine));
+            pushOnce(warn(messages.ReactHooksMensagens.memoCallbackNoDeps, relPath, locLine));
           }
           if (isAnyHook(name) && inConditionalOrLoop(path)) {
-            pushOnce(warn(ReactHooksMensagens.hookInConditional, relPath, locLine));
+            pushOnce(warn(messages.ReactHooksMensagens.hookInConditional, relPath, locLine));
           }
         } catch {
           // ignora

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 /**
  * Sistema de validação para correções automáticas
- * Integra com o sistema existente de detectores do Sensei
+ * Integra com o sistema existente de detectores do Prometheus
  */
 
 import { getMessages } from '@core/messages/index.js';

@@ -3,8 +3,7 @@ import type { Dirent, Stats } from 'node:fs';
 import { promises as fs } from 'node:fs';
 
 import { config } from '@core/config/config.js';
-import { ExcecoesMensagens } from '@core/messages/pt/core/excecoes-messages.js';
-import { logVarredor } from '@core/messages/pt/log/log-helper.js';
+import { messages } from '@core/messages/index.js';
 import { lerArquivoTexto, lerEstado } from '@shared/persistence/persistencia.js';
 import micromatch from 'micromatch';
 import path from 'path';
@@ -14,7 +13,7 @@ import type { FileEntry, FileMap, ScanOptions } from '@';
 export type { ScanOptions };
 export async function scanRepository(baseDir: string, options: ScanOptions = {}): Promise<FileMap> {
   // Log de início da varredura
-  logVarredor.iniciarVarredura(baseDir);
+  messages.log.iniciarVarredura(baseDir);
 
   // Helpers locais de normalização (não exportados)
   const toPosix = (s: string) => s.replace(/\\+/g, '/');
@@ -174,7 +173,7 @@ export async function scanRepository(baseDir: string, options: ScanOptions = {})
       // Normaliza para separador POSIX para que micromatch funcione de forma consistente no Windows
       const relPath = toPosix(relPathRaw);
 
-      // Regra fixa do Sensei: não analisar testes (deixa para o runner, ex.: Vitest)
+      // Regra fixa do Prometheus: não analisar testes (deixa para o runner, ex.: Vitest)
       const isTestLike = (p: string): boolean => {
         const rp = toPosix(p);
         if (/(^|\/)__(tests|mocks)__(\/|$)/.test(rp)) return true;
@@ -237,7 +236,7 @@ export async function scanRepository(baseDir: string, options: ScanOptions = {})
             }
           }
           if (stat == null) {
-            throw new Error(ExcecoesMensagens.statIndefinidoPara(fullCaminho));
+            throw new Error(messages.ExcecoesMensagens.statIndefinidoPara(fullCaminho));
           }
           let mtimeMs = 0;
           if (typeof stat === 'object' && stat && 'mtimeMs' in (stat as Stats)) {
@@ -426,6 +425,6 @@ export async function scanRepository(baseDir: string, options: ScanOptions = {})
   // Log de conclusão da varredura
   const totalArquivos = Object.keys(fileMap).length;
   const totalDiretorios = new Set(Object.values(fileMap).map(f => path.dirname(f.relPath))).size;
-  logVarredor.completo(totalArquivos, totalDiretorios);
+  messages.log.completo(totalArquivos, totalDiretorios);
   return fileMap;
 }

@@ -1,0 +1,34 @@
+{
+  "analistas": {
+    "title": "アナリスト",
+    "description": "コード評価のためのシステムアナリスト。"
+  },
+  "cli": {
+    "title": "コマンドラインインターフェース",
+    "description": "CLI コマンドとハンドラー。"
+  },
+  "core": {
+    "title": "コアシステム",
+    "description": "メインロジックと実行エンジン。"
+  },
+  "guardian": {
+    "title": "ガーディアン",
+    "description": "整合性とセキュリティの監視。"
+  },
+  "licensas": {
+    "title": "ライセンス",
+    "description": "ライセンスのスキャンと管理。"
+  },
+  "relatorios": {
+    "title": "レポート",
+    "description": "プロジェクト健全性レポートの生成。"
+  },
+  "ui": {
+    "title": "ユーザーインターフェース",
+    "description": "UI コンポーネントと対話。"
+  },
+  "zeladores": {
+    "title": "メンテナー",
+    "description": "メンテナンスおよびクリーニングユーティリティ。"
+  }
+}

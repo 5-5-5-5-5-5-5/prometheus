@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
-// @sensei-disable tipo-literal-inline-complexo
+// @prometheus-disable tipo-literal-inline-complexo
 // Justificativa: tipos locais para arquétipos personalizados
 /**
- * Sistema de Arquétipos Personalizados do Sensei
+ * Sistema de Arquétipos Personalizados do Prometheus
  *
  * Permite que usuários criem arquétipos personalizados para seus projetos,
  * mantendo compatibilidade com arquétipos oficiais e oferecendo sugestões
@@ -16,7 +16,7 @@ import { ARQUETIPOS } from '@analistas/estrategistas/arquetipos-defs.js';
 // NOTA: parseFileAST ainda não foi implementado no módulo de parsing
 // import { parseFileAST } from '@core/parsing/parser.js';
 import { getMessages } from '@core/messages/index.js';
-import { SENSEI_ARQUIVOS } from '@core/registry/paths.js';
+import { PROMETHEUS_ARQUIVOS } from '@core/registry/paths.js';
 import { lerEstado, salvarEstado } from '@shared/persistence/persistencia.js';
 
 import type { ArquetipoEstruturaDef, ArquetipoPersonalizado } from '@';
@@ -24,17 +24,17 @@ import type { ArquetipoEstruturaDef, ArquetipoPersonalizado } from '@';
 const { log, ArquetiposExtraMensagens } = getMessages();
 
 // Nome do arquivo legado (para compatibilidade)
-const ARQUETIPO_PERSONALIZADO_FILENAME = 'sensei.repo.arquetipo.json';
+const ARQUETIPO_PERSONALIZADO_FILENAME = 'prometheus.repo.arquetipo.json';
 
 /**
  * Carrega o arquétipo personalizado do projeto atual
- * Tenta primeiro o novo caminho (.sensei/estrutura.arquetipo.json),
- * depois o legado (raiz/sensei.repo.arquetipo.json)
+ * Tenta primeiro o novo caminho (.prometheus/estrutura.arquetipo.json),
+ * depois o legado (raiz/prometheus.repo.arquetipo.json)
  */
 
 export async function carregarArquetipoPersonalizado(baseDir: string = process.cwd()): Promise<ArquetipoPersonalizado | null> {
   // Tentar novo caminho primeiro
-  const novoCaminho = SENSEI_ARQUIVOS.ESTRUTURA_ARQUETIPO;
+  const novoCaminho = PROMETHEUS_ARQUIVOS.ESTRUTURA_ARQUETIPO;
   const caminhoLegado = path.join(baseDir, ARQUETIPO_PERSONALIZADO_FILENAME);
   try {
     // Tenta novo caminho
@@ -66,7 +66,7 @@ export async function carregarArquetipoPersonalizado(baseDir: string = process.c
 }
 /**
  * Salva o arquétipo personalizado do projeto atual
- * Usa o novo caminho (.sensei/estrutura.arquetipo.json)
+ * Usa o novo caminho (.prometheus/estrutura.arquetipo.json)
  */
 export async function salvarArquetipoPersonalizado(arquetipo: Omit<ArquetipoPersonalizado, 'metadata'>, _baseDir: string = process.cwd()): Promise<void> {
   const arquetipoCompleto: ArquetipoPersonalizado = {
@@ -79,12 +79,12 @@ export async function salvarArquetipoPersonalizado(arquetipo: Omit<ArquetipoPers
   };
 
   // Usar novo caminho centralizado
-  const novoCaminho = SENSEI_ARQUIVOS.ESTRUTURA_ARQUETIPO;
+  const novoCaminho = PROMETHEUS_ARQUIVOS.ESTRUTURA_ARQUETIPO;
 
-  // Garantir que o diretório .sensei existe
-  const senseiDir = path.dirname(novoCaminho);
+  // Garantir que o diretório .prometheus existe
+  const prometheusDir = path.dirname(novoCaminho);
   try {
-    await fs.mkdir(senseiDir, {
+    await fs.mkdir(prometheusDir, {
       recursive: true
     });
   } catch {
@@ -102,7 +102,7 @@ export async function salvarArquetipoPersonalizado(arquetipo: Omit<ArquetipoPers
 export async function existeArquetipoPersonalizado(baseDir: string = process.cwd()): Promise<boolean> {
   // Verificar novo caminho primeiro
   try {
-    await fs.access(SENSEI_ARQUIVOS.ESTRUTURA_ARQUETIPO);
+    await fs.access(PROMETHEUS_ARQUIVOS.ESTRUTURA_ARQUETIPO);
     return true;
   } catch {
     // Tentar caminho legado

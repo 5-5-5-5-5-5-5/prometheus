@@ -5,7 +5,7 @@ import type { NodePath } from '@babel/traverse';
 import type * as t from '@babel/types';
 import { config } from '@core/config/config.js';
 import { traverse } from '@core/config/traverse.js';
-import { DetectorDependenciasMensagens } from '@core/messages/pt/analistas/detector-dependencias-messages.js';
+import { messages } from '@core/messages/index.js';
 import { normalizarPosix, resolverModulo } from '@shared/helpers/imports.js';
 import { normalizePath } from '@shared/helpers/path.js';
 
@@ -246,7 +246,7 @@ export const detectorDependencias = {
         if (!val.startsWith('.') && !val.startsWith('/')) {
           ocorrencias.push({
             tipo: 'info',
-            mensagem: DetectorDependenciasMensagens.importDependenciaExterna(val),
+            mensagem: messages.DetectorDependenciasMensagens.importDependenciaExterna(val),
             relPath,
             linha: p.node.loc?.start.line,
             coluna: p.node.loc?.start.column
@@ -256,7 +256,7 @@ export const detectorDependencias = {
         if (val.startsWith('.') && val.split('../').length > 3) {
           ocorrencias.push({
             tipo: 'aviso',
-            mensagem: DetectorDependenciasMensagens.importRelativoLongo(val),
+            mensagem: messages.DetectorDependenciasMensagens.importRelativoLongo(val),
             relPath,
             linha: p.node.loc?.start.line,
             coluna: p.node.loc?.start.column
@@ -266,7 +266,7 @@ export const detectorDependencias = {
         if (relPath.endsWith('.ts') && val.endsWith('.js') && !resolved.key.endsWith('.ts')) {
           ocorrencias.push({
             tipo: 'aviso',
-            mensagem: DetectorDependenciasMensagens.importJsEmTs(val),
+            mensagem: messages.DetectorDependenciasMensagens.importJsEmTs(val),
             relPath,
             linha: p.node.loc?.start.line,
             coluna: p.node.loc?.start.column
@@ -277,7 +277,7 @@ export const detectorDependencias = {
           if (arquivosExistentes && !resolved.existe) {
             ocorrencias.push({
               tipo: 'erro',
-              mensagem: DetectorDependenciasMensagens.importArquivoInexistente(val),
+              mensagem: messages.DetectorDependenciasMensagens.importArquivoInexistente(val),
               relPath,
               linha: p.node.loc?.start.line,
               coluna: p.node.loc?.start.column
@@ -313,7 +313,7 @@ export const detectorDependencias = {
           if (!val.startsWith('.') && !val.startsWith('/')) {
             ocorrencias.push({
               tipo: 'info',
-              mensagem: DetectorDependenciasMensagens.requireDependenciaExterna(val),
+              mensagem: messages.DetectorDependenciasMensagens.requireDependenciaExterna(val),
               relPath,
               linha: p.node.loc?.start.line,
               coluna: p.node.loc?.start.column
@@ -323,7 +323,7 @@ export const detectorDependencias = {
           if (val.startsWith('.') && val.split('../').length > 3) {
             ocorrencias.push({
               tipo: 'aviso',
-              mensagem: DetectorDependenciasMensagens.requireRelativoLongo(val),
+              mensagem: messages.DetectorDependenciasMensagens.requireRelativoLongo(val),
               relPath,
               linha: p.node.loc?.start.line,
               coluna: p.node.loc?.start.column
@@ -333,7 +333,7 @@ export const detectorDependencias = {
           if (relPath.endsWith('.ts') && val.endsWith('.js') && !resolved.key.endsWith('.ts')) {
             ocorrencias.push({
               tipo: 'aviso',
-              mensagem: DetectorDependenciasMensagens.requireJsEmTs(val),
+              mensagem: messages.DetectorDependenciasMensagens.requireJsEmTs(val),
               relPath,
               linha: p.node.loc?.start.line,
               coluna: p.node.loc?.start.column
@@ -344,7 +344,7 @@ export const detectorDependencias = {
             if (arquivosExistentes && !resolved.existe) {
               ocorrencias.push({
                 tipo: 'erro',
-                mensagem: DetectorDependenciasMensagens.requireArquivoInexistente(val),
+                mensagem: messages.DetectorDependenciasMensagens.requireArquivoInexistente(val),
                 relPath,
                 linha: p.node.loc?.start.line,
                 coluna: p.node.loc?.start.column
@@ -373,7 +373,7 @@ export const detectorDependencias = {
           if (config.VERBOSE) {
             ocorrencias.push({
               tipo: 'info',
-              mensagem: DetectorDependenciasMensagens.importUsadoRegistroDinamico(nome),
+              mensagem: messages.DetectorDependenciasMensagens.importUsadoRegistroDinamico(nome),
               relPath
             });
           }
@@ -385,7 +385,7 @@ export const detectorDependencias = {
     if (tiposImport.size > 1) {
       ocorrencias.push({
         tipo: 'aviso',
-        mensagem: DetectorDependenciasMensagens.usoMistoRequireImport,
+        mensagem: messages.DetectorDependenciasMensagens.usoMistoRequireImport,
         relPath
       });
     }
@@ -394,7 +394,7 @@ export const detectorDependencias = {
     if (grafoDependencias.get(relPath)?.has(relPath)) {
       ocorrencias.push({
         tipo: 'alerta',
-        mensagem: DetectorDependenciasMensagens.importCircularSelf,
+        mensagem: messages.DetectorDependenciasMensagens.importCircularSelf,
         relPath
       });
     }
@@ -419,7 +419,7 @@ export const detectorDependencias = {
       const caminhoCompleto = caminhoLimpo.join(' → ');
       ocorrencias.push({
         tipo: 'alerta',
-        mensagem: DetectorDependenciasMensagens.dependenciaCircular(ciclo.length, caminhoCompleto),
+        mensagem: messages.DetectorDependenciasMensagens.dependenciaCircular(ciclo.length, caminhoCompleto),
         relPath,
         // Adiciona contexto extra para debugging
         contexto: `Ciclo completo: ${caminhoCompleto}`

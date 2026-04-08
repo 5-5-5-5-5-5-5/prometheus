@@ -68,7 +68,7 @@ export const CONFIGURACAO_PERMISSIVA: ConfiguracaoPontuacao = {
 
 // Função para obter a configuração atual baseada na variável de ambiente
 export function obterConfiguracaoAtual(): ConfiguracaoPontuacao {
-  const modo = process.env.SENSEI_MODO_PONTUACAO || 'padrao';
+  const modo = process.env.PROMETHEUS_MODO_PONTUACAO || 'padrao';
   switch (modo.toLowerCase()) {
     case 'conservador':
     case 'strict':

@@ -1,12 +1,12 @@
 {
-  "name": "sensei",
+  "name": "prometheus",
   "version": "0.4.1",
   "type": "module",
   "description": "C.L.I modular para análise, diagnóstico e manutenção de projetos JavaScript/TypeScript e multi-stack leve",
   "author": "5 5 5",
   "license": "MIT-0",
   "bin": {
-    "sensei": "./dist/bin/index.js"
+    "prometheus": "./dist/bin/index.js"
   },
   "exports": {
     ".": "./dist/bin/index.js"
@@ -18,24 +18,24 @@
     "prebuild": "rimraf dist bin",
     "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
     "prepare": "npm run build",
-    "start": "sensei",
-    "diagnosticar": "sensei diagnosticar",
-    "diagnosticar:json": "sensei diagnosticar --json",
-    "formatar": "sensei formatar --write",
-    "reestruturar": "sensei reestruturar",
-    "podar": "sensei podar",
-    "fix-types": "sensei fix-types",
-    "name": "sensei names",
-    "rename": "sensei renames",
-    "perf:baseline": "sensei perf snapshot --baseline || true",
-    "perf:compare": "sensei perf compare",
-    "perf:gate": "sensei perf compare --threshold 0",
-    "scan": "sensei licencas scan",
-    "add": "sensei licencas disclaimer add",
-    "scan:root": "sensei licencas scan --root .",
-    "notices": "sensei licencas notices generate",
-    "verify": "sensei licencas disclaimer verify",
-    "guardian": "sensei guardian",
+    "start": "prometheus",
+    "diagnosticar": "prometheus diagnosticar",
+    "diagnosticar:json": "prometheus diagnosticar --json",
+    "formatar": "prometheus formatar --write",
+    "reestruturar": "prometheus reestruturar",
+    "podar": "prometheus podar",
+    "fix-types": "prometheus fix-types",
+    "name": "prometheus names",
+    "rename": "prometheus renames",
+    "perf:baseline": "prometheus perf snapshot --baseline || true",
+    "perf:compare": "prometheus perf compare",
+    "perf:gate": "prometheus perf compare --threshold 0",
+    "scan": "prometheus licencas scan",
+    "add": "prometheus licencas disclaimer add",
+    "scan:root": "prometheus licencas scan --root .",
+    "notices": "prometheus licencas notices generate",
+    "verify": "prometheus licencas disclaimer verify",
+    "guardian": "prometheus guardian",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint --ext .ts src",
     "test": "vitest run --passWithNoTests",
@@ -62,12 +62,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/5-5-5-5-5-5-5/sensei.git"
+    "url": "git+https://github.com/5-5-5-5-5-5-5/prometheus.git"
   },
   "bugs": {
-    "url": "https://github.com/5-5-5-5-5-5-5/sensei/issues"
+    "url": "https://github.com/5-5-5-5-5-5-5/prometheus/issues"
   },
-  "homepage": "https://github.com/5-5-5-5-5-5-5/sensei#readme",
+  "homepage": "https://github.com/5-5-5-5-5-5-5/prometheus#readme",
   "files": [
     "dist",
     "README.md",
@@ -88,7 +88,7 @@
     "micromatch": "^4.0.8",
     "ora": "^9.3.0",
     "p-limit": "^7.3.0",
-    "sensei": "file:sensei-0.4.1.tgz",
+    "prometheus": "file:prometheus-0.4.1.tgz",
     "xxhashjs": "^0.2.2"
   },
   "devDependencies": {

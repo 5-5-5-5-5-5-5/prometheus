@@ -42,7 +42,7 @@ export type {
   OpcoesProcessamentoFiltros,
   OtimizarSvgOptions,
   ResultadoValidacao,
-  SenseiGlobalFlags,
+  PrometheusGlobalFlags,
   TipoLinguagemProjeto,
 } from './cli/options.js';
 export * from './cli/processamento-diagnostico.js';

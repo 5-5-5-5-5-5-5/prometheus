@@ -16,7 +16,7 @@ import type { CommanderError } from 'commander';
 import { Command } from 'commander';
 
 // 🌐 Flags globais aplicáveis em todos os comandos
-import type { ErrorLike,SenseiGlobalFlags } from '@';
+import type { ErrorLike,PrometheusGlobalFlags } from '@';
 import { extrairMensagemErro } from '@';
 
 const { log, CliBinMensagens } = getMessages();
@@ -47,7 +47,7 @@ const program = new Command();
 
 // �️ Função para aplicar flags globais
 async function aplicarFlagsGlobais(opts: unknown) {
-  const flags = opts as SenseiGlobalFlags;
+  const flags = opts as PrometheusGlobalFlags;
   // Sanitização e normalização (pode lançar)
   try {
     // lazy import para não criar ciclo
@@ -62,7 +62,7 @@ async function aplicarFlagsGlobais(opts: unknown) {
   config.REPORT_SILENCE_LOGS = Boolean(flags.silence);
   config.REPORT_EXPORT_ENABLED = Boolean(flags.export);
   config.REPORT_EXPORT_FULL = Boolean((flags as Record<string, unknown>)['exportFull']);
-  const debugAtivo = Boolean(flags.debug) || process.env.SENSEI_DEBUG === 'true';
+  const debugAtivo = Boolean(flags.debug) || process.env.PROMETHEUS_DEBUG === 'true';
   config.DEV_MODE = debugAtivo;
   config.SCAN_ONLY = Boolean(flags.scanOnly);
   // Se silence está ativo, verbose é sempre falso
@@ -87,7 +87,7 @@ export async function mainCli(): Promise<void> {
   // Inicializa memória de conversas
 
   // Handler de rejeições não tratadas com mensagem identificável (usado por testes e ops)
-  function __sensei_unhandledRejectionHandler(err: ErrorLike) {
+  function __prometheus_unhandledRejectionHandler(err: ErrorLike) {
     const MARCADOR = CliBinMensagens.unhandledRejection;
     const mensagem = extrairMensagemErro(err);
     console.error(MARCADOR, mensagem);
@@ -100,7 +100,7 @@ export async function mainCli(): Promise<void> {
       process.exit(1);
     }
   }
-  process.on('unhandledRejection', __sensei_unhandledRejectionHandler);
+  process.on('unhandledRejection', __prometheus_unhandledRejectionHandler);
 
   // Mantemos handler para exceções não capturadas — garante comportamento crítico em produção
   process.on('uncaughtException', (err: ErrorLike) => {
@@ -125,7 +125,7 @@ export async function mainCli(): Promise<void> {
     if (process.env.NODE_ENV === 'production') {
       try {
         // Em dist/bin, o safe config está na raiz do pacote: subir dois níveis
-        const safeCfgCaminho = join(__dirname, '..', '..', 'sensei.config.safe.json');
+        const safeCfgCaminho = join(__dirname, '..', '..', 'prometheus.config.safe.json');
         const raw = await lerArquivoTexto(safeCfgCaminho);
         const safeCfg = raw ? JSON.parse(raw) : {};
         const prod = safeCfg?.productionDefaults;
@@ -171,7 +171,7 @@ export async function mainCli(): Promise<void> {
       console.log(chalk.cyan(CliBinMensagens.resumoConversa.titulo));
       console.log(CliBinMensagens.resumoConversa.total.replace('{total}', String(resumo.totalMessages)));
       console.log(CliBinMensagens.resumoConversa.usuario.replace('{total}', String(resumo.userMessages)));
-      console.log(CliBinMensagens.resumoConversa.sensei.replace('{total}', String(resumo.assistantMessages)));
+      console.log(CliBinMensagens.resumoConversa.prometheus.replace('{total}', String(resumo.assistantMessages)));
       if (resumo.firstMessage) console.log(CliBinMensagens.resumoConversa.primeira.replace('{mensagem}', resumo.firstMessage));
       if (resumo.lastMessage) console.log(CliBinMensagens.resumoConversa.ultima.replace('{mensagem}', resumo.lastMessage));
       console.log('');
@@ -213,7 +213,7 @@ export async function mainCli(): Promise<void> {
 
 // Global handler para reduzir falsos-positivos e capturar rejeições não tratadas.
 // A mensagem contém um marcador único para que testes possam verificar o registro.
-function __sensei_unhandledRejectionHandler(err: ErrorLike) {
+function __prometheus_unhandledRejectionHandler(err: ErrorLike) {
   const MARCADOR = CliBinMensagens.unhandledRejection;
   const mensagem = extrairMensagemErro(err);
   // Mensagem identificável: usada pelos testes unitários para detectar o handler
@@ -232,7 +232,7 @@ function __sensei_unhandledRejectionHandler(err: ErrorLike) {
     process.exit(1);
   }
 }
-process.on('unhandledRejection', __sensei_unhandledRejectionHandler);
+process.on('unhandledRejection', __prometheus_unhandledRejectionHandler);
 
 // Invoca a função principal apenas quando o arquivo for executado como entrypoint.
 // Isso evita efeitos colaterais ao importar o módulo em testes ou ferramentas de análise.

@@ -1,23 +1,23 @@
 // SPDX-License-Identifier: MIT
-import { AnalystOrigens, AnalystTipos, PythonMensagens, SeverityNiveis } from '@core/messages/pt/core/plugin-messages.js';
+import { messages } from '@core/messages/index.js';
 import { createLineLookup } from '@shared/helpers/line-lookup.js';
 import { maskPythonComments, maskPythonStringsAndComments } from '@shared/helpers/masking.js';
 
 import { criarAnalista, criarOcorrencia } from '@';
 
-const disableEnv = process.env.SENSEI_DISABLE_PLUGIN_PYTHON === '1';
+const disableEnv = process.env.PROMETHEUS_DISABLE_PLUGIN_PYTHON === '1';
 type Msg = ReturnType<typeof criarOcorrencia>;
 function isPythonFile(relPath: string): boolean {
   return /\.(py|pyx|pyi)$/i.test(relPath);
 }
-function warn(message: string, relPath: string, line?: number, nivel: (typeof SeverityNiveis)[keyof typeof SeverityNiveis] = SeverityNiveis.warning): Msg {
+function warn(message: string, relPath: string, line?: number, nivel: (typeof messages.SeverityNiveis)[keyof typeof messages.SeverityNiveis] = messages.SeverityNiveis.warning): Msg {
   return criarOcorrencia({
     relPath,
     mensagem: message,
     linha: line,
     nivel,
-    origem: AnalystOrigens.python,
-    tipo: AnalystTipos.python
+    origem: messages.AnalystOrigens.python,
+    tipo: messages.AnalystTipos.python
   });
 }
 function collectPythonIssues(src: string, relPath: string): Msg[] {
@@ -40,7 +40,7 @@ function collectPythonIssues(src: string, relPath: string): Msg[] {
 
     // Ignora dunder methods, main, e métodos comuns sem tipo
     if (/^__|main|__init__|setUp|tearDown|get_|set_/.test(funcNome)) continue;
-    ocorrencias.push(warn(PythonMensagens.missingTypeHints, relPath, line));
+    ocorrencias.push(warn(messages.PythonMensagens.missingTypeHints, relPath, line));
   }
 
   /* -------------------------- Security Issues -------------------------- */
@@ -48,32 +48,32 @@ function collectPythonIssues(src: string, relPath: string): Msg[] {
   // print() instead of logging
   for (const match of scan.matchAll(/^\s*print\s*\(/gm)) {
     const line = lineOf(match.index);
-    ocorrencias.push(warn(PythonMensagens.printInsteadOfLog, relPath, line));
+    ocorrencias.push(warn(messages.PythonMensagens.printInsteadOfLog, relPath, line));
   }
 
   // eval() usage
   for (const match of scan.matchAll(/\beval\s*\(/gi)) {
     const line = lineOf(match.index);
-    ocorrencias.push(warn(PythonMensagens.evalUsage, relPath, line, SeverityNiveis.error));
+    ocorrencias.push(warn(messages.PythonMensagens.evalUsage, relPath, line, messages.SeverityNiveis.error));
   }
 
   // exec() usage
   for (const match of scan.matchAll(/\bexec\s*\(/gi)) {
     const line = lineOf(match.index);
-    ocorrencias.push(warn(PythonMensagens.execUsage, relPath, line, SeverityNiveis.error));
+    ocorrencias.push(warn(messages.PythonMensagens.execUsage, relPath, line, messages.SeverityNiveis.error));
   }
 
   // subprocess(..., shell=True)
   for (const match of scan.matchAll(/\bsubprocess\.(?:run|Popen|call|check_call|check_output)\s*\([\s\S]*?\)/g)) {
     if (!/\bshell\s*=\s*True\b/.test(match[0])) continue;
     const line = lineOf(match.index);
-    ocorrencias.push(warn(PythonMensagens.subprocessShellTrue, relPath, line, SeverityNiveis.error));
+    ocorrencias.push(warn(messages.PythonMensagens.subprocessShellTrue, relPath, line, messages.SeverityNiveis.error));
   }
 
   // pickle loads (RCE)
   for (const match of scan.matchAll(/\bpickle\.(?:load|loads)\s*\(/gi)) {
     const line = lineOf(match.index);
-    ocorrencias.push(warn(PythonMensagens.pickleUsage, relPath, line, SeverityNiveis.error));
+    ocorrencias.push(warn(messages.PythonMensagens.pickleUsage, relPath, line, messages.SeverityNiveis.error));
   }
 
   // yaml.load sem Loader seguro
@@ -85,7 +85,7 @@ function collectPythonIssues(src: string, relPath: string): Msg[] {
     if (hasSafeLoader) continue;
     // FullLoader é melhor que default em versões antigas, mas ainda é discutível; marcamos aviso.
     const line = lineOf(match.index);
-    ocorrencias.push(warn(PythonMensagens.yamlUnsafeLoad, relPath, line, hasFullLoader || hasExplicitLoader ? SeverityNiveis.warning : SeverityNiveis.error));
+    ocorrencias.push(warn(messages.PythonMensagens.yamlUnsafeLoad, relPath, line, hasFullLoader || hasExplicitLoader ? messages.SeverityNiveis.warning : messages.SeverityNiveis.error));
   }
 
   // requests/urllib sem verify (HTTP inseguro)
@@ -93,7 +93,7 @@ function collectPythonIssues(src: string, relPath: string): Msg[] {
     const hasVerify = /verify\s*=/i.test(match[0]);
     if (!hasVerify && /http:\/\//i.test(match[0])) {
       const line = lineOf(match.index);
-      ocorrencias.push(warn(PythonMensagens.httpWithoutVerify, relPath, line));
+      ocorrencias.push(warn(messages.PythonMensagens.httpWithoutVerify, relPath, line));
     }
   }
 
@@ -105,7 +105,7 @@ function collectPythonIssues(src: string, relPath: string): Msg[] {
     // Heurística: f-string com interpolação sugere concatenação de SQL.
     if (!/\{[^}]+\}/.test(text)) continue;
     const line = lineOf(match.index);
-    ocorrencias.push(warn(PythonMensagens.sqlInjection, relPath, line, SeverityNiveis.error));
+    ocorrencias.push(warn(messages.PythonMensagens.sqlInjection, relPath, line, messages.SeverityNiveis.error));
   }
 
   /* -------------------------- Exception Handling -------------------------- */
@@ -113,19 +113,19 @@ function collectPythonIssues(src: string, relPath: string): Msg[] {
   // Bare except
   for (const match of scan.matchAll(/^\s*except\s*:\s*$/gm)) {
     const line = lineOf(match.index);
-    ocorrencias.push(warn(PythonMensagens.broadExcept, relPath, line));
+    ocorrencias.push(warn(messages.PythonMensagens.broadExcept, relPath, line));
   }
 
   // except ... pass (bad practice)
   for (const match of scan.matchAll(/except\s+\w+\s*(?:as\s+\w+)?\s*:\s*pass/g)) {
     const line = lineOf(match.index);
-    ocorrencias.push(warn(PythonMensagens.passInExcept, relPath, line));
+    ocorrencias.push(warn(messages.PythonMensagens.passInExcept, relPath, line));
   }
 
   // bare raise (contextless)
   for (const match of scan.matchAll(/except\s+\w+\s*(?:as\s+\w+)?\s*:\s*\n\s*raise\s*\n/gm)) {
     const line = lineOf(match.index);
-    ocorrencias.push(warn(PythonMensagens.bareRaise, relPath, line));
+    ocorrencias.push(warn(messages.PythonMensagens.bareRaise, relPath, line));
   }
 
   /* -------------------------- Code Quality & Best Practices -------------------------- */
@@ -133,13 +133,13 @@ function collectPythonIssues(src: string, relPath: string): Msg[] {
   // global keyword (code smell)
   for (const match of scan.matchAll(/^\s*global\s+\w+/gm)) {
     const line = lineOf(match.index);
-    ocorrencias.push(warn(PythonMensagens.globalKeyword, relPath, line));
+    ocorrencias.push(warn(messages.PythonMensagens.globalKeyword, relPath, line));
   }
 
   // Mutable default arguments
   for (const match of scan.matchAll(/def\s+\w+\s*\([^)]*=\s*(?:\[|\{)[^\]}]*(?:\]|\})/g)) {
     const line = lineOf(match.index);
-    ocorrencias.push(warn(PythonMensagens.mutableDefault, relPath, line));
+    ocorrencias.push(warn(messages.PythonMensagens.mutableDefault, relPath, line));
   }
 
   /* -------------------------- Performance Hints -------------------------- */
@@ -148,13 +148,13 @@ function collectPythonIssues(src: string, relPath: string): Msg[] {
   for (const match of scan.matchAll(/for\s+\w+\s+in\s+\w+:\s*\n\s*(\w+)\.append\s*\(/g)) {
     const line = lineOf(match.index);
     // Apenas sugerir se parece simples (sem múltiplas linhas complexas)
-    ocorrencias.push(warn(PythonMensagens.listComprehensionOpportunity, relPath, line, SeverityNiveis.suggestion));
+    ocorrencias.push(warn(messages.PythonMensagens.listComprehensionOpportunity, relPath, line, messages.SeverityNiveis.suggestion));
   }
 
   // Iterating over dict without .items()
   for (const match of scan.matchAll(/for\s+\w+\s+in\s+(\w+):\s*\n\s*(?:value|val)\s*=\s*\1\[/gm)) {
     const line = lineOf(match.index);
-    ocorrencias.push(warn(PythonMensagens.loopingOverDict, relPath, line, SeverityNiveis.suggestion));
+    ocorrencias.push(warn(messages.PythonMensagens.loopingOverDict, relPath, line, messages.SeverityNiveis.suggestion));
   }
   return ocorrencias;
 }

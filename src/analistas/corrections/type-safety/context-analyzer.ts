@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// @sensei-disable problema-documentacao
+// @prometheus-disable problema-documentacao
 // Justificativa: funções estão tipadas, detector está identificando falsos positivos
 /**
  * Analisador de contexto para Type Safety Auto-Fix

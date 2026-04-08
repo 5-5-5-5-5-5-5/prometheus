@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 /**
- * Sistema de supressão inline para o Sensei
+ * Sistema de supressão inline para o Prometheus
  * Permite desabilitar regras específicas usando comentários no código
  *
  * Formatos suportados (qualquer sintaxe de comentário inline, ex.: //, #, --, ;, <!-- -->, blocos /* ... * /):
- * - @sensei-disable-next-line nome-da-regra
- * - @sensei-disable nome-da-regra
- * - @sensei-enable nome-da-regra
+ * - @prometheus-disable-next-line nome-da-regra
+ * - @prometheus-disable nome-da-regra
+ * - @prometheus-enable nome-da-regra
  */
 
 import type { RegrasSuprimidas, SupressaoInfo } from '@';
@@ -48,8 +48,8 @@ export function extrairSupressoes(src: string): RegrasSuprimidas {
     const linhaNorm = normalizarLinha(linha);
     const numeroLinha = i + 1;
 
-    // @sensei-disable-next-line regra1 regra2
-    const matchNextLine = linhaNorm.match(/@sensei-disable-next-line\s+(.+)/);
+    // @prometheus-disable-next-line regra1 regra2
+    const matchNextLine = linhaNorm.match(/@prometheus-disable-next-line\s+(.+)/);
     if (matchNextLine) {
       const regras = matchNextLine[1].trim().split(/\s+/);
       const linhaAfetada = numeroLinha + 1;
@@ -65,8 +65,8 @@ export function extrairSupressoes(src: string): RegrasSuprimidas {
       continue;
     }
 
-    // @sensei-disable regra1 regra2
-    const matchDisable = linhaNorm.match(/@sensei-disable\s+(.+)/);
+    // @prometheus-disable regra1 regra2
+    const matchDisable = linhaNorm.match(/@prometheus-disable\s+(.+)/);
     if (matchDisable) {
       const regras = matchDisable[1].trim().split(/\s+/);
       regras.forEach((regra) => {
@@ -75,8 +75,8 @@ export function extrairSupressoes(src: string): RegrasSuprimidas {
       continue;
     }
 
-    // @sensei-enable regra1 regra2
-    const matchEnable = linhaNorm.match(/@sensei-enable\s+(.+)/);
+    // @prometheus-enable regra1 regra2
+    const matchEnable = linhaNorm.match(/@prometheus-enable\s+(.+)/);
     if (matchEnable) {
       const regras = matchEnable[1].trim().split(/\s+/);
       regras.forEach((regra) => {
@@ -85,14 +85,14 @@ export function extrairSupressoes(src: string): RegrasSuprimidas {
       continue;
     }
 
-    // @sensei-disable (desabilita todas as regras)
-    if (linhaNorm.includes('@sensei-disable-all')) {
+    // @prometheus-disable (desabilita todas as regras)
+    if (linhaNorm.includes('@prometheus-disable-all')) {
       blocosAtivos.add('*');
       continue;
     }
 
-    // @sensei-enable (reabilita todas as regras)
-    if (linhaNorm.includes('@sensei-enable-all')) {
+    // @prometheus-enable (reabilita todas as regras)
+    if (linhaNorm.includes('@prometheus-enable-all')) {
       blocosAtivos.clear();
       continue;
     }

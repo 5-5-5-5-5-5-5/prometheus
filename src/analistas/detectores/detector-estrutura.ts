@@ -5,7 +5,7 @@ import type { Node } from '@babel/types';
 import { config } from '@core/config/config.js';
 import { getAllExpectedDirNames, getDirVariantPattern, getNameConventions } from '@core/config/conventions.js';
 import { isInsideSrc } from '@core/config/paths.js';
-import { DetectorEstruturaMensagens } from '@core/messages/pt/analistas/detector-estrutura-messages.js';
+import { messages } from '@core/messages/index.js';
 import { detectarContextoProjeto } from '@shared/contexto-projeto.js';
 import micromatch from 'micromatch';
 
@@ -68,7 +68,7 @@ export const detectorEstrutura = {
       ocorrencias.push({
         tipo: 'estrutura-monorepo',
         nivel: 'info',
-        mensagem: DetectorEstruturaMensagens.monorepoDetectado,
+        mensagem: messages.DetectorEstruturaMensagens.monorepoDetectado,
         origem: 'detector-estrutura',
         relPath: '[raiz do projeto]',
         linha: 0
@@ -78,7 +78,7 @@ export const detectorEstrutura = {
         ocorrencias.push({
           tipo: 'estrutura-monorepo-incompleto',
           nivel: 'aviso',
-          mensagem: DetectorEstruturaMensagens.monorepoSemPackages,
+          mensagem: messages.DetectorEstruturaMensagens.monorepoSemPackages,
           origem: 'detector-estrutura',
           relPath: '[raiz do projeto]',
           linha: 0
@@ -91,7 +91,7 @@ export const detectorEstrutura = {
       ocorrencias.push({
         tipo: 'estrutura-fullstack',
         nivel: 'info',
-        mensagem: DetectorEstruturaMensagens.fullstackDetectado,
+        mensagem: messages.DetectorEstruturaMensagens.fullstackDetectado,
         origem: 'detector-estrutura',
         relPath: '[raiz do projeto]',
         linha: 0
@@ -102,7 +102,7 @@ export const detectorEstrutura = {
         tipo: 'estrutura-incompleta',
         nivel: 'info',
         // Reduzido de 'aviso' para 'info'
-        mensagem: DetectorEstruturaMensagens.pagesSemApi,
+        mensagem: messages.DetectorEstruturaMensagens.pagesSemApi,
         origem: 'detector-estrutura',
         relPath: '[raiz do projeto]',
         linha: 0
@@ -115,7 +115,7 @@ export const detectorEstrutura = {
         tipo: 'estrutura-mista',
         nivel: 'info',
         // Reduzido de 'aviso' para 'info'
-        mensagem: DetectorEstruturaMensagens.estruturaMista,
+        mensagem: messages.DetectorEstruturaMensagens.estruturaMista,
         origem: 'detector-estrutura',
         relPath: '[raiz do projeto]',
         linha: 0
@@ -131,7 +131,7 @@ export const detectorEstrutura = {
         tipo: 'estrutura-suspeita',
         nivel: 'info',
         // Reduzido de 'aviso' para 'info'
-        mensagem: DetectorEstruturaMensagens.muitosArquivosRaiz,
+        mensagem: messages.DetectorEstruturaMensagens.muitosArquivosRaiz,
         origem: 'detector-estrutura',
         relPath: '[raiz do projeto]',
         linha: 0
@@ -143,7 +143,7 @@ export const detectorEstrutura = {
       ocorrencias.push({
         tipo: 'estrutura-backend',
         nivel: 'info',
-        mensagem: DetectorEstruturaMensagens.sinaisBackend,
+        mensagem: messages.DetectorEstruturaMensagens.sinaisBackend,
         origem: 'detector-estrutura',
         relPath: '[raiz do projeto]',
         linha: 0
@@ -155,7 +155,7 @@ export const detectorEstrutura = {
       ocorrencias.push({
         tipo: 'estrutura-frontend',
         nivel: 'info',
-        mensagem: DetectorEstruturaMensagens.sinaisFrontend,
+        mensagem: messages.DetectorEstruturaMensagens.sinaisFrontend,
         origem: 'detector-estrutura',
         relPath: '[raiz do projeto]',
         linha: 0
@@ -169,7 +169,7 @@ export const detectorEstrutura = {
       ocorrencias.push({
         tipo: 'estrutura-config',
         nivel: 'info',
-        mensagem: DetectorEstruturaMensagens.arquivosConfigDetectados(detectados),
+        mensagem: messages.DetectorEstruturaMensagens.arquivosConfigDetectados(detectados),
         origem: 'detector-estrutura',
         relPath: '[raiz do projeto]',
         linha: 1
@@ -201,7 +201,7 @@ export const detectorEstrutura = {
         ocorrencias.push({
           tipo: 'estrutura-entrypoints',
           nivel: 'aviso',
-          mensagem: DetectorEstruturaMensagens.multiplosEntrypointsAgrupados({
+          mensagem: messages.DetectorEstruturaMensagens.multiplosEntrypointsAgrupados({
             previewGrupos,
             sufixoOcultos
           }),
@@ -216,7 +216,7 @@ export const detectorEstrutura = {
         ocorrencias.push({
           tipo: 'estrutura-entrypoints',
           nivel: 'aviso',
-          mensagem: DetectorEstruturaMensagens.multiplosEntrypointsLista(preview, resto),
+          mensagem: messages.DetectorEstruturaMensagens.multiplosEntrypointsLista(preview, resto),
           origem: 'detector-estrutura',
           relPath: '[raiz do projeto]',
           linha: 0
@@ -233,7 +233,7 @@ export const detectorEstrutura = {
         tipo: 'estrutura-sem-src',
         nivel: 'info',
         // Reduzido de 'aviso' para 'info'
-        mensagem: DetectorEstruturaMensagens.projetoGrandeSemSrc,
+        mensagem: messages.DetectorEstruturaMensagens.projetoGrandeSemSrc,
         origem: 'detector-estrutura',
         relPath: '[raiz do projeto]',
         linha: 0
@@ -262,7 +262,7 @@ export const detectorEstrutura = {
             ocorrencias.push({
               tipo: 'name-convention',
               nivel: 'aviso',
-              mensagem: DetectorEstruturaMensagens.nomeDiretorioNaoConforme(foundVariant, expected),
+              mensagem: messages.DetectorEstruturaMensagens.nomeDiretorioNaoConforme(foundVariant, expected),
               origem: 'detector-estrutura',
               relPath: `[raiz do projeto]`,
               linha: 0

@@ -1,19 +1,19 @@
 ---
-Proveniência e Autoria: Este documento integra o projeto Sensei (licença MIT-0).
+Proveniência e Autoria: Este documento integra o projeto Prometheus (licença MIT-0).
 ---
 
 
 # Política de Segurança
 
-A segurança é uma prioridade máxima para o projeto Sensei. Valorizamos a comunidade de usuários e colaboradores que ajudam a identificar e corrigir vulnerabilidades. Este documento descreve como reportar vulnerabilidades de segurança de forma responsável.
+A segurança é uma prioridade máxima para o projeto Prometheus. Valorizamos a comunidade de usuários e colaboradores que ajudam a identificar e corrigir vulnerabilidades. Este documento descreve como reportar vulnerabilidades de segurança de forma responsável.
 
 ## Relatando Vulnerabilidades
 
-Se você descobrir uma vulnerabilidade de segurança no Sensei, por favor, reporte-a de forma privada para evitar exposição pública antes da correção. Não crie issues públicas ou divulgue detalhes da vulnerabilidade.
+Se você descobrir uma vulnerabilidade de segurança no Prometheus, por favor, reporte-a de forma privada para evitar exposição pública antes da correção. Não crie issues públicas ou divulgue detalhes da vulnerabilidade.
 
 ### Métodos de Relato:
 
-- **GitHub Security Advisories**: Use o [formulário de advisories do GitHub](https://github.com/5-5-5-5-5-5-5/sensei/security/advisories/new) para relatar vulnerabilidades de forma privada.
+- **GitHub Security Advisories**: Use o [formulário de advisories do GitHub](https://github.com/5-5-5-5-5-5-5/prometheus/security/advisories/new) para relatar vulnerabilidades de forma privada.
 - **Issues Privadas**: Abra uma issue no repositório com o rótulo `security` e marque como privada, se possível. Evite incluir detalhes sensíveis no título ou descrição inicial.
 - **E-mail**: Contate o mantenedor diretamente via e-mail (consulte o perfil do GitHub de [@5-5-5-5-5-5-5](https://github.com/5-5-5-5-5-5-5) para obter o e-mail).
 
@@ -46,7 +46,7 @@ Apenas a versão mais recente e as versões ativas de manutenção recebem corre
 Para questões relacionadas à segurança, entre em contato:
 
 - **Mantenedor**: 5 5 5 ([@5-5-5-5-5-5-5](https://github.com/5-5-5-5-5-5-5))
-- **Repositório**: [https://github.com/5-5-5-5-5-5-5/sensei](https://github.com/5-5-5-5-5-5-5/sensei)
+- **Repositório**: [https://github.com/5-5-5-5-5-5-5/prometheus](https://github.com/5-5-5-5-5-5-5/prometheus)
 
-Obrigado por ajudar a manter o Sensei seguro!
+Obrigado por ajudar a manter o Prometheus seguro!
 

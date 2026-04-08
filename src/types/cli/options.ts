@@ -35,9 +35,9 @@ export interface OpcoesProcessamentoFiltros {
 }
 
 /**
- * Flags globais aplicáveis em todos os comandos do Sensei
+ * Flags globais aplicáveis em todos os comandos do Prometheus
  */
-export interface SenseiGlobalFlags {
+export interface PrometheusGlobalFlags {
   silence?: boolean;
   verbose?: boolean;
   export?: boolean;

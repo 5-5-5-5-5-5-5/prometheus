@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2025 Sensei Contributors
-// @sensei-disable tipo-literal-inline-complexo
+// SPDX-FileCopyrightText: 2025 Prometheus Contributors
+// @prometheus-disable tipo-literal-inline-complexo
 // Justificativa: tipos locais para manipulação de shards
 
 /**

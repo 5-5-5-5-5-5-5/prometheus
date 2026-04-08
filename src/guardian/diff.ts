@@ -14,15 +14,15 @@ export function diffSnapshots(before: Record<string, string>, after: Record<stri
   const hashAfter = config.GUARDIAN_ENFORCE_PROTECTION ? Object.values(after).join('|') : '';
   const cacheChave = `${key}:${hashBefore}>${hashAfter}`;
   const globalAny = global as unknown as {
-    __SENSEI_DIFF_CACHE__?: Map<string, ComparacaoSnapshot>;
+    __PROMETHEUS_DIFF_CACHE__?: Map<string, ComparacaoSnapshot>;
   };
-  if (!globalAny.__SENSEI_DIFF_CACHE__) globalAny.__SENSEI_DIFF_CACHE__ = new Map();
-  const cache = globalAny.__SENSEI_DIFF_CACHE__;
+  if (!globalAny.__PROMETHEUS_DIFF_CACHE__) globalAny.__PROMETHEUS_DIFF_CACHE__ = new Map();
+  const cache = globalAny.__PROMETHEUS_DIFF_CACHE__;
   if (cache.has(cacheChave)) {
     const globAny = globalAny as unknown as {
-      __SENSEI_DIFF_CACHE_HITS__?: number;
+      __PROMETHEUS_DIFF_CACHE_HITS__?: number;
     };
-    globAny.__SENSEI_DIFF_CACHE_HITS__ = (globAny.__SENSEI_DIFF_CACHE_HITS__ || 0) + 1;
+    globAny.__PROMETHEUS_DIFF_CACHE_HITS__ = (globAny.__PROMETHEUS_DIFF_CACHE_HITS__ || 0) + 1;
     const hit = cache.get(cacheChave);
     if (hit) return hit;
   }

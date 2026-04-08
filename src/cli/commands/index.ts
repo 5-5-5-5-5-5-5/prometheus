@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 /**
- * Ponto de entrada único para todos os comandos da CLI do Sensei.
+ * Ponto de entrada único para todos os comandos da CLI do Prometheus.
  *
  * Este arquivo centraliza as exportações de todos os comandos disponíveis,
  * facilitando a manutenção e evitando múltiplas importações espalhadas.

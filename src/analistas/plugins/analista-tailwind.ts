@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
-import { AnalystOrigens, AnalystTipos, SeverityNiveis, TailwindMensagens } from '@core/messages/pt/core/plugin-messages.js';
+import { messages } from '@core/messages/index.js';
 import { createLineLookup } from '@shared/helpers/line-lookup.js';
 
 import { criarAnalista, criarOcorrencia } from '@';
 
-const disableEnv = process.env.SENSEI_DISABLE_PLUGIN_TAILWIND === '1';
+const disableEnv = process.env.PROMETHEUS_DISABLE_PLUGIN_TAILWIND === '1';
 type Msg = ReturnType<typeof criarOcorrencia>;
 type ClassBlock = {
   text: string;
@@ -288,14 +288,14 @@ function propertyKey(token: string): string | null {
   const found = groups.find(g => g.re.test(base));
   return found ? `${variants}|${found.key}` : null;
 }
-function warn(message: string, relPath: string, line?: number, nivel: (typeof SeverityNiveis)[keyof typeof SeverityNiveis] = SeverityNiveis.warning): Msg {
+function warn(message: string, relPath: string, line?: number, nivel: (typeof messages.SeverityNiveis)[keyof typeof messages.SeverityNiveis] = messages.SeverityNiveis.warning): Msg {
   return criarOcorrencia({
     relPath,
     mensagem: message,
     linha: line,
     nivel,
-    origem: AnalystOrigens.tailwind,
-    tipo: AnalystTipos.tailwind
+    origem: messages.AnalystOrigens.tailwind,
+    tipo: messages.AnalystTipos.tailwind
   });
 }
 function collectTailwindIssues(src: string, relPath: string): Msg[] {
@@ -320,13 +320,13 @@ function collectTailwindIssues(src: string, relPath: string): Msg[] {
       // Detect duplicated exact tokens within same block (redundant classes)
       const repeats = list.filter((t, i) => list.indexOf(t) !== i);
       for (const r of [...new Set(repeats)]) {
-        ocorrencias.push(warn(TailwindMensagens.repeatedClass(r), relPath, line));
+        ocorrencias.push(warn(messages.TailwindMensagens.repeatedClass(r), relPath, line));
       }
       if (uniqTokens.length > 1) {
         // Mensagem: mostra a chave sem o prefixo de variantes para não poluir,
         // mas mantém as classes originais nos exemplos.
         const normalizedChave = key.includes('|') ? key.split('|').slice(1).join('|') : key;
-        ocorrencias.push(warn(TailwindMensagens.conflictingClasses(normalizedChave, uniqTokens.slice(0, 4)), relPath, line));
+        ocorrencias.push(warn(messages.TailwindMensagens.conflictingClasses(normalizedChave, uniqTokens.slice(0, 4)), relPath, line));
 
         // Detect variant conflicts for same property across multiple variants
         const propSuffix = normalizedChave;
@@ -338,7 +338,7 @@ function collectTailwindIssues(src: string, relPath: string): Msg[] {
           if (propPart === propSuffix) variantsSet.add(varPart || 'base');
         }
         if (variantsSet.size > 1) {
-          ocorrencias.push(warn(TailwindMensagens.variantConflict(propSuffix, Array.from(variantsSet)), relPath, line, SeverityNiveis.suggestion));
+          ocorrencias.push(warn(messages.TailwindMensagens.variantConflict(propSuffix, Array.from(variantsSet)), relPath, line, messages.SeverityNiveis.suggestion));
         }
       }
     }
@@ -354,7 +354,7 @@ function collectTailwindIssues(src: string, relPath: string): Msg[] {
     }
     for (const [prop, vset] of Object.entries(propVariants)) {
       if (vset.size > 1) {
-        ocorrencias.push(warn(TailwindMensagens.variantConflict(prop, Array.from(vset)), relPath, line, SeverityNiveis.suggestion));
+        ocorrencias.push(warn(messages.TailwindMensagens.variantConflict(prop, Array.from(vset)), relPath, line, messages.SeverityNiveis.suggestion));
       }
     }
   }
@@ -370,13 +370,13 @@ function collectTailwindIssues(src: string, relPath: string): Msg[] {
   }) => {
     const hasDangerousUrl = /\[.*url\(.+\).*\]/i.test(token) && /javascript:|data:text\/html/i.test(token);
     if (hasDangerousUrl) {
-      ocorrencias.push(warn(TailwindMensagens.dangerousArbitraryValue(token), relPath, line));
+      ocorrencias.push(warn(messages.TailwindMensagens.dangerousArbitraryValue(token), relPath, line));
       return;
     }
 
     // Evita ruído: ignore vars, cores, gradientes, calc, unidades comuns, etc.
     if (safeArbitrary.test(token)) return;
-    ocorrencias.push(warn(TailwindMensagens.arbitraryValue(token), relPath, line));
+    ocorrencias.push(warn(messages.TailwindMensagens.arbitraryValue(token), relPath, line));
   });
 
   // Important usage detection (e.g., 'text-red-500!')
@@ -386,7 +386,7 @@ function collectTailwindIssues(src: string, relPath: string): Msg[] {
     token,
     line
   }) => {
-    ocorrencias.push(warn(TailwindMensagens.importantUsage(token), relPath, line, SeverityNiveis.suggestion));
+    ocorrencias.push(warn(messages.TailwindMensagens.importantUsage(token), relPath, line, messages.SeverityNiveis.suggestion));
   });
   return ocorrencias;
 }

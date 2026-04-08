@@ -461,7 +461,7 @@ function normalizarSeparadoresDeSecao(code: string, opts: {
     titulo: string | null;
   } | null => {
     // Formato legado aceito (compat): /* -------------------------- substituir por titulo (opcionalmente com um título embutido) -------------------------- */
-    const m = line.match(/^\s*\/\*\s*-{10,}\s*substituir\s+por\s+titulo\s+@sensei-secao(?:\((.+?)\))?\s*-{10,}\s*\*\/\s*$/i);
+    const m = line.match(/^\s*\/\*\s*-{10,}\s*substituir\s+por\s+titulo\s+@prometheus-secao(?:\((.+?)\))?\s*-{10,}\s*\*\/\s*$/i);
     if (!m) return null;
     const raw = (m[1] ?? '').trim();
     return {
@@ -471,7 +471,7 @@ function normalizarSeparadoresDeSecao(code: string, opts: {
   const isSeparadorSemTitulo = (line: string): boolean => {
     // Ex.: /* -------------------------- substituir por titulo -------------------------- */
     // Ex.: /* -------------------------- - -------------------------- */
-    return /^\s*\/\*\s*-{10,}\s*substituir\s+por\s+titulo\s*-{10,}\s*\*\/\s*$/i.test(line) || /^\s*\/\*\s*-{10,}\s*-\s*-{10,}\s*\*\/\s*$/.test(line) || /^\s*\/\*\s*-{10,}\s*@sensei-secao\s*-{10,}\s*\*\/\s*$/i.test(line);
+    return /^\s*\/\*\s*-{10,}\s*substituir\s+por\s+titulo\s*-{10,}\s*\*\/\s*$/i.test(line) || /^\s*\/\*\s*-{10,}\s*-\s*-{10,}\s*\*\/\s*$/.test(line) || /^\s*\/\*\s*-{10,}\s*@prometheus-secao\s*-{10,}\s*\*\/\s*$/i.test(line);
   };
   const buildSeparatorWithTitle = (title: string): string => {
     return `  /* -------------------------- ${title} -------------------------- */`;
@@ -670,7 +670,7 @@ function formatarMarkdownMinimo(code: string): FormatadorMinimoResult {
     parser: 'markdown',
     formatted,
     changed: formatted !== normalizarNewlinesFinais(normalized),
-    reason: changedFences || changedInline || changedHeadings || changedBlanks ? 'estilo-sensei-markdown' : 'normalizacao-basica'
+    reason: changedFences || changedInline || changedHeadings || changedBlanks ? 'estilo-prometheus-markdown' : 'normalizacao-basica'
   };
 }
 function formatarYamlMinimo(code: string): FormatadorMinimoResult {
@@ -686,7 +686,7 @@ function formatarYamlMinimo(code: string): FormatadorMinimoResult {
     parser: 'yaml',
     formatted,
     changed: formatted !== normalizarNewlinesFinais(normalized),
-    reason: changedBlanks ? 'estilo-sensei-yaml' : 'normalizacao-basica'
+    reason: changedBlanks ? 'estilo-prometheus-yaml' : 'normalizacao-basica'
   };
 }
 function tokenizeXml(src: string): Array<{
@@ -1081,7 +1081,7 @@ function formatarHtmlMinimo(code: string): FormatadorMinimoResult {
     parser: 'html',
     formatted,
     changed: formatted !== baseline,
-    reason: 'estilo-sensei-html',
+    reason: 'estilo-prometheus-html',
   };
 }
 
@@ -1263,7 +1263,7 @@ function formatarCssMinimo(code: string): FormatadorMinimoResult {
     parser: 'css',
     formatted,
     changed: formatted !== baseline,
-    reason: 'estilo-sensei-css',
+    reason: 'estilo-prometheus-css',
   };
 }
 
@@ -1379,7 +1379,7 @@ function formatarScssMinimo(code: string): FormatadorMinimoResult {
     parser: 'scss',
     formatted,
     changed: formatted !== baseline,
-    reason: 'estilo-sensei-scss',
+    reason: 'estilo-prometheus-scss',
   };
 }
 
@@ -1578,7 +1578,7 @@ function formatarSqlMinimo(code: string): FormatadorMinimoResult {
     parser: 'sql',
     formatted,
     changed: formatted !== baseline,
-    reason: 'estilo-sensei-sql',
+    reason: 'estilo-prometheus-sql',
   };
 }
 
@@ -1651,7 +1651,7 @@ function formatarTomlMinimo(code: string): FormatadorMinimoResult {
     parser: 'toml',
     formatted,
     changed: formatted !== baseline,
-    reason: 'estilo-sensei-toml',
+    reason: 'estilo-prometheus-toml',
   };
 }
 
@@ -1718,7 +1718,7 @@ function formatarIniMinimo(code: string): FormatadorMinimoResult {
     parser: 'ini',
     formatted,
     changed: formatted !== baseline,
-    reason: 'estilo-sensei-ini',
+    reason: 'estilo-prometheus-ini',
   };
 }
 
@@ -1772,7 +1772,7 @@ function formatarDockerfileMinimo(code: string): FormatadorMinimoResult {
     parser: 'dockerfile',
     formatted,
     changed: formatted !== baseline,
-    reason: 'estilo-sensei-dockerfile',
+    reason: 'estilo-prometheus-dockerfile',
   };
 }
 
@@ -1821,7 +1821,7 @@ function formatarShellMinimo(code: string): FormatadorMinimoResult {
     parser: 'shell',
     formatted,
     changed: formatted !== baseline,
-    reason: 'estilo-sensei-shell',
+    reason: 'estilo-prometheus-shell',
   };
 }
 
@@ -1897,7 +1897,7 @@ function formatarPropertiesMinimo(code: string): FormatadorMinimoResult {
     parser: 'properties',
     formatted,
     changed: formatted !== baseline,
-    reason: 'estilo-sensei-properties',
+    reason: 'estilo-prometheus-properties',
   };
 }
 
@@ -1917,7 +1917,7 @@ function formatarJavaMinimo(code: string): FormatadorMinimoResult {
     parser: 'java',
     formatted,
     changed: formatted !== baseline,
-    reason: 'estilo-sensei-java',
+    reason: 'estilo-prometheus-java',
   };
 }
 
@@ -1938,7 +1938,7 @@ function formatarPythonMinimo(code: string): FormatadorMinimoResult {
     parser: 'python',
     formatted,
     changed: formatted !== baseline,
-    reason: 'estilo-sensei-python',
+    reason: 'estilo-prometheus-python',
   };
 }
 
@@ -2095,7 +2095,7 @@ async function carregarPrettierDoProjeto(baseDir: string): Promise<PrettierApi |
       // ignora
     }
 
-    // 2) Fallback: tenta resolver do contexto do Sensei (útil em dev, monorepos, etc.).
+    // 2) Fallback: tenta resolver do contexto do Prometheus (útil em dev, monorepos, etc.).
     {
       const api = await tryResolveFrom(createRequire(import.meta.url));
       if (api) return api;
@@ -2103,7 +2103,7 @@ async function carregarPrettierDoProjeto(baseDir: string): Promise<PrettierApi |
 
     // 3) Fallback: bundle local em feedback/prettier (quando existe no workspace).
     // Mantém isso “best effort” para não mudar comportamento em instalações normais.
-    const feedbackDir = process.env.SENSEI_PRETTIER_FEEDBACK_DIR || path.join(base, 'feedback', 'prettier');
+    const feedbackDir = process.env.PROMETHEUS_PRETTIER_FEEDBACK_DIR || path.join(base, 'feedback', 'prettier');
     const feedbackPkg = path.join(feedbackDir, 'package.json');
     if (fs.existsSync(feedbackPkg)) {
       const candidates = [path.join(feedbackDir, 'index.mjs'), path.join(feedbackDir, 'index.cjs')];
@@ -2277,7 +2277,7 @@ function formatarGoMinimo(code: string): FormatadorMinimoResult {
     parser: 'go',
     formatted,
     changed: formatted !== baseline,
-    reason: 'estilo-sensei-go',
+    reason: 'estilo-prometheus-go',
   };
 }
 
@@ -2297,7 +2297,7 @@ function formatarTypeScriptMinimo(code: string, relPath: string): FormatadorMini
     parser: 'typescript',
     formatted,
     changed: formatted !== baseline,
-    reason: 'estilo-sensei-typescript',
+    reason: 'estilo-prometheus-typescript',
   };
 }
 
@@ -2317,7 +2317,7 @@ function formatarJavaScriptMinimo(code: string, relPath: string): FormatadorMini
     parser: 'babel',
     formatted,
     changed: formatted !== baseline,
-    reason: 'estilo-sensei-javascript',
+    reason: 'estilo-prometheus-javascript',
   };
 }
 

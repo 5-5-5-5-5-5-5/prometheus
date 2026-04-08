@@ -1,0 +1,426 @@
+{
+  "$schema": "./node_modules/prometheus/dist/types/core/config/config.schema.json",
+  "comment": "Configuração completa do Prometheus - CLI de análise e manutenção de projetos",
+  "_comment_doc": "Documentação: https://github.com/5-5-5-5-5-5/prometheus#configuração",
+
+  "locale": "pt",
+  "_locale_doc": "Idioma das mensagens: pt, en, zh, ja (padrão: pt). Também pode usar variável PROMETHEUS_LOCALE",
+
+  "verbose": false,
+  "_verbose_doc": "Ativa logs detalhados (debug)",
+
+  "logLevel": "info",
+  "_logLevel_doc": "Nível de log: erro, aviso, info, debug",
+
+  "devMode": false,
+  "_devMode_doc": "Modo desenvolvimento (ativa ferramentas extras)",
+
+  "safeMode": true,
+  "_safeMode_doc": "Modo seguro - pede confirmação antes de ações destrutivas",
+
+  "allowPlugins": false,
+  "_allowPlugins_doc": "Permite carregar plugins externos",
+
+  "allowExec": false,
+  "_allowExec_doc": "Permite executar comandos externos (cuidado!)",
+
+  "exclude": [
+    "node_modules/**",
+    "dist/**",
+    "build/**",
+    "coverage/**",
+    ".git/**",
+    "**/*.log",
+    ".prometheus/**"
+  ],
+  "_exclude_doc": "Padrões globais de exclusão (simplificado)",
+
+  "INCLUDE_EXCLUDE_RULES": {
+    "globalExcludeGlob": [
+      "node_modules/**",
+      "dist/**",
+      "build/**",
+      "coverage/**",
+      ".git/**",
+      "**/*.log",
+      ".prometheus/**",
+      "scripts/**",
+      ".pnpm/**",
+      "out/**",
+      "**/.turbo/**",
+      "**/.vercel/**",
+      "**/.expo/**",
+      "**/.parcel-cache/**",
+      ".deprecados/**",
+      "**/deprecados/**",
+      ".pensando/**",
+      "**/pensando/**",
+      "**/*.lock",
+      "package-lock.json",
+      "yarn.lock",
+      "pnpm-lock.yaml"
+    ],
+    "dirRules": {},
+    "defaultExcludes": true
+  },
+  "_INCLUDE_EXCLUDE_RULES_doc": "Regras granulares de inclusão/exclusão",
+
+  "SCAN_ONLY": false,
+  "_SCAN_ONLY_doc": "Modo somente varredura (sem AST, mais rápido)",
+
+  "ANALISE_SCAN_ONLY": false,
+  "_ANALISE_SCAN_ONLY_doc": "Alias para SCAN_ONLY (mantido por compatibilidade)",
+
+  "ANALISE_LIMITES": {
+    "FUNCOES_LONGAS": {
+      "MAX_LINHAS": 60,
+      "MAX_PARAMETROS": 5,
+      "MAX_ANINHAMENTO": 4
+    },
+    "CODIGO_FRAGIL": {
+      "MAX_LINHAS_FUNCAO": 60,
+      "MAX_PARAMETROS": 5,
+      "MAX_NESTED_CALLBACKS": 3
+    }
+  },
+  "_ANALISE_LIMITES_doc": "Limites para detection de funções longas/código frágil",
+
+  "ANALISE_AST_CACHE_ENABLED": true,
+  "_ANALISE_AST_CACHE_doc": "Habilita cache de AST (melhora performance)",
+
+  "ANALISE_METRICAS_ENABLED": true,
+  "_ANALISE_METRICAS_doc": "Habilita coleta de métricas",
+
+  "ANALISE_TIMEOUT_POR_ANALISTA_MS": 30000,
+  "_ANALISE_TIMEOUT_doc": "Timeout por analista individual (ms). 0 = disabled",
+
+  "WORKER_POOL_ENABLED": true,
+  "_WORKER_POOL_doc": "Habilita pool de workers para processamento paralelo",
+
+  "WORKER_POOL_MAX_WORKERS": 0,
+  "_WORKER_POOL_MAX_doc": "Máximo de workers. 0 = automático (número de CPUs)",
+
+  "WORKER_POOL_BATCH_SIZE": 10,
+  "_WORKER_POOL_BATCH_doc": "Tamanho do batch por worker",
+
+  "AUTOANALISE_CONCURRENCY": 5,
+  "_AUTOANALISE_CONCURRENCY_doc": "Concorrência para auto-análise",
+
+  "nameConventions": {
+    "srcDirectory": "src",
+    "distDirectory": "dist",
+    "docsDirectory": "docs",
+    "typesDirectory": "types",
+    "testsDirectory": "tests",
+    "configDirectory": "config",
+    "scriptsDirectory": "scripts",
+    "assetsDirectory": "assets",
+    "utilsDirectory": "utils",
+    "servicesDirectory": "services",
+    "componentsDirectory": "components",
+    "modelsDirectory": "models",
+    "middlewareDirectory": "middleware",
+    "routesDirectory": "routes",
+    "controllersDirectory": "controllers",
+    "viewsDirectory": "views",
+    "stylesDirectory": "styles",
+    "imagesDirectory": "images",
+    "localesDirectory": "locales"
+  },
+  "_nameConventions_doc": "Convenções de nomenclatura de diretórios",
+
+  "conventions": {
+    "typesDirectory": "src/tipos"
+  },
+  "_conventions_doc": "Convenções específicas do projeto (ex: diretório de tipos)",
+
+  "ESTRUTURA_ARQUIVOS_RAIZ_MAX": 10,
+  "_ESTRUTURA_ARQUIVOS_RAIZ_MAX_doc": "Limite de arquivos na raiz antes de considerar reorganização",
+
+  "REPO_ARQUETIPO": "cli-modular",
+  "_REPO_ARQUETIPO_doc": "Arquétipo do repositório para análise estrutural",
+
+  "STRUCTURE_AUTO_FIX": false,
+  "_STRUCTURE_AUTO_FIX_doc": "Aplica correções estruturais automaticamente (CUIDADO!)",
+
+  "STRUCTURE_CONCURRENCY": 5,
+  "_STRUCTURE_CONCURRENCY_doc": "Concorrência para operações de estrutura",
+
+  "coverageGate": {
+    "lines": 90,
+    "functions": 90,
+    "branches": 90,
+    "statements": 90
+  },
+  "_coverageGate_doc": "Thresholds de coverage para gates (0-100%)",
+
+  "languageSupport": {
+    "javascript": {
+      "enabled": true,
+      "parser": "babel",
+      "plugin": "core"
+    },
+    "typescript": {
+      "enabled": true,
+      "parser": "babel",
+      "plugin": "core"
+    },
+    "html": {
+      "enabled": true,
+      "parser": "htmlparser2",
+      "plugin": "core"
+    },
+    "css": {
+      "enabled": true,
+      "parser": "css-tree",
+      "plugin": "core"
+    },
+    "xml": {
+      "enabled": true,
+      "parser": "fast-xml-parser",
+      "plugin": "core"
+    },
+    "php": {
+      "enabled": true,
+      "parser": "heuristic",
+      "plugin": "core"
+    },
+    "python": {
+      "enabled": true,
+      "parser": "heuristic",
+      "plugin": "core"
+    },
+    "java": {
+      "enabled": false,
+      "parser": "java",
+      "plugin": "java"
+    },
+    "kotlin": {
+      "enabled": false,
+      "parser": "kotlin",
+      "plugin": "kotlin"
+    }
+  },
+  "_languageSupport_doc": "Habilita/desabilita suporte por linguagem",
+
+  "languages": {
+    "javascript": true,
+    "typescript": true,
+    "html": true,
+    "css": true,
+    "xml": true,
+    "python": true
+  },
+  "_languages_doc": "Versão simplificada do languageSupport (true/false)",
+
+  "suppress": {
+    "rules": [
+      "weak-crypto",
+      "magic-constants",
+      "unhandled-async",
+      "missing-jsdoc",
+      "poor-naming",
+      "problemas-teste"
+    ],
+    "severity": {
+      "unused-import": "off"
+    },
+    "paths": [
+      "test/**/*",
+      "tests/**/*"
+    ]
+  },
+  "_suppress_doc": "Suprime regras específicas (desabilita ou muda severity)",
+
+  "rules": {
+    "tipo-inseguro": {
+      "severity": "error",
+      "exclude": [
+        "test/**/*",
+        "tests/**/*",
+        "**/*.test.ts",
+        "**/*.spec.ts",
+        "**/__tests__/**"
+      ]
+    },
+    "arquivo-orfao": {
+      "severity": "warning",
+      "allowTestFiles": true,
+      "exclude": [
+        "test/**/*",
+        "tests/**/*",
+        "**/*.test.ts",
+        "**/*.spec.ts"
+      ]
+    },
+    "dependencia-circular": {
+      "severity": "error",
+      "showFullPath": true
+    },
+    "poor-naming": {
+      "severity": "warning",
+      "exclude": [
+        "src/types/**",
+        "**/*.d.ts",
+        "test/**/*",
+        "tests/**/*",
+        "**/*.test.ts",
+        "**/*.spec.ts"
+      ]
+    },
+    "unused-import": {
+      "severity": "warning",
+      "exclude": []
+    },
+    "duplicate-code": {
+      "severity": "warning",
+      "exclude": []
+    }
+  },
+  "_rules_doc": "Configuração granular de regras (severity: error|warning|info|off)",
+
+  "testPatterns": {
+    "files": [
+      "**/*.test.*",
+      "**/*.spec.*",
+      "test/**/*",
+      "tests/**/*",
+      "**/__tests__/**"
+    ],
+    "excludeFromOrphanCheck": true,
+    "allowAnyType": true
+  },
+  "_testPatterns_doc": "Padrões para arquivos de teste",
+
+  "fastMode": {
+    "analystsInclude": [
+      "detector-dependencias",
+      "detector-estrutura",
+      "arquitetura",
+      "seguranca",
+      "detector-tipos-inseguros",
+      "todo-comments",
+      "analista-padroes-uso"
+    ],
+    "analystsExclude": [
+      "documentacao",
+      "duplicacoes",
+      "xml",
+      "performance",
+      "qualidade-testes"
+    ],
+    "conventions": {
+      "typesDirectory": "src/types"
+    }
+  },
+  "_fastMode_doc": "Modo rápido - inclui/exclui analistas específicos",
+
+  "detectorMarkdown": {
+    "checkProveniencia": true,
+    "checkLicenses": true,
+    "checkReferences": true,
+    "headerLines": 30,
+    "whitelist": {
+      "paths": [],
+      "patterns": [],
+      "dirs": []
+    },
+    "whitelistMode": "merge"
+  },
+  "_detectorMarkdown_doc": "Configuração do detector de Markdown",
+
+  "GUARDIAN_ENABLED": true,
+  "_GUARDIAN_ENABLED_doc": "Habilita modo Guardian (proteção de arquivos)",
+
+  "GUARDIAN_ENFORCE_PROTECTION": true,
+  "_GUARDIAN_ENFORCE_PROTECTION_doc": "Guardian aplica proteção rigorosa",
+
+  "GUARDIAN_BASELINE": ".prometheus/guardian-baseline.json",
+  "_GUARDIAN_BASELINE_doc": "Caminho do arquivo baseline do Guardian",
+
+  "GUARDIAN_ALLOW_ADDS": false,
+  "_GUARDIAN_ALLOW_ADDS_doc": "Guardian permite novos arquivos",
+
+  "GUARDIAN_ALLOW_CHG": false,
+  "_GUARDIAN_ALLOW_CHG_doc": "Guardian permite alterações",
+
+  "GUARDIAN_ALLOW_DELS": false,
+  "_GUARDIAN_ALLOW_DELS_doc": "Guardian permite exclusões",
+
+  "REPORT_EXPORT_ENABLED": true,
+  "_REPORT_EXPORT_ENABLED_doc": "Habilita exportação de relatórios",
+
+  "REPORT_OUTPUT_DIR": "prometheus-reports",
+  "_REPORT_OUTPUT_DIR_doc": "Diretório para relatórios exportados",
+
+  "REPORT_EXPORT_FULL": false,
+  "_REPORT_EXPORT_FULL_doc": "Gera relatório completo em JSON (pesado)",
+
+  "REPORT_FRAGMENT_OCCURRENCES": 2000,
+  "_REPORT_FRAGMENT_OCCURRENCES_doc": "Tamanho máximo por shard de ocorrências",
+
+  "REPORT_FRAGMENT_FILEENTRIES": 500,
+  "_REPORT_FRAGMENT_FILEENTRIES_doc": "Tamanho máximo por shard de entradas",
+
+  "REPORT_FRAGMENT_SUMMARY_TOPN": 5,
+  "_REPORT_FRAGMENT_SUMMARY_TOPN_doc": "Top-N no resumo por shard",
+
+  "REPORT_SILENCE_LOGS": false,
+  "_REPORT_SILENCE_LOGS_doc": "Silencia logs de progresso",
+
+  "SUPPRESS_PARCIAL_LOGS": false,
+  "_SUPPRESS_PARCIAL_LOGS_doc": "Suprime logs com 'parcial'",
+
+  "RELATORIO_SAUDE_TABELA_ENABLED": true,
+  "_RELATORIO_SAUDE_TABELA_doc": "Usa tabela com moldura no relatório de saúde",
+
+  "RELATORIO_SAUDE_DETALHADO_VERBOSE": true,
+  "_RELATORIO_SAUDE_DETALHADO_VERBOSE_doc": "Exibe lista detalhada em modo verbose",
+
+  "ZELADOR_GHOST_INACTIVITY_DAYS": 30,
+  "_ZELADOR_GHOST_INACTIVITY_DOC": "Dias de inatividade para considerar arquivo órfão",
+
+  "ZELADOR_LINE_THRESHOLD": 20,
+  "_ZELADOR_LINE_THRESHOLD_doc": "Linhas mínimas para considerar arquivo ativo",
+
+  "COMPACT_MODE": false,
+  "_COMPACT_MODE_doc": "Modo compacto (saída reduzida)",
+
+  "PARSE_ERRO_AGRUPAR": true,
+  "_PARSE_ERRO_AGRUPAR_doc": "Agrupa erros de parsing no mesmo arquivo",
+
+  "PARSE_ERRO_MAX_POR_ARQUIVO": 1,
+  "_PARSE_ERRO_MAX_POR_ARQUIVO_doc": "Máximo de erros por arquivo antes de agrupar",
+
+  "PARSE_ERRO_FALHA": false,
+  "_PARSE_ERRO_FALHA_doc": "Erros de parsing causam exit code 1",
+
+  "VIGIA_TOP_N": 10,
+  "_VIGIA_TOP_N_doc": "Top-N de problemas a mostrar",
+
+  "ANALISE_METRICAS_HISTORICO_MAX": 200,
+  "_ANALISE_METRICAS_HISTORICO_MAX_doc": "Máximo de entradas no histórico de métricas",
+
+  "ANALISE_PRIORIZACAO_ENABLED": true,
+  "_ANALISE_PRIORIZACAO_doc": "Habilita priorização de arquivos por histórico",
+
+  "ANALISE_PRIORIZACAO_PESOS": {
+    "duracaoMs": 1,
+    "ocorrencias": 2,
+    "penalidadeReuso": 0.5
+  },
+  "_ANALISE_PRIORIZACAO_PESOS_doc": "Pesos para priorização",
+
+  "ANALISE_INCREMENTAL_ENABLED": false,
+  "_ANALISE_INCREMENTAL_doc": "Habilita análise incremental (cache)",
+
+  "ESTRUTURA_CAMADAS": {},
+  "_ESTRUTURA_CAMADAS_doc": "Mapeamento de camadas para estrutura",
+
+  "PLUGINS": {
+    "enabled": ["core"],
+    "autoload": true,
+    "registry": "@prometheus/plugins"
+  },
+  "_PLUGINS_doc": "Configuração de plugins"
+}

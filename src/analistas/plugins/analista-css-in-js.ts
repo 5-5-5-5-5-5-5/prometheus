@@ -1,22 +1,22 @@
 // SPDX-License-Identifier: MIT
-import { AnalystOrigens, AnalystTipos, CssInJsMensagens, SeverityNiveis } from '@core/messages/pt/core/plugin-messages.js';
+import { messages } from '@core/messages/index.js';
 
 import type { Ocorrencia } from '@';
 import { criarAnalista, criarOcorrencia } from '@';
 
-const disableEnv = process.env.SENSEI_DISABLE_PLUGIN_CSS_IN_JS === '1';
+const disableEnv = process.env.PROMETHEUS_DISABLE_PLUGIN_CSS_IN_JS === '1';
 type Msg = ReturnType<typeof criarOcorrencia>;
 function findLine(src: string, index = 0): number {
   return src.slice(0, index).split(/\n/).length;
 }
-function emitir(message: string, relPath: string, nivel: (typeof SeverityNiveis)[keyof typeof SeverityNiveis], line = 1): Msg {
+function emitir(message: string, relPath: string, nivel: (typeof messages.SeverityNiveis)[keyof typeof messages.SeverityNiveis], line = 1): Msg {
   return criarOcorrencia({
     relPath,
     mensagem: message,
     linha: line,
     nivel,
-    origem: AnalystOrigens.cssInJs,
-    tipo: AnalystTipos.cssInJs
+    origem: messages.AnalystOrigens.cssInJs,
+    tipo: messages.AnalystTipos.cssInJs
   });
 }
 function detectarStyledComponents(src: string): {
@@ -93,25 +93,25 @@ export const analistaCssInJs = criarAnalista({
     if (!sc.detected && !sj.detected) return null;
     if (sc.detected) {
       const first = sc.indices[0] ?? 0;
-      ocorrencias.push(emitir(CssInJsMensagens.detectedStyledComponents, relPath, SeverityNiveis.info, findLine(src, first)));
+      ocorrencias.push(emitir(messages.CssInJsMensagens.detectedStyledComponents, relPath, messages.SeverityNiveis.info, findLine(src, first)));
       if (sc.global) {
-        ocorrencias.push(emitir(CssInJsMensagens.globalStyles('styled-components'), relPath, SeverityNiveis.warning, findLine(src, first)));
+        ocorrencias.push(emitir(messages.CssInJsMensagens.globalStyles('styled-components'), relPath, messages.SeverityNiveis.warning, findLine(src, first)));
       }
     }
     if (sj.detected) {
       const first = sj.indices[0] ?? 0;
-      ocorrencias.push(emitir(CssInJsMensagens.detectedStyledJsx, relPath, SeverityNiveis.info, findLine(src, first)));
+      ocorrencias.push(emitir(messages.CssInJsMensagens.detectedStyledJsx, relPath, messages.SeverityNiveis.info, findLine(src, first)));
       if (sj.global) {
-        ocorrencias.push(emitir(CssInJsMensagens.globalStyles('styled-jsx'), relPath, SeverityNiveis.warning, findLine(src, first)));
+        ocorrencias.push(emitir(messages.CssInJsMensagens.globalStyles('styled-jsx'), relPath, messages.SeverityNiveis.warning, findLine(src, first)));
       }
     }
 
     // Sinais comuns dentro de CSS em template strings / style tags
     if (/!important/.test(src)) {
-      ocorrencias.push(emitir(CssInJsMensagens.importantUsage, relPath, SeverityNiveis.warning, 1));
+      ocorrencias.push(emitir(messages.CssInJsMensagens.importantUsage, relPath, messages.SeverityNiveis.warning, 1));
     }
     if (/url\(\s*['"]?http:\/\//i.test(src)) {
-      ocorrencias.push(emitir(CssInJsMensagens.httpUrl, relPath, SeverityNiveis.warning, 1));
+      ocorrencias.push(emitir(messages.CssInJsMensagens.httpUrl, relPath, messages.SeverityNiveis.warning, 1));
     }
     return ocorrencias.length ? ocorrencias : null;
   }

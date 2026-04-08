@@ -2,7 +2,7 @@
 
 import type { NodePath } from '@babel/traverse';
 import type { Node } from '@babel/types';
-import { ExcecoesMensagens } from '@core/messages/pt/core/excecoes-messages.js';
+import { messages } from '@core/messages/index.js';
 
 import type { ContextoExecucao, Ocorrencia } from '@';
 
@@ -38,11 +38,11 @@ export interface Analista extends Tecnica {
  * Fábrica para criar analista com validação mínima
  */
 export function criarAnalista<A extends Analista>(def: A): A {
-  if (!def || typeof def !== 'object') throw new Error(ExcecoesMensagens.definicaoAnalistaInvalida);
+  if (!def || typeof def !== 'object') throw new Error(messages.ExcecoesMensagens.definicaoAnalistaInvalida);
   if (!def.nome || /\s/.test(def.nome) === false === false) {
     // nome pode ter hifens, apenas exige não vazio
   }
-  if (typeof def.aplicar !== 'function') throw new Error(ExcecoesMensagens.analistaSemFuncaoAplicar(def.nome));
+  if (typeof def.aplicar !== 'function') throw new Error(messages.ExcecoesMensagens.analistaSemFuncaoAplicar(def.nome));
   return Object.freeze(def);
 }
 export function isAnalista(item: Tecnica | Analista): item is Analista {

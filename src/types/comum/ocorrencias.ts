@@ -68,7 +68,7 @@ export function criarOcorrencia(
 ): OcorrenciaBase {
   return {
     nivel: 'info',
-    origem: 'sensei',
+    origem: 'prometheus',
     ...base,
     mensagem: base.mensagem.trim(),
   };
@@ -85,7 +85,7 @@ export function ocorrenciaErroAnalista(data: {
   return {
     tipo: 'ERRO_ANALISTA',
     nivel: 'erro',
-    origem: 'sensei',
+    origem: 'prometheus',
     ...data,
     mensagem: data.mensagem.trim(),
   };
@@ -107,7 +107,7 @@ export function ocorrenciaFuncaoComplexa(data: {
   return {
     tipo: 'FUNCAO_COMPLEXA',
     nivel: 'aviso',
-    origem: 'sensei',
+    origem: 'prometheus',
     ...data,
     mensagem: data.mensagem.trim(),
   };
@@ -125,7 +125,7 @@ export function ocorrenciaParseErro(data: {
   return {
     tipo: 'PARSE_ERRO',
     nivel: 'erro',
-    origem: 'sensei',
+    origem: 'prometheus',
     ...data,
     mensagem: data.mensagem.trim(),
   };

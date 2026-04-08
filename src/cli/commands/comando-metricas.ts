@@ -1,20 +1,18 @@
 // SPDX-License-Identifier: MIT
-// @sensei-disable tipo-literal-inline-complexo
+// @prometheus-disable tipo-literal-inline-complexo
 // Justificativa: tipos inline para opções de comando CLI são locais e não precisam de extração
 import path from 'node:path';
 
 import { ExitCode, sair } from '@cli/helpers/exit-codes.js';
 import { config } from '@core/config/config.js';
 import { formatMs } from '@core/config/format.js';
-import { getMessages } from '@core/messages/index.js';
-import { CliComandoMetricasMensagens } from '@core/messages/pt/cli/cli-comando-metricas-messages.js';
-import { ICONES_DIAGNOSTICO } from '@core/messages/shared/icons.js';
+import { messages } from '@core/messages/index.js';
 import { lerEstado, salvarEstado } from '@shared/persistence/persistencia.js';
 import { Command } from 'commander';
 
 import type { MetricaExecucao } from '@';
 
-const { log, logMetricas } = getMessages();
+const { log, logMetricas } = messages;
 
 interface RegistroHistorico extends MetricaExecucao {
   timestamp: number;
@@ -78,7 +76,7 @@ export function comandoMetricas(): Command {
           total: lista.length,
           historico: lista
         });
-        log.sucesso(CliComandoMetricasMensagens.historicoExportado(destino));
+        log.sucesso(messages.CliComandoMetricasMensagens.historicoExportado(destino));
         return;
       }
       if (opts.json) {
@@ -98,17 +96,17 @@ export function comandoMetricas(): Command {
       }
       for (const h of ultimos) {
         const timestampISO = new Date(h.timestamp).toISOString();
-        log.info(CliComandoMetricasMensagens.linhaExecucao(timestampISO, h.totalArquivos ?? 0, formatarDuracao(h.tempoAnaliseMs ?? 0), formatarDuracao(h.tempoParsingMs ?? 0), h.cacheAstHits ?? 0, h.cacheAstMiss ?? 0));
+        log.info(messages.CliComandoMetricasMensagens.linhaExecucao(timestampISO, h.totalArquivos ?? 0, formatarDuracao(h.tempoAnaliseMs ?? 0), formatarDuracao(h.tempoParsingMs ?? 0), h.cacheAstHits ?? 0, h.cacheAstMiss ?? 0));
       }
       if (opts.analistas && agg) {
-        log.info(CliComandoMetricasMensagens.linhaEmBranco);
-        log.info(CliComandoMetricasMensagens.tituloTopAnalistas(ICONES_DIAGNOSTICO.info));
+        log.info(messages.CliComandoMetricasMensagens.linhaEmBranco);
+        log.info(messages.CliComandoMetricasMensagens.tituloTopAnalistas(messages.ICONES_DIAGNOSTICO.info));
         for (const a of agg.topAnalistas) {
-          log.info(CliComandoMetricasMensagens.linhaTopAnalista(a.nome, formatMs(a.totalMs), formatMs(a.mediaMs), a.execucoes, a.ocorrencias));
+          log.info(messages.CliComandoMetricasMensagens.linhaTopAnalista(a.nome, formatMs(a.totalMs), formatMs(a.mediaMs), a.execucoes, a.ocorrencias));
         }
       }
       if (agg) {
-        log.info(CliComandoMetricasMensagens.medias(formatMs(agg.mediaAnaliseMs), formatMs(agg.mediaParsingMs)));
+        log.info(messages.CliComandoMetricasMensagens.medias(formatMs(agg.mediaAnaliseMs), formatMs(agg.mediaParsingMs)));
       }
     } catch (err) {
       log.erro(`Falha ao processar métricas: ${err instanceof Error ? err.message : String(err)}`);

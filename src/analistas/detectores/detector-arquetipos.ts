@@ -45,10 +45,10 @@ if (process.env.VITEST) {
     scoreArquetipo: typeof scoreArquetipo;
   };
   const g = globalThis as unknown as {
-    __SENSEI_TESTS__?: TestExports;
+    __PROMETHEUS_TESTS__?: TestExports;
   };
-  const prev = g.__SENSEI_TESTS__ ?? {} as TestExports;
-  g.__SENSEI_TESTS__ = {
+  const prev = g.__PROMETHEUS_TESTS__ ?? {} as TestExports;
+  g.__PROMETHEUS_TESTS__ = {
     ...prev,
     scoreArquetipo
   };
@@ -236,7 +236,7 @@ export async function detectarArquetipos(contexto: Pick<ContextoExecucao, 'arqui
       candidatos = [top];
     }
   }
-  const baselineCaminho = path.join(baseDir, '.sensei', 'baseline-estrutura.json');
+  const baselineCaminho = path.join(baseDir, '.prometheus', 'baseline-estrutura.json');
   let baseline: SnapshotEstruturaBaseline | undefined;
   const existente = await lerEstado<SnapshotEstruturaBaseline | []>(baselineCaminho);
   if (existente && !Array.isArray(existente) && typeof existente === 'object' && 'arquetipo' in existente) {
@@ -272,7 +272,7 @@ export async function detectarArquetipos(contexto: Pick<ContextoExecucao, 'arqui
         forbiddenPresent: [],
         anomalias: [],
         sugestaoPadronizacao: '',
-        explicacaoSimilaridade: 'Detectado via baseline existente (.sensei/baseline-estrutura.json).',
+        explicacaoSimilaridade: 'Detectado via baseline existente (.prometheus/baseline-estrutura.json).',
         descricao: 'Arquétipo determinado pelo baseline'
       };
       candidatos = [melhorLinhaBase, ...candidatos.filter((c: ResultadoDeteccaoArquetipo) => c.nome !== baseline.arquetipo)];
@@ -300,12 +300,12 @@ export async function detectarArquetipos(contexto: Pick<ContextoExecucao, 'arqui
   // Sugestão de plano para o candidato top
   if (candidatos[0]) {
     try {
-      // Usa plano de arquétipos se preset for diferente de 'sensei' ou em ambiente de teste
+      // Usa plano de arquétipos se preset for diferente de 'prometheus' ou em ambiente de teste
       const preset = (contexto as {
         preset?: string;
-      }).preset ?? 'sensei';
+      }).preset ?? 'prometheus';
       const emTeste = !!process.env.VITEST;
-      const preferEstrategista = preset === 'sensei' && !emTeste;
+      const preferEstrategista = preset === 'prometheus' && !emTeste;
       const {
         plano
       } = await OperarioEstrutura.planejar(baseDir, contexto.arquivos, {

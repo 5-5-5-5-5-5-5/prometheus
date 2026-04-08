@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 /**
- * Lint de CSS interno do Sensei (inspirado em linters de CSS do ecossistema).
+ * Lint de CSS interno do Prometheus (inspirado em linters de CSS do ecossistema).
  *
  * Importante: este arquivo NÃO usa nem depende dos artefatos em /implis.
  * A pasta implis serve apenas como referência/"inspiração" de regras.

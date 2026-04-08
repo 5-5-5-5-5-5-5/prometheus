@@ -1,16 +1,16 @@
 ---
-Proveniência e Autoria: Este documento integra o projeto Sensei (licença MIT-0).
+Proveniência e Autoria: Este documento integra o projeto Prometheus (licença MIT-0).
 ---
 
 
 # Guia de Comandos
 
-Este guia documenta os comandos efetivamente expostos pela CLI atual do Sensei.
+Este guia documenta os comandos efetivamente expostos pela CLI atual do Prometheus.
 
 ## Visão Geral
 
 ```bash
-sensei --help
+prometheus --help
 ```
 
 Comandos disponíveis:
@@ -36,7 +36,7 @@ Comandos disponíveis:
 Análise completa do repositório.
 
 ```bash
-sensei diagnosticar [opções]
+prometheus diagnosticar [opções]
 ```
 
 Flags principais:
@@ -70,11 +70,11 @@ Flags principais:
 Exemplos:
 
 ```bash
-sensei diagnosticar --compact
-sensei diagnosticar --full --guardian-check
-sensei diagnosticar --json --export --export-to relatorios
-sensei diagnosticar --include "src/**" --exclude "**/*.test.ts"
-sensei diagnosticar --fix-safe
+prometheus diagnosticar --compact
+prometheus diagnosticar --full --guardian-check
+prometheus diagnosticar --json --export --export-to relatorios
+prometheus diagnosticar --include "src/**" --exclude "**/*.test.ts"
+prometheus diagnosticar --fix-safe
 ```
 
 ## guardian
@@ -82,7 +82,7 @@ sensei diagnosticar --fix-safe
 Baseline e verificação de integridade.
 
 ```bash
-sensei guardian [opções]
+prometheus guardian [opções]
 ```
 
 Flags:
@@ -95,9 +95,9 @@ Flags:
 Exemplos:
 
 ```bash
-sensei guardian --accept-baseline
-sensei guardian --diff
-sensei guardian --diff --json
+prometheus guardian --accept-baseline
+prometheus guardian --diff
+prometheus guardian --diff --json
 ```
 
 ## formatar
@@ -105,7 +105,7 @@ sensei guardian --diff --json
 Formatação interna do projeto.
 
 ```bash
-sensei formatar [opções]
+prometheus formatar [opções]
 ```
 
 Flags:
@@ -119,8 +119,8 @@ Flags:
 Exemplos:
 
 ```bash
-sensei formatar --check
-sensei formatar --write --engine auto
+prometheus formatar --check
+prometheus formatar --write --engine auto
 ```
 
 ## otimizar-svg
@@ -128,7 +128,7 @@ sensei formatar --write --engine auto
 Otimização de SVGs usando o motor interno.
 
 ```bash
-sensei otimizar-svg [opções]
+prometheus otimizar-svg [opções]
 ```
 
 Flags:
@@ -142,8 +142,8 @@ Flags:
 Exemplos:
 
 ```bash
-sensei otimizar-svg --dry
-sensei otimizar-svg --dir assets/icons --write
+prometheus otimizar-svg --dry
+prometheus otimizar-svg --dir assets/icons --write
 ```
 
 ## podar
@@ -151,7 +151,7 @@ sensei otimizar-svg --dir assets/icons --write
 Remoção de arquivos órfãos e lixo do repositório.
 
 ```bash
-sensei podar [opções]
+prometheus podar [opções]
 ```
 
 Flags:
@@ -163,8 +163,8 @@ Flags:
 Exemplos:
 
 ```bash
-sensei podar
-sensei podar --force
+prometheus podar
+prometheus podar --force
 ```
 
 ## reestruturar
@@ -172,7 +172,7 @@ sensei podar --force
 Aplica plano de reorganização estrutural.
 
 ```bash
-sensei reestruturar [opções]
+prometheus reestruturar [opções]
 ```
 
 Flags:
@@ -191,17 +191,17 @@ Flags:
 Exemplos:
 
 ```bash
-sensei reestruturar --somente-plano --preset sensei
-sensei reestruturar --auto --flat
-sensei reestruturar --preset node-community --categoria controller=handlers
+prometheus reestruturar --somente-plano --preset prometheus
+prometheus reestruturar --auto --flat
+prometheus reestruturar --preset node-community --categoria controller=handlers
 ```
 
 ## atualizar
 
-Atualização segura do Sensei.
+Atualização segura do Prometheus.
 
 ```bash
-sensei atualizar [opções]
+prometheus atualizar [opções]
 ```
 
 Flags:
@@ -213,7 +213,7 @@ Flags:
 Lista analistas registrados e seus metadados.
 
 ```bash
-sensei analistas [opções]
+prometheus analistas [opções]
 ```
 
 Flags:
@@ -227,7 +227,7 @@ Flags:
 Consulta histórico de métricas de execução.
 
 ```bash
-sensei metricas [opções]
+prometheus metricas [opções]
 ```
 
 Flags:
@@ -240,9 +240,9 @@ Flags:
 Exemplos:
 
 ```bash
-sensei metricas
-sensei metricas --analistas
-sensei metricas --json --limite 20
+prometheus metricas
+prometheus metricas --analistas
+prometheus metricas --json --limite 20
 ```
 
 ## fix-types
@@ -250,7 +250,7 @@ sensei metricas --json --limite 20
 Detecta e corrige `any` e `unknown`.
 
 ```bash
-sensei fix-types [opções]
+prometheus fix-types [opções]
 ```
 
 Flags:
@@ -267,8 +267,8 @@ Flags:
 Exemplos:
 
 ```bash
-sensei fix-types --dry-run
-sensei fix-types --target src --confidence 90 --verbose
+prometheus fix-types --dry-run
+prometheus fix-types --target src --confidence 90 --verbose
 ```
 
 ## licencas
@@ -276,7 +276,7 @@ sensei fix-types --target src --confidence 90 --verbose
 Ferramentas relacionadas a licenças e avisos de terceiros.
 
 ```bash
-sensei licencas [subcomando]
+prometheus licencas [subcomando]
 ```
 
 Subcomandos confirmados:
@@ -290,7 +290,7 @@ Subcomandos confirmados:
 Gera arquivos de mapeamento de nomes no diretório `names/`.
 
 ```bash
-sensei names [opções]
+prometheus names [opções]
 ```
 
 Flags:
@@ -302,7 +302,7 @@ Flags:
 Aplica renomeações baseadas nos mapeamentos gerados por `names`.
 
 ```bash
-sensei rename
+prometheus rename
 ```
 
 ## reverter
@@ -310,7 +310,7 @@ sensei rename
 Gerencia o mapa de reversão de moves estruturais.
 
 ```bash
-sensei reverter [subcomando]
+prometheus reverter [subcomando]
 ```
 
 Subcomandos:
@@ -326,7 +326,7 @@ Subcomandos:
 Baseline e comparação de performance sintética.
 
 ```bash
-sensei perf [opções] [subcomando]
+prometheus perf [opções] [subcomando]
 ```
 
 Flags:
@@ -343,9 +343,9 @@ Subcomandos:
 Exemplos:
 
 ```bash
-sensei perf baseline
-sensei perf compare
-sensei perf --json compare
+prometheus perf baseline
+prometheus perf compare
+prometheus perf --json compare
 ```
 
 

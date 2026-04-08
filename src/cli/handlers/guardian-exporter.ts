@@ -8,12 +8,11 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
 import { config } from '@core/config/config.js';
-import { getMessages } from '@core/messages/index.js';
-import { CliExportersMensagens } from '@core/messages/pt/cli/cli-exporters-messages.js';
+import { messages } from '@core/messages/index.js';
 
 import type { GuardianBaseline, GuardianExportOptions, GuardianExportResult } from '@';
 
-const { log } = getMessages();
+const log = messages.log;
 
 // Re-export para compatibilidade
 export type { GuardianBaseline, GuardianExportOptions, GuardianExportResult };
@@ -70,7 +69,7 @@ async function gerarRelatorioMarkdown(caminho: string, options: GuardianExportOp
   lines.push('# Relatório Guardian - Verificação de Integridade');
   lines.push('');
   lines.push(`**Gerado em:** ${new Date().toISOString()}`);
-  lines.push(`**Comando:** \`sensei guardian\``);
+  lines.push(`**Comando:** \`prometheus guardian\``);
   lines.push('');
 
   // Status
@@ -177,7 +176,7 @@ export async function exportarRelatoriosGuardian(options: GuardianExportOptions)
 
     // Gerar timestamp único para os arquivos
     const ts = new Date().toISOString().replace(/[:.]/g, '-');
-    const nomeBase = `sensei-guardian-${ts}`;
+    const nomeBase = `prometheus-guardian-${ts}`;
 
     // Gerar relatório Markdown
     const caminhoMd = path.join(dir, `${nomeBase}.md`);
@@ -188,16 +187,16 @@ export async function exportarRelatoriosGuardian(options: GuardianExportOptions)
     await gerarRelatorioJson(caminhoJson, options);
 
     // Log de sucesso
-    log.sucesso(CliExportersMensagens.guardian.relatoriosExportadosTitulo);
-    log.info(CliExportersMensagens.guardian.caminhoMarkdown(caminhoMd));
-    log.info(CliExportersMensagens.guardian.caminhoJson(caminhoJson));
+    log.sucesso(messages.CliExportersMensagens.guardian.relatoriosExportadosTitulo);
+    log.info(messages.CliExportersMensagens.guardian.caminhoMarkdown(caminhoMd));
+    log.info(messages.CliExportersMensagens.guardian.caminhoJson(caminhoJson));
     return {
       markdown: caminhoMd,
       json: caminhoJson,
       dir
     };
   } catch (error) {
-    log.erro(CliExportersMensagens.guardian.falhaExportar((error as Error).message));
+    log.erro(messages.CliExportersMensagens.guardian.falhaExportar((error as Error).message));
     return null;
   }
 }

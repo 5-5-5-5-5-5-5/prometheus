@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// @sensei-disable tipo-literal-inline-complexo
+// @prometheus-disable tipo-literal-inline-complexo
 // Justificativa: tipos locais para helpers de estrutura
 
 /**
@@ -40,16 +40,16 @@ export const PADRAO_OPCOES: Required<Pick<OpcoesEstrategista, 'raizCodigo' | 'cr
   apenasCategoriasConfiguradas: true,
   estiloPreferido: 'kebab',
   categoriasMapa: {},
-  ignorarPastas: ['node_modules', '.git', 'dist', 'build', 'coverage', '.sensei']
+  ignorarPastas: ['node_modules', '.git', 'dist', 'build', 'coverage', '.prometheus']
 };
 
 // Presets de estrutura: baseiam-se nos defaults, aplicando ajustes de organização
 export const PRESETS: Record<string, Partial<typeof PADRAO_OPCOES> & {
   nome: string;
 }> = {
-  sensei: {
-    nome: 'sensei',
-    // No preset "sensei" não organizamos por entidade/domains
+  prometheus: {
+    nome: 'prometheus',
+    // No preset "prometheus" não organizamos por entidade/domains
     criarSubpastasPorEntidade: false,
     apenasCategoriasConfiguradas: false,
     categoriasMapa: {
@@ -180,7 +180,7 @@ export function normalizarRel(relPath: string): string {
   return normalizePath(relPath);
 }
 export async function carregarConfigEstrategia(baseDir: string, overrides?: OpcoesEstrategista): Promise<Required<typeof PADRAO_OPCOES>> {
-  const caminho = path.join(baseDir, '.sensei', 'estrutura.json');
+  const caminho = path.join(baseDir, '.prometheus', 'estrutura.json');
   const lido = await lerEstado<Record<string, unknown> | []>(caminho);
   const cfgArquivo = (lido && !Array.isArray(lido) && typeof lido === 'object' ? lido : {}) as (Partial<typeof PADRAO_OPCOES> & {
     preset?: string;

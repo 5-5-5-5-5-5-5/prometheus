@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2025 Sensei Contributors
+// SPDX-FileCopyrightText: 2025 Prometheus Contributors
 
 /**
  * @module cli/diagnostico/exporters/json-exporter
@@ -47,7 +47,7 @@ export function gerarRelatorioJson(dados: Partial<RelatorioJson>, options: Parti
       schemaVersion: '1.0.0',
       modo: 'full',
       flags: [],
-      senseiVersion: (() => {
+      prometheusVersion: (() => {
         try {
           // Evita dependência direta de package.json fora do build
           // Em runtime, pode ser enriquecido pela CLI

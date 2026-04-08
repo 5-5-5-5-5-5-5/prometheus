@@ -69,8 +69,8 @@ export function comandoAtualizar(
         }
 
         const cmd = opts.global
-          ? 'npm install -g sensei@latest'
-          : 'npm install sensei@latest';
+          ? 'npm install -g prometheus@latest'
+          : 'npm install prometheus@latest';
 
         logSistema.atualizacaoExecutando(cmd);
         executarShellSeguro(cmd, { stdio: 'inherit' });

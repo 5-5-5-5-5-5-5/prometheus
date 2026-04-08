@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 /**
- * @fileoverview Exception and error messages for Sensei core.
+ * @fileoverview Exception and error messages for Prometheus core.
  * Centralizes error strings related to CLI, plugins, analysts,
  * validation, security, persistence, schema, scanner, rollback, and reports.
  */
@@ -12,7 +12,7 @@ export const ExcecoesMensagens = {
   requireMutateFsAutoFix: 'Auto-fix unavailable',
   autoFixTimeout: (timeoutMs: number) => `Auto-fix timeout after ${timeoutMs}ms`,
   // Plugins / safe import
-  pluginsDesabilitadosSafeMode: 'Plugin loading disabled in SAFE_MODE. Set SENSEI_ALLOW_PLUGINS=1 to allow.',
+  pluginsDesabilitadosSafeMode: 'Plugin loading disabled in SAFE_MODE. Set PROMETHEUS_ALLOW_PLUGINS=1 to allow.',
   pluginBloqueado: (erro: string) => `Plugin blocked: ${erro}`,
   caminhoPluginNaoResolvido: 'Plugin path not resolved',
   // Plugin registry

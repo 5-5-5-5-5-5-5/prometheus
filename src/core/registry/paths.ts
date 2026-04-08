@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 /**
- * @fileoverview Gerenciamento centralizado de caminhos para arquivos JSON do Sensei
+ * @fileoverview Gerenciamento centralizado de caminhos para arquivos JSON do Prometheus
  *
  * Este módulo define todos os caminhos de arquivos JSON usados pelo sistema,
  * evitando hardcoding espalhado e permitindo evolução consistente.
@@ -9,7 +9,7 @@
  * - guardian.baseline.json: Snapshot de integridade do Guardian
  * - estrutura.baseline.json: Baseline da estrutura de diretórios
  * - estrutura.arquetipo.json: Arquétipo personalizado do repositório
- * - sensei.config.json: Configuração do usuário (raiz do projeto)
+ * - prometheus.config.json: Configuração do usuário (raiz do projeto)
  */
 
 import path from 'node:path';
@@ -18,13 +18,13 @@ import path from 'node:path';
 export const PROJETO_RAIZ = process.cwd();
 
 /**
- * Diretórios principais do Sensei
+ * Diretórios principais do Prometheus
  */
-export const SENSEI_DIRS = {
-  /** Diretório de estado interno (.sensei/) */
-  STATE: path.join(PROJETO_RAIZ, '.sensei'),
-  /** Diretório de histórico de métricas (.sensei/historico-metricas/) */
-  METRICS_HISTORY: path.join(PROJETO_RAIZ, '.sensei', 'historico-metricas'),
+export const PROMETHEUS_DIRS = {
+  /** Diretório de estado interno (.prometheus/) */
+  STATE: path.join(PROJETO_RAIZ, '.prometheus'),
+  /** Diretório de histórico de métricas (.prometheus/historico-metricas/) */
+  METRICS_HISTORY: path.join(PROJETO_RAIZ, '.prometheus', 'historico-metricas'),
   /** Diretório de relatórios (relatorios/) */
   REPORTS: path.join(PROJETO_RAIZ, 'relatorios'),
   /** Diretório de performance baselines (docs/perf/) */
@@ -38,48 +38,48 @@ export const SENSEI_DIRS = {
  * Categoria 2: Estado interno (leitura/escrita sistema)
  * Categoria 3: Relatórios (escrita sistema)
  */
-export const SENSEI_ARQUIVOS = {
+export const PROMETHEUS_ARQUIVOS = {
   /* -------------------------- CONFIGURAÇÃO (raiz do projeto) -------------------------- */
-  /** Configuração principal do usuário (sensei.config.json) */
-  CONFIG: path.join(PROJETO_RAIZ, 'sensei.config.json'),
-  /** Configuração segura/alternativa (sensei.config.safe.json) */
-  CONFIG_SAFE: path.join(PROJETO_RAIZ, 'sensei.config.safe.json'),
-  /* -------------------------- ESTADO INTERNO (.sensei/) -------------------------- */
-  /** Baseline de integridade do Guardian (.sensei/guardian.baseline.json) */
-  GUARDIAN_BASELINE: path.join(SENSEI_DIRS.STATE, 'guardian.baseline.json'),
-  /** Baseline de estrutura de diretórios (.sensei/estrutura.baseline.json) */
-  ESTRUTURA_BASELINE: path.join(SENSEI_DIRS.STATE, 'estrutura.baseline.json'),
-  /** Arquétipo personalizado do repo (.sensei/estrutura.arquetipo.json) */
-  ESTRUTURA_ARQUETIPO: path.join(SENSEI_DIRS.STATE, 'estrutura.arquetipo.json'),
-  /** Mapa de reversão de estrutura (.sensei/mapa-reversao.json) */
-  MAPA_REVERSAO: path.join(SENSEI_DIRS.STATE, 'mapa-reversao.json'),
-  /** Registros da Vigia Oculta (.sensei/integridade.json) */
-  REGISTRO_VIGIA: path.join(SENSEI_DIRS.STATE, 'integridade.json'),
-  /** Histórico de métricas (.sensei/historico-metricas/metricas-historico.json) */
-  METRICAS_HISTORICO: path.join(SENSEI_DIRS.METRICS_HISTORY, 'metricas-historico.json'),
+  /** Configuração principal do usuário (prometheus.config.json) */
+  CONFIG: path.join(PROJETO_RAIZ, 'prometheus.config.json'),
+  /** Configuração segura/alternativa (prometheus.config.safe.json) */
+  CONFIG_SAFE: path.join(PROJETO_RAIZ, 'prometheus.config.safe.json'),
+  /* -------------------------- ESTADO INTERNO (.prometheus/) -------------------------- */
+  /** Baseline de integridade do Guardian (.prometheus/guardian.baseline.json) */
+  GUARDIAN_BASELINE: path.join(PROMETHEUS_DIRS.STATE, 'guardian.baseline.json'),
+  /** Baseline de estrutura de diretórios (.prometheus/estrutura.baseline.json) */
+  ESTRUTURA_BASELINE: path.join(PROMETHEUS_DIRS.STATE, 'estrutura.baseline.json'),
+  /** Arquétipo personalizado do repo (.prometheus/estrutura.arquetipo.json) */
+  ESTRUTURA_ARQUETIPO: path.join(PROMETHEUS_DIRS.STATE, 'estrutura.arquetipo.json'),
+  /** Mapa de reversão de estrutura (.prometheus/mapa-reversao.json) */
+  MAPA_REVERSAO: path.join(PROMETHEUS_DIRS.STATE, 'mapa-reversao.json'),
+  /** Registros da Vigia Oculta (.prometheus/integridade.json) */
+  REGISTRO_VIGIA: path.join(PROMETHEUS_DIRS.STATE, 'integridade.json'),
+  /** Histórico de métricas (.prometheus/historico-metricas/metricas-historico.json) */
+  METRICAS_HISTORICO: path.join(PROMETHEUS_DIRS.METRICS_HISTORY, 'metricas-historico.json'),
   /* -------------------------- ARQUIVOS LEGADOS (compatibilidade) -------------------------- */
   /** @deprecated Use GUARDIAN_BASELINE - baseline.json antigo */
-  GUARDIAN_BASELINE_LEGACY: path.join(SENSEI_DIRS.STATE, 'baseline.json'),
+  GUARDIAN_BASELINE_LEGACY: path.join(PROMETHEUS_DIRS.STATE, 'baseline.json'),
   /** @deprecated Use ESTRUTURA_BASELINE - baseline-estrutura.json antigo */
-  ESTRUTURA_BASELINE_LEGACY: path.join(SENSEI_DIRS.STATE, 'baseline-estrutura.json'),
-  /** @deprecated Movido para .sensei/ - sensei.repo.arquetipo.json na raiz */
-  ESTRUTURA_ARQUETIPO_LEGACY_ROOT: path.join(PROJETO_RAIZ, 'sensei.repo.arquetipo.json')
+  ESTRUTURA_BASELINE_LEGACY: path.join(PROMETHEUS_DIRS.STATE, 'baseline-estrutura.json'),
+  /** @deprecated Movido para .prometheus/ - prometheus.repo.arquetipo.json na raiz */
+  ESTRUTURA_ARQUETIPO_LEGACY_ROOT: path.join(PROJETO_RAIZ, 'prometheus.repo.arquetipo.json')
 } as const;
 
 /**
  * Padrões de nomenclatura para relatórios dinâmicos
  */
 export const REPORT_PADROES = {
-  /** Relatório de diagnóstico (sensei-diagnostico-{timestamp}.md) */
-  DIAGNOSTICO: (timestamp: string) => path.join(SENSEI_DIRS.REPORTS, `sensei-diagnostico-${timestamp}.md`),
-  /** Relatório JSON resumo (sensei-relatorio-summary-{timestamp}.json) */
-  SUMMARY_JSON: (timestamp: string) => path.join(SENSEI_DIRS.REPORTS, `sensei-relatorio-summary-${timestamp}.json`),
+  /** Relatório de diagnóstico (prometheus-diagnostico-{timestamp}.md) */
+  DIAGNOSTICO: (timestamp: string) => path.join(PROMETHEUS_DIRS.REPORTS, `prometheus-diagnostico-${timestamp}.md`),
+  /** Relatório JSON resumo (prometheus-relatorio-summary-{timestamp}.json) */
+  SUMMARY_JSON: (timestamp: string) => path.join(PROMETHEUS_DIRS.REPORTS, `prometheus-relatorio-summary-${timestamp}.json`),
   /** Relatório de análise async (async-analysis-report.json) */
-  ASYNC_ANALYSIS: path.join(SENSEI_DIRS.REPORTS, 'async-analysis-report.json'),
+  ASYNC_ANALYSIS: path.join(PROMETHEUS_DIRS.REPORTS, 'async-analysis-report.json'),
   /** Baseline de performance (docs/perf/baseline-{timestamp}.json) */
-  PERF_BASELINE: (timestamp: string) => path.join(SENSEI_DIRS.PERF, `baseline-${timestamp}.json`),
+  PERF_BASELINE: (timestamp: string) => path.join(PROMETHEUS_DIRS.PERF, `baseline-${timestamp}.json`),
   /** Diff de performance (docs/perf/ultimo-diff.json) */
-  PERF_DIFF: path.join(SENSEI_DIRS.PERF, 'ultimo-diff.json')
+  PERF_DIFF: path.join(PROMETHEUS_DIRS.PERF, 'ultimo-diff.json')
 } as const;
 
 /**
@@ -87,11 +87,11 @@ export const REPORT_PADROES = {
  */
 export const MIGRACAO_MAPA = {
   // Guardian: baseline.json → guardian.baseline.json
-  [SENSEI_ARQUIVOS.GUARDIAN_BASELINE_LEGACY]: SENSEI_ARQUIVOS.GUARDIAN_BASELINE,
+  [PROMETHEUS_ARQUIVOS.GUARDIAN_BASELINE_LEGACY]: PROMETHEUS_ARQUIVOS.GUARDIAN_BASELINE,
   // Estrutura: baseline-estrutura.json → estrutura.baseline.json
-  [SENSEI_ARQUIVOS.ESTRUTURA_BASELINE_LEGACY]: SENSEI_ARQUIVOS.ESTRUTURA_BASELINE,
-  // Arquétipo: sensei.repo.arquetipo.json (raiz) → .sensei/estrutura.arquetipo.json
-  [SENSEI_ARQUIVOS.ESTRUTURA_ARQUETIPO_LEGACY_ROOT]: SENSEI_ARQUIVOS.ESTRUTURA_ARQUETIPO
+  [PROMETHEUS_ARQUIVOS.ESTRUTURA_BASELINE_LEGACY]: PROMETHEUS_ARQUIVOS.ESTRUTURA_BASELINE,
+  // Arquétipo: prometheus.repo.arquetipo.json (raiz) → .prometheus/estrutura.arquetipo.json
+  [PROMETHEUS_ARQUIVOS.ESTRUTURA_ARQUETIPO_LEGACY_ROOT]: PROMETHEUS_ARQUIVOS.ESTRUTURA_ARQUETIPO
 } as const;
 
 /**
@@ -106,7 +106,7 @@ export function resolveFilePath(newPath: string): string {
 }
 
 /**
- * Tipo para caminhos de arquivos do Sensei
+ * Tipo para caminhos de arquivos do Prometheus
  */
-export type SenseiFilePath = (typeof SENSEI_ARQUIVOS)[keyof typeof SENSEI_ARQUIVOS];
-export type SenseiDirPath = (typeof SENSEI_DIRS)[keyof typeof SENSEI_DIRS];
+export type PrometheusFilePath = (typeof PROMETHEUS_ARQUIVOS)[keyof typeof PROMETHEUS_ARQUIVOS];
+export type PrometheusDirPath = (typeof PROMETHEUS_DIRS)[keyof typeof PROMETHEUS_DIRS];

@@ -33,8 +33,8 @@ export interface RelatorioJson {
       exclude?: string[];
       globalExclude?: string[];
     };
-    /** Versão do Sensei */
-    senseiVersion?: string;
+    /** Versão do Prometheus */
+    prometheusVersion?: string;
     /** Nome do projeto */
     projectNome?: string;
   };

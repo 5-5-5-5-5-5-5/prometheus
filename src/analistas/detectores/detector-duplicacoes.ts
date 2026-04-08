@@ -2,7 +2,7 @@
 import type { NodePath } from '@babel/traverse';
 import type { ArrowFunctionExpression, ClassMethod, FunctionDeclaration, FunctionExpression, Node, ObjectMethod } from '@babel/types';
 import { traverse } from '@core/config/traverse.js';
-import { DetectorAgregadosMensagens } from '@core/messages/pt/analistas/detector-agregados-messages.js';
+import { messages } from '@core/messages/index.js';
 import { createHash } from 'crypto';
 
 import type { Analista, BlocoFuncao, ContextoExecucao, DuplicacaoEncontrada, Ocorrencia } from '@';
@@ -35,7 +35,7 @@ export const analistaDuplicacoes: Analista = {
         return [criarOcorrencia({
           tipo: 'erro_analise',
           nivel: 'aviso',
-          mensagem: DetectorAgregadosMensagens.erroAnalisarDuplicacoes(erro),
+          mensagem: messages.DetectorAgregadosMensagens.erroAnalisarDuplicacoes(erro),
           relPath,
           linha: 1
         })];
@@ -59,7 +59,7 @@ export const analistaDuplicacoes: Analista = {
           ocorrencias.push(criarOcorrencia({
             tipo: 'codigo_duplicado',
             nivel,
-            mensagem: DetectorAgregadosMensagens.duplicacoesResumo(tipo, resumo, dups.length),
+            mensagem: messages.DetectorAgregadosMensagens.duplicacoesResumo(tipo, resumo, dups.length),
             relPath,
             linha: primeiraFunc?.inicio || 1
           }));
@@ -70,7 +70,7 @@ export const analistaDuplicacoes: Analista = {
       return [criarOcorrencia({
         tipo: 'erro_analise',
         nivel: 'aviso',
-        mensagem: DetectorAgregadosMensagens.erroAnalisarDuplicacoes(erro),
+        mensagem: messages.DetectorAgregadosMensagens.erroAnalisarDuplicacoes(erro),
         relPath,
         linha: 1
       })];

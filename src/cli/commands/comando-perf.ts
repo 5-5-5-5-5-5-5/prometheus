@@ -6,15 +6,13 @@ import path from 'node:path';
 import { ExitCode, sair } from '@cli/helpers/exit-codes.js';
 import { config } from '@core/config/config.js';
 import { formatPct } from '@core/config/format.js';
-import { getMessages } from '@core/messages/index.js';
-import { CliComandoDesempMensagens } from '@core/messages/pt/cli/cli-comando-perf-messages.js';
-import { ICONES_DIAGNOSTICO } from '@core/messages/shared/icons.js';
+import { messages } from '@core/messages/index.js';
 import { lerEstado, salvarEstado } from '@shared/persistence/persistencia.js';
 import { Command } from 'commander';
 
 import type { MetricaExecucaoLike, SnapshotPerf } from '@';
 
-const { log, logSistema } = getMessages();
+const { log, logSistema } = messages;
 
 async function obterCommit(): Promise<string | undefined> {
   try {
@@ -110,8 +108,8 @@ export function comandoPerf(): Command {
       const parent = cmd.parent?.opts?.() || {};
       const dir = parent.dir ? String(parent.dir) : config.PERF_SNAPSHOT_DIR;
       const metricas = (globalThis as unknown as {
-        __ULTIMAS_METRICAS_SENSEI__?: Partial<MetricaExecucaoLike> | null;
-      }).__ULTIMAS_METRICAS_SENSEI__;
+        __ULTIMAS_METRICAS_PROMETHEUS__?: Partial<MetricaExecucaoLike> | null;
+      }).__ULTIMAS_METRICAS_PROMETHEUS__;
       const snap = await gerarBaseline(dir, metricas || undefined);
       if (parent.json) {
         console.log(JSON.stringify({
@@ -158,7 +156,7 @@ export function comandoPerf(): Command {
         regressao
       }, null, 2));
     } else {
-      log.info(CliComandoDesempMensagens.tituloComparacaoSnapshotsComIcone(ICONES_DIAGNOSTICO.info));
+      log.info(messages.CliComandoDesempMensagens.tituloComparacaoSnapshotsComIcone(messages.ICONES_DIAGNOSTICO.info));
       diffs.forEach(d => {
         log.info(`  ${d.campo}: ${d.anterior ?? '-'} => ${d.novo ?? '-'} (${formatPct(d.variacaoPct)})`);
       });

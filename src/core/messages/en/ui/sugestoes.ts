@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
-// @sensei-disable tipo-literal-inline-complexo
+// @prometheus-disable tipo-literal-inline-complexo
 // Justification: inline types for suggestion system
 /**
  * Centralized Suggestion and Tips System
  *
- * Centralizes ALL contextual suggestions from Sensei:
+ * Centralizes ALL contextual suggestions from Prometheus:
  * - Command usage tips
  * - Context-based suggestions
  * - Quick help messages
@@ -37,7 +37,7 @@ export const SUGESTOES_COMANDOS = {
 export const SUGESTOES_DIAGNOSTICO = {
   modoExecutivo: `${ICONES.diagnostico.executive} Executive mode: showing only critical problems`,
   primeiraVez: [
-    `${ICONES.feedback.dica} First time? Start with: sensei diagnosticar --full`,
+    `${ICONES.feedback.dica} First time? Start with: prometheus diagnosticar --full`,
     `${ICONES.feedback.dica} Use --help to see all available options`,
   ],
   projetoGrande: [
@@ -180,7 +180,7 @@ export const SUGESTOES_ZELADOR = {
   ],
   estrutura: [
     `${ICONES.feedback.dica} Structure caretaker organizes files by pattern`,
-    `${ICONES.feedback.dica} Configure patterns in sensei.config.json`,
+    `${ICONES.feedback.dica} Configure patterns in prometheus.config.json`,
   ],
 } as const;
 

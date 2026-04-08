@@ -2,13 +2,13 @@
 
 export const CliBinMensagens = {
   flagsInvalidas: 'Invalid flags: {erro}',
-  unhandledRejection: 'Sensei: unhandled rejection',
+  unhandledRejection: 'Prometheus: unhandled rejection',
   excecaoNaoCapturada: 'Uncaught exception: {mensagem}',
   resumoConversa: {
     titulo: '\n📊 CONVERSATION SUMMARY',
     total: 'Total: {total}',
     usuario: 'User: {total}',
-    sensei: 'Sensei: {total}',
+    prometheus: 'Prometheus: {total}',
     primeira: 'First: {mensagem}',
     ultima: 'Last: {mensagem}',
   },

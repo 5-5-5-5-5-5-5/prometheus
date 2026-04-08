@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2025 Sensei Contributors
+// SPDX-FileCopyrightText: 2025 Prometheus Contributors
 
 /**
  * @module cli/diagnostico/handlers/auto-fix-handler
@@ -7,12 +7,11 @@
  * @see docs/REFACTOR-CLI-DIAGNOSTICAR.md - Sprint 2
  */
 
-import { getMessages } from '@core/messages/index.js';
-import { ExcecoesMensagens } from '@core/messages/pt/core/excecoes-messages.js';
+import { messages } from '@core/messages/index.js';
 
 import type { AutoFixOptions, AutoFixResult, FileEntryWithAst } from '@';
 
-const { log, MENSAGENS_AUTOFIX, CliAutoFixHandlerMensagens } = getMessages();
+const { log, MENSAGENS_AUTOFIX, CliAutoFixHandlerMensagens } = messages;
 
 // Re-export para compatibilidade
 export type { AutoFixOptions, AutoFixResult };
@@ -89,7 +88,7 @@ export async function executarAutoFix(entries: FileEntryWithAst[], options: Auto
 async function executarComTimeout(entries: FileEntryWithAst[], options: AutoFixOptions, timeoutMs: number): Promise<AutoFixResult> {
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => {
-      reject(new Error(ExcecoesMensagens.autoFixTimeout(timeoutMs)));
+      reject(new Error(messages.ExcecoesMensagens.autoFixTimeout(timeoutMs)));
     }, timeoutMs);
     executarAutoFixInterno(entries, options).then(resultado => {
       clearTimeout(timer);

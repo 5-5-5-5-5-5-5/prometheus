@@ -4,7 +4,7 @@ import type { NodePath } from '@babel/traverse';
 import type { Node } from '@babel/types';
 import * as t from '@babel/types';
 import { traverse } from '@core/config/traverse.js';
-import { PadroesUsoMensagens } from '@core/messages/pt/analistas/analista-padroes-uso-messages.js';
+import { messages } from '@core/messages/index.js';
 import { detectarContextoProjeto } from '@shared/contexto-projeto.js';
 import { garantirArray, incrementar } from '@shared/helpers/helpers-analistas.js';
 
@@ -97,7 +97,7 @@ export const analistaPadroesUso = {
             push({
               tipo: 'alerta',
               nivel,
-              mensagem: PadroesUsoMensagens.varUsage,
+              mensagem: messages.PadroesUsoMensagens.varUsage,
               relPath,
               linha: node.loc?.start.line,
               coluna: node.loc?.start.column
@@ -109,7 +109,7 @@ export const analistaPadroesUso = {
             if (!contextoArquivo.isTest) {
               push({
                 tipo: 'info',
-                mensagem: PadroesUsoMensagens.letUsage,
+                mensagem: messages.PadroesUsoMensagens.letUsage,
                 relPath,
                 linha: node.loc?.start.line,
                 coluna: node.loc?.start.column
@@ -127,7 +127,7 @@ export const analistaPadroesUso = {
                 // Menos rigoroso para testes onde require pode ser normal
                 push({
                   tipo: 'alerta',
-                  mensagem: PadroesUsoMensagens.requireInTs,
+                  mensagem: messages.PadroesUsoMensagens.requireInTs,
                   relPath,
                   linha: node.loc?.start.line,
                   coluna: node.loc?.start.column
@@ -138,7 +138,7 @@ export const analistaPadroesUso = {
               incrementar(estatisticasUsoGlobal.evals, relPath);
               push({
                 tipo: 'critico',
-                mensagem: PadroesUsoMensagens.evalUsage,
+                mensagem: messages.PadroesUsoMensagens.evalUsage,
                 relPath,
                 linha: node.loc?.start.line,
                 coluna: node.loc?.start.column
@@ -151,7 +151,7 @@ export const analistaPadroesUso = {
           if (t.isAssignmentExpression(node) && t.isMemberExpression(node.left) && (t.isIdentifier(node.left.object) && node.left.object.name === 'module' && t.isIdentifier(node.left.property) && node.left.property.name === 'exports' || t.isIdentifier(node.left.object) && node.left.object.name === 'exports') && relPath.endsWith('.ts')) {
             push({
               tipo: 'alerta',
-              mensagem: PadroesUsoMensagens.moduleExportsInTs,
+              mensagem: messages.PadroesUsoMensagens.moduleExportsInTs,
               relPath,
               linha: node.loc?.start.line,
               coluna: node.loc?.start.column
@@ -161,7 +161,7 @@ export const analistaPadroesUso = {
             incrementar(estatisticasUsoGlobal.withs, relPath);
             push({
               tipo: 'critico',
-              mensagem: PadroesUsoMensagens.withUsage,
+              mensagem: messages.PadroesUsoMensagens.withUsage,
               relPath,
               linha: node.loc?.start.line,
               coluna: node.loc?.start.column
@@ -171,7 +171,7 @@ export const analistaPadroesUso = {
           ) {
             push({
               tipo: 'info',
-              mensagem: PadroesUsoMensagens.anonymousFunction,
+              mensagem: messages.PadroesUsoMensagens.anonymousFunction,
               relPath,
               linha: node.loc?.start.line,
               coluna: node.loc?.start.column
@@ -184,7 +184,7 @@ export const analistaPadroesUso = {
           ) {
             push({
               tipo: 'info',
-              mensagem: PadroesUsoMensagens.arrowAsClassMethod,
+              mensagem: messages.PadroesUsoMensagens.arrowAsClassMethod,
               relPath,
               linha: node.loc?.start.line,
               coluna: node.loc?.start.column
@@ -194,7 +194,7 @@ export const analistaPadroesUso = {
       });
     } catch (e) {
       ocorrencias.push(ocorrenciaErroAnalista({
-        mensagem: PadroesUsoMensagens.erroAnalise(relPath, (e as Error).message),
+        mensagem: messages.PadroesUsoMensagens.erroAnalise(relPath, (e as Error).message),
         relPath,
         origem: 'analista-padroes-uso'
       }));

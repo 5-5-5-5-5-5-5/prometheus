@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
-// @sensei-disable seguranca vulnerabilidade-seguranca
+// @prometheus-disable seguranca vulnerabilidade-seguranca
 import type { NodePath } from '@babel/traverse';
 import type { CallExpression, NewExpression, Node } from '@babel/types';
 import { traverse } from '@core/config/traverse.js';
-import { DetectorAgregadosMensagens } from '@core/messages/pt/analistas/detector-agregados-messages.js';
+import { messages } from '@core/messages/index.js';
 import { detectarContextoProjeto } from '@shared/contexto-projeto.js';
 import { agruparPor } from '@shared/helpers/agrupar.js';
 import { detectarSegredosHardcoded } from '@shared/helpers/detectores-comuns.js';
@@ -53,7 +53,7 @@ export const analistaSeguranca: Analista = {
           ocorrencias.push(criarOcorrencia({
             tipo: 'vulnerabilidade-seguranca',
             nivel: nivelAjustado,
-            mensagem: DetectorAgregadosMensagens.problemasSegurancaResumo(severidade, resumo, items.length),
+            mensagem: messages.DetectorAgregadosMensagens.problemasSegurancaResumo(severidade, resumo, items.length),
             relPath,
             linha: items[0].linha
           }));
@@ -63,7 +63,7 @@ export const analistaSeguranca: Analista = {
       // Aplicar supressões inline antes de retornar
       return filtrarOcorrenciasSuprimidas(ocorrencias, 'seguranca', src);
     } catch (erro) {
-      return [criarErroAnalise(relPath, DetectorAgregadosMensagens.erroAnalisarSeguranca(erro))];
+      return [criarErroAnalise(relPath, messages.DetectorAgregadosMensagens.erroAnalisarSeguranca(erro))];
     }
   }
 };
@@ -273,7 +273,7 @@ function detectarPadroesPerigosos(src: string, relPath: string, problemas: Probl
           descricao: 'Regex literal detectada com padrão potencialmente vulnerável a ReDoS',
           severidade: 'media',
           linha: numeroLinha,
-          sugestao: 'Revise o padrão para evitar quantificadores aninhados ou curingas repetitivos (.*.*). Se necessário, adicione @sensei-disable.'
+          sugestao: 'Revise o padrão para evitar quantificadores aninhados ou curingas repetitivos (.*.*). Se necessário, adicione @prometheus-disable.'
         });
       }
     }

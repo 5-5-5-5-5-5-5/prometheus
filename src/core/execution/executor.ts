@@ -4,8 +4,7 @@ import crypto from 'node:crypto';
 import { config } from '@core/config/config.js';
 import { formatMs } from '@core/config/format.js';
 import { traverse } from '@core/config/traverse.js';
-import { getMessages } from '@core/messages/index.js';
-import { logAnalistas } from '@core/messages/pt/log/log-helper.js';
+import { messages } from '@core/messages/index.js';
 import { createDefaultReporter } from '@core/reporting/default-reporter.js';
 import { WorkerPool } from '@core/workers/worker-pool.js';
 import { lerEstado, salvarEstado } from '@shared/persistence/persistencia.js';
@@ -16,7 +15,7 @@ import { ocorrenciaErroAnalista } from '@';
 
 import type { ExecutorEventEmitter } from '../../types/core/config/config.js';
 
-const { log, logCore, ExecutorExtraMensagens } = getMessages();
+const { log, logCore, ExecutorExtraMensagens, logAnalistas } = messages;
 
 export type { ExecutorEventEmitter };
 // Fallback para infoDestaque quando mock de log não implementa
@@ -522,7 +521,7 @@ export async function executarInquisicao(fileEntriesComAst: FileEntryWithAst[], 
   // Agregação de métricas
   let metricasExecucao: MetricaExecucao | null = null;
   if (config.ANALISE_METRICAS_ENABLED) {
-    const metricasGlobais: MetricasGlobais = (globalThis as unknown as Record<string, unknown>).__SENSEI_METRICAS__ as MetricasGlobais || {
+    const metricasGlobais: MetricasGlobais = (globalThis as unknown as Record<string, unknown>).__PROMETHEUS_METRICAS__ as MetricasGlobais || {
       parsingTimeMs: 0,
       cacheHits: 0,
       cacheMiss: 0
@@ -598,8 +597,8 @@ export async function executarInquisicao(fileEntriesComAst: FileEntryWithAst[], 
 export function registrarUltimasMetricas(metricas: MetricaExecucao | undefined): void {
   try {
     (globalThis as unknown as {
-      __ULTIMAS_METRICAS_SENSEI__?: MetricaExecucao | null;
-    }).__ULTIMAS_METRICAS_SENSEI__ = metricas || null;
+      __ULTIMAS_METRICAS_PROMETHEUS__?: MetricaExecucao | null;
+    }).__ULTIMAS_METRICAS_PROMETHEUS__ = metricas || null;
   } catch {
     /* ignore */
   }

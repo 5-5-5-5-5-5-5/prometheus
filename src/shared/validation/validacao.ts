@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 import path from 'node:path';
 
-import { ExcecoesMensagens } from '@core/messages/pt/core/excecoes-messages.js';
+import { messages } from '@core/messages/index.js';
 
 import type { ErroValidacaoCombinacao } from '@';
 
@@ -16,7 +16,7 @@ export function normalizePath(p: string): string {
 
   // Assegurar que o caminho permanece dentro da CWD
   if (!resolved.startsWith(cwd)) {
-    throw new Error(ExcecoesMensagens.caminhoForaDaCwdNaoPermitido(p));
+    throw new Error(messages.ExcecoesMensagens.caminhoForaDaCwdNaoPermitido(p));
   }
   return normalized;
 }

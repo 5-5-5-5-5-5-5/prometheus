@@ -3,8 +3,7 @@ import { promises as fs } from 'node:fs';
 
 import { config } from '@core/config/config.js';
 import { isMetaPath } from '@core/config/paths.js';
-import { getMessages } from '@core/messages/index.js';
-import { InquisidorMensagens } from '@core/messages/pt/core/inquisidor-messages.js';
+import { messages } from '@core/messages/index.js';
 import { lerEstado } from '@shared/persistence/persistencia.js';
 import * as path from 'path';
 
@@ -14,7 +13,7 @@ import { ocorrenciaParseErro } from '@';
 import { executarInquisicao as executarExecucao, registrarUltimasMetricas } from './executor.js';
 import { scanRepository } from './scanner.js';
 
-const { log, InquisidorExtraMensagens } = getMessages();
+const { log, InquisidorExtraMensagens } = messages;
 // Fallback de símbolos para cenários de teste onde o mock de log não inclui `simbolos`.
 const SIMBOLOS_ALTERNATIVA: SimbolosLog = {
   info: 'ℹ️',
@@ -58,9 +57,9 @@ export async function prepararComAst(
   // Cache em memória (process-level). Chave: relPath
   // Guarda: { mtimeMs, size, ast } - tipo importado de @types
   const globalStore = globalThis as unknown as Record<string, unknown>;
-  const cache: Map<string, CacheValor> = globalStore.__SENSEI_AST_CACHE__ as Map<string, CacheValor> || new Map();
-  if (!globalStore.__SENSEI_AST_CACHE__) globalStore.__SENSEI_AST_CACHE__ = cache;
-  const metricas: MetricasGlobais = globalStore.__SENSEI_METRICAS__ as MetricasGlobais || {
+  const cache: Map<string, CacheValor> = globalStore.__PROMETHEUS_AST_CACHE__ as Map<string, CacheValor> || new Map();
+  if (!globalStore.__PROMETHEUS_AST_CACHE__) globalStore.__PROMETHEUS_AST_CACHE__ = cache;
+  const metricas: MetricasGlobais = globalStore.__PROMETHEUS_METRICAS__ as MetricasGlobais || {
     parsingTimeMs: 0,
     cacheHits: 0,
     cacheMiss: 0
@@ -69,7 +68,7 @@ export async function prepararComAst(
   metricas.parsingTimeMs = 0;
   metricas.cacheHits = 0;
   metricas.cacheMiss = 0;
-  globalStore.__SENSEI_METRICAS__ = metricas;
+  globalStore.__PROMETHEUS_METRICAS__ = metricas;
   return Promise.all(entries.map(async (entry): Promise<FileEntryWithAst> => {
     let ast: import('@babel/traverse').NodePath<import('@babel/types').Node> | undefined = undefined;
     const ext = path.extname(entry.relPath);
@@ -117,7 +116,7 @@ export async function prepararComAst(
               // Tentar extrair linha/coluna do parser executando uma parse rápida
               // que lança uma exceção com informação de localização (quando disponível).
               const globalStore2 = globalStore as unknown as Record<string, unknown>;
-              const lista = globalStore2.__SENSEI_PARSE_ERROS__ as OcorrenciaParseErro[] | undefined || [];
+              const lista = globalStore2.__PROMETHEUS_PARSE_ERROS__ as OcorrenciaParseErro[] | undefined || [];
               try {
                 // Importar babel parser diretamente e forçar parse para capturar erro com loc
                 const babel = await import('@babel/parser');
@@ -130,7 +129,7 @@ export async function prepararComAst(
                   babel.parse(entry.content || '', parseOpts as unknown as import('@babel/parser').ParserOptions);
                   // se por algum motivo não lançar, registra erro genérico
                   lista.push(ocorrenciaParseErro({
-                    mensagem: InquisidorMensagens.parseAstNaoGerada,
+                    mensagem: messages.InquisidorMensagens.parseAstNaoGerada,
                     relPath: entry.relPath,
                     origem: 'parser'
                   }));
@@ -147,7 +146,7 @@ export async function prepararComAst(
                   const coluna = typeof err.loc?.column === 'number' ? err.loc.column : undefined;
                   const detalhe = err && err.message ? String(err.message) : undefined;
                   lista.push(ocorrenciaParseErro({
-                    mensagem: InquisidorMensagens.parseErro(detalhe || InquisidorMensagens.parseAstNaoGerada),
+                    mensagem: messages.InquisidorMensagens.parseErro(detalhe || messages.InquisidorMensagens.parseAstNaoGerada),
                     relPath: entry.relPath,
                     origem: 'parser',
                     linha,
@@ -158,12 +157,12 @@ export async function prepararComAst(
               } catch {
                 // Se não conseguimos importar/usar o babel parser, fallback para mensagem genérica
                 lista.push(ocorrenciaParseErro({
-                  mensagem: InquisidorMensagens.parseAstNaoGerada,
+                  mensagem: messages.InquisidorMensagens.parseAstNaoGerada,
                   relPath: entry.relPath,
                   origem: 'parser'
                 }));
               }
-              globalStore2.__SENSEI_PARSE_ERROS__ = lista;
+              globalStore2.__PROMETHEUS_PARSE_ERROS__ = lista;
             }
           }
           metricas.parsingTimeMs += performance.now() - inicioParse;
@@ -178,15 +177,15 @@ export async function prepararComAst(
         }
       } catch (e) {
         const err = e as Error;
-        log.erro(InquisidorMensagens.falhaGerarAst(entry.relPath, err.message));
+        log.erro(messages.InquisidorMensagens.falhaGerarAst(entry.relPath, err.message));
         // Registra ocorrência de parse erro
-        const lista = globalStore.__SENSEI_PARSE_ERROS__ as OcorrenciaParseErro[] | undefined || [];
+        const lista = globalStore.__PROMETHEUS_PARSE_ERROS__ as OcorrenciaParseErro[] | undefined || [];
         lista.push(ocorrenciaParseErro({
-          mensagem: InquisidorMensagens.parseErro(err.message),
+          mensagem: messages.InquisidorMensagens.parseErro(err.message),
           relPath: entry.relPath,
           origem: 'parser'
         }));
-        globalStore.__SENSEI_PARSE_ERROS__ = lista;
+        globalStore.__PROMETHEUS_PARSE_ERROS__ = lista;
       }
     }
     return {
@@ -219,17 +218,17 @@ export async function iniciarInquisicao(
           // A política semântica correta: não mostrar progresso parcial durante a varredura;
           // em vez disso, exibimos apenas um resumo final após a conclusão da varredura.
           const g = globalThis as unknown as {
-            __SENSEI_DIR_COUNT__?: number;
-            __SENSEI_DIR_SAMPLES__?: string[];
+            __PROMETHEUS_DIR_COUNT__?: number;
+            __PROMETHEUS_DIR_SAMPLES__?: string[];
           };
-          g.__SENSEI_DIR_COUNT__ = (g.__SENSEI_DIR_COUNT__ || 0) + 1;
+          g.__PROMETHEUS_DIR_COUNT__ = (g.__PROMETHEUS_DIR_COUNT__ || 0) + 1;
           // Armazena primeiros N diretórios como amostra para diagnóstico posterior
           const SAMPLE_MAX = 5;
-          if (!g.__SENSEI_DIR_SAMPLES__) g.__SENSEI_DIR_SAMPLES__ = [];
-          if (g.__SENSEI_DIR_SAMPLES__.length < SAMPLE_MAX) {
-            g.__SENSEI_DIR_SAMPLES__.push(progressData.caminho);
+          if (!g.__PROMETHEUS_DIR_SAMPLES__) g.__PROMETHEUS_DIR_SAMPLES__ = [];
+          if (g.__PROMETHEUS_DIR_SAMPLES__.length < SAMPLE_MAX) {
+            g.__PROMETHEUS_DIR_SAMPLES__.push(progressData.caminho);
           }
-          // contador atualizado em g.__SENSEI_DIR_COUNT__ (não usado diretamente aqui)
+          // contador atualizado em g.__PROMETHEUS_DIR_COUNT__ (não usado diretamente aqui)
           // Em modo verbose original poderíamos mostrar mais detalhes, mas por padrão
           // evitamos ruído progressivo. Erros continuam sendo reportados abaixo.
         } else if (progressData.tipo === 'erro') {
@@ -342,12 +341,12 @@ export async function iniciarInquisicao(
   // Exibe um resumo único da varredura preliminar, imediatamente antes da análise principal.
   try {
     const g = globalThis as unknown as {
-      __SENSEI_DIR_COUNT__?: number;
-      __SENSEI_DIR_SAMPLES__?: string[];
+      __PROMETHEUS_DIR_COUNT__?: number;
+      __PROMETHEUS_DIR_SAMPLES__?: string[];
     };
-    const totalDirs = g.__SENSEI_DIR_COUNT__ || 0;
+    const totalDirs = g.__PROMETHEUS_DIR_COUNT__ || 0;
     // Não exibir caminhos nem moldura — apenas resumo simples em texto.
-    const amostra = Array.isArray(g.__SENSEI_DIR_SAMPLES__) ? g.__SENSEI_DIR_SAMPLES__ : [];
+    const amostra = Array.isArray(g.__PROMETHEUS_DIR_SAMPLES__) ? g.__PROMETHEUS_DIR_SAMPLES__ : [];
     if (config.LOG_ESTRUTURADO) {
       log.info(JSON.stringify({
         tipo: 'varredura_preliminar',
@@ -386,12 +385,12 @@ export async function iniciarInquisicao(
   }
 
   // Anexa ocorrências de parse se existirem
-  const parseErros: OcorrenciaParseErro[] = (globalThis as unknown as Record<string, unknown>).__SENSEI_PARSE_ERROS__ as OcorrenciaParseErro[] || [];
+  const parseErros: OcorrenciaParseErro[] = (globalThis as unknown as Record<string, unknown>).__PROMETHEUS_PARSE_ERROS__ as OcorrenciaParseErro[] || [];
   if (parseErros.length) {
     // Armazena contagem original para métricas (usado em saída JSON)
     (globalThis as unknown as {
-      __SENSEI_PARSE_ERROS_ORIGINAIS__?: number;
-    }).__SENSEI_PARSE_ERROS_ORIGINAIS__ = parseErros.length;
+      __PROMETHEUS_PARSE_ERROS_ORIGINAIS__?: number;
+    }).__PROMETHEUS_PARSE_ERROS_ORIGINAIS__ = parseErros.length;
     if (config.PARSE_ERRO_AGRUPAR) {
       const porArquivo: Record<string, OcorrenciaParseErro[]> = {};
       for (const pe of parseErros) {
@@ -404,7 +403,7 @@ export async function iniciarInquisicao(
         } else {
           // Consolida em uma única ocorrência representativa
           ocorrencias.push(ocorrenciaParseErro({
-            mensagem: InquisidorMensagens.parseErrosAgregados(lista.length),
+            mensagem: messages.InquisidorMensagens.parseErrosAgregados(lista.length),
             relPath: arq || '',
             origem: 'parser'
           }));

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+import { messages } from '@core/messages/index.js';
 import type { NodePath } from '@babel/traverse';
 import type { ExportNamedDeclaration, ImportDeclaration, ImportDefaultSpecifier, ImportNamespaceSpecifier, ImportSpecifier, Node } from '@babel/types';
 import { traverse } from '@core/config/traverse.js';
@@ -41,9 +42,7 @@ export const analistaArquitetura: Analista = {
           });
           return [];
         }
-        const { DetectorArquiteturaMensagens } = await import(
-          '@core/messages/pt/analistas/detector-arquitetura-messages.js'
-        );
+        const { DetectorArquiteturaMensagens } = messages;
         return [criarOcorrencia({
           tipo: 'erro-analise',
           nivel: 'aviso',
@@ -68,9 +67,7 @@ export const analistaArquitetura: Analista = {
           origem: 'arquitetura',
         });
       } else {
-        const { DetectorArquiteturaMensagens } = await import(
-          '@core/messages/pt/analistas/detector-arquitetura-messages.js'
-        );
+        const { DetectorArquiteturaMensagens } = messages;
         ocorrencias.push(criarOcorrencia({
           tipo: 'analise-arquitetura',
           nivel: (analiseCompleta.violacoes?.length ?? 0) > 0 ? 'aviso' : 'info',

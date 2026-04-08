@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 import type { NodePath } from '@babel/traverse';
 import type { Node } from '@babel/types';
-import { DetectorAgregadosMensagens } from '@core/messages/pt/analistas/detector-agregados-messages.js';
+import { messages } from '@core/messages/index.js';
 import { detectarContextoProjeto } from '@shared/contexto-projeto.js';
 import { agruparPor } from '@shared/helpers/agrupar.js';
 
@@ -45,7 +45,7 @@ export const analistaQualidadeTestes: Analista = {
           ocorrencias.push(criarOcorrencia({
             tipo: 'problemas-teste',
             nivel,
-            mensagem: DetectorAgregadosMensagens.problemasTesteResumo(severidade, resumo, items.length),
+            mensagem: messages.DetectorAgregadosMensagens.problemasTesteResumo(severidade, resumo, items.length),
             relPath,
             linha: items[0].linha
           }));
@@ -56,7 +56,7 @@ export const analistaQualidadeTestes: Analista = {
       return [criarOcorrencia({
         tipo: 'erro-analise',
         nivel: 'aviso',
-        mensagem: DetectorAgregadosMensagens.erroAnalisarQualidadeTestes(erro),
+        mensagem: messages.DetectorAgregadosMensagens.erroAnalisarQualidadeTestes(erro),
         relPath,
         linha: 1
       })];

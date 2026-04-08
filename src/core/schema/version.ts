@@ -2,11 +2,11 @@
 /**
  * Sistema de Versionamento de Schema para Relatórios JSON
  *
- * Este módulo gerencia versões de schema para relatórios JSON do Sensei,
+ * Este módulo gerencia versões de schema para relatórios JSON do Prometheus,
  * garantindo compatibilidade futura e evolução controlada dos formatos.
  */
 
-import { ExcecoesMensagens } from '@core/messages/pt/core/excecoes-messages.js';
+import { messages } from '@core/messages/index.js';
 
 import type { RelatorioComVersao, SchemaMetadata } from '@';
 
@@ -35,7 +35,7 @@ export const HISTORICO_VERSOES: Record<string, SchemaMetadata> = {
 export function criarSchemaMetadata(versao: string = VERSAO_ATUAL, descricaoPersonalizada?: string): SchemaMetadata {
   const base = HISTORICO_VERSOES[versao];
   if (!base) {
-    throw new Error(ExcecoesMensagens.versaoSchemaDesconhecida(versao));
+    throw new Error(messages.ExcecoesMensagens.versaoSchemaDesconhecida(versao));
   }
   return {
     ...base,
@@ -119,7 +119,7 @@ export function migrarParaVersaoAtual<T>(relatorio: Record<string, unknown>): Re
   // Para futuras migrações, implementar lógica aqui
   // Por enquanto, apenas revalidar
   if (!validacao.valido) {
-    throw new Error(ExcecoesMensagens.relatorioSchemaInvalido(validacao.erros.join(', ')));
+    throw new Error(messages.ExcecoesMensagens.relatorioSchemaInvalido(validacao.erros.join(', ')));
   }
   return relatorio as unknown as RelatorioComVersao<T>;
 }

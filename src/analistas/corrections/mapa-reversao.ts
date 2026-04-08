@@ -2,14 +2,13 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
-import { getMessages } from '@core/messages/index.js';
-import { ExcecoesMensagens } from '@core/messages/pt/core/excecoes-messages.js';
-import { SENSEI_ARQUIVOS } from '@core/registry/paths.js';
+import { messages } from '@core/messages/index.js';
+import { PROMETHEUS_ARQUIVOS } from '@core/registry/paths.js';
 import { lerEstado, salvarEstado } from '@shared/persistence/persistencia.js';
 
 import type { MapaReversao, MoveReversao } from '@';
 
-const { log, logAuto, MapaReversaoExtraMensagens } = getMessages();
+const { log, logAuto, MapaReversaoExtraMensagens } = messages;
 
 const CONSTANTES_MAPA = {
   VERSAO: '1.0.0',
@@ -23,7 +22,7 @@ export class GerenciadorMapaReversao {
   constructor(opts?: {
     mapaPath?: string;
   }) {
-    this.mapaPath = opts?.mapaPath ?? SENSEI_ARQUIVOS.MAPA_REVERSAO;
+    this.mapaPath = opts?.mapaPath ?? PROMETHEUS_ARQUIVOS.MAPA_REVERSAO;
     this.mapa = {
       versao: CONSTANTES_MAPA.VERSAO,
       moves: [],
@@ -52,7 +51,7 @@ export class GerenciadorMapaReversao {
 
       // Validação básica
       if (!this.mapa.moves || !Array.isArray(this.mapa.moves)) {
-        throw new Error(ExcecoesMensagens.mapaReversaoCorrompido);
+        throw new Error(messages.ExcecoesMensagens.mapaReversaoCorrompido);
       }
       logAuto.mapaReversaoCarregado(this.mapa.moves.length);
     } catch (error) {

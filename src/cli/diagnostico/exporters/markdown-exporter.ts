@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2025 Sensei Contributors
+// SPDX-FileCopyrightText: 2025 Prometheus Contributors
 
 /**
  * @module cli/diagnostico/exporters/markdown-exporter
@@ -255,7 +255,7 @@ function gerarSecaoArquetipos(arquetipos: ArquetipoResult): string {
   }
 
   if (arquetipos.salvo) {
-    md += '\n✅ Arquétipo salvo em `sensei.repo.arquetipo.json`\n';
+    md += '\n✅ Arquétipo salvo em `prometheus.repo.arquetipo.json`\n';
   }
 
   return md;
@@ -377,7 +377,7 @@ function gerarSecaoSugestoes(sugestoes: string[]): string {
 }
 
 function gerarRodape(): string {
-  return `---\n\n*Gerado por Sensei v0.2.0 em ${new Date().toLocaleString('pt-BR')}*`;
+  return `---\n\n*Gerado por Prometheus v0.2.0 em ${new Date().toLocaleString('pt-BR')}*`;
 }
 
   /* -------------------------- Helpers -------------------------- */

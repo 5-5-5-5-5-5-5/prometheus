@@ -8,13 +8,12 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
 import { config } from '@core/config/config.js';
-import { getMessages } from '@core/messages/index.js';
-import { CliExportersMensagens } from '@core/messages/pt/cli/cli-exporters-messages.js';
+import { messages } from '@core/messages/index.js';
 import { gerarRelatorioReestruturarJson, gerarRelatorioReestruturarMarkdown } from '@relatorios/relatorio-reestruturar.js';
 
 import type { MovimentoEstrutural, ReestruturacaoExportOptions, ReestruturacaoExportResult } from '@';
 
-const { log } = getMessages();
+const log = messages.log;
 
 // Re-export para compatibilidade
 export type { ReestruturacaoExportOptions, ReestruturacaoExportResult };
@@ -82,7 +81,7 @@ export async function exportarRelatoriosReestruturacao(options: ReestruturacaoEx
 
     // Gerar timestamp único para os arquivos
     const ts = new Date().toISOString().replace(/[:.]/g, '-');
-    const nomeBase = `sensei-reestruturacao-${ts}`;
+    const nomeBase = `prometheus-reestruturacao-${ts}`;
 
     // Normalizar movimentos para formato padrão
     const movimentosNormalizados = normalizarMovimentos(movimentos);
@@ -107,7 +106,7 @@ export async function exportarRelatoriosReestruturacao(options: ReestruturacaoEx
 
     // Log de sucesso
     const modo = simulado ? '(dry-run) ' : '';
-    log.sucesso(CliExportersMensagens.reestruturacao.relatoriosExportados(modo, dir));
+    log.sucesso(messages.CliExportersMensagens.reestruturacao.relatoriosExportados(modo, dir));
     return {
       markdown: caminhoMd,
       json: caminhoJson,
@@ -115,7 +114,7 @@ export async function exportarRelatoriosReestruturacao(options: ReestruturacaoEx
     };
   } catch (error) {
     const modo = options.simulado ? '(dry-run) ' : '';
-    log.erro(CliExportersMensagens.reestruturacao.falhaExportar(modo, (error as Error).message));
+    log.erro(messages.CliExportersMensagens.reestruturacao.falhaExportar(modo, (error as Error).message));
     return null;
   }
 }

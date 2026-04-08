@@ -15,14 +15,13 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
-import { getMessages } from '@core/messages/index.js';
-import { ExcecoesMensagens } from '@core/messages/pt/core/excecoes-messages.js';
+import { messages } from '@core/messages/index.js';
 
 import type { MigrationResult } from '@';
 
-import { MIGRACAO_MAPA,SENSEI_ARQUIVOS, SENSEI_DIRS, type SenseiFilePath } from './paths.js';
+import { MIGRACAO_MAPA,PROMETHEUS_ARQUIVOS, PROMETHEUS_DIRS, type PrometheusFilePath } from './paths.js';
 
-const { log } = getMessages();
+const log = messages.log;
 
 /**
  * Opções para operações de leitura
@@ -116,18 +115,18 @@ async function tryMigrate(targetPath: string): Promise<MigrationResult> {
 /**
  * Lê arquivo JSON do registry
  *
- * @param filePath Caminho do arquivo (use SENSEI_FILES.*)
+ * @param filePath Caminho do arquivo (use PROMETHEUS_FILES.*)
  * @param options Opções de leitura
  * @returns Conteúdo parseado do JSON
  *
  * @example
  * ```ts
- * const config = await readJSON(SENSEI_FILES.CONFIG, {
+ * const config = await readJSON(PROMETHEUS_FILES.CONFIG, {
  *   default: {}
  * });
  * ```
  */
-export async function readJSON<T = unknown>(fileCaminho: SenseiFilePath | string, options: ReadOptions<T> = {}): Promise<T> {
+export async function readJSON<T = unknown>(fileCaminho: PrometheusFilePath | string, options: ReadOptions<T> = {}): Promise<T> {
   const {
     default: defaultValue,
     migrate = true,
@@ -149,7 +148,7 @@ export async function readJSON<T = unknown>(fileCaminho: SenseiFilePath | string
       if (defaultValue !== undefined) {
         return defaultValue;
       }
-      throw new Error(ExcecoesMensagens.arquivoNaoEncontrado(String(fileCaminho)));
+      throw new Error(messages.ExcecoesMensagens.arquivoNaoEncontrado(String(fileCaminho)));
     }
 
     // Ler e parsear
@@ -158,33 +157,33 @@ export async function readJSON<T = unknown>(fileCaminho: SenseiFilePath | string
 
     // Validar se fornecido
     if (validate && !validate(parsed)) {
-      throw new Error(ExcecoesMensagens.validacaoFalhouPara(String(fileCaminho)));
+      throw new Error(messages.ExcecoesMensagens.validacaoFalhouPara(String(fileCaminho)));
     }
     return parsed;
   } catch (erro) {
     if (defaultValue !== undefined) {
       return defaultValue;
     }
-    throw new Error(ExcecoesMensagens.erroAoLer(String(fileCaminho), (erro as Error).message));
+    throw new Error(messages.ExcecoesMensagens.erroAoLer(String(fileCaminho), (erro as Error).message));
   }
 }
 
 /**
  * Escreve arquivo JSON no registry
  *
- * @param filePath Caminho do arquivo (use SENSEI_FILES.*)
+ * @param filePath Caminho do arquivo (use PROMETHEUS_FILES.*)
  * @param data Dados a serem salvos
  * @param options Opções de escrita
  *
  * @example
  * ```ts
- * await writeJSON(SENSEI_FILES.GUARDIAN_BASELINE, snapshot, {
+ * await writeJSON(PROMETHEUS_FILES.GUARDIAN_BASELINE, snapshot, {
  *   createDirs: true,
  *   backup: true
  * });
  * ```
  */
-export async function writeJSON<T = unknown>(fileCaminho: SenseiFilePath | string, data: T, options: WriteOptions = {}): Promise<void> {
+export async function writeJSON<T = unknown>(fileCaminho: PrometheusFilePath | string, data: T, options: WriteOptions = {}): Promise<void> {
   const {
     createDirs = true,
     backup = false,
@@ -208,17 +207,17 @@ export async function writeJSON<T = unknown>(fileCaminho: SenseiFilePath | strin
     // Escrever arquivo
     await fs.writeFile(fileCaminho, content, 'utf-8');
   } catch (erro) {
-    throw new Error(ExcecoesMensagens.erroAoEscrever(String(fileCaminho), (erro as Error).message));
+    throw new Error(messages.ExcecoesMensagens.erroAoEscrever(String(fileCaminho), (erro as Error).message));
   }
 }
 
 /**
  * Deleta arquivo do registry
  *
- * @param filePath Caminho do arquivo (use SENSEI_FILES.*)
+ * @param filePath Caminho do arquivo (use PROMETHEUS_FILES.*)
  * @param options Opções de deleção
  */
-export async function deleteJSON(fileCaminho: SenseiFilePath | string, options: {
+export async function deleteJSON(fileCaminho: PrometheusFilePath | string, options: {
   backup?: boolean;
 } = {}): Promise<void> {
   const {
@@ -236,14 +235,14 @@ export async function deleteJSON(fileCaminho: SenseiFilePath | string, options: 
       await fs.unlink(fileCaminho);
     }
   } catch (erro) {
-    throw new Error(ExcecoesMensagens.erroAoDeletar(String(fileCaminho), (erro as Error).message));
+    throw new Error(messages.ExcecoesMensagens.erroAoDeletar(String(fileCaminho), (erro as Error).message));
   }
 }
 
 /**
  * Lista todos os arquivos JSON em um diretório do registry
  *
- * @param dirPath Caminho do diretório (use SENSEI_DIRS.*)
+ * @param dirPath Caminho do diretório (use PROMETHEUS_DIRS.*)
  * @returns Lista de caminhos completos
  */
 export async function listJSONFiles(dirPath: string): Promise<string[]> {
@@ -271,6 +270,6 @@ export const ArquivoRegistro = {
   write: writeJSON,
   delete: deleteJSON,
   list: listJSONFiles,
-  paths: SENSEI_ARQUIVOS,
-  dirs: SENSEI_DIRS
+  paths: PROMETHEUS_ARQUIVOS,
+  dirs: PROMETHEUS_DIRS
 } as const;

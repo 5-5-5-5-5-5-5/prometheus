@@ -8,13 +8,12 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
 import { config } from '@core/config/config.js';
-import { getMessages } from '@core/messages/index.js';
-import { CliExportersMensagens } from '@core/messages/pt/cli/cli-exporters-messages.js';
+import { messages } from '@core/messages/index.js';
 import { gerarRelatorioPodaJson, gerarRelatorioPodaMarkdown } from '@relatorios/relatorio-poda.js';
 
 import type { PodaExportOptions, PodaExportResult } from '@';
 
-const { log } = getMessages();
+const log = messages.log;
 
 // Re-export para compatibilidade
 export type { PodaExportOptions, PodaExportResult };
@@ -53,7 +52,7 @@ export async function exportarRelatoriosPoda(options: PodaExportOptions): Promis
 
     // Gerar timestamp único para os arquivos
     const ts = new Date().toISOString().replace(/[:.]/g, '-');
-    const nomeBase = `sensei-poda-${ts}`;
+    const nomeBase = `prometheus-poda-${ts}`;
 
     // Gerar relatório Markdown
     const caminhoMd = path.join(dir, `${nomeBase}.md`);
@@ -66,14 +65,14 @@ export async function exportarRelatoriosPoda(options: PodaExportOptions): Promis
     await gerarRelatorioPodaJson(caminhoJson, podados, pendentes);
 
     // Log de sucesso
-    log.sucesso(CliExportersMensagens.poda.relatoriosExportados(dir));
+    log.sucesso(messages.CliExportersMensagens.poda.relatoriosExportados(dir));
     return {
       markdown: caminhoMd,
       json: caminhoJson,
       dir
     };
   } catch (error) {
-    log.erro(CliExportersMensagens.poda.falhaExportar((error as Error).message));
+    log.erro(messages.CliExportersMensagens.poda.falhaExportar((error as Error).message));
     // Re-throw para manter comportamento original do comando
     throw error;
   }

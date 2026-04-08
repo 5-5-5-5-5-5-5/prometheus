@@ -2,7 +2,7 @@
 import type { NodePath } from '@babel/traverse';
 import type { ArrowFunctionExpression, ClassDeclaration, FunctionDeclaration, ImportDeclaration, NewExpression, Node, TSEnumDeclaration, TSInterfaceDeclaration, TSTypeAliasDeclaration, VariableDeclaration } from '@babel/types';
 import { traverse } from '@core/config/traverse.js';
-import { DetectorConstrucoesSintaticasMensagens } from '@core/messages/pt/analistas/detector-construcoes-sintaticas-messages.js';
+import { messages } from '@core/messages/index.js';
 import { criarErroAnalise } from '@shared/helpers/ocorrencias.js';
 
 import { type Analista, type ConstrucaoSintatica, criarOcorrencia, type Ocorrencia } from '@';
@@ -148,12 +148,12 @@ export const analistaConstrucoesSintaticas: Analista = {
       return [criarOcorrencia({
         tipo: 'construcoes-sintaticas',
         nivel: 'info',
-        mensagem: DetectorConstrucoesSintaticasMensagens.identificadas(mensagemFinal),
+        mensagem: messages.DetectorConstrucoesSintaticasMensagens.identificadas(mensagemFinal),
         relPath,
         linha: 1
       })];
     } catch (erro) {
-      return [criarErroAnalise(relPath, DetectorConstrucoesSintaticasMensagens.erroAnalisar(erro))];
+      return [criarErroAnalise(relPath, messages.DetectorConstrucoesSintaticasMensagens.erroAnalisar(erro))];
     }
   }
 };

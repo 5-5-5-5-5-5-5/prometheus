@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-import { AnalystOrigens, AnalystTipos, HtmlMensagens, SeverityNiveis } from '@core/messages/pt/core/plugin-messages.js';
+import { messages } from '@core/messages/index.js';
 import { createLineLookup } from '@shared/helpers/line-lookup.js';
 import { maskHtmlComments, maskTagBlocks } from '@shared/helpers/masking.js';
 import type { AnyNode, Document, Element, Text } from 'domhandler';
@@ -7,16 +7,16 @@ import { parseDocument } from 'htmlparser2';
 
 import { criarAnalista, criarOcorrencia } from '@';
 
-const disableEnv = process.env.SENSEI_DISABLE_PLUGIN_HTML === '1';
+const disableEnv = process.env.PROMETHEUS_DISABLE_PLUGIN_HTML === '1';
 type Msg = ReturnType<typeof criarOcorrencia>;
 function warn(message: string, relPath: string, line?: number): Msg {
   return criarOcorrencia({
     relPath,
     mensagem: message,
     linha: line,
-    nivel: SeverityNiveis.warning,
-    origem: AnalystOrigens.html,
-    tipo: AnalystTipos.html
+    nivel: messages.SeverityNiveis.warning,
+    origem: messages.AnalystOrigens.html,
+    tipo: messages.AnalystTipos.html
   });
 }
 type NodeWithChildren = AnyNode & {
@@ -103,7 +103,7 @@ function collectHtmlIssuesAst(src: string, relPath: string): Msg[] {
       const level = parseInt(tag.charAt(1), 10);
       if (level === 1) h1Contagem++;
       if (level > lastHeadingNivel + 1 && lastHeadingNivel > 0) {
-        ocorrencias.push(warn(HtmlMensagens.headingSkipped(level, lastHeadingNivel + 1), relPath, line));
+        ocorrencias.push(warn(messages.HtmlMensagens.headingSkipped(level, lastHeadingNivel + 1), relPath, line));
       }
       lastHeadingNivel = level;
     }
@@ -114,7 +114,7 @@ function collectHtmlIssuesAst(src: string, relPath: string): Msg[] {
       const ariaLabel = !!getAttr(n, 'aria-label');
       const title = !!getAttr(n, 'title');
       if (!text && !ariaLabel && !title) {
-        ocorrencias.push(warn(HtmlMensagens.buttonWithoutText, relPath, line));
+        ocorrencias.push(warn(messages.HtmlMensagens.buttonWithoutText, relPath, line));
       }
     }
 
@@ -123,7 +123,7 @@ function collectHtmlIssuesAst(src: string, relPath: string): Msg[] {
       const hasCaption = (n as NodeWithChildren).children?.some(c => c.type === 'tag' && String((c as Element).name).toLowerCase() === 'caption');
       const ariaLabel = !!getAttr(n, 'aria-label');
       if (!hasCaption && !ariaLabel) {
-        ocorrencias.push(warn(HtmlMensagens.tableWithoutCaption, relPath, line));
+        ocorrencias.push(warn(messages.HtmlMensagens.tableWithoutCaption, relPath, line));
       }
     }
 
@@ -131,7 +131,7 @@ function collectHtmlIssuesAst(src: string, relPath: string): Msg[] {
     if (tag === 'iframe') {
       const title = getAttr(n, 'title');
       if (!title) {
-        ocorrencias.push(warn(HtmlMensagens.iframeWithoutTitle, relPath, line));
+        ocorrencias.push(warn(messages.HtmlMensagens.iframeWithoutTitle, relPath, line));
       }
     }
     if (tag === 'a') {
@@ -139,7 +139,7 @@ function collectHtmlIssuesAst(src: string, relPath: string): Msg[] {
       if (target === '_blank') {
         const rel = getAttr(n, 'rel');
         const safe = /(noopener|noreferrer)/i.test(rel);
-        if (!safe) ocorrencias.push(warn(HtmlMensagens.linkTargetBlank, relPath, line));
+        if (!safe) ocorrencias.push(warn(messages.HtmlMensagens.linkTargetBlank, relPath, line));
       }
       const attrs = n.attribs || {};
       const hasHref = Object.prototype.hasOwnProperty.call(attrs, 'href');
@@ -150,7 +150,7 @@ function collectHtmlIssuesAst(src: string, relPath: string): Msg[] {
         const tabindex = getAttr(n, 'tabindex');
         const isRoleButton = role === 'button';
         if (!hasOnClick && !isRoleButton && !tabindex) {
-          ocorrencias.push(warn(HtmlMensagens.linkNoHref, relPath, line));
+          ocorrencias.push(warn(messages.HtmlMensagens.linkNoHref, relPath, line));
         }
       }
     }
@@ -165,28 +165,28 @@ function collectHtmlIssuesAst(src: string, relPath: string): Msg[] {
       const attrs = n.attribs || {};
       const dataAttr = Object.keys(attrs).some(k => /^(data-)?(decorative|icon|symbol)$/i.test(k));
       if (!alt && !decorative && !dataAttr && !isSvg) {
-        ocorrencias.push(warn(HtmlMensagens.imgWithoutAlt, relPath, line));
+        ocorrencias.push(warn(messages.HtmlMensagens.imgWithoutAlt, relPath, line));
       }
 
       // Verifica loading lazy
       const loading = getAttr(n, 'loading');
       if (!loading && !isTemplate) {
-        ocorrencias.push(warn(HtmlMensagens.imgWithoutLoading, relPath, line));
+        ocorrencias.push(warn(messages.HtmlMensagens.imgWithoutLoading, relPath, line));
       }
 
       // Verifica dimensões
       const width = getAttr(n, 'width');
       const height = getAttr(n, 'height');
       if (!width || !height) {
-        ocorrencias.push(warn(HtmlMensagens.imgWithoutDimensions, relPath, line));
+        ocorrencias.push(warn(messages.HtmlMensagens.imgWithoutDimensions, relPath, line));
       }
     }
     if (tag === 'form') {
       const method = getAttr(n, 'method');
       const action = getAttr(n, 'action');
-      if (!method) ocorrencias.push(warn(HtmlMensagens.formWithoutMethod, relPath, line));
+      if (!method) ocorrencias.push(warn(messages.HtmlMensagens.formWithoutMethod, relPath, line));
       if (!action && !hasAnyDataAttr(n)) {
-        ocorrencias.push(warn(HtmlMensagens.formWithoutAction, relPath, line));
+        ocorrencias.push(warn(messages.HtmlMensagens.formWithoutAction, relPath, line));
       }
     }
     if (tag === 'input') {
@@ -196,22 +196,22 @@ function collectHtmlIssuesAst(src: string, relPath: string): Msg[] {
       const isHidden = type === 'hidden';
       const isButton = type === 'button' || type === 'submit' || type === 'reset';
       if (!isHidden && !isButton && !ariaLabel && !name) {
-        ocorrencias.push(warn(HtmlMensagens.inputWithoutLabel, relPath, line));
+        ocorrencias.push(warn(messages.HtmlMensagens.inputWithoutLabel, relPath, line));
       }
       if (!type) {
-        ocorrencias.push(warn(HtmlMensagens.inputWithoutType, relPath, line));
+        ocorrencias.push(warn(messages.HtmlMensagens.inputWithoutType, relPath, line));
       }
       if (type === 'password') {
         const autocomplete = getAttr(n, 'autocomplete');
         if (!autocomplete) {
-          ocorrencias.push(warn(HtmlMensagens.passwordWithoutAutocomplete, relPath, line));
+          ocorrencias.push(warn(messages.HtmlMensagens.passwordWithoutAutocomplete, relPath, line));
         }
       }
     }
     const attrs = n?.attribs || {};
     for (const k of Object.keys(attrs)) {
       if (isInlineEvent(k)) {
-        ocorrencias.push(warn(HtmlMensagens.inlineHandler, relPath, line));
+        ocorrencias.push(warn(messages.HtmlMensagens.inlineHandler, relPath, line));
         break;
       }
     }
@@ -221,9 +221,9 @@ function collectHtmlIssuesAst(src: string, relPath: string): Msg[] {
       const textNodes = children.filter((c): c is Text => c.type === 'text');
       const text = textNodes.map(c => String((c as Text).data || '')).join('');
       if (!srcAttr && text.trim().length > 0) {
-        ocorrencias.push(warn(HtmlMensagens.inlineScript, relPath, line));
+        ocorrencias.push(warn(messages.HtmlMensagens.inlineScript, relPath, line));
         if (text.length > 1000) {
-          ocorrencias.push(warn(HtmlMensagens.largeInlineScript, relPath, line));
+          ocorrencias.push(warn(messages.HtmlMensagens.largeInlineScript, relPath, line));
         }
       }
 
@@ -232,7 +232,7 @@ function collectHtmlIssuesAst(src: string, relPath: string): Msg[] {
         const defer = getAttr(n, 'defer');
         const async = getAttr(n, 'async');
         if (!defer && !async) {
-          ocorrencias.push(warn(HtmlMensagens.scriptWithoutDefer, relPath, line));
+          ocorrencias.push(warn(messages.HtmlMensagens.scriptWithoutDefer, relPath, line));
         }
       }
     }
@@ -241,17 +241,17 @@ function collectHtmlIssuesAst(src: string, relPath: string): Msg[] {
       const textNodes = children.filter((c): c is Text => c.type === 'text');
       const text = textNodes.map(c => String((c as Text).data || '')).join('');
       if (text.trim().length > 0) {
-        ocorrencias.push(warn(HtmlMensagens.inlineStyle, relPath, line));
+        ocorrencias.push(warn(messages.HtmlMensagens.inlineStyle, relPath, line));
       }
     }
   });
   if (!isTemplate) {
-    if (!hasDoctype) ocorrencias.push(warn(HtmlMensagens.doctype, relPath, 1));
-    if (!htmlLangOk) ocorrencias.push(warn(HtmlMensagens.htmlLang, relPath, 1));
-    if (!hasCharset) ocorrencias.push(warn(HtmlMensagens.metaCharset, relPath, 1));
-    if (!hasViewport) ocorrencias.push(warn(HtmlMensagens.viewport, relPath, 1));
-    if (!hasTitle) ocorrencias.push(warn(HtmlMensagens.title, relPath, 1));
-    if (h1Contagem > 1) ocorrencias.push(warn(HtmlMensagens.multipleH1, relPath, 1));
+    if (!hasDoctype) ocorrencias.push(warn(messages.HtmlMensagens.doctype, relPath, 1));
+    if (!htmlLangOk) ocorrencias.push(warn(messages.HtmlMensagens.htmlLang, relPath, 1));
+    if (!hasCharset) ocorrencias.push(warn(messages.HtmlMensagens.metaCharset, relPath, 1));
+    if (!hasViewport) ocorrencias.push(warn(messages.HtmlMensagens.viewport, relPath, 1));
+    if (!hasTitle) ocorrencias.push(warn(messages.HtmlMensagens.title, relPath, 1));
+    if (h1Contagem > 1) ocorrencias.push(warn(messages.HtmlMensagens.multipleH1, relPath, 1));
   }
   return ocorrencias;
 }
@@ -268,7 +268,7 @@ function collectHtmlIssuesRegex(src: string, relPath: string): Msg[] {
 
   // DOCTYPE
   if (!/<!DOCTYPE\s+html>/i.test(scan) && !isTemplate) {
-    ocorrencias.push(warn(HtmlMensagens.doctype, relPath, 1));
+    ocorrencias.push(warn(messages.HtmlMensagens.doctype, relPath, 1));
   }
 
   // lang no <html>
@@ -276,7 +276,7 @@ function collectHtmlIssuesRegex(src: string, relPath: string): Msg[] {
   if (htmlTag && !isTemplate) {
     const hasLang = /\slang=['"][^'" >]+['"]/i.test(htmlTag[0]);
     if (!hasLang) {
-      ocorrencias.push(warn(HtmlMensagens.htmlLang, relPath, lineOfMasked(htmlTag.index)));
+      ocorrencias.push(warn(messages.HtmlMensagens.htmlLang, relPath, lineOfMasked(htmlTag.index)));
     }
   }
 
@@ -284,24 +284,24 @@ function collectHtmlIssuesRegex(src: string, relPath: string): Msg[] {
   const hasCharsetAttr = /<meta\s+[^>]*\bcharset\s*=\s*['"]?[^'">\s]+/i.test(scan);
   const hasCharsetInContentTipo = /<meta\s+[^>]*http-equiv\s*=\s*['"]content-type['"][^>]*>/i.test(scan) && /charset\s*=\s*utf-8/i.test(scan);
   if (!hasCharsetAttr && !hasCharsetInContentTipo && !isTemplate) {
-    ocorrencias.push(warn(HtmlMensagens.metaCharset, relPath, 1));
+    ocorrencias.push(warn(messages.HtmlMensagens.metaCharset, relPath, 1));
   }
 
   // viewport
   if (!/<meta\s+[^>]*name=["']viewport["']/i.test(scan) && !isTemplate) {
-    ocorrencias.push(warn(HtmlMensagens.viewport, relPath, 1));
+    ocorrencias.push(warn(messages.HtmlMensagens.viewport, relPath, 1));
   }
 
   // title
   if (!/<title>[^<]*<\/title>/i.test(scan) && !isTemplate) {
-    ocorrencias.push(warn(HtmlMensagens.title, relPath, 1));
+    ocorrencias.push(warn(messages.HtmlMensagens.title, relPath, 1));
   }
 
   // <a target="_blank" sem rel seguro
   for (const m of scan.matchAll(/<a[^>]*target=['"]?_blank['"]?[^>]*>/gi)) {
     const hasRelSafe = /rel=['"][^'"]*(noopener|noreferrer)[^'"]*['"]/i.test(m[0]);
     if (!hasRelSafe) {
-      ocorrencias.push(warn(HtmlMensagens.linkTargetBlank, relPath, lineOfMasked(m.index)));
+      ocorrencias.push(warn(messages.HtmlMensagens.linkTargetBlank, relPath, lineOfMasked(m.index)));
     }
   }
 
@@ -314,13 +314,13 @@ function collectHtmlIssuesRegex(src: string, relPath: string): Msg[] {
     const rolePresentation = /\srole=['"](presentation|none)['"]/i.test(m[0]);
     const dataAttr = /\s(?:data-)?(?:decorative|icon|symbol)=/i.test(m[0]);
     if (!hasAlt && !ariaHidden && !ariaLabel && !rolePresentation && !dataAttr && !isSvg) {
-      ocorrencias.push(warn(HtmlMensagens.imgWithoutAlt, relPath, lineOfMasked(m.index)));
+      ocorrencias.push(warn(messages.HtmlMensagens.imgWithoutAlt, relPath, lineOfMasked(m.index)));
     }
   }
 
   // Handlers inline (mais flexível para data-*)
   for (const m of scan.matchAll(/\son(?:click|change|submit|load|error|mouseover|mouseout|keyup|keydown|focus|blur|input)=/gi)) {
-    ocorrencias.push(warn(HtmlMensagens.inlineHandler, relPath, lineOfMasked(m.index)));
+    ocorrencias.push(warn(messages.HtmlMensagens.inlineHandler, relPath, lineOfMasked(m.index)));
   }
 
   // form sem method ou action
@@ -328,10 +328,10 @@ function collectHtmlIssuesRegex(src: string, relPath: string): Msg[] {
     const hasMethod = /\smethod=/i.test(m[0]);
     const hasAction = /\saction=/i.test(m[0]);
     if (!hasMethod) {
-      ocorrencias.push(warn(HtmlMensagens.formWithoutMethod, relPath, lineOfMasked(m.index)));
+      ocorrencias.push(warn(messages.HtmlMensagens.formWithoutMethod, relPath, lineOfMasked(m.index)));
     }
     if (!hasAction && !/<form[^>]*data-/i.test(m[0])) {
-      ocorrencias.push(warn(HtmlMensagens.formWithoutAction, relPath, lineOfMasked(m.index)));
+      ocorrencias.push(warn(messages.HtmlMensagens.formWithoutAction, relPath, lineOfMasked(m.index)));
     }
   }
 
@@ -342,12 +342,12 @@ function collectHtmlIssuesRegex(src: string, relPath: string): Msg[] {
     const isHidden = /\stype=['"]?hidden['"]?/i.test(m[0]);
     const isButton = /\stype=['"]?(button|submit|reset)['"]/i.test(m[0]);
     if (!isHidden && !isButton && !hasAriaLabel && !hasNome) {
-      ocorrencias.push(warn(HtmlMensagens.inputWithoutLabel, relPath, lineOfMasked(m.index)));
+      ocorrencias.push(warn(messages.HtmlMensagens.inputWithoutLabel, relPath, lineOfMasked(m.index)));
     }
 
     // Detecta autocomplete ruim
     if (/\stype=['"]?password['"]?\s/.test(m[0]) && !/\sautocomplete=/i.test(m[0])) {
-      ocorrencias.push(warn(HtmlMensagens.passwordWithoutAutocomplete, relPath, lineOfMasked(m.index)));
+      ocorrencias.push(warn(messages.HtmlMensagens.passwordWithoutAutocomplete, relPath, lineOfMasked(m.index)));
     }
   }
 
@@ -361,7 +361,7 @@ function collectHtmlIssuesRegex(src: string, relPath: string): Msg[] {
       const hasRoleButton = /\srole=['"]button['"]/i.test(m[0]);
       const hasTabIndex = /\stabindex\s*=/.test(m[0]);
       if (!hasOnClick && !hasRoleButton && !hasTabIndex) {
-        ocorrencias.push(warn(HtmlMensagens.linkNoHref, relPath, lineOfMasked(m.index)));
+        ocorrencias.push(warn(messages.HtmlMensagens.linkNoHref, relPath, lineOfMasked(m.index)));
       }
     }
   }
@@ -381,7 +381,7 @@ function collectHtmlIssuesRegex(src: string, relPath: string): Msg[] {
       .replace(/<\/\s*script\b[^>]*\s*>[\s\S]*$/i, '');
     const isEmpty = innerScriptContent.trim().length === 0;
     if (!isExternal && !isEmpty) {
-      ocorrencias.push(warn(HtmlMensagens.inlineScript, relPath, lineOfScan(m.index)));
+      ocorrencias.push(warn(messages.HtmlMensagens.inlineScript, relPath, lineOfScan(m.index)));
     }
   }
 
@@ -396,7 +396,7 @@ function collectHtmlIssuesRegex(src: string, relPath: string): Msg[] {
     }
     const isEmpty = /<style\b[^>]*>\s*<\/\s*style[^>]*>/i.test(m[0]);
     if (!isEmpty) {
-      ocorrencias.push(warn(HtmlMensagens.inlineStyle, relPath, lineOfScan(m.index)));
+      ocorrencias.push(warn(messages.HtmlMensagens.inlineStyle, relPath, lineOfScan(m.index)));
     }
   }
   return ocorrencias;

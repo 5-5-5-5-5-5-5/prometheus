@@ -2,12 +2,12 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 
-import type { MemoryMessage,SenseiContextState, SenseiRunRecord } from '@';
+import type { MemoryMessage,PrometheusContextState, PrometheusRunRecord } from '@';
 
 import type { RunEndUpdate,RunStartInput } from '../types/shared/memory.js';
 
 // Re-exporta para compatibilidade com código existente
-export type { MemoryMessage,RunEndUpdate,RunStartInput, SenseiContextState, SenseiRunRecord };
+export type { MemoryMessage,RunEndUpdate,RunStartInput, PrometheusContextState, PrometheusRunRecord };
 export class ConversationMemory {
   private history: MemoryMessage[] = [];
   constructor(private maxHistory = 10, private persistCaminho?: string) {}
@@ -32,7 +32,7 @@ export class ConversationMemory {
     return [...this.history];
   }
   getSummary(): {
-    // @sensei-disable: tipo-literal-inline-complexo
+    // @prometheus-disable: tipo-literal-inline-complexo
     totalMessages: number;
     userMessages: number;
     assistantMessages: number;
@@ -63,8 +63,8 @@ export class ConversationMemory {
     }
   }
 }
-export class SenseiContextMemory {
-  private state: SenseiContextState = {
+export class PrometheusContextMemory {
+  private state: PrometheusContextState = {
     schemaVersion: 1,
     lastRuns: [],
     preferences: {}
@@ -74,12 +74,12 @@ export class SenseiContextMemory {
     if (!this.persistCaminho) return;
     try {
       const raw = await readFile(this.persistCaminho, 'utf-8');
-      const parsed = JSON.parse(raw) as Partial<SenseiContextState>;
+      const parsed = JSON.parse(raw) as Partial<PrometheusContextState>;
       if (parsed && parsed.schemaVersion === 1) {
         this.state = {
-          // @sensei-disable: tipo-literal-inline-complexo
+          // @prometheus-disable: tipo-literal-inline-complexo
           schemaVersion: 1,
-          lastRuns: Array.isArray(parsed.lastRuns) ? parsed.lastRuns as SenseiRunRecord[] : [],
+          lastRuns: Array.isArray(parsed.lastRuns) ? parsed.lastRuns as PrometheusRunRecord[] : [],
           preferences: parsed.preferences && typeof parsed.preferences === 'object' ? parsed.preferences as Record<string, unknown> : {}
         };
       }
@@ -87,9 +87,9 @@ export class SenseiContextMemory {
       // mantém defaults
     }
   }
-  getState(): SenseiContextState {
+  getState(): PrometheusContextState {
     return {
-      // @sensei-disable: tipo-literal-inline-complexo
+      // @prometheus-disable: tipo-literal-inline-complexo
       schemaVersion: 1,
       lastRuns: [...this.state.lastRuns],
       preferences: {
@@ -97,7 +97,7 @@ export class SenseiContextMemory {
       }
     };
   }
-  getLastRun(): SenseiRunRecord | undefined {
+  getLastRun(): PrometheusRunRecord | undefined {
     return this.state.lastRuns[this.state.lastRuns.length - 1];
   }
   getPreference<T = unknown>(key: string): T | undefined {
@@ -110,7 +110,7 @@ export class SenseiContextMemory {
   async recordRunStart(
   input: RunStartInput): Promise<string> {
     const id = `${Date.now()}-${Math.random().toString(16).slice(2)}`;
-    const record: SenseiRunRecord = {
+    const record: PrometheusRunRecord = {
       id,
       timestamp: input.timestamp ?? new Date().toISOString(),
       cwd: input.cwd,
@@ -157,14 +157,14 @@ export class SenseiContextMemory {
 }
 export async function getDefaultMemory(): Promise<ConversationMemory> {
   // Preferimos memória por projeto (cwd) para evitar misturar repositórios.
-  const persistCaminho = join(process.cwd(), '.sensei', 'history.json');
+  const persistCaminho = join(process.cwd(), '.prometheus', 'history.json');
   const mem = new ConversationMemory(10, persistCaminho);
   await mem.init();
   return mem;
 }
-export async function getDefaultContextMemory(): Promise<SenseiContextMemory> {
-  const persistCaminho = join(process.cwd(), '.sensei', 'context.json');
-  const mem = new SenseiContextMemory(20, persistCaminho);
+export async function getDefaultContextMemory(): Promise<PrometheusContextMemory> {
+  const persistCaminho = join(process.cwd(), '.prometheus', 'context.json');
+  const mem = new PrometheusContextMemory(20, persistCaminho);
   await mem.init();
   return mem;
 }

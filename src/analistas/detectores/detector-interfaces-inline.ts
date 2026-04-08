@@ -13,7 +13,7 @@
 import type { NodePath } from '@babel/traverse';
 import type { Node } from '@babel/types';
 import { getTypesDirectoryDisplay, isInsideTypesDirectory } from '@core/config/conventions.js';
-import { DetectorInterfacesInlineMensagens } from '@core/messages/pt/analistas/detector-interfaces-inline-messages.js';
+import { messages } from '@core/messages/index.js';
 import { isInStringOrComment } from '@shared/helpers/context-utils.js';
 
 import type { Analista, InterfaceInlineDetection, Ocorrencia } from '@';
@@ -114,7 +114,7 @@ const ANALISTA: Analista = {
           linha,
           complexidade,
           contexto: tipoCompleto.substring(0, 100),
-          sugestao: DetectorInterfacesInlineMensagens.moverTipoParaTipos(nomeTipo)
+          sugestao: messages.DetectorInterfacesInlineMensagens.moverTipoParaTipos(nomeTipo)
         };
         ocorrencias.push(createOcorrencia(detection, relPath));
       }
@@ -139,7 +139,7 @@ const ANALISTA: Analista = {
         complexidade: 0,
         // Não importa - exportada sempre reporta
         contexto: `export interface ${nomeInterface}`,
-        sugestao: DetectorInterfacesInlineMensagens.interfaceExportadaParaTipos(nomeInterface)
+        sugestao: messages.DetectorInterfacesInlineMensagens.interfaceExportadaParaTipos(nomeInterface)
       };
       ocorrencias.push(createOcorrencia(detection, relPath));
     }
@@ -174,7 +174,7 @@ const ANALISTA: Analista = {
           linha,
           complexidade,
           contexto: interfaceCompleta.substring(0, 100),
-          sugestao: DetectorInterfacesInlineMensagens.interfaceComplexaParaTipos(nomeInterface)
+          sugestao: messages.DetectorInterfacesInlineMensagens.interfaceComplexaParaTipos(nomeInterface)
         };
         ocorrencias.push(createOcorrencia(detection, relPath));
       }
@@ -197,7 +197,7 @@ const ANALISTA: Analista = {
       ocorrencias.push({
         tipo: 'interface-inline-duplicada',
         nivel: 'aviso',
-        mensagem: DetectorInterfacesInlineMensagens.tipoDuplicado({
+        mensagem: messages.DetectorInterfacesInlineMensagens.tipoDuplicado({
           propriedades,
           totalOcorrencias,
           contextoDesc,
