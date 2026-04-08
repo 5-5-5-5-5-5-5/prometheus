@@ -13,7 +13,7 @@ import type { FileEntry, FileMap, ScanOptions } from '@';
 export type { ScanOptions };
 export async function scanRepository(baseDir: string, options: ScanOptions = {}): Promise<FileMap> {
   // Log de início da varredura
-  messages.log.iniciarVarredura(baseDir);
+  messages.logVarredor.iniciarVarredura(baseDir);
 
   // Helpers locais de normalização (não exportados)
   const toPosix = (s: string) => s.replace(/\\+/g, '/');
@@ -63,7 +63,7 @@ export async function scanRepository(baseDir: string, options: ScanOptions = {})
       if (!p) continue;
       p = toPosix(trimDotSlash(p));
       let anchor = '';
-      if (p.includes('/**')) anchor = p.slice(0, p.indexOf('/**'));else if (p.includes('/*')) anchor = p.slice(0, p.indexOf('/*'));else if (p.includes('/')) anchor = p.split('/')[0];else anchor = '';
+      if (p.includes('/**')) anchor = p.slice(0, p.indexOf('/**')); else if (p.includes('/*')) anchor = p.slice(0, p.indexOf('/*')); else if (p.includes('/')) anchor = p.split('/')[0]; else anchor = '';
       anchor = anchor.replace(/\/+/g, '/').replace(/\/$/, '');
       // Ignora anchors inválidos: vazios, apenas '.', '**' ou contendo metacaracteres (ex.: '**/src')
       if (anchor && anchor !== '.' && anchor !== '**' && !META.test(anchor)) {
@@ -386,7 +386,7 @@ export async function scanRepository(baseDir: string, options: ScanOptions = {})
           if (efetivoIncluirConteudo) {
             const emTeste = !!process.env.VITEST;
             try {
-              if (emTeste) content = await lerEstado<string>(norm);else content = await lerArquivoTexto(norm);
+              if (emTeste) content = await lerEstado<string>(norm); else content = await lerArquivoTexto(norm);
             } catch (e) {
               onProgress(JSON.stringify({
                 tipo: 'erro',
@@ -425,6 +425,6 @@ export async function scanRepository(baseDir: string, options: ScanOptions = {})
   // Log de conclusão da varredura
   const totalArquivos = Object.keys(fileMap).length;
   const totalDiretorios = new Set(Object.values(fileMap).map(f => path.dirname(f.relPath))).size;
-  messages.log.completo(totalArquivos, totalDiretorios);
+  messages.logVarredor.completo(totalArquivos, totalDiretorios);
   return fileMap;
 }

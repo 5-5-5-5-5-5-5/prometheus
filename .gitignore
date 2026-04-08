@@ -3,7 +3,7 @@
 .vscode
 .legados
 .codex
-.sensei
+.prometheus
 scripts
 
 # Node modules

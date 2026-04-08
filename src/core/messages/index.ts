@@ -12,10 +12,10 @@
  *
  * Uso:
  *   import { messages, setLocale, getLocale, t, getMessages } from '@core/messages/index.js';
- *   
+ *
  *   // Definir locale:
  *   setLocale('en');
- *   
+ *
  *   // Acessar mensagens (resolve automaticamente pelo locale atual):
  *   messages.log
  *   messages.ExcecoesMensagens

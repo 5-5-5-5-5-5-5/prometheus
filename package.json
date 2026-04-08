@@ -1,6 +1,6 @@
 {
   "name": "prometheus",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "type": "module",
   "description": "C.L.I modular para análise, diagnóstico e manutenção de projetos JavaScript/TypeScript e multi-stack leve",
   "author": "5 5 5",
@@ -12,7 +12,7 @@
     ".": "./dist/bin/index.js"
   },
   "engines": {
-    "node": ">=24.14.0"
+    "node": ">=24.14.1"
   },
   "scripts": {
     "prebuild": "rimraf dist bin",
@@ -82,13 +82,13 @@
     "chalk": "^5.6.2",
     "commander": "^14.0.3",
     "css-tree": "^3.2.1",
-    "fast-xml-parser": "^5.5.10",
+    "fast-xml-parser": "^5.5.11",
     "htmlparser2": "^12.0.0",
     "java-parser": "^3.0.1",
     "micromatch": "^4.0.8",
     "ora": "^9.3.0",
     "p-limit": "^7.3.0",
-    "prometheus": "file:prometheus-0.4.1.tgz",
+    "prometheus": "file:prometheus-0.4.2.tgz",
     "xxhashjs": "^0.2.2"
   },
   "devDependencies": {
