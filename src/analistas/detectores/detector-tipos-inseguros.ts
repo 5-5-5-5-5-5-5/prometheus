@@ -141,6 +141,32 @@ const ANALISTA: Analista = {
       const lineContext = splitLines(src)[linha - 1]?.trim() || '';
       const tipo = matchFraco[1];
 
+      // Filtrar contextos legítimos onde {} é aceitável
+      // 1. Inicialização de objeto vazio: prop?: {} = {}
+      // 2. Partial types: Partial<SomeType> - contexto válido
+      // 3. Parâmetros opcionais com默认值
+      // 4. Type assertions em objetos reais (não tipagem explícita)
+      const antes = src.substring(Math.max(0, position - 30), position);
+      const depois = lineContext.substring(lineContext.indexOf(':') + 1);
+
+      // Pular se é inicialização de objeto vazio (prop?: {} = {})
+      if (/\?\s*:\s*\{\}\s*=/.test(`${antes  }: {}`)) continue;
+
+      // Pular se é parâmetro de função com valor default
+      if (/\?\s*:\s*\{\}\s*[=,)]/.test(antes)) continue;
+
+      // Pular se é parte de Partial/Required/Readonly
+      if (/Partial<|Required<|Readonly<|\}\?$/.test(antes)) continue;
+
+      // Pular se é em contexto de catch block
+      if (/catch\s*\([^)]*:\s*\{\}/.test(lineContext)) continue;
+
+      // Pular se é inicialização de objeto vazio: algo = {}
+      if (depois.trim().startsWith('=')) continue;
+
+      // Pular se é parâmetro de função com default: : {} = ou : {} ,
+      if (/^\s*\{?\s*\}\s*[,=)]/.test(depois)) continue;
+
       const mensagem = `Tipo '${tipo}' é muito permissivo e pouco útil para type safety`;
       const sugestao = tipo === 'Object' ? 'Use Record<string, unknown> ou interface específica' : 'Use Record<string, never> para objetos vazios ou interface específica';
 

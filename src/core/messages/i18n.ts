@@ -9,7 +9,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-let cache: Record<string, any> = {};
+let cache: Record<string, Record<string, unknown>> = {};
 let currentLocale: string = 'pt';
 
 const SUPPORTED_LOCALES = ['pt', 'en', 'zh', 'ja'];
@@ -32,7 +32,7 @@ function detectLocale(): string {
         return confLocale;
       }
     }
-  } catch (e) {
+  } catch {
     // Ignora erros (arquivo inexistente ou JSON inválido)
   }
 
@@ -55,7 +55,7 @@ export function initLocale(): void {
 
 initLocale();
 
-export function carregarMensagens(locale: string): any {
+export function carregarMensagens(locale: string): Record<string, unknown> {
   if (cache[locale]) {
     return cache[locale];
   }
@@ -77,7 +77,12 @@ export function carregarMensagens(locale: string): any {
 
 export function t(key: string, locale: string, vars?: Record<string, string | number>): string {
   const mensagens = carregarMensagens(locale);
-  const valor = key.split('.').reduce((obj, k) => obj?.[k], mensagens);
+  const valor = key.split('.').reduce((obj: unknown, k: string) => {
+    if (obj && typeof obj === 'object' && k in obj) {
+      return (obj as Record<string, unknown>)[k];
+    }
+    return undefined;
+  }, mensagens);
 
   if (typeof valor !== 'string') {
     return key;

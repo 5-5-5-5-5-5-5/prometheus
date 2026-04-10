@@ -8,15 +8,11 @@ Proveniência e Autoria: Este documento integra o projeto Prometheus (licença M
 
 ---
 
-<img src="svg/badge-analitico.svg"/>
-<img src="svg/badge-colaborador.svg"/>
-<img src="svg/badge-persistente.svg"/>
-
----
-
-<img src="svg/badge-open-source.svg"/>
-<img src="svg/badge-security.svg"/>
-<img src="svg/badge-software-architect.svg"/>
+<img src="svg/badge-beta.svg"/>
+<img src="svg/badge-stable.svg"/>
+<img src="svg/badge-maintained.svg"/>
+<img src="svg/badge-prs-welcome.svg"/>
+<img src="svg/badge-maintained.svg"/>
 
 ---
 

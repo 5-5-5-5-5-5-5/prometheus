@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 // @prometheus-disable tipo-inseguro-unknown
 // Justificativa: unknown é usado para serialização genérica que aceita qualquer entrada
-import { promises as fs } from 'node:fs';
 import * as fsCb from 'node:fs';
+import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
 import { messages } from '@core/messages/index.js';
