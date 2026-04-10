@@ -10,7 +10,6 @@ Proveniência e Autoria: Este documento integra o projeto Prometheus (licença M
 
 <img src="svg/badge-beta.svg"/>
 <img src="svg/badge-stable.svg"/>
-<img src="svg/badge-maintained.svg"/>
 <img src="svg/badge-prs-welcome.svg"/>
 <img src="svg/badge-maintained.svg"/>
 
