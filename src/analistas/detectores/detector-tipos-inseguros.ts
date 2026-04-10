@@ -19,7 +19,7 @@ import { isTestArquivo, shouldSuppressOccurrence } from '@shared/helpers/rule-co
 
 import type { Analista, Ocorrencia } from '@';
 
-const ANALISTA: Analista = {
+export const ANALISTA: Analista = {
   nome: 'detector-tipos-inseguros',
   categoria: 'code-quality',
   descricao: 'Detecta uso de any e unknown que podem ser substituídos por tipos específicos',
@@ -334,4 +334,3 @@ const ANALISTA: Analista = {
     return ocorrencias;
   }
 };
-export default ANALISTA;

@@ -8,14 +8,14 @@ export * from './detector-dependencias.js';
 export * from './detector-duplicacoes.js';
 export * from './detector-estrutura.js';
 export * from './detector-fantasmas.js';
-export * from './detector-interfaces-inline.js';
+export { ANALISTA as detectorInterfacesInline } from './detector-interfaces-inline.js';
 export * from './detector-performance.js';
 export * from './detector-seguranca.js';
-export * from './detector-tipos-inseguros.js';
+export { ANALISTA as detectorTiposInseguros } from './detector-tipos-inseguros.js';
 export * from './detector-vazamentos-memoria.js';
 
 // Default export para compatibilidade
-const detectores = {
+export const detectores = {
   detectorDependencias: (): null => null,
   detectorEstrutura: (): null => null,
   analyserArquitetura: (): null => null,
@@ -32,5 +32,3 @@ const detectores = {
   detectorFantasmas: (): null => null,
   detectorArquetipos: (): null => null,
 };
-
-export default detectores;

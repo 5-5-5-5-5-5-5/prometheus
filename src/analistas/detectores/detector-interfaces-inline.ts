@@ -20,7 +20,7 @@ import type { Analista, InterfaceInlineDetection, Ocorrencia } from '@';
 
 import type { DuplicateEntry,InlineTypeOccurrence } from '../../types/analistas/detectores.js';
 
-const ANALISTA: Analista = {
+export const ANALISTA: Analista = {
   nome: 'detector-interfaces-inline',
   categoria: 'code-organization',
   descricao: 'Detecta interfaces e tipos complexos inline que deveriam estar em arquivos de tipos',
@@ -499,5 +499,3 @@ function extractTypeDefinition(afterEquals: string): string | null {
   }
   return null;
 }
-
-export default ANALISTA;

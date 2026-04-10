@@ -229,4 +229,3 @@ export const ICONES = {
 /**
  * Export default para uso simplificado
  */
-export default ICONES;
