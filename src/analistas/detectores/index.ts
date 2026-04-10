@@ -8,10 +8,10 @@ export * from './detector-dependencias.js';
 export * from './detector-duplicacoes.js';
 export * from './detector-estrutura.js';
 export * from './detector-fantasmas.js';
-export { ANALISTA as detectorInterfacesInline } from './detector-interfaces-inline.js';
+export * from './detector-interfaces-inline.js';
 export * from './detector-performance.js';
 export * from './detector-seguranca.js';
-export { ANALISTA as detectorTiposInseguros } from './detector-tipos-inseguros.js';
+export * from './detector-tipos-inseguros.js';
 export * from './detector-vazamentos-memoria.js';
 
 // Default export para compatibilidade

@@ -11,9 +11,9 @@ import { analistaConstrucoesSintaticas } from '@analistas/detectores/detector-co
 import * as detectorDependenciasMod from '@analistas/detectores/detector-dependencias.js';
 import { analistaDuplicacoes } from '@analistas/detectores/detector-duplicacoes.js';
 import * as detectorEstruturaMod from '@analistas/detectores/detector-estrutura.js';
-import { ANALISTA as detectorInterfacesInline } from '@analistas/detectores/detector-interfaces-inline.js';
+import { detectorInterfacesInline } from '@analistas/detectores/detector-interfaces-inline.js';
 import { analistaSeguranca } from '@analistas/detectores/detector-seguranca.js';
-import { ANALISTA as detectorTiposInseguros } from '@analistas/detectores/detector-tipos-inseguros.js';
+import { detectorTiposInseguros } from '@analistas/detectores/detector-tipos-inseguros.js';
 import { analistaVazamentoMemoria } from '@analistas/detectores/detector-vazamentos-memoria.js';
 // Analistas contextuais inteligentes
 import { analistaSugestoesContextuais } from '@analistas/estrategistas/sugestoes-contextuais.js';

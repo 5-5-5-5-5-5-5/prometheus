@@ -225,6 +225,9 @@ export const ICONES = {
   relatorio: ICONES_RELATORIO,
   zelador: ICONES_ZELADOR,
 } as const;
+export const ICONES_CENTRAL = ICONES;
+export const ICONES_DIAGNOSTICO_CENTRAL = ICONES_DIAGNOSTICO;
+export const ICONES_ZELADOR_CENTRAL = ICONES_ZELADOR;
 
 /**
  * Export default para uso simplificado
