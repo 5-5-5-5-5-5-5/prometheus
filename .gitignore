@@ -4,6 +4,7 @@
 .legados
 .codex
 .prometheus
+.qwen
 scripts
 
 # Node modules
