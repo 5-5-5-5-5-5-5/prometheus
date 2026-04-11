@@ -22,7 +22,7 @@ Proveniência e Autoria: Este documento integra o projeto Prometheus (licença M
 
 ---
 
-![version](https://img.shields.io/badge/version-0.4.2-brightblue?style=flat-square)
+![version](https://img.shields.io/badge/version-0.4.3-brightblue?style=flat-square)
 ![node](https://img.shields.io/badge/node-%3E%3D24.14.1-brightgreen?style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT--0-red?style=flat-square)
 [![issues](https://img.shields.io/github/issues/5-5-5-5-5-5-5/prometheus?style=flat-square)](https://github.com/5-5-5-5-5-5-5/prometheus/issues)
@@ -34,7 +34,7 @@ Proveniência e Autoria: Este documento integra o projeto Prometheus (licença M
 
 <div align="center">
 
-CLI modular para **análise, diagnóstico e manutenção** de projetos JavaScript/TypeScript com suporte extensível para HTML, CSS, XML, Python, PHP e mais.
+CLI modular para **análise, diagnóstico e manutenção** de projetos JavaScript/TypeScript com suporte extensível para HTML, CSS, XML, Python, PHP, Shell, SQL e mais.
 
 [🚀 Começar Rápido](#-começar-rápido) • [📚 Documentação](#-documentação-completa) • [💡 Exemplos](#-exemplos) • [🔧 Instalar](#instalação) • [🤝 Contribuir](#-desenvolvimento)
 
@@ -49,11 +49,11 @@ CLI modular para **análise, diagnóstico e manutenção** de projetos JavaScrip
 - [📥 Instalação](#instalação)
 - [🔄 Fluxo Recomendado](#fluxo-recomendado)
 - [⚙️ Configuração](#configuração)
+- [📚 Comandos Disponíveis](#-comandos-disponíveis)
 - [📚 Documentação Completa](#-documentação-completa)
 - [💡 Exemplos](#-exemplos)
 - [🏗️ Arquitetura](#-estrutura-do-projeto)
 - [👨‍💻 Desenvolvimento](#-desenvolvimento)
-- [📄 Arquivos Principais](#arquivos-principais)
 - [🤝 Contribuir](#-desenvolvimento)
 - [📞 Suporte](#-suporte)
 
@@ -64,30 +64,37 @@ Prometheus oferece uma suite completa de ferramentas para análise e manutençã
 ### 🔍 Análise Inteligente
 
 - **Diagnóstico Completo**: Detecta problemas de qualidade, segurança e arquitetura
-- **Análise Customizável**: 15+ analisadores especializados (código frágil, duplicação, complexidade, etc)
-- **Sistema de Registro**: Descoberta automática de analistas built-in e plugins customizados
-- **Multi-linguagem**: Suporte nativo para JavaScript/TypeScript + HTML, CSS, XML, Python, PHP
+- **15+ Analisadores Especializados**: Código frágil, duplicação, complexidade, performance, vazamentos de memória, tipos inseguros, etc.
+- **18+ Plugins Multi-linguagem**: React, CSS, HTML, Python, Shell, SQL, Tailwind, XML, SVG, e mais
+- **Sistema de Registro Inteligente**: Descoberta automática de analistas built-in e plugins customizados
+- **Multi-linguagem**: JavaScript/TypeScript nativo + HTML, CSS, XML, Python, PHP, Shell, SQL (Java/Kotlin disponíveis)
 
 ### 🛡️ Manutenção Assistida
 
-- **Auto-fix Seguro**: Correções automáticas com validação de segurança
-- **Guardian**: Monitoramento contínuo de saúde do projeto com baselines
-- **Reestruturação**: Reorganização automática de código seguindo padrões
-- **Poda Inteligente**: Identificação e limpeza de arquivos órfãos
+- **Auto-fix Seguro**: Correções automáticas com validação de segurança (comando `corrigir`)
+- **Guardian**: Monitoramento contínuo de saúde do projeto com baselines e verificação de integridade
+- **Reestruturação**: Reorganização automática de código seguindo padrões arquiteturais
+- **Poda Inteligente**: Identificação e limpeza de arquivos órfãos e código morto
+- **Fix Types**: Correção automática de tipos inseguros (`any`, `unknown`)
+- **Formatação**: Formatação automática seguindo padrões do projeto
+- **Names/Rename**: Extração e renomeação em massa de variáveis com mapeamento inteligente
+- **Reverter**: Gerenciamento de mapa de reversão para moves aplicados
 
 ### 📊 Relatórios Profissionais
 
-- **Múltiplos Formatos**: JSON, Markdown, HTML, CSV
-- **Análise Arquitetural**: Visualização de estrutura e dependências
-- **Métricas Detalhadas**: Complexidade, duplicação, cobertura, performance
-- **Exportação**: Integração com CI/CD, dashboards, ferramentas externas
+- **Múltiplos Formatos**: JSON, Markdown, HTML, CSV com export sharded para projetos grandes
+- **Análise Arquitetural**: Detecção de padrões arquiteturais e dependências
+- **Métricas Detalhadas**: Complexidade ciclomática, duplicação, cobertura, performance com histórico
+- **Baseline de Performance**: Snapshots e comparação de performance ao longo do tempo
+- **Scan de Licenças**: Verificação de licenças de dependências e geração de THIRD-PARTY-NOTICES
 
 ### 🔌 Extensível
 
-- **Plugin System**: Crie analistas customizados facilmente
+- **Plugin System**: Crie analistas customizados com autodiscovery automático
 - **API Modular**: Use Prometheus como biblioteca em seu código
 - **Registry Pattern**: Descoberta dinâmica de componentes
-- **Hooks de Integração**: Integre com suas ferramentas
+- **Worker Pool**: Processamento paralelo com workers para performance em projetos grandes
+- **Schema Versioning**: Relatórios versionados com compatibilidade backward
 
 ---
 
@@ -117,31 +124,26 @@ prometheus diagnosticar --gravidade critic
 ### Próximos Passos
 
 ```bash
-# Configurar seu projeto
-prometheus config --init
-
 # Revisar o que pode ser corrigido automaticamente
 prometheus corrigir --revisar
 
-# Monitorar saúde do projeto
+# Aplicar correções automáticas
+prometheus corrigir --auto
+
+# Estabelecer baseline de saúde do projeto
 prometheus guardian --baseline
+
+# Verificar mudanças após edições
 prometheus guardian --verificar
+
+# Extrair nomes de variáveis para mapeamento
+prometheus names
+
+# Renomear variáveis em massa
+prometheus rename
 ```
 
 👉 **Quer aprender mais?** Veja [Guia de Início Rápido](./docs/guias/GUIA-INICIO-RAPIDO.md) para tutorial completo.
-
----
-
-## Arquivos Principais
-
-| Arquivo | Descrição |
-|---------|-----------|
-| [CHANGELOG.md](CHANGELOG.md) | Histórico de versões e mudanças |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | Guia de contribuição |
-| [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Código de conduta |
-| [SECURITY.md](SECURITY.md) | Política de segurança |
-| [LICENSE](LICENSE) | MIT-0 License |
-| [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt) | Licenças de dependências |
 
 ---
 
@@ -154,12 +156,15 @@ O Prometheus foi projetado para operar como ferramenta de análise estática e m
 - **reorganização estrutural** via `prometheus reestruturar`
 - **poda inteligente** de arquivos órfãos via `prometheus podar`
 - **correções automáticas** via `prometheus corrigir` e `prometheus fix-types`
-- **utilitários avançados** para formatação, licenças, métricas, nomes e performance
+- **gerenciamento de nomes** via `prometheus names` e `prometheus rename`
+- **gestão de reversões** via `prometheus reverter`
+- **métricas e performance** via `prometheus metricas` e `prometheus perf`
+- **utilitários avançados** para formatação, licenças, otimização SVG e mais
 
-**Versão**: v0.5.0 (roadmap até v0.7.0+)
+**Versão atual**: v0.4.3
 **Runtime**: Node.js >= 24.14.1
 **Licença**: MIT-0
-**Linguagem**: TypeScript 5.0+
+**Linguagem**: TypeScript 6.0+
 
 ## Instalação
 
@@ -235,26 +240,14 @@ prometheus diagnosticar --verbose
 
 # Exportar para arquivo JSON
 prometheus diagnosticar --relatorio json --saida analise.json
+
+# Apenas problemas críticos
+prometheus diagnosticar --gravidade critic
 ```
 
-#### 2️⃣ Revisar Configuração
+#### 2️⃣ Estabelecer Baseline de Saúde
 
-Customizar análise conforme suas necessidades:
-
-```bash
-# Criar config padrão
-prometheus config --init
-
-# Validar config existente
-prometheus config --validar
-
-# Ver config carregada
-prometheus config --show
-```
-
-#### 3️⃣ Estabelecer Baseline de Saúde
-
-Criar snapshot inicial para comparações:
+Criar snapshot inicial para comparações futuras:
 
 ```bash
 # Estabelecer baseline
@@ -267,12 +260,12 @@ prometheus guardian --verificar
 prometheus guardian --confirmar
 ```
 
-#### 4️⃣ Correções Automáticas
+#### 3️⃣ Correções Automáticas
 
-Aplicar fixes com segment:
+Aplicar fixes com segurança:
 
 ```bash
-# Ver o que poderia ser corrigido
+# Ver o que pode ser corrigido
 prometheus corrigir
 
 # Revisar mudanças antes de aplicar
@@ -280,18 +273,43 @@ prometheus corrigir --revisar
 
 # Aplicar automaticamente
 prometheus corrigir --auto
+
+# Corrigir tipos inseguros (any, unknown)
+prometheus fix-types --auto
 ```
 
-#### 5️⃣ Monitoramento Contínuo
+#### 4️⃣ Monitoramento Contínuo
 
-ativar monitoramento em tempo real:
+Ativar monitoramento em tempo real:
 
 ```bash
-# Monitor modo watch
+# Monitorar em modo watch
 prometheus guardian --monitorar
 
 # Gerar relatórios periódicos
 prometheus diagnosticar --relatorio markdown --saida RELATORIO.md
+
+# Ver métricas históricas
+prometheus metricas
+
+# Baseline de performance
+prometheus perf snapshot --baseline
+prometheus perf compare
+```
+
+#### 5️⃣ Manutenção de Nomes (Opcional)
+
+Extrair e renomear variáveis:
+
+```bash
+# Extrair nomes de variáveis
+prometheus names
+
+# Renomear variáveis em massa
+prometheus rename --apply
+
+# Reverter mudanças se necessário
+prometheus reverter listar
 ```
 
 ---
@@ -318,44 +336,34 @@ O arquivo principal de configuração é [`prometheus.config.json`](./prometheus
 ```json
 {
   "prometheus": {
-    "nome": "meu-projeto",
-    "versao": "1.0.0",
+    "locale": "pt",
+    "verbose": true,
+    "exclude": [
+      "node_modules/**",
+      "dist/**",
+      "coverage/**",
+      ".git/**"
+    ],
 
     "INCLUDE_EXCLUDE_RULES": {
       "globalExcludeGlob": [
         "node_modules/**",
         "dist/**",
-        "coverage/**",
-        ".git/**"
+        "build/**",
+        "coverage/**"
       ]
     },
 
     "REPO_ARQUETIPO": "cli-modular",
 
-    "REPORT_EXPORT_ENABLED": true,
-
-    "analistas": {
-      "CodigoFragil": { "habilitado": true, "gravidade": "major" },
-      "CodigoMorto": { "habilitado": true, "gravidade": "minor" }
+    "languageSupport": {
+      "javascript": { "enabled": true },
+      "typescript": { "enabled": true },
+      "html": { "enabled": true },
+      "css": { "enabled": true }
     }
   }
 }
-```
-
-### Gerenciar Configuração
-
-```bash
-# Ver config carregada
-prometheus config --show
-
-# Validar config
-prometheus config --validar
-
-# Reset para padrões
-prometheus config --reset --force
-
-# Init novo projeto
-prometheus config --init
 ```
 
 Para configuração completa, veja [GUIA-CONFIGURACAO.md](./docs/guias/GUIA-CONFIGURACAO.md).
@@ -366,29 +374,44 @@ Para configuração completa, veja [GUIA-CONFIGURACAO.md](./docs/guias/GUIA-CONF
 
 ### Comandos Principais
 
-| Comando | Alias | Descrição |
-|---------|-------|-----------|
-| `diagnosticar` | `diag` | Análise completa do projeto |
-| `corrigir` | - | Auto-fix com validação |
-| `guardian` | - | Monitoramento de integridade |
-| `config` | - | Gerenciamento de config |
-| `analista` | - | Info sobre analistas |
-| `relatorio` | - | Gerar relatórios especiais |
+| Comando | Descrição | Exemplo de Uso |
+|---------|-----------|----------------|
+| `diagnosticar` | Análise completa do projeto | `prometheus diagnosticar --verbose` |
+| `corrigir` | Auto-fix com validação de segurança | `prometheus corrigir --auto` |
+| `guardian` | Monitoramento contínuo de integridade | `prometheus guardian --baseline` |
+| `reestruturar` | Reorganizar estrutura do código | `prometheus reestruturar` |
+| `podar` | Remover código morto/arquivos órfãos | `prometheus podar` |
+| `fix-types` | Corrigir tipos inseguros (`any`, `unknown`) | `prometheus fix-types --auto` |
+| `formatar` | Formatação automática do código | `prometheus formatar --write` |
+| `analistas` | Listar/info sobre analistas | `prometheus analistas --listar` |
+
+### Comandos de Nomes e Renomeação
+
+| Comando | Descrição | Exemplo de Uso |
+|---------|-----------|----------------|
+| `names` | Extrair nomes de variáveis | `prometheus names` |
+| `rename` | Aplicar renomeações em massa | `prometheus rename --apply` |
+| `reverter` | Gerenciar mapa de reversão | `prometheus reverter listar` |
+
+### Comandos de Métricas e Performance
+
+| Comando | Descrição | Exemplo de Uso |
+|---------|-----------|----------------|
+| `metricas` | Histórico de execuções | `prometheus metricas` |
+| `perf` | Baseline e comparação de performance | `prometheus perf snapshot --baseline` |
+
+### Comandos de Licenças
+
+| Comando | Descrição | Exemplo de Uso |
+|---------|-----------|----------------|
+| `licencas` | Scan de licenças de dependências | `prometheus licencas scan` |
 
 ### Comandos Utilitários
 
-- `formatar` - Formatação automática
-- `otimizar-svg` - Otimizar arquivos SVG
-- `podar` - Remover código morto
-- `reestruturar` - Reorganizar estrutura
-- `fix-types` - Corrigir tipos inseguros (`any`, `unknown`)
-- `licencas` - Scan de licenças de dependências
-- `names` - Geração de mapeamento de nomes
-- `rename` - Aplicar renomeações
-- `reverter` - Reverter moves registrados
-- `metricas` - Histórico de execuções
-- `perf` - Baseline de performance
-- `atualizar` - Atualizar Prometheus
+| Comando | Descrição | Exemplo de Uso |
+|---------|-----------|----------------|
+| `otimizar-svg` | Otimizar arquivos SVG | `prometheus otimizar-svg` |
+| `atualizar` | Atualizar Prometheus | `prometheus atualizar` |
 
 ### Ajuda Detalhada
 
@@ -459,20 +482,53 @@ prometheus guardian --monitorar
 prometheus guardian --confirmar
 ```
 
-### Relatórios Especializados
+### Relatórios e Métricas
 
 ```bash
-# Análise arquitetural
-prometheus relatorio arquitetura --saida arquitetura.md
+# Análise com exportação JSON
+prometheus diagnosticar --relatorio json --saida analise.json
 
-# Padrões de uso
-prometheus relatorio padroes --saida padroes.json
+# Exportar como Markdown
+prometheus diagnosticar --relatorio markdown --saida RELATORIO.md
 
-# Complexidade
-prometheus relatorio complexidade --saida complexidade.html
+# Ver métricas históricas
+prometheus metricas
 
-# Duplicação
-prometheus relatorio duplicacao --saida duplicacao.md
+# Baseline de performance
+prometheus perf snapshot --baseline
+
+# Comparar performance
+prometheus perf compare
+```
+
+### Nomes e Renomeação
+
+```bash
+# Extrair nomes de variáveis do projeto
+prometheus names
+
+# Renomear variáveis usando mapeamento
+prometheus rename
+
+# Reverter renomeações aplicadas
+prometheus reverter listar
+prometheus reverter --help
+```
+
+### Licenças e Compliance
+
+```bash
+# Scan de licenças de dependências
+prometheus licencas scan
+
+# Gerar arquivo THIRD-PARTY-NOTICES
+prometheus licencas notices generate
+
+# Adicionar disclaimer de proveniência
+prometheus licencas disclaimer add
+
+# Verificar disclaimers
+prometheus licencas disclaimer verify
 ```
 
 👉 **Mais exemplos?** Veja [Exemplos de Uso](./docs/exemplos/EXEMPLOS-USO.md).
@@ -522,35 +578,98 @@ Prometheus possui documentação extensiva e atualizada:
 
 ```
 prometheus-dev/
-├── src/                          # Código-fonte
-│   ├── bin/                      # CLI entry points
-│   ├── cli/                      # Comandos e handlers
-│   ├── core/                     # Núcleo (config, execution, messages)
-│   ├── analistas/                # Detectores/analisadores
-│   ├── relatorios/               # Gerador de relatórios
-│   ├── shared/                   # Código compartilhado
+├── src/                          # Código-fonte principal
+│   ├── bin/                      # Entry points da CLI
+│   │   ├── index.ts              # Bootstrap com ESM loader
+│   │   └── cli.ts                # Ponto de entrada principal
+│   │
+│   ├── cli/                      # Interface de linha de comando
+│   │   ├── commands/             # Implementação de todos os comandos
+│   │   ├── diagnostico/          # Handlers, filtros e exporters
+│   │   ├── handlers/             # Exporters especializados
+│   │   ├── helpers/              # Funções auxiliares
+│   │   ├── options/              # Flags e validações
+│   │   ├── processing/           # Processamento de resultados
+│   │   ├── index.ts              # Registro de comandos
+│   │   └── processamento-diagnostico.ts
+│   │
+│   ├── core/                     # Núcleo do sistema
+│   │   ├── config/               # Configuração e validação
+│   │   ├── execution/            # Motor de execução
+│   │   ├── messages/             # Sistema i18n (PT, EN, ZH, JA)
+│   │   └── shared/               # Utilitários compartilhados
+│   │
+│   ├── analistas/                # Sistema de análise
+│   │   ├── detectores/           # 15+ detectores built-in
+│   │   │   ├── detector-codigo-fragil.ts
+│   │   │   ├── detector-duplicacoes.ts
+│   │   │   ├── detector-performance.ts
+│   │   │   ├── detector-seguranca.ts
+│   │   │   ├── detector-vazamentos-memoria.ts
+│   │   │   └── ...
+│   │   │
+│   │   ├── plugins/              # 18+ plugins multi-linguagem
+│   │   │   ├── analista-react.ts
+│   │   │   ├── analista-css.ts
+│   │   │   ├── analista-html.ts
+│   │   │   ├── analista-python.ts
+│   │   │   ├── analista-shell.ts
+│   │   │   ├── analista-sql.ts
+│   │   │   └── ...
+│   │   │
+│   │   ├── arquitetos/           # Análise arquitetural
+│   │   ├── estrategistas/        # Análise estratégica
+│   │   ├── pontuadores/          # Sistema de pontuação
+│   │   ├── corrections/          # Correções automáticas
+│   │   └── registry/             # Sistema de registro
+│   │
+│   ├── zeladores/                # Executores de ações
+│   │   ├── index.ts
+│   │   └── zelador-imports.ts
+│   │
 │   ├── guardian/                 # Monitor de saúde
+│   ├── relatorios/               # Geradores de relatórios
 │   ├── licensas/                 # Gestão de licenças
+│   ├── shared/                   # Código compartilhado
 │   ├── types/                    # TypeScript definitions
-│   └── zeladores/                # Executores de ação
+│   └── node.loader.ts            # ESM loader customizado
 │
-├── tests/                        # Testes unitários
-├── docs/                         # Documentação complete
+├── tests/                        # Testes unitários (Vitest)
+├── docs/                         # Documentação completa
 │   ├── guias/                    # Guias operacionais
 │   ├── arquitetura/              # Arquitetura e design
-│   ├── desenvolvimento/          # Guias para devs
+│   ├── desenvolvimento/          # Guias para desenvolvedores
 │   ├── referencia/               # Referência técnica
-│   ├── exemplos/                 # Casos de uso
+│   ├── exemplos/                 # Casos de uso práticos
 │   ├── roadmap/                  # Roadmap do projeto
-│   ├── INDICE.md                 # Índice navegável
-│   └── README.md                 # Documentação overview
+│   ├── INDICE.md                 # Índice completo navegável
+│   └── README.md                 # Overview da documentação
 │
-├── scripts/                      # Utilitários
-├── prometheus.config.json        # Configuração
-├── package.json                  # Metadados
-├── tsconfig.json                 # TypeScript config
+├── .github/                      # Configuração CI/CD
+├── svg/                          # Badges e assets visuais
+├── prometheus.config.json        # Configuração do projeto
+├── package.json                  # Metadados e scripts
+├── tsconfig.json                 # Configuração TypeScript
+├── vitest.config.ts              # Configuração de testes
+├── eslint.config.js              # Configuração ESLint
 └── README.md                     # Este arquivo
 ```
+
+### Parsers e Linguagens Suportadas
+
+| Linguagem | Parser | Status |
+|-----------|--------|--------|
+| JavaScript | Babel | ✅ Nativo |
+| TypeScript | Babel | ✅ Nativo |
+| HTML | htmlparser2 | ✅ Nativo |
+| CSS | css-tree | ✅ Nativo |
+| XML | fast-xml-parser | ✅ Nativo |
+| Python | Heurístico | ✅ Nativo |
+| PHP | Heurístico | ✅ Nativo |
+| Shell | Heurístico | ✅ Plugin |
+| SQL | Heurístico | ✅ Plugin |
+| Java | java-parser | ⚙️ Disponível (desabilitado) |
+| Kotlin | Heurístico | ⚙️ Disponível (desabilitado) |
 
 Para detalhes sobre cada diretório, veja [Estrutura de Código](./docs/desenvolvimento/estrutura-codigo/README.md).
 
@@ -578,42 +697,89 @@ prometheus --version
 
 ### Scripts Disponíveis
 
+#### Build e Desenvolvimento
+
 ```bash
-npm run build          # Compilar TypeScript
+npm run build          # Compilar TypeScript (limpa dist/ antes)
+npm run typecheck      # Verificação de tipos sem compilar
+npm run lint           # ESLint com auto-fix
 npm run test           # Rodar testes (Vitest)
-npm run test:watch    # Testes em watch mode
-npm run lint           # ESLint
-npm run typecheck      # Type checking
-npm run diagnosticar   # Rodar Prometheus no projeto
-npm run formatar       # Formatar código
-npm run podar          # Poda de código morto
+npm run test:watch     # Testes em modo watch
+npm run coverage       # Testes com relatório de cobertura
 ```
 
-### Verificar Qualidade
+#### Execução do Prometheus
 
 ```bash
-# Executar análise completa
+npm start              # Executar Prometheus
+npm run diagnosticar   # Análise do projeto
+npm run diagnosticar:json  # Análise com saída JSON
+npm run formatar       # Formatar código automaticamente
+npm run reestruturar   # Reorganizar estrutura
+npm run podar          # Poda de código morto
+npm run fix-types      # Corrigir tipos inseguros
+npm run guardian       # Executar Guardian
+```
+
+#### Métricas e Performance
+
+```bash
+npm run metricas       # Ver histórico de métricas
+npm run perf:baseline  # Criar baseline de performance
+npm run perf:compare   # Comparar com baseline
+npm run perf:gate      # Gate de performance (threshold 0)
+```
+
+#### Licenças e Compliance
+
+```bash
+npm run scan           # Scan de licenças de dependências
+npm run scan:root      # Scan a partir da raiz
+npm run add            # Adicionar disclaimer de licença
+npm run notices        # Gerar THIRD-PARTY-NOTICES.txt
+npm run verify         # Verificar disclaimers
+```
+
+#### Nomes e Renomeação
+
+```bash
+npm run name           # Extrair nomes de variáveis
+npm run rename         # Aplicar renomeações
+```
+
+### Verificar Qualidade do Código
+
+```bash
+# Executar análise completa do projeto
 npm run diagnosticar
 
-# Type check
+# Verificação de tipos
 npm run typecheck
 
-# Lint
+# Lint e formatação
 npm run lint
 
-# Testes
+# Testes unitários
 npm run test
+
+# Cobertura de testes
+npm run coverage
+
+# Gate de performance (antes de commit)
+npm run perf:gate
 ```
 
 ### Padrões de Desenvolvimento
 
 Ao contribuir, siga os padrões em [PADROES.md](./docs/desenvolvimento/PADROES.md):
 
-- ✅ TypeScript type-safe (sem `any`)
+- ✅ TypeScript type-safe (sem `any` ou `unknown` sem necessidade)
 - ✅ Nomes descritivos em camelCase/PascalCase
-- ✅ JSDoc para funções públicas
+- ✅ JSDoc para funções públicas e APIs
 - ✅ Testes com cobertura > 80%
-- ✅ Sem console.log em produção
+- ✅ Sem console.log em produção (use sistema de mensagens)
+- ✅ Imports organizados e ordenados
+- ✅ Padrões arquiteturais (Registry, Strategy, Singleton)
 
 ---
 
@@ -638,26 +804,35 @@ Prometheus é um projeto open-source e recebe contribuições de toda a comunida
 - 🧪 **Testes** - Aumentar cobertura
 - 🔄 **Padrões** - Melhorias de qualidade
 
-### Criando um Novo Analista
+### Criando um Novo Analista ou Detector
 
-Contribuições mais comuns são novos analisadores:
+A contribuição mais comum e valiosa é criar novos analisadores:
 
 ```bash
-# 1. Crie o arquivo
-touch src/analistas/detectores/seu-detector.ts
+# 1. Crie o arquivo do detector em src/analistas/detectores/
+# ou plugin em src/analistas/plugins/
+# Exemplo: src/analistas/detectores/detector-meu-analista.ts
 
-# 2. Implemente conforme [CRIAR-ANALISTA.md](./docs/desenvolvimento/analistas/CRIAR-ANALISTA.md)
+# 2. Implemente seguindo o guia:
+# Veja [CRIAR-ANALISTA.md](./docs/desenvolvimento/analistas/CRIAR-ANALISTA.md)
 
 # 3. Adicione testes
-touch tests/analistas/seu-detector.test.ts
+# tests/analistas/detector-meu-analista.test.ts
 
-# 4. Registre no registry
-# (automático via descoberta)
+# 4. Registro é automático via autodiscovery
+# Plugins com prefixo "analista-" ou "detector-" são descobertos automaticamente
 
-# 5. Teste
+# 5. Teste seu analista
 npm run test
 npm run diagnosticar
 ```
+
+### Recursos para Desenvolvedores
+
+- 📖 [Como Criar Analistas](./docs/desenvolvimento/analistas/CRIAR-ANALISTA.md) - Guia com 6 passos
+- 🏗️ [Estrutura de Código](./docs/desenvolvimento/estrutura-codigo/README.md) - Mapa do src/
+- 📝 [Padrões de Desenvolvimento](./docs/desenvolvimento/PADROES.md) - Convenções
+- 🔌 [Sistema de Plugins](./docs/desenvolvimento/SISTEMA-PLUGINS.md) - Como estender
 
 ---
 
@@ -696,15 +871,27 @@ npm run diagnosticar
 Prometheus segue [Semantic Versioning](https://semver.org/):
 
 - **MAJOR**: Breaking changes (v1.0.0, v2.0.0)
-- **MINOR**: Novas features compatíveis (v0.5.0, v0.6.0)
-- **PATCH**: Bug fixes (v0.5.1, v0.5.2)
+- **MINOR**: Novas features compatíveis (v0.4.0, v0.5.0)
+- **PATCH**: Bug fixes e melhorias (v0.4.1, v0.4.2)
+
+### Histórico de Versões
+
+- ✅ **v0.4.3** (Atual) - Estabilidade, correções de bugs, melhorias de performance
+- ✅ **v0.4.2** - Melhorias de estabilidade e documentação
+- ✅ **v0.4.1** - Correções de bugs
+- ✅ **v0.4.0** - Refinamento de tipos e robustez
+- ✅ **v0.3.9** - Gerenciamento de nomes (names/rename), segurança de tipagem
+- ✅ **v0.3.6** - Extração avançada de sinais, validações aprimoradas
+- ✅ **v0.3.0** - Novos comandos, plugins multi-linguagem, Node.js 24+
+- ✅ **v0.2.0** - Worker Pool, Schema Versioning, Pontuação Adaptativa
+- ✅ **v0.1.0** - Lançamento inicial
 
 ### Roadmap Futuro
 
-- **v0.5.0** (Q2 2026) - Sistema extensível de analistas
-- **v0.6.0** (Q3 2026) - Dashboard Web
-- **v0.7.0** (Q4 2026) - Análise com IA
-- **v1.0.0** (2027) - Estabilidade e API pública
+- **v0.5.0** - Sistema extensível de analistas completo, APIs públicas
+- **v0.6.0** - Dashboard Web para visualização de relatórios
+- **v0.7.0** - Análise assistida por IA
+- **v1.0.0** - Estabilidade completa e API pública consolidada
 
 👉 Veja [ROADMAP.md](./docs/roadmap/ROADMAP.md) para detalhes completos.
 
@@ -714,12 +901,31 @@ Prometheus segue [Semantic Versioning](https://semver.org/):
 
 O Prometheus é mantido em altos padrões de qualidade:
 
-- ✅ TypeScript 5.0+ (type-safe)
-- ✅ Testes com Vitest (80%+ cobertura)
-- ✅ ESLint + prettier
-- ✅ Sem dependências externas pesadas
-- ✅ Performance benchmarked
-- ✅ Segurança auditada
+- ✅ TypeScript 6.0+ (type-safe, sem `any` desnecessários)
+- ✅ Testes com Vitest (cobertura target: 80%+)
+- ✅ ESLint 9.x + configuração strict
+- ✅ Worker Pool para processamento paralelo
+- ✅ Schema Versioning em relatórios JSON
+- ✅ Pontuação Adaptativa baseada no tamanho do projeto
+- ✅ Sistema i18n (PT, EN, ZH, JA)
+- ✅ Segurança auditada (CodeQL, path traversal protection)
+- ✅ Performance benchmarked (snapshots e gates)
+- ✅ Sem dependências externas desnecessárias
+
+### Dependências Principais
+
+| Dependência | Uso | Versão |
+|-------------|-----|--------|
+| @babel/parser | Parsing JS/TS | ^7.29.2 |
+| commander | CLI framework | ^14.0.3 |
+| chalk | Terminal colorido | ^5.6.2 |
+| micromatch | Pattern matching | ^4.0.8 |
+| css-tree | Parsing CSS | ^3.2.1 |
+| htmlparser2 | Parsing HTML | ^12.0.0 |
+| fast-xml-parser | Parsing XML | ^5.5.11 |
+| java-parser | Parsing Java | ^3.0.1 |
+| ora | Spinners de progresso | ^9.3.0 |
+| vitest | Framework de testes | ^4.1.4 |
 
 ---
 
