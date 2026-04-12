@@ -9,7 +9,10 @@
       "Bash(} *)",
       "Bash(endoffile)",
       "Read(//home/italo/**)",
-      "Bash(npx *)"
+      "Bash(npx *)",
+      "Bash(rm *)",
+      "Bash(jq *)",
+      "Bash(git add *)"
     ]
   },
   "$version": 3
