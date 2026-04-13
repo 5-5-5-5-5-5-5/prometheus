@@ -11,14 +11,25 @@ Guia completo e detalhado de todos os comandos disponíveis no Prometheus.
 
 ## 📋 Sumário de Comandos
 
-| Comando        | Descrição              | Uso           |
-| -------------- | ---------------------- | ------------- |
-| `diagnosticar` | Analisar o projeto     | Principal     |
-| `corrigir`     | Auto-fix de problemas  | Manutenção    |
-| `guardian`     | Monitor de saúde       | Monitoramento |
-| `relatorio`    | Gerar relatórios       | Análise       |
-| `config`       | Gerenciar configuração | Setup         |
-| `analista`     | Info sobre analistas   | Consulta      |
+| Comando             | Descrição                           | Categoria       |
+| ------------------- | ----------------------------------- | --------------- |
+| `diagnosticar`      | Análise completa do projeto         | Principal       |
+| `guardian`          | Monitor de integridade estrutural   | Monitoramento   |
+| `formatar`          | Formatação de código                | Manutenção      |
+| `otimizar-svg`      | Otimização de arquivos SVG          | Manutenção      |
+| `podar`             | Remoção de código morto             | Limpeza         |
+| `reestruturar`      | Reestruturação inteligente          | Refatoração     |
+| `atualizar`         | Atualização de padrões e estruturas | Manutenção      |
+| `analistas`         | Listar e gerenciar analistas        | Consulta        |
+| `metricas`          | Exibir métricas do projeto          | Consulta        |
+| `fix-types`         | Correção de tipos inseguros         | Correção        |
+| `licencas`          | Gestão de licenças de dependências  | Compliance      |
+| `names`             | Extração de nomes de variáveis      | Mapeamento      |
+| `rename`            | Renomeação em massa de variáveis    | Refatoração     |
+| `reverter`          | Reversão de renomeações             | Reversão        |
+| `perf`              | Benchmark de performance da CLI     | Performance     |
+| `dashboard`         | Iniciar dashboard web interativo    | Visualização    |
+| `plugins`           | Gerenciar plugins de análise        | Extensões       |
 
 ---
 
@@ -277,159 +288,134 @@ prometheus guardian --monitorar
 
 ---
 
-## 📊 `prometheus relatorio`
+## 🖥️ `prometheus dashboard`
 
-Gerar relatórios especializados.
+Iniciar o dashboard web interativo.
 
 ### Sintaxe
 
 ```bash
-prometheus relatorio [tipo] [opções]
+prometheus dashboard [opções]
 ```
 
-### Tipos de Relatório
+### Opções
 
-#### `prometheus relatorio arquitetura`
+| Opção        | Tipo   | Padrão | Descrição                        |
+| ------------ | ------ | ------ | -------------------------------- |
+| `--port`     | number | `3000` | Porta para o servidor web        |
 
-Análise arquitetural:
+### Exemplos
 
 ```bash
-prometheus relatorio arquitetura --saida arquitetura.md
-
-# Com gráfico
-prometheus relatorio arquitetura --com-grafico --saida arquitetura.html
+prometheus dashboard
+prometheus dashboard --port 8080
 ```
 
-#### `prometheus relatorio padroes`
+### Funcionalidades do Dashboard
 
-Padrões de uso encontrados:
+- Visualização de workflows GitHub Actions
+- Gráficos de saúde do projeto
+- Métricas automáticas (segurança, performance, documentação, arquitetura, qualidade)
+- Histórico de tendências
+- Ferramentas rápidas (diagnosticar, otimizar SVG)
+
+---
+
+## 🔌 `prometheus plugins`
+
+Gerenciar plugins de análise.
+
+### Sintaxe
 
 ```bash
-prometheus relatorio padroes --saida padroes.md
-
-# Agrupar por tipo
-prometheus relatorio padroes --agrupar-por tipo --saida padroes.json
+prometheus plugins [subcomando] [opções]
 ```
 
-#### `prometheus relatorio duplicacao`
+### Subcomandos
 
-Análise de código duplicado:
+#### `prometheus plugins listar`
+
+Listar plugins instalados:
 
 ```bash
-prometheus relatorio duplicacao --saida duplicacao.md
-
-# Threshold de similaridade
-prometheus relatorio duplicacao --threshold 80 --saida duplicacao.md
+prometheus plugins listar
 ```
 
-#### `prometheus relatorio complexidade`
+#### `prometheus plugins instalar <nome>`
 
-Complexidade ciclomática:
+Instalar um plugin:
 
 ```bash
-prometheus relatorio complexidade --saida complexidade.html
-
-# Apenas funções muito complexas
-prometheus relatorio complexidade --minimo 15 --saida complexidade.json
+prometheus plugins instalar nome-do-plugin
 ```
 
-### Opções Gerais
+#### `prometheus plugins remover <nome>`
+
+Remover um plugin:
 
 ```bash
---saida             string    Arquivo de saída
---formato          string    json|markdown|html|csv
---paginar          boolean   Paginar output (markdown)
---incluir-graficos boolean   Incluir gráficos (HTML)
---tema              string    light|dark (HTML)
+prometheus plugins remover nome-do-plugin
 ```
 
 ---
 
-## ⚙️ `prometheus config`
+## 📝 `prometheus names`
 
-Gerenciar configuração.
+Extrair nomes de variáveis do projeto.
 
-### Subcomandos
-
-#### `prometheus config --init`
-
-Criar configuração padrão:
+### Sintaxe
 
 ```bash
-prometheus config --init
-
-# Cria prometheus.config.json com padrões
+prometheus names [opções]
 ```
 
-#### `prometheus config --validar`
+### Opções
 
-Validar arquivo de configuração:
+| Opção        | Tipo    | Descrição                                |
+| ------------ | ------- | ---------------------------------------- |
+| `--legacy`   | boolean | Gera também arquivo único names/name.txt |
+
+### Exemplos
 
 ```bash
-prometheus config --validar
-
-# Verifica syntaxe e schema
-prometheus config --validar --arquivo custom-config.json
+prometheus names
+prometheus names --legacy
 ```
 
-#### `prometheus config --show`
+---
 
-Exibir configuração carregada:
+## ✏️ `prometheus rename`
+
+Aplicar renomeações de variáveis em massa.
+
+### Sintaxe
 
 ```bash
-prometheus config --show
-
-# Formato JSON
-prometheus config --show --formato json
-
-# Apenas seção específica
-prometheus config --show --secao analistas
+prometheus rename [opções]
 ```
 
-#### `prometheus config --reset`
-
-Resetar para padrões:
+### Exemplos
 
 ```bash
-prometheus config --reset
-
-# Confirma antes
-prometheus config --reset --force
+prometheus rename
 ```
 
-### Exemplo de Config
+---
 
-```json
-{
-  "prometheus": {
-    "nome": "meu-projeto",
-    "versao": "1.0.0",
-    "caminhos": ["src", "tests"],
-    "excluir": ["node_modules", "dist", ".git"],
+## ↩️ `prometheus reverter`
 
-    "analistas": {
-      "CodigoFragil": {
-        "habilitado": true,
-        "gravidade": "major"
-      },
-      "CodigoMorto": {
-        "habilitado": true,
-        "gravidade": "minor"
-      }
-    },
+Reverter renomeações aplicadas.
 
-    "autoFix": {
-      "habilitado": true,
-      "backup": true,
-      "tipos": ["variavel-nao-usada", "console-deixado"]
-    },
+### Sintaxe
 
-    "relatorios": {
-      "formato": "markdown",
-      "saida": "./relatorios"
-    }
-  }
-}
+```bash
+prometheus reverter [opções]
+```
+
+### Exemplos
+
+```bash
+prometheus reverter
 ```
 
 ---

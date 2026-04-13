@@ -48,7 +48,7 @@ class RegistroAnalistas {
 }
 
 // 3. Descoberta (Scan de plugins)
-class DescobritorPlugins {
+class DescobridorPlugins {
   async descobrir(caminho: string): Promise<void>
 }
 
@@ -73,7 +73,7 @@ class LoaderPlugins {
            │
            ↓
 ┌──────────────────────┐
-│ DescobritorPlugins   │
+│ DescobridorPlugins   │
 │ Scan: src/analistas/ │
 └──────────┬───────────┘
            │
@@ -227,9 +227,9 @@ for (const [nome, classe] of Object.entries(BUILT_IN_ANALISTAS)) {
 
 // Descobrir e registrar plugins
 const pluginsDir = path.join(process.cwd(), 'src/analistas/plugins');
-const pluginsDiscobertos = await descobrirPlugins(pluginsDir);
+const pluginsDescobertos = await descobrirPlugins(pluginsDir);
 
-for (const [nome, classe] of pluginsDiscobertos) {
+for (const [nome, classe] of pluginsDescobertos) {
   registro.registrar(nome, classe);
 }
 

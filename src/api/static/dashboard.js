@@ -15,8 +15,14 @@ document.addEventListener('DOMContentLoaded', () => {
     banner.className = 'hidden';
     document.body.appendChild(banner);
 
+    // Criar Toast Container
+    const toastContainer = document.createElement('div');
+    toastContainer.id = 'toast-container';
+    document.body.appendChild(toastContainer);
+
     // Inicialização
     initNavigation();
+    initMusicPlayer();
     loadWorkflows();
     loadProjectStatus();
 
@@ -96,24 +102,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- API Interactions ---
     async function loadWorkflows() {
+        const list = document.getElementById('workflow-list');
+        list.innerHTML = '<li class="loading"><i class="fas fa-spinner fa-spin"></i> Carregando workflows...</li>';
+
         try {
             const res = await fetch('/api/v1/repositorio/arquivos');
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
             const data = await res.json();
             state.workflows = data.workflows || [];
-            renderWorkflowList();
+
+            if (state.workflows.length === 0) {
+                list.innerHTML = '<li class="empty"><i class="fas fa-info-circle"></i> Nenhum workflow encontrado</li>';
+            } else {
+                renderWorkflowList();
+            }
         } catch (err) {
             console.error('Erro ao listar workflows:', err);
+            list.innerHTML = '<li class="error"><i class="fas fa-exclamation-triangle"></i> Erro ao carregar</li>';
+            showToast('Erro ao carregar workflows', 'error');
         }
     }
 
     async function loadProjectStatus() {
+        const integrityEl = document.getElementById('status-integridade');
+        integrityEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
         try {
             const res = await fetch('/api/v1/repositorio/status');
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
             const data = await res.json();
 
             document.getElementById('status-integridade').textContent = data.saude || 'OK';
             document.getElementById('info-workflows').textContent = data.metricas?.workflows || '0';
             document.getElementById('info-versao').textContent = data.versao || '0.6.0';
+
+            // Adicionar mais métricas se disponíveis
+            if (data.metricas?.totalFiles) {
+                const filesEl = document.getElementById('info-files');
+                if (filesEl) filesEl.textContent = data.metricas.totalFiles;
+            }
+
+            if (data.metricas?.dependencies !== undefined) {
+                const depsEl = document.getElementById('info-dependencies');
+                if (depsEl) depsEl.textContent = data.metricas.dependencies;
+            }
 
             const guardianDesc = document.getElementById('guardian-desc');
             if (data.metricas?.integridade) {
@@ -123,8 +157,27 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.metricas?.radar) {
                 renderRadarChart(data.metricas.radar);
             }
+
+            // Atualizar barra de progresso do guardian
+            const healthBar = document.querySelector('.health-bar .fill');
+            if (healthBar && data.metricas?.radar) {
+                const avgScore = Object.values(data.metricas.radar).reduce((a, b) => a + b, 0) / 5;
+                healthBar.style.width = `${avgScore}%`;
+
+                // Cor baseada no score
+                if (avgScore >= 80) {
+                    healthBar.style.background = 'var(--success)';
+                } else if (avgScore >= 60) {
+                    healthBar.style.background = 'var(--warning)';
+                } else {
+                    healthBar.style.background = 'var(--critical)';
+                }
+            }
         } catch (err) {
             console.error('Erro ao obter status:', err);
+            integrityEl.textContent = 'Erro';
+            integrityEl.style.color = 'var(--critical)';
+            showToast('Erro ao carregar status do projeto', 'error');
         }
     }
 
@@ -184,6 +237,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('analysis-detail').classList.remove('hidden');
         document.getElementById('current-workflow-name').textContent = relPath;
 
+        // Mostrar loading
+        const scoreEl = document.getElementById('workflow-score');
+        scoreEl.textContent = '<i class="fas fa-spinner fa-spin"></i> Analisando...';
+        scoreEl.className = 'score-badge loading';
+
         // Limpar resultados anteriores
         const list = document.querySelectorAll('#workflow-list li');
         list.forEach(li => li.classList.remove('active'));
@@ -195,11 +253,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ relPath })
             });
+
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
             const data = await res.json();
-            state.analysisResults = data.resultados;
+            state.analysisResults = data.resultados || [];
             renderAnalysis();
+            showToast('Análise concluída com sucesso!', 'success');
         } catch (err) {
             console.error('Erro na análise:', err);
+            scoreEl.textContent = 'Erro na análise';
+            scoreEl.className = 'score-badge error';
+            showToast('Erro ao analisar workflow', 'error');
         }
     }
 
@@ -241,8 +306,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Resumo
         const hasCritical = results.some(r => r.nivel === 'erro');
+        const hasWarnings = results.some(r => r.nivel === 'aviso');
+
         document.getElementById('sec-status').textContent = hasCritical ? '❌ Problemas de Segurança' : '✅ Seguro';
         document.getElementById('sec-status').className = hasCritical ? 'critical' : 'success';
+
+        // Performance status
+        const perfIssues = results.filter(r => r.tipo?.toLowerCase().includes('performance'));
+        document.getElementById('perf-status').textContent = perfIssues.length > 0 ? `⚠️ ${perfIssues.length} problema(s)` : '✅ Otimizada';
+        document.getElementById('perf-status').style.color = perfIssues.length > 0 ? 'var(--warning)' : '#10b981';
+
+        // Boas práticas
+        const bestPractices = results.filter(r => r.tipo?.toLowerCase().includes('best practice') || r.tipo?.toLowerCase().includes('boa prática'));
+        document.getElementById('best-practices-status').textContent = bestPractices.length === 0 ? '✅ Aplicadas' : `⚠️ ${bestPractices.length} pendente(s)`;
+        document.getElementById('best-practices-status').style.color = bestPractices.length === 0 ? '#10b981' : 'var(--warning)';
+
+        // Documentação
+        const docIssues = results.filter(r => r.tipo?.toLowerCase().includes('document'));
+        document.getElementById('docs-status').textContent = docIssues.length > 0 ? `📝 ${docIssues.length} melhoria(s)` : '✅ Completa';
+        document.getElementById('docs-status').style.color = docIssues.length > 0 ? 'var(--warning)' : '#10b981';
 
         // Souls Feedback
         showSoulsBanner(hasCritical, score);
@@ -272,28 +354,182 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderGraph() {
         const mermaidDiv = document.getElementById('workflow-graph');
-        // Simple logic to build graph from steps
-        let graphDef = 'graph TD;\n';
-        const steps = state.analysisResults ? state.analysisResults.filter(r => r.mensagem.includes('Job') || r.mensagem.includes('step')) : [];
 
-        if (steps.length === 0) {
-            graphDef += '  Start((Start)) --> End((Fim))';
+        if (!state.analysisResults || state.analysisResults.length === 0) {
+            mermaidDiv.innerHTML = '<div class="empty-state"><i class="fas fa-project-diagram"></i><p>Nenhum dado para exibir</p></div>';
+            return;
+        }
+
+        // Construir grafo baseado nos jobs/steps do workflow
+        let graphDef = 'graph TD;\n';
+        graphDef += '    classDef default fill:#0a0a0a,stroke:#c29a53,stroke-width:2px,color:#e2e8f0;\n';
+        graphDef += '    classDef success fill:#065f46,stroke:#10b981,stroke-width:2px;\n';
+        graphDef += '    classDef warning fill:#b45309,stroke:#f59e0b,stroke-width:2px;\n';
+        graphDef += '    classDef error fill:#991b1b,stroke:#ef4444,stroke-width:2px;\n\n';
+
+        // Parse dos resultados para extrair jobs
+        const jobs = [];
+        const jobMap = {};
+
+        state.analysisResults.forEach((result, idx) => {
+            if (result.mensagem && result.mensagem.includes('Job')) {
+                const jobName = result.mensagem.replace('Job ', '').trim();
+                const jobId = `job${idx}`;
+                jobMap[jobName] = jobId;
+                jobs.push({ id: jobId, name: jobName, nivel: result.nivel });
+            }
+        });
+
+        if (jobs.length === 0) {
+            // Se não tem jobs, criar grafo simples
+            graphDef += '    Start([Início]) --> Analise[Análise Concluída];\n';
+            graphDef += '    class Start success;\n';
+            graphDef += '    class Analise success;\n';
         } else {
-             graphDef += '  Workflow --> Analise;\n';
-             graphDef += '  Analise --> Concluido;';
+            // Criar grafo com jobs
+            graphDef += '    Start([Workflow Start]) --> ' + jobs[0].id + ';\n';
+            graphDef += '    class Start success;\n';
+
+            jobs.forEach((job, idx) => {
+                const safeId = job.id.replace(/[^a-zA-Z0-9]/g, '_');
+                const label = job.name.replace(/[^a-zA-Z0-9\\s]/g, '');
+
+                graphDef += `    ${safeId}["${label}"];\n`;
+
+                // Adicionar classe baseada no nível
+                if (job.nivel === 'erro') {
+                    graphDef += `    class ${safeId} error;\n`;
+                } else if (job.nivel === 'aviso') {
+                    graphDef += `    class ${safeId} warning;\n`;
+                }
+
+                // Conectar ao próximo job
+                if (idx < jobs.length - 1) {
+                    const nextJob = jobs[idx + 1].id.replace(/[^a-zA-Z0-9]/g, '_');
+                    graphDef += `    ${safeId} --> ${nextJob};\n`;
+                } else {
+                    graphDef += `    ${safeId} --> End([Concluído]);\n`;
+                    graphDef += '    class End success;\n';
+                }
+            });
         }
 
         mermaidDiv.textContent = graphDef;
         mermaid.init(undefined, mermaidDiv);
     }
 
+    // Função para mostrar toast notifications
+    function showToast(message, type = 'info') {
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+
+        const icon = type === 'success' ? 'check-circle' :
+                     type === 'error' ? 'exclamation-circle' : 'info-circle';
+
+        toast.innerHTML = `
+            <i class="fas fa-${icon}"></i>
+            <span>${message}</span>
+            <button class="toast-close" onclick="this.parentElement.remove()">&times;</button>
+        `;
+
+        toastContainer.appendChild(toast);
+
+        // Auto-remove após 5 segundos
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(100%)';
+            setTimeout(() => toast.remove(), 300);
+        }, 5000);
+    }
+
+    // --- Music Player ---
+    function initMusicPlayer() {
+        const audioPlayer = document.getElementById('audio-player');
+        const musicToggle = document.getElementById('music-toggle');
+        const musicControls = document.getElementById('music-controls');
+        const playBtn = document.getElementById('music-play');
+        const pauseBtn = document.getElementById('music-pause');
+        const volumeSlider = document.getElementById('music-volume');
+
+        let isPlaying = false;
+        let isExpanded = false;
+
+        // Set initial volume
+        if (audioPlayer) {
+            audioPlayer.volume = 0.3;
+        }
+
+        // Toggle expand/collapse
+        musicToggle?.addEventListener('click', () => {
+            isExpanded = !isExpanded;
+            musicControls.classList.toggle('visible', isExpanded);
+
+            // Auto-play on first expand
+            if (isExpanded && !isPlaying) {
+                playMusic();
+            }
+        });
+
+        // Play button
+        playBtn?.addEventListener('click', () => {
+            playMusic();
+        });
+
+        // Pause button
+        pauseBtn?.addEventListener('click', () => {
+            pauseMusic();
+        });
+
+        // Volume control
+        volumeSlider?.addEventListener('input', (e) => {
+            if (audioPlayer) {
+                audioPlayer.volume = parseFloat(e.target.value);
+            }
+        });
+
+        function playMusic() {
+            if (audioPlayer) {
+                audioPlayer.play().catch(err => {
+                    console.log('Autoplay blocked, waiting user interaction');
+                });
+                isPlaying = true;
+                playBtn.style.display = 'none';
+                pauseBtn.style.display = 'flex';
+                musicToggle.classList.add('playing');
+            }
+        }
+
+        function pauseMusic() {
+            if (audioPlayer) {
+                audioPlayer.pause();
+                isPlaying = false;
+                playBtn.style.display = 'flex';
+                pauseBtn.style.display = 'none';
+                musicToggle.classList.remove('playing');
+            }
+        }
+    }
+
     async function loadTrends() {
+        const chartContainer = document.querySelector('#view-tendencias .chart-container');
+        chartContainer.innerHTML = '<div class="loading-state"><i class="fas fa-spinner fa-spin"></i><p>Carregando histórico...</p></div>';
+
         try {
             const res = await fetch('/api/v1/repositorio/metricas');
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
             const data = await res.json();
+
+            if (!data || data.length === 0) {
+                chartContainer.innerHTML = '<div class="empty-state"><i class="fas fa-chart-line"></i><p>Sem dados históricos</p></div>';
+                return;
+            }
+
             renderChart(data);
         } catch (err) {
             console.error('Erro ao carregar tendências:', err);
+            chartContainer.innerHTML = '<div class="error-state"><i class="fas fa-exclamation-triangle"></i><p>Erro ao carregar dados</p></div>';
+            showToast('Erro ao carregar tendências', 'error');
         }
     }
 

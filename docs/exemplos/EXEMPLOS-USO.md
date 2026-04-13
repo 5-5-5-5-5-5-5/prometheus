@@ -178,7 +178,7 @@ Criar novo detector para suas necessidades:
 import { type Analista, type ResultadoOcorrencia } from '@/analistas/tipos.js';
 import { type Arquivo } from '@/shared/tipos.js';
 
-export class DetectorAssimaSemsWait implements Analista {
+export class DetectorAsyncSemAwait implements Analista {
   nome = 'AsyncSemAwait';
   descricao = 'Detecta funções async sem await';
 
@@ -211,7 +211,7 @@ export class DetectorAssimaSemsWait implements Analista {
   }
 }
 
-export default DetectorAssimaSemsWait;
+export default DetectorAsyncSemAwait;
 ```
 
 ### Registrar Analista
@@ -219,9 +219,9 @@ export default DetectorAssimaSemsWait;
 ```typescript
 // src/analistas/registry/index.ts
 
-import DetectorAssimaSemsWait from '../customizados/detector-async-sem-await.js';
+import DetectorAsyncSemAwait from '../customizados/detector-async-sem-await.js';
 
-registroAnalistas.registrar('AsyncSemAwait', DetectorAssimaSemsWait);
+registroAnalistas.registrar('AsyncSemAwait', DetectorAsyncSemAwait);
 ```
 
 ### Usar no Config

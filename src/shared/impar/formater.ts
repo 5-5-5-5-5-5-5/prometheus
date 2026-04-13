@@ -1270,6 +1270,7 @@ function tokenizeCssBlocks(src: string): Array<{ kind: 'rule' | 'at-rule' | 'com
   const out: Array<{ kind: 'rule' | 'at-rule' | 'comment' | 'text'; value: string }> = [];
   let i = 0;
   while (i < src.length) {
+    // Comentário /* ... */
     if (src[i] === '/' && src[i + 1] === '*') {
       const end = src.indexOf('*/', i + 2);
       if (end === -1) {
@@ -1278,17 +1279,73 @@ function tokenizeCssBlocks(src: string): Array<{ kind: 'rule' | 'at-rule' | 'com
       }
       out.push({ kind: 'comment', value: src.slice(i, end + 2) });
       i = end + 2;
-    } else if (src[i] === '@') {
-      let depth = 0;
-      const constStart = i;
+    }
+    // String aspa dupla "..."
+    else if (src[i] === '"') {
+      const strStart = i;
+      i++;
       while (i < src.length) {
-        if (src[i] === '{') depth++;
+        if (src[i] === '\\') { i += 2; continue; }
+        if (src[i] === '"') { i++; break; }
+        i++;
+      }
+      out.push({ kind: 'rule', value: src.slice(strStart, i) });
+    }
+    // String aspa simples '...'
+    else if (src[i] === "'") {
+      const strStart = i;
+      i++;
+      while (i < src.length) {
+        if (src[i] === '\\') { i += 2; continue; }
+        if (src[i] === "'") { i++; break; }
+        i++;
+      }
+      out.push({ kind: 'rule', value: src.slice(strStart, i) });
+    }
+    // Parênteses url(...), :not(...), etc. - preservar conteudo intacto
+    else if (src[i] === '(') {
+      const parenStart = i;
+      let parenDepth = 1;
+      i++;
+      while (i < src.length && parenDepth > 0) {
+        if (src[i] === '(') parenDepth++;
+        else if (src[i] === ')') parenDepth--;
+        i++;
+      }
+      out.push({ kind: 'rule', value: src.slice(parenStart, i) });
+    }
+    // @-rules: @media, @keyframes, @import, etc.
+    else if (src[i] === '@') {
+      let depth = 0;
+      const atStart = i;
+      let blockStarted = false;
+      while (i < src.length) {
+        if (src[i] === '(') {
+          // Pular conteudo entre parenteses dentro do at-rule
+          let parenDepth = 1;
+          i++;
+          while (i < src.length && parenDepth > 0) {
+            if (src[i] === '(') parenDepth++;
+            else if (src[i] === ')') parenDepth--;
+            i++;
+          }
+          continue;
+        }
+        if (src[i] === '{') {
+          depth++;
+          blockStarted = true;
+        }
         if (src[i] === '}') {
           if (depth === 0) {
             i++;
             break;
           }
           depth--;
+          // Se depth voltou a 0, o bloco do at-rule fechou
+          if (depth === 0 && blockStarted) {
+            i++;
+            break;
+          }
         }
         if (src[i] === ';' && depth === 0) {
           i++;
@@ -1296,13 +1353,23 @@ function tokenizeCssBlocks(src: string): Array<{ kind: 'rule' | 'at-rule' | 'com
         }
         i++;
       }
-      out.push({ kind: 'at-rule', value: src.slice(constStart, i) });
-    } else if (src[i] === '{' || src[i] === '}' || src[i] === ';') {
+      out.push({ kind: 'at-rule', value: src.slice(atStart, i) });
+    }
+    // Caracteres especiais
+    else if (src[i] === '{' || src[i] === '}' || src[i] === ';') {
       out.push({ kind: 'text', value: src[i] });
       i++;
-    } else {
+    }
+    // Regras normais (seletores e propriedades)
+    else {
       const ruleStart = i;
-      while (i < src.length && !['{', '}', ';', '@'].includes(src[i] ?? '') && !(src[i] === '/' && src[i + 1] === '*')) {
+      while (i < src.length &&
+        src[i] !== '{' &&
+        src[i] !== '}' &&
+        src[i] !== ';' &&
+        src[i] !== '@' &&
+        !(src[i] === '/' && src[i + 1] === '*')
+      ) {
         i++;
       }
       const chunk = src.slice(ruleStart, i);
@@ -1319,122 +1386,158 @@ function formatarCssMinimo(code: string): FormatadorMinimoResult {
   const tokens = tokenizeCssBlocks(normalized);
   const indentStr = (n: number) => '  '.repeat(Math.max(0, n));
 
-  type CssProp = { prop: string; value: string; isComment: boolean; commentText?: string };
-  type CssBlock = { selector: string; props: CssProp[] };
-  const blocks: CssBlock[] = [];
-  let currentBlock: CssBlock | null = null;
-  let braceDepth = 0;
+  // Estrutura de árvore para blocos CSS aninhados
+  interface CssProp { kind: 'prop'; prop: string; value: string; }
+  interface CssComment { kind: 'comment'; text: string; }
+  interface CssBlock { kind: 'block'; selector: string; items: CssItem[]; }
+  type CssItem = CssProp | CssComment | CssBlock;
 
-  for (const tok of tokens) {
-    if (tok.kind === 'comment') {
-      if (currentBlock) {
-        currentBlock.props.push({ prop: '', value: '', isComment: true, commentText: tok.value.trim() });
-      }
-      continue;
+  function findColonOutsideParens(str: string): number {
+    let depth = 0;
+    for (let i = 0; i < str.length; i++) {
+      if (str[i] === '(') depth++;
+      else if (str[i] === ')') depth--;
+      else if (str[i] === ':' && depth === 0) return i;
     }
-    if (tok.kind === 'text') {
-      if (tok.value === '{') {
-        braceDepth++;
+    return -1;
+  }
+
+  // Parse dos tokens em uma árvore de blocos
+  function parseCssTokens(tokenList: Array<{ kind: string; value: string }>): CssItem[] {
+    const items: CssItem[] = [];
+    let currentSelector = '';
+
+    function flushSelector() {
+      if (currentSelector.trim()) {
+        items.push({ kind: 'block', selector: currentSelector.trim(), items: [] });
+        currentSelector = '';
+      }
+    }
+
+    let idx = 0;
+    while (idx < tokenList.length) {
+      const tok = tokenList[idx]!;
+
+      if (tok.kind === 'comment') {
+        items.push({ kind: 'comment', text: tok.value.trim() });
+        idx++;
         continue;
-      } else if (tok.value === '}') {
-        if (currentBlock) {
-          blocks.push(currentBlock);
-          currentBlock = null;
-        }
-        braceDepth = Math.max(0, braceDepth - 1);
       }
-      continue;
-    }
-    if (tok.kind === 'at-rule') {
-      const trimmed = tok.value.trim();
-      if (trimmed.endsWith('}')) {
-        const inner = trimmed.replace(/\s*}\s*$/, '').trim();
-        const selector = inner.split('{')[0]?.trim() ?? '';
-        const propsStr = inner.split('{').slice(1).join('{');
-        const block: CssBlock = { selector, props: [] };
-        if (propsStr) {
-          const props = propsStr.split(';').filter(p => p.trim());
-          for (const prop of props) {
-            const trimmedProp = prop.trim();
-            if (trimmedProp) {
-              const colonIdx = trimmedProp.indexOf(':');
-              if (colonIdx > 0) {
-                block.props.push({
-                  prop: trimmedProp.slice(0, colonIdx).trim(),
-                  value: trimmedProp.slice(colonIdx + 1).trim(),
-                  isComment: false,
-                });
+
+      if (tok.kind === 'text') {
+        if (tok.value === '{') {
+          flushSelector();
+          // Verificar o ultimo bloco adicionado
+          const lastBlock = items[items.length - 1];
+          if (lastBlock?.kind === 'block') {
+            idx++; // pular {
+            // Coletar tokens do bloco interno
+            const innerTokens: Array<{ kind: string; value: string }> = [];
+            let depth = 1;
+            while (idx < tokenList.length && depth > 0) {
+              const innerTok = tokenList[idx]!;
+              if (innerTok.kind === 'text') {
+                if (innerTok.value === '{') depth++;
+                else if (innerTok.value === '}') depth--;
               }
+              if (depth > 0) innerTokens.push(innerTok);
+              idx++;
             }
+            lastBlock.items = parseCssTokens(innerTokens);
+          } else {
+            // Sem bloco correspondente, pular {
+            idx++;
           }
+        } else if (tok.value === '}') {
+          flushSelector();
+          idx++;
+        } else if (tok.value === ';') {
+          idx++;
+        } else {
+          idx++;
         }
-        blocks.push(block);
-      } else if (trimmed.includes('{')) {
-        const selector = trimmed.split('{')[0]?.trim() ?? '';
-        currentBlock = { selector, props: [] };
-        const propsStr = trimmed.split('{').slice(1).join('{');
-        if (propsStr) {
-          const props = propsStr.split(';').filter(p => p.trim());
-          for (const prop of props) {
-            const trimmedProp = prop.trim();
-            if (trimmedProp) {
-              const colonIdx = trimmedProp.indexOf(':');
-              if (colonIdx > 0) {
-                currentBlock.props.push({
-                  prop: trimmedProp.slice(0, colonIdx).trim(),
-                  value: trimmedProp.slice(colonIdx + 1).trim(),
-                  isComment: false,
-                });
-              }
-            }
-          }
-        }
-      } else {
-        const props = trimmed.split(';').filter(p => p.trim());
-        for (const prop of props) {
-          const trimmedProp = prop.trim();
-          if (trimmedProp) {
-            blocks.push({ selector: trimmedProp, props: [] });
-          }
-        }
+        continue;
       }
-      continue;
-    }
-    if (tok.kind === 'rule') {
-      const trimmed = tok.value.trim();
-      if (!trimmed) continue;
-      if (braceDepth > 0 && currentBlock) {
-        const colonIdx = trimmed.indexOf(':');
-        if (colonIdx > 0) {
-          currentBlock.props.push({
-            prop: trimmed.slice(0, colonIdx).trim(),
-            value: trimmed.slice(colonIdx + 1).trim(),
-            isComment: false,
-          });
+
+      if (tok.kind === 'at-rule') {
+        const trimmed = tok.value.trim();
+        if (trimmed.includes('{')) {
+          // @media, @keyframes, etc.
+          const selector = trimmed.split('{')[0]?.trim() ?? '';
+          // Extrair conteudo entre o primeiro { e o ultimo }
+          const firstBrace = trimmed.indexOf('{');
+          const lastBrace = trimmed.lastIndexOf('}');
+          const innerContent = trimmed.slice(firstBrace + 1, lastBrace).trim();
+
+          const block: CssBlock = { kind: 'block', selector, items: [] };
+          if (innerContent) {
+            // Tokenizar e parsear o conteudo interno
+            const innerTokens = tokenizeCssBlocks(innerContent);
+            block.items = parseCssTokens(innerTokens);
+          }
+          items.push(block);
+        } else {
+          // @import, @charset, etc. - sem bloco
+          items.push({ kind: 'block', selector: trimmed.replace(/;\s*$/, '').trim(), items: [] });
         }
-      } else {
-        currentBlock = { selector: trimmed, props: [] };
+        idx++;
+        continue;
       }
+
+      if (tok.kind === 'rule') {
+        const trimmed = tok.value.trim();
+        if (!trimmed) { idx++; continue; }
+
+        // Verificar se é uma propriedade (tem : fora de parenteses)
+        const colonIdx = findColonOutsideParens(trimmed);
+        if (colonIdx > 0 && !trimmed.includes('{') && !trimmed.includes('}')) {
+          const prop = trimmed.slice(0, colonIdx).trim();
+          const value = trimmed.slice(colonIdx + 1).trim();
+          // Verificar se value parece pseudo-elemento/classe (ex: :after, ::before, :hover)
+          const isPseudoLike = value.startsWith(':') || value.startsWith('::');
+          // So adicionar como propriedade se parecer com uma
+          if (!isPseudoLike && prop.length > 0 && !prop.includes(' ') && !prop.startsWith('.') &&
+              !prop.startsWith('#') && !prop.startsWith(':') && !prop.startsWith('@')) {
+            items.push({ kind: 'prop', prop, value });
+            idx++;
+            continue;
+          }
+        }
+
+        // É parte de um seletor - acumular
+        currentSelector = (currentSelector ? currentSelector + ' ' : '') + trimmed;
+        idx++;
+        continue;
+      }
+
+      idx++;
     }
+
+    flushSelector();
+    return items;
   }
 
-  const outLines: string[] = [];
-  for (const block of blocks) {
-    outLines.push(`${indentStr(0)}${block.selector} {`);
-
-    // Processar propriedades e comentários na ordem original
-    for (const p of block.props) {
-      if (p.isComment) {
-        // Manter comentário na posição original
-        outLines.push(`${indentStr(1)}${p.commentText}`);
-      } else if (p.value !== '') {
-        // Formatar propriedade sem alinhamento forçado
-        outLines.push(`${indentStr(1)}${p.prop}: ${p.value};`);
+  // Gerar output formatado a partir da árvore
+  function renderItems(items: CssItem[], depth: number): string[] {
+    const lines: string[] = [];
+    for (const item of items) {
+      if (item.kind === 'comment') {
+        lines.push(`${indentStr(depth)}${item.text}`);
+      } else if (item.kind === 'prop') {
+        lines.push(`${indentStr(depth)}${item.prop}: ${item.value};`);
+      } else if (item.kind === 'block') {
+        lines.push(`${indentStr(depth)}${item.selector} {`);
+        if (item.items.length > 0) {
+          lines.push(...renderItems(item.items, depth + 1));
+        }
+        lines.push(`${indentStr(depth)}}`);
       }
     }
-    outLines.push('}');
-    outLines.push('');
+    return lines;
   }
+
+  const treeItems = parseCssTokens(tokens);
+  const outLines = renderItems(treeItems, 0);
 
   const formatted = normalizarNewlinesFinais(outLines.join('\n').replace(/\n{3,}/g, '\n\n'));
   const baseline = normalizarNewlinesFinais(normalized);

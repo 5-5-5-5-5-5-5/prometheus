@@ -5,64 +5,80 @@ Proveniência e Autoria: Este documento integra o projeto Prometheus (licença M
 
 # Roadmap - Prometheus 🗺️
 
-## Versão Atual: 0.4.2
+## Versão Atual: 0.6.0
 
 Planejamento estratégico do desenvolvimento do Prometheus, incluindo features planejadas, melhorias e visão de longo prazo.
 
 ---
 
-## 📅 Próximas Versões
+## ✅ Versões Concluídas
 
-### v0.5.0 - Sistema de Analistas Extensível (Q2 2026)
-
-**Objetivo**: Permitir que usuários criem e compartilhem analistas personalizados.
-
-#### Features Planejadas
-
-- [ ] Interface pública para criar analistas customizados
-- [ ] Marketplace de analistas (repositório comunitário)
-- [ ] Validação automática de analistas
-- [ ] Sistema de versionamento para analistas
-- [ ] Suporte a linguagens adicionais (Go, Rust, Java)
-
-#### Melhorias
-
-- [ ] Performance: cache de análise entre execuções
-- [ ] UX: interface interativa de configuração
-- [ ] Documentação: exemplos passo a passo
-
----
-
-### v0.6.0 - Integração Web (Q3 2026)
+### v0.6.0 - Integração Web (Q2 2026) ✅ CONCLUÍDO
 
 **Objetivo**: Dashboard web para visualização de resultados.
 
-#### Features
+#### Features Implementadas
 
-- [ ] Dashboard interativo (React/Vue)
-- [ ] Real-time reporting
-- [ ] Histórico de análises
-- [ ] Comparação entre versões
-- [ ] Exportação de relatórios em múltiplos formatos
+- [x] Dashboard interativo com interface estilo Dark Souls
+- [x] Visualização de workflows GitHub Actions com análise em tempo real
+- [x] Gráficos de saúde do projeto com métricas reais
+- [x] Representação visual de workflows com diagramas Mermaid
+- [x] Histórico de análises com dados persistentes
+- [x] Exportação de relatórios visuais
+- [x] API REST para Prometheus
+- [x] Loading states e tratamento de erros
+- [x] Interface responsiva para mobile/tablet
+- [x] Sistema de notificações toast
 
-#### Melhorias
+#### Melhorias Implementadas
 
-- [ ] API REST para Prometheus
-- [ ] WebSockets para live updates
-- [ ] Suporte a múltiplos projetos simultâneos
+- [x] Métricas automáticas calculadas do projeto real
+- [x] Barra de progresso do Guardian com indicadores dinâmicos
+- [x] Tooltips explicativos em todos os cards
+- [x] Grafo Mermaid gerado dinamicamente
 
 ---
 
-### v0.7.0 - AI-Powered Analysis (Q4 2026)
+### v0.5.0 - Sistema de Analistas Extensível (Q1 2026) ✅ CONCLUÍDO
+
+**Objetivo**: Permitir que usuários criem e compartilhem analistas personalizados.
+
+#### Features Implementadas
+
+- [x] Interface pública para criar analistas customizados
+- [x] Sistema de plugins com autodiscovery
+- [x] Validação automática de analistas
+- [x] Suporte a GitHub Actions com detecção de segurança
+- [x] Documentação completa para criação de analistas
+
+---
+
+## 📅 Próximas Versões
+
+### v0.7.0 - AI-Powered Analysis (Q3 2026)
 
 **Objetivo**: Integração com modelos de IA para análise mais profunda.
 
-#### Features
+#### Features Planejadas
 
 - [ ] Sugestões baseadas em IA
 - [ ] Detecção de padrões avançada
 - [ ] Recomendações de refatoração automática
 - [ ] Análise de segurança com IA
+
+---
+
+### v0.8.0 - Marketplace e Comunidade (Q4 2026)
+
+**Objetivo**: Ecossistema comunitário de analistas e plugins.
+
+#### Features Planejadas
+
+- [ ] Marketplace de analistas (repositório comunitário)
+- [ ] Sistema de versionamento para analistas externos
+- [ ] Suporte a linguagens adicionais (Go, Rust, Java)
+- [ ] Performance: cache de análise entre execuções
+- [ ] Suporte a múltiplos projetos simultâneos
 
 ---
 

@@ -18,7 +18,7 @@ Este guia cobre o menor caminho para instalar, executar e validar o Prometheus n
 ### Desenvolvimento local
 
 ```bash
-git clone https://github.com/5-5-5-0-5-5-5/prometheus.git
+git clone https://github.com/5-5-5-5-5-5-5/prometheus.git
 cd prometheus
 npm install
 npm run build

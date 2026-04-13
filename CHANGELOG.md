@@ -10,18 +10,78 @@ Todas as mudanças notáveis deste repositório serão documentadas aqui.
 O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
-## [Unreleased]
+## [0.6.0] - 2026-04-13
 
 ### Adicionado
 
-- **Desacoplamento (plano em planejamento/)**:
-  - **IoC no motor**: Comandos da CLI (`podar`, `guardian`, `reestruturar`, `fix-types`, `atualizar`) passam explicitamente a lista de técnicas (`registroAnalistas`) para `iniciarInquisicao`, permitindo que o Core não importe o registro de analistas quando orquestrado pela CLI.
-  - **Eventos no Executor**: `executarInquisicao` aceita opcionalmente `opts.events` (interface `ExecutorEventEmitter`). Quando fornecido, emite `file:processed` (por arquivo) e `analysis:complete` (ao final), permitindo que frontends (CLI, Web, extensões) reajam ao progresso sem acoplar ao Core.
-  - **Autodiscovery de plugins**: Já existente; analistas em `src/analistas/plugins/` com prefixo `analista-` ou `detector-` são descobertos automaticamente e mesclados ao registro.
+- **Dashboard Web Interativo**:
+  - Novo comando `prometheus dashboard` para iniciar interface web completa
+  - Visualização de workflows GitHub Actions com análise em tempo real
+  - Gráficos de saúde do projeto com métricas reais (segurança, performance, documentação, arquitetura, qualidade)
+  - Representação visual de workflows com diagramas Mermaid
+  - Sistema de notificações toast para feedback ao usuário
+  - Loading states e tratamento de erros aprimorado
+
+- **Métricas Automáticas do Projeto**:
+  - Cálculo automático de scores baseado na estrutura real do projeto
+  - Histórico de tendências com dados persistentes
+  - Barra de progresso do Guardian com indicadores visuais dinâmicos
+  - Cards informativos: segurança, performance, boas práticas, documentação
+
+- **Melhorias de UX do Dashboard**:
+  - Tooltips explicativos em todos os cards e métricas
+  - Feedback visual durante carregamento de dados
+  - Grafo Mermaid gerado dinamicamente baseado nos jobs do workflow
+  - Interface responsiva para mobile e tablet
+
+### Melhorado
+
+- **API REST**:
+  - Endpoint `/api/v1/repositorio/status` agora retorna métricas reais calculadas automaticamente
+  - Endpoint `/api/v1/repositorio/metricas` para histórico de tendências
+  - Melhor tratamento de erros HTTP em todos os endpoints
+
+### Corrigido
+
+- Dados mockados do radar chart substituídos por métricas reais do projeto
+- Renderização do grafo Mermaid agora reflete jobs reais do workflow analisado
+- Estados de loading e empty state em todas as views do dashboard
+
+## [0.5.0] - 2026-03-15
+
+### Adicionado
+
+- Sistema de plugins para GitHub Actions com detecção de segurança e boas práticas
+- Análise avançada de workflows com detecção de anti-padrões
+- Integração com SDK para análise programática
+
+### Melhorado
+
+- Performance do scanner de arquivos otimizada com processamento paralelo
+- Precisão dos detectores de código frágil e vazamentos de memória
+
+## [0.4.3] - 2026-02-20
+
+### Adicionado
+
+- **Gerenciamento de Nomes de Variáveis**:
+  - Novo comando `names`: Varre o projeto e extrai nomes de variáveis para mapeamento em `names/name.txt`.
+  - Novo comando `rename`: Aplica renomeações de variáveis em massa baseadas no arquivo de mapeamento.
+  - Script automatizado para sugestão de traduções (Português) para nomes de variáveis.
 
 ### Alterado
 
-- **Names/Rename fragmentados**: Em projetos grandes, o comando `names` passa a gerar uma estrutura em `names/` espelhando `src/` (um `.txt` por arquivo fonte), em vez de um único `name.txt` monolítico. O `rename` usa `names/name.txt` se existir (retrocompatível), caso contrário agrega todos os `names/**/*.txt`. Opção `names --legacy` gera também o arquivo único `names/name.txt`.
+- **Segurança de Tipagem**:
+  - Refinamento massivo de tipos `any` e `unknown` em todo o core e CLI via `fix-types`.
+  - Melhoria na inferência de tipos em callbacks assíncronos e interfaces de plugins.
+- **Robustez do Renomeador**:
+  - Implementação de lista de nomes protegidos para evitar renomeação acidental de propriedades nativas (Node.js/JS).
+  - Ajuste no gerador de código para evitar erros de sintaxe em casts do TypeScript.
+
+### Corrigido
+
+- **Erros de Compilação**: Correção de erros de sintaxe gerados pelo Babel em `analista-html.ts`, `detector-markdown.ts` e `processamento-diagnostico.ts`.
+- **CLI**: Resolução do erro `ERR_INVALID_MODULE_SPECIFIER` na execução global do pacote via ESM loader.
 
 ## [0.3.9] - 2026-02-19
 
@@ -238,37 +298,6 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 ### Corrigido
 
 - **Problema de Exclusão**: Correção crítica onde `node_modules` era escaneado mesmo sem filtros explícitos devido a configuração vazia de `CLI_EXCLUDE_PATTERNS`
-
-## [Unreleased]
-
-### Melhorado
-
-- Filtros dinâmicos `--include`/`--exclude` com suporte a flags repetidas, vírgulas e espaços.
-- Harmonização: inclusão explícita de `node_modules` (ex.: `--include node_modules/**`) agora funciona inclusive em `--scan-only`.
-- Saída `--json` com logs intermediários silenciados e escape Unicode \uXXXX para estabilidade em Windows/CI.
-
-### Refatorado
-
-- Analistas deixam de impor limitação rígida a `src/`; escopo agora é totalmente controlado pelo scanner/CLI via `--include`/`--exclude`.
-- `ritual-comando`: reduz ruído — só reporta "padrao-ausente" em arquivos com face de comandos (cli/commands/comandos/bot).
-- `todo-comments`: passa a respeitar o escopo do scanner; mantém filtros de testes/specs e extensões.
-
-### Corrigido
-
-- Normalização de caminhos no Windows (POSIX interno) em scanner e matching de padrões.
-- Supressão de falsos positivos de parsing em `node_modules` quando não aplicável; políticas alinhadas para evitar inundação de `PARSE_ERRO`.
-
-### Removido
-
-- Hardcodes de escopo (ex.: checks fixos por `src/` e block amplo de `node_modules`) dentro de analistas.
-
-### Interno/Infra
-
-- Documentação atualizada (README principal, docs de decisões, docs/README, src/analistas/README).
-- CHECKLIST atualizado com data 2025-08-22 e itens concluídos da harmonização.
-- Build/tsc estabilizado; smoke tests leves para `diagnosticar --json` e `--scan-only`.
-
----
 
 ## [0.1.0] - 2025-08-18
 
