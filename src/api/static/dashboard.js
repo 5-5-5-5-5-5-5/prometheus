@@ -9,6 +9,14 @@ document.addEventListener('DOMContentLoaded', () => {
         view: 'workflows' // 'workflows', 'projeto', 'tendencias'
     };
 
+    // Função para sanitizar HTML e prevenir XSS
+    function sanitizeHtml(str) {
+        if (typeof str !== 'string') return str;
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
     // Criar Banner de Status (Souls Style)
     const banner = document.createElement('div');
     banner.id = 'souls-banner';
@@ -413,31 +421,44 @@ document.addEventListener('DOMContentLoaded', () => {
         const hasCritical = results.some(r => r.nivel === 'erro');
         const hasWarnings = results.some(r => r.nivel === 'aviso');
 
-        document.getElementById('sec-status').innerHTML = hasCritical
-            ? '<i class="fas fa-times-circle"></i> Problemas de Segurança'
-            : '<i class="fas fa-check-circle"></i> Seguro';
-        document.getElementById('sec-status').className = hasCritical ? 'critical' : 'success';
+        // Sec status - DOM seguro
+        const secStatus = document.getElementById('sec-status');
+        secStatus.innerHTML = '';
+        const secIcon = document.createElement('i');
+        secIcon.className = hasCritical ? 'fas fa-times-circle' : 'fas fa-check-circle';
+        secStatus.appendChild(secIcon);
+        secStatus.appendChild(document.createTextNode(hasCritical ? ' Problemas de Segurança' : ' Seguro'));
+        secStatus.className = hasCritical ? 'critical' : 'success';
 
-        // Performance status
+        // Performance status - DOM seguro
         const perfIssues = results.filter(r => r.tipo?.toLowerCase().includes('performance'));
-        document.getElementById('perf-status').innerHTML = perfIssues.length > 0
-            ? `<i class="fas fa-exclamation-triangle"></i> ${perfIssues.length} problema(s)`
-            : '<i class="fas fa-check-circle"></i> Otimizada';
-        document.getElementById('perf-status').style.color = perfIssues.length > 0 ? 'var(--warning)' : '#10b981';
+        const perfStatus = document.getElementById('perf-status');
+        perfStatus.innerHTML = '';
+        const perfIcon = document.createElement('i');
+        perfIcon.className = perfIssues.length > 0 ? 'fas fa-exclamation-triangle' : 'fas fa-check-circle';
+        perfStatus.appendChild(perfIcon);
+        perfStatus.appendChild(document.createTextNode(perfIssues.length > 0 ? ` ${perfIssues.length} problema(s)` : ' Otimizada'));
+        perfStatus.style.color = perfIssues.length > 0 ? 'var(--warning)' : '#10b981';
 
-        // Boas práticas
+        // Boas práticas - DOM seguro
         const bestPractices = results.filter(r => r.tipo?.toLowerCase().includes('best practice') || r.tipo?.toLowerCase().includes('boa prática'));
-        document.getElementById('best-practices-status').innerHTML = bestPractices.length === 0
-            ? '<i class="fas fa-check-circle"></i> Aplicadas'
-            : `<i class="fas fa-exclamation-triangle"></i> ${bestPractices.length} pendente(s)`;
-        document.getElementById('best-practices-status').style.color = bestPractices.length === 0 ? '#10b981' : 'var(--warning)';
+        const bpStatus = document.getElementById('best-practices-status');
+        bpStatus.innerHTML = '';
+        const bpIcon = document.createElement('i');
+        bpIcon.className = bestPractices.length === 0 ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle';
+        bpStatus.appendChild(bpIcon);
+        bpStatus.appendChild(document.createTextNode(bestPractices.length === 0 ? ' Aplicadas' : ` ${bestPractices.length} pendente(s)`));
+        bpStatus.style.color = bestPractices.length === 0 ? '#10b981' : 'var(--warning)';
 
-        // Documentação
+        // Documentação - DOM seguro
         const docIssues = results.filter(r => r.tipo?.toLowerCase().includes('document'));
-        document.getElementById('docs-status').innerHTML = docIssues.length > 0
-            ? `<i class="fas fa-book-open"></i> ${docIssues.length} melhoria(s)`
-            : '<i class="fas fa-check-circle"></i> Completa';
-        document.getElementById('docs-status').style.color = docIssues.length > 0 ? 'var(--warning)' : '#10b981';
+        const docStatus = document.getElementById('docs-status');
+        docStatus.innerHTML = '';
+        const docIcon = document.createElement('i');
+        docIcon.className = docIssues.length > 0 ? 'fas fa-book-open' : 'fas fa-check-circle';
+        docStatus.appendChild(docIcon);
+        docStatus.appendChild(document.createTextNode(docIssues.length > 0 ? ` ${docIssues.length} melhoria(s)` : ' Completa'));
+        docStatus.style.color = docIssues.length > 0 ? 'var(--warning)' : '#10b981';
 
         // Souls Feedback
         showSoulsBanner(hasCritical, score);
@@ -539,11 +560,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const icon = type === 'success' ? 'check-circle' :
             type === 'error' ? 'exclamation-circle' : 'info-circle';
 
-        toast.innerHTML = `
-            <i class="fas fa-${icon}"></i>
-            <span>${message}</span>
-            <button class="toast-close" onclick="this.parentElement.remove()">&times;</button>
-        `;
+        const iconEl = document.createElement('i');
+        iconEl.className = `fas fa-${icon}`;
+        const msgSpan = document.createElement('span');
+        msgSpan.textContent = message;
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'toast-close';
+        closeBtn.setAttribute('aria-label', 'Fechar notificação');
+        closeBtn.textContent = '\u00D7';
+        closeBtn.addEventListener('click', () => toast.remove());
+
+        toast.appendChild(iconEl);
+        toast.appendChild(msgSpan);
+        toast.appendChild(closeBtn);
 
         toastContainer.appendChild(toast);
 
@@ -689,7 +718,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const title = document.createElement('h4');
             title.className = 'category-title';
-            title.innerHTML = `<i class="fas fa-folder"></i> ${categoria} (${items.length})`;
+            const icon = document.createElement('i');
+            icon.className = 'fas fa-folder';
+            title.appendChild(icon);
+            title.appendChild(document.createTextNode(` ${categoria} (${items.length})`));
             section.appendChild(title);
 
             const grid = document.createElement('div');
@@ -698,10 +730,14 @@ document.addEventListener('DOMContentLoaded', () => {
             items.forEach(analista => {
                 const card = document.createElement('div');
                 card.className = 'analista-card';
-                card.innerHTML = `
-                    <div class="analista-name">${analista.nome}</div>
-                    <div class="analista-desc">${analista.descricao || 'Sem descrição'}</div>
-                `;
+                const nameDiv = document.createElement('div');
+                nameDiv.className = 'analista-name';
+                nameDiv.textContent = analista.nome || '';
+                const descDiv = document.createElement('div');
+                descDiv.className = 'analista-desc';
+                descDiv.textContent = analista.descricao || 'Sem descrição';
+                card.appendChild(nameDiv);
+                card.appendChild(descDiv);
                 grid.appendChild(card);
             });
 
@@ -736,13 +772,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const ocorrencias = data.ocorrencias || [];
         ocorrencias.slice(0, 50).forEach(oc => {
             const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${oc.tipo || 'N/A'}</td>
-                <td>${oc.mensagem || ''}</td>
-                <td>${oc.relPath || ''}</td>
-                <td>${oc.linha || '-'}</td>
-                <td><span class="severity ${oc.nivel || 'info'}">${oc.nivel || 'info'}</span></td>
-            `;
+            const tdTipo = document.createElement('td');
+            tdTipo.textContent = oc.tipo || 'N/A';
+            const tdMsg = document.createElement('td');
+            tdMsg.textContent = oc.mensagem || '';
+            const tdArquivo = document.createElement('td');
+            tdArquivo.textContent = oc.relPath || '';
+            const tdLinha = document.createElement('td');
+            tdLinha.textContent = oc.linha || '-';
+            const tdNivel = document.createElement('td');
+            const spanNivel = document.createElement('span');
+            spanNivel.className = `severity ${oc.nivel || 'info'}`;
+            spanNivel.textContent = oc.nivel || 'info';
+            tdNivel.appendChild(spanNivel);
+            tr.appendChild(tdTipo);
+            tr.appendChild(tdMsg);
+            tr.appendChild(tdArquivo);
+            tr.appendChild(tdLinha);
+            tr.appendChild(tdNivel);
             tbody.appendChild(tr);
         });
     }
@@ -781,10 +828,14 @@ document.addEventListener('DOMContentLoaded', () => {
         (data.licencas || []).slice(0, 8).forEach(([licenca, count]) => {
             const li = document.createElement('li');
             li.className = 'license-item';
-            li.innerHTML = `
-                <span class="license-name">${licenca}</span>
-                <span class="license-count">${count}</span>
-            `;
+            const spanName = document.createElement('span');
+            spanName.className = 'license-name';
+            spanName.textContent = licenca || '';
+            const spanCount = document.createElement('span');
+            spanCount.className = 'license-count';
+            spanCount.textContent = String(count);
+            li.appendChild(spanName);
+            li.appendChild(spanCount);
             topList.appendChild(li);
         });
 
@@ -793,12 +844,21 @@ document.addEventListener('DOMContentLoaded', () => {
         tbody.innerHTML = '';
         (data.problematicas || []).forEach(pkg => {
             const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${pkg.name || ''}</td>
-                <td>${pkg.version || ''}</td>
-                <td><span class="severity erro">UNKNOWN</span></td>
-                <td>${pkg.repository || '-'}</td>
-            `;
+            const tdNome = document.createElement('td');
+            tdNome.textContent = pkg.name || '';
+            const tdVersao = document.createElement('td');
+            tdVersao.textContent = pkg.version || '';
+            const tdLicenca = document.createElement('td');
+            const spanLicenca = document.createElement('span');
+            spanLicenca.className = 'severity erro';
+            spanLicenca.textContent = 'UNKNOWN';
+            tdLicenca.appendChild(spanLicenca);
+            const tdRepo = document.createElement('td');
+            tdRepo.textContent = pkg.repository || '-';
+            tr.appendChild(tdNome);
+            tr.appendChild(tdVersao);
+            tr.appendChild(tdLicenca);
+            tr.appendChild(tdRepo);
             tbody.appendChild(tr);
         });
 
