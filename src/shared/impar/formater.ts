@@ -1073,9 +1073,9 @@ function formatarSvgMinimo(code: string): FormatadorMinimoResult {
     reason: opt.changed ? 'svg-optimized' : 'normalizacao-basica'
   };
 }
-function tokenizeHtml(src: string): Array<{ kind: 'tag' | 'text' | 'comment'; value: string }> {
+function tokenizeHtml(src: string): Array<{ kind: 'tag' | 'text' | 'comment' | 'raw'; value: string }> {
   const re = /(<\/?[^>\n]+?>|<!--[\s\S]*?-->)/g;
-  const out: Array<{ kind: 'tag' | 'text' | 'comment'; value: string }> = [];
+  const out: Array<{ kind: 'tag' | 'text' | 'comment' | 'raw'; value: string }> = [];
   let last = 0;
   for (const m of src.matchAll(re)) {
     const start = m.index ?? -1;
@@ -1189,6 +1189,17 @@ const HTML_BLOCK_ELEMENTS = new Set([
   'p', 'dl', 'dt', 'dd',
 ]);
 
+const HTML_INLINE_ELEMENTS = new Set([
+  'span', 'a', 'strong', 'em', 'b', 'i', 'u', 'small', 'big',
+  'abbr', 'cite', 'dfn', 'code', 'var', 'samp', 'kbd', 'sub', 'sup',
+  'mark', 'q', 'time', 'data', 'ruby', 'rt', 'rp', 'bdi', 'bdo', 'wbr',
+  'br', 'img', 'input', 'label', 'select', 'textarea', 'button',
+]);
+
+function isHtmlInlineTag(tagName: string): boolean {
+  return HTML_INLINE_ELEMENTS.has(tagName.toLowerCase());
+}
+
 function isHtmlBlockTag(tagName: string): boolean {
   return HTML_BLOCK_ELEMENTS.has(tagName.toLowerCase());
 }
@@ -1204,10 +1215,115 @@ function extractTagName(tag: string): string | null {
 
 function formatarHtmlMinimo(code: string): FormatadorMinimoResult {
   const normalized = normalizarFimDeLinha(removerBom(code));
-  const tokens = tokenizeHtml(normalized);
+
+  // Estratégia: encontrar todos os blocos script/style e processá-los separadamente
+  // do resto do HTML
+
+  // Primeiro, extrair todos os blocos script/style com seus conteúdos originais
+  interface BlockInfo {
+    start: number;
+    end: number;
+    openTag: string;
+    content: string;
+    closeTag: string;
+    type: 'script' | 'style';
+  }
+
+  const blocks: BlockInfo[] = [];
+
+  // Encontrar blocos <script>
+  for (const match of code.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)) {
+    const start = match.index ?? -1;
+    if (start < 0) continue;
+    const fullMatch = match[0];
+    const openTagEnd = fullMatch.indexOf('>');
+    const closeTagStart = fullMatch.lastIndexOf('</script>');
+
+    blocks.push({
+      start,
+      end: start + fullMatch.length,
+      openTag: fullMatch.slice(0, openTagEnd + 1),
+      content: fullMatch.slice(openTagEnd + 1, closeTagStart),
+      closeTag: '</script>',
+      type: 'script'
+    });
+  }
+
+  // Encontrar blocos <style>
+  for (const match of code.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)) {
+    const start = match.index ?? -1;
+    if (start < 0) continue;
+    const fullMatch = match[0];
+    const openTagEnd = fullMatch.indexOf('>');
+    const closeTagStart = fullMatch.lastIndexOf('</style>');
+
+    blocks.push({
+      start,
+      end: start + fullMatch.length,
+      openTag: fullMatch.slice(0, openTagEnd + 1),
+      content: fullMatch.slice(openTagEnd + 1, closeTagStart),
+      closeTag: '</style>',
+      type: 'style'
+    });
+  }
+
+  // Ordenar blocos por posição
+  blocks.sort((a, b) => a.start - b.start);
+
+  // Agora processar o HTML em segmentos
+  const outLines: string[] = [];
   let indent = 0;
   const indentStr = (n: number) => '  '.repeat(Math.max(0, n));
-  const outLines: string[] = [];
+
+  let lastEnd = 0;
+
+  for (const block of blocks) {
+    // Processar HTML antes deste bloco
+    const htmlBefore = normalized.slice(lastEnd, block.start);
+    if (htmlBefore.trim()) {
+      processHtmlFragment(htmlBefore, outLines, indent);
+    }
+
+    // Adicionar o bloco script/style preservado
+    const normalizedOpenTag = normalizeHtmlTag(block.openTag);
+    outLines.push(`${indentStr(indent)}${normalizedOpenTag}`);
+
+    // Adicionar conteúdo preservado linha por linha
+    const contentLines = block.content.split('\n');
+    for (const line of contentLines) {
+      outLines.push(line);
+    }
+
+    outLines.push(`${indentStr(indent)}${block.closeTag}`);
+
+    lastEnd = block.end;
+  }
+
+  // Processar HTML restante após o último bloco
+  const htmlAfter = normalized.slice(lastEnd);
+  if (htmlAfter.trim()) {
+    processHtmlFragment(htmlAfter, outLines, indent);
+  }
+
+  const formatted = normalizarNewlinesFinais(outLines.join('\n'));
+  const baseline = normalizarNewlinesFinais(normalized);
+  return {
+    ok: true,
+    parser: 'html',
+    formatted,
+    changed: formatted !== baseline,
+    reason: 'estilo-prometheus-html',
+  };
+}
+
+function processHtmlFragment(
+  fragment: string,
+  outLines: string[],
+  startIndent: number
+): void {
+  let indent = startIndent;
+  const tokens = tokenizeHtml(fragment);
+  const indentStr = (n: number) => '  '.repeat(Math.max(0, n));
 
   for (const tok of tokens) {
     if (tok.kind === 'comment') {
@@ -1215,6 +1331,7 @@ function formatarHtmlMinimo(code: string): FormatadorMinimoResult {
       outLines.push(line);
       continue;
     }
+
     if (tok.kind === 'text') {
       const trimmed = tok.value.replace(/\s+/g, ' ').trim();
       if (trimmed) {
@@ -1222,6 +1339,7 @@ function formatarHtmlMinimo(code: string): FormatadorMinimoResult {
       }
       continue;
     }
+
     const normalizedTag = normalizeHtmlTag(tok.value);
     const tagName = extractTagName(normalizedTag);
     const isClosing = normalizedTag.startsWith('</');
@@ -1254,16 +1372,6 @@ function formatarHtmlMinimo(code: string): FormatadorMinimoResult {
       outLines.push(`${indentStr(indent)}${normalizedTag}`);
     }
   }
-
-  const formatted = normalizarNewlinesFinais(outLines.join('\n'));
-  const baseline = normalizarNewlinesFinais(normalized);
-  return {
-    ok: true,
-    parser: 'html',
-    formatted,
-    changed: formatted !== baseline,
-    reason: 'estilo-prometheus-html',
-  };
 }
 
 function tokenizeCssBlocks(src: string): Array<{ kind: 'rule' | 'at-rule' | 'comment' | 'text'; value: string }> {
@@ -1497,7 +1605,7 @@ function formatarCssMinimo(code: string): FormatadorMinimoResult {
           const isPseudoLike = value.startsWith(':') || value.startsWith('::');
           // So adicionar como propriedade se parecer com uma
           if (!isPseudoLike && prop.length > 0 && !prop.includes(' ') && !prop.startsWith('.') &&
-              !prop.startsWith('#') && !prop.startsWith(':') && !prop.startsWith('@')) {
+            !prop.startsWith('#') && !prop.startsWith(':') && !prop.startsWith('@')) {
             items.push({ kind: 'prop', prop, value });
             idx++;
             continue;
@@ -2512,7 +2620,7 @@ function formatarGoMinimo(code: string): FormatadorMinimoResult {
   let indent = 0;
   let inComment = false;
   let inString = false;
-  const stringChar = '';
+  let stringChar = '';
   let inBacktick = false;
 
   for (const raw of lines) {
