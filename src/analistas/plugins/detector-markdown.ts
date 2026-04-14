@@ -30,7 +30,7 @@ const { log } = getMessages();
 const LICENCA_PADROES: MarkdownLicensePatterns = {
   incompativeis: [/\bGPL\b/i, /\bAGPL\b/i, /\bLGPL\b/i, /Creative\s+Commons/i, /\bCC-BY\b/i, /All\s+rights\s+reserved/i],
   cessaoDireitos: [/cess(?:ã|a)o\s+de\s+direitos/i, /transfer(?:ê|e)ncia\s+de\s+direitos/i],
-  referenciasRisco: [/Stack\s*Overflow/i, /stackoverflow\.com/i, /\bassign\b/i, /\bcession\b/i]
+  referenciasRisco: [/Stack\s*Overflow/i, /\bstackoverflow\.com\b/i, /\bassign\b/i, /\bcession\b/i]
 };
 
 /**
