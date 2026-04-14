@@ -47,6 +47,26 @@
             </i>
             Saúde do Projeto
           </button>
+          <button class="nav-btn" data-view="analise">
+            <i class="fas fa-code">
+            </i>
+            Análise de Código
+          </button>
+          <button class="nav-btn" data-view="detectores">
+            <i class="fas fa-shield-alt">
+            </i>
+            Detectores
+          </button>
+          <button class="nav-btn" data-view="licencas">
+            <i class="fas fa-balance-scale">
+            </i>
+            Licenças
+          </button>
+          <button class="nav-btn" data-view="performance">
+            <i class="fas fa-tachometer-alt">
+            </i>
+            Performance
+          </button>
           <button class="nav-btn" data-view="tendencias">
             <i class="fas fa-chart-line">
             </i>
@@ -147,7 +167,9 @@
                     Segurança
                   </h3>
                   <p id="sec-status">
-                    ✅ Seguro
+                    <i class="fas fa-check-circle">
+                    </i>
+                    Seguro
                   </p>
                 </div>
                 <div class="card" title="Status de otimização de performance">
@@ -297,6 +319,355 @@
               </i>
               Auto-Fix (Em breve)
             </button>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- VISÃO: ANÁLISE DE CÓDIGO -->
+    <main id="view-analise" class="view hidden">
+      <div class="dashboard-grid">
+        <div class="card full-width">
+          <div class="view-header">
+            <h2>
+              <i class="fas fa-search">
+              </i>
+              Análise Detalhada do Código
+            </h2>
+            <button class="action-btn" id="btn-executar-analise">
+              <i class="fas fa-play">
+              </i>
+              Executar Análise
+            </button>
+          </div>
+          <div id="analise-loading" class="hidden">
+            <div class="loading-spinner">
+              <i class="fas fa-spinner fa-spin">
+              </i>
+              <p>
+                Analisando projeto...
+              </p>
+            </div>
+          </div>
+          <div id="analise-results" class="hidden">
+            <div class="summary-cards">
+              <div class="card stat-card">
+                <h3>
+                  <i class="fas fa-exclamation-circle" style="color: var(--critical);">
+                  </i>
+                  Erros
+                </h3>
+                <p class="big-number" id="analise-erros">
+                  0
+                </p>
+              </div>
+              <div class="card stat-card">
+                <h3>
+                  <i class="fas fa-exclamation-triangle" style="color: var(--warning);">
+                  </i>
+                  Avisos
+                </h3>
+                <p class="big-number" id="analise-avisos">
+                  0
+                </p>
+              </div>
+              <div class="card stat-card">
+                <h3>
+                  <i class="fas fa-info-circle" style="color: var(--accent);">
+                  </i>
+                  Informações
+                </h3>
+                <p class="big-number" id="analise-info">
+                  0
+                </p>
+              </div>
+              <div class="card stat-card">
+                <h3>
+                  <i class="fas fa-file-code" style="color: var(--success);">
+                  </i>
+                  Arquivos
+                </h3>
+                <p class="big-number" id="analise-arquivos">
+                  0
+                </p>
+              </div>
+            </div>
+            <div class="card">
+              <h3>
+                <i class="fas fa-clock">
+                </i>
+                Tempo de Análise
+              </h3>
+              <p class="medium-number" id="analise-tempo">
+                0ms
+              </p>
+            </div>
+            <div class="card full-width">
+              <h3>
+                <i class="fas fa-list">
+                </i>
+                Top Problemas Encontrados
+              </h3>
+              <table class="data-table" id="analise-problemas-table">
+                <thead>
+                  <tr>
+                    <th>
+                      Tipo
+                    </th>
+                    <th>
+                      Mensagem
+                    </th>
+                    <th>
+                      Arquivo
+                    </th>
+                    <th>
+                      Linha
+                    </th>
+                    <th>
+                      Nível
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="analise-problemas-body">
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- VISÃO: DETECTORES -->
+    <main id="view-detectores" class="view hidden">
+      <div class="dashboard-grid">
+        <div class="card full-width">
+          <h2>
+            <i class="fas fa-shield-alt">
+            </i>
+            Detectores e Plugins Ativos
+          </h2>
+          <div class="detector-stats" id="detector-stats">
+            <div class="detector-card">
+              <div class="detector-icon">
+                <i class="fas fa-bug">
+                </i>
+              </div>
+              <div class="detector-count" id="total-detectores">
+                0
+              </div>
+              <div class="detector-label">
+                Detectores
+              </div>
+            </div>
+            <div class="detector-card">
+              <div class="detector-icon">
+                <i class="fas fa-plug">
+                </i>
+              </div>
+              <div class="detector-count" id="total-plugins">
+                0
+              </div>
+              <div class="detector-label">
+                Plugins
+              </div>
+            </div>
+            <div class="detector-card">
+              <div class="detector-icon">
+                <i class="fas fa-cogs">
+                </i>
+              </div>
+              <div class="detector-count" id="total-tecnicas">
+                0
+              </div>
+              <div class="detector-label">
+                Técnicas
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card full-width">
+          <h3>
+            <i class="fas fa-list-ul">
+            </i>
+            Lista de Analistas
+          </h3>
+          <div class="analista-list" id="analista-list">
+            <div class="loading-state">
+              <i class="fas fa-spinner fa-spin">
+              </i>
+              <p>
+                Carregando analistas...
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- VISÃO: LICENÇAS -->
+    <main id="view-licencas" class="view hidden">
+      <div class="dashboard-grid">
+        <div class="card full-width">
+          <div class="view-header">
+            <h2>
+              <i class="fas fa-balance-scale">
+              </i>
+              Scan de Licenças de Dependências
+            </h2>
+            <button class="action-btn" id="btn-executar-licencas">
+              <i class="fas fa-sync">
+              </i>
+              Atualizar
+            </button>
+          </div>
+          <div id="licencas-loading" class="hidden">
+            <div class="loading-spinner">
+              <i class="fas fa-spinner fa-spin">
+              </i>
+              <p>
+                Escaneando dependências...
+              </p>
+            </div>
+          </div>
+          <div id="licencas-results" class="hidden">
+            <div class="summary-cards">
+              <div class="card stat-card">
+                <h3>
+                  <i class="fas fa-cube" style="color: var(--accent);">
+                  </i>
+                  Total de Pacotes
+                </h3>
+                <p class="big-number" id="licencas-total">
+                  0
+                </p>
+              </div>
+              <div class="card stat-card">
+                <h3>
+                  <i class="fas fa-check-circle" style="color: var(--success);">
+                  </i>
+                  Licenças Válidas
+                </h3>
+                <p class="big-number" id="licencas-validas">
+                  0
+                </p>
+              </div>
+              <div class="card stat-card">
+                <h3>
+                  <i class="fas fa-exclamation-triangle" style="color: var(--critical);">
+                  </i>
+                  Problemáticas
+                </h3>
+                <p class="big-number" id="licencas-problematicas">
+                  0
+                </p>
+              </div>
+            </div>
+            <div class="dashboard-grid">
+              <div class="card">
+                <h3>
+                  <i class="fas fa-chart-pie">
+                  </i>
+                  Distribuição de Licenças
+                </h3>
+                <div class="chart-container" style="height: 250px;">
+                  <canvas id="licencas-chart">
+                  </canvas>
+                </div>
+              </div>
+              <div class="card">
+                <h3>
+                  <i class="fas fa-trophy">
+                  </i>
+                  Top Licenças
+                </h3>
+                <ul class="license-list" id="licencas-top-list">
+                </ul>
+              </div>
+            </div>
+            <div class="card full-width">
+              <h3>
+                <i class="fas fa-exclamation-circle">
+                </i>
+                Pacotes Problemáticos
+              </h3>
+              <table class="data-table" id="licencas-problematicas-table">
+                <thead>
+                  <tr>
+                    <th>
+                      Pacote
+                    </th>
+                    <th>
+                      Versão
+                    </th>
+                    <th>
+                      Licença
+                    </th>
+                    <th>
+                      Repositório
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="licencas-problematicas-body">
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- VISÃO: PERFORMANCE -->
+    <main id="view-performance" class="view hidden">
+      <div class="dashboard-grid">
+        <div class="card">
+          <h2>
+            <i class="fas fa-tachometer-alt">
+            </i>
+            Métricas de Performance
+          </h2>
+          <ul class="perf-metrics">
+            <li>
+              <strong>
+                Tempo de Execução:
+              </strong>
+              <span id="perf-tempo">
+                --
+              </span>
+            </li>
+            <li>
+              <strong>
+                Memória Usada:
+              </strong>
+              <span id="perf-memoria">
+                --
+              </span>
+            </li>
+            <li>
+              <strong>
+                Arquivos Processados:
+              </strong>
+              <span id="perf-arquivos">
+                --
+              </span>
+            </li>
+          </ul>
+        </div>
+        <div class="card">
+          <h2>
+            <i class="fas fa-chart-area">
+            </i>
+            Histórico de Performance
+          </h2>
+          <div class="chart-container" style="height: 250px;">
+            <canvas id="perf-chart">
+            </canvas>
+          </div>
+        </div>
+        <div class="card full-width">
+          <h2>
+            <i class="fas fa-chart-bar">
+            </i>
+            Tempo por Analista
+          </h2>
+          <div class="chart-container" style="height: 300px;">
+            <canvas id="analistas-chart">
+            </canvas>
           </div>
         </div>
       </div>

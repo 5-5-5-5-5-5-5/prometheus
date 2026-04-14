@@ -25,6 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initMusicPlayer();
     loadWorkflows();
     loadProjectStatus();
+    loadAnalistas();
+    loadLicencas();
+    loadPerformance();
 
     // --- Navegação Global ---
     function initNavigation() {
@@ -76,6 +79,68 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.disabled = false;
             }
         });
+
+        // Botão Executar Análise
+        document.getElementById('btn-executar-analise')?.addEventListener('click', async () => {
+            const btn = document.getElementById('btn-executar-analise');
+            const loading = document.getElementById('analise-loading');
+            const results = document.getElementById('analise-results');
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Executando...';
+            loading.classList.remove('hidden');
+            results.classList.add('hidden');
+
+            try {
+                const res = await fetch('/api/v1/comando/diagnosticar/detalhado', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ full: true, fast: true })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    renderAnaliseResults(data);
+                    loading.classList.add('hidden');
+                    results.classList.remove('hidden');
+                    showToast('Análise concluída com sucesso!', 'success');
+
+                    // Auto-scroll para resultados
+                    results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            } catch (err) {
+                alert('Erro na análise: ' + err);
+                loading.classList.add('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-play"></i> Executar Análise';
+            }
+        });
+
+        // Botão Atualizar Licenças
+        document.getElementById('btn-executar-licencas')?.addEventListener('click', async () => {
+            const btn = document.getElementById('btn-executar-licencas');
+            const loading = document.getElementById('licencas-loading');
+            const results = document.getElementById('licencas-results');
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Escaneando...';
+            loading.classList.remove('hidden');
+            results.classList.add('hidden');
+
+            try {
+                await loadLicencasData();
+                loading.classList.add('hidden');
+                results.classList.remove('hidden');
+                showToast('Scan de licenças concluído!', 'success');
+            } catch (err) {
+                alert('Erro no scan: ' + err);
+                loading.classList.add('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-sync"></i> Atualizar';
+            }
+        });
     }
 
     function switchView(view) {
@@ -86,8 +151,48 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
         document.getElementById(`view-${view}`).classList.remove('hidden');
 
+        // Auto-carregar dados quando entrar na view
         if (view === 'tendencias') loadTrends();
         if (view === 'projeto') loadProjectStatus();
+        if (view === 'analise') loadAnaliseAuto();
+        if (view === 'detectores') loadDetectoresAuto();
+        if (view === 'licencas') loadLicencasAuto();
+        if (view === 'performance') loadPerformanceAuto();
+    }
+
+    // Auto-load functions para tornar análises executáveis
+    async function loadAnaliseAuto() {
+        const results = document.getElementById('analise-results');
+        if (!results.classList.contains('hidden') && state.analiseData) {
+            return; // Já tem dados carregados
+        }
+
+        // Executar análise automaticamente ao entrar na view
+        const btn = document.getElementById('btn-executar-analise');
+        if (btn && !btn.disabled) {
+            btn.click();
+        }
+    }
+
+    async function loadDetectoresAuto() {
+        const listEl = document.getElementById('analista-list');
+        if (listEl && !listEl.querySelector('.loading-state') && listEl.children.length > 0) {
+            return; // Já tem dados carregados
+        }
+        await loadAnalistas();
+    }
+
+    async function loadLicencasAuto() {
+        const results = document.getElementById('licencas-results');
+        if (!results.classList.contains('hidden')) {
+            return; // Já tem dados carregados
+        }
+        await loadLicencasData();
+        results.classList.remove('hidden');
+    }
+
+    async function loadPerformanceAuto() {
+        await loadPerformance();
     }
 
     function switchTab(tab) {
@@ -308,22 +413,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const hasCritical = results.some(r => r.nivel === 'erro');
         const hasWarnings = results.some(r => r.nivel === 'aviso');
 
-        document.getElementById('sec-status').textContent = hasCritical ? '❌ Problemas de Segurança' : '✅ Seguro';
+        document.getElementById('sec-status').innerHTML = hasCritical
+            ? '<i class="fas fa-times-circle"></i> Problemas de Segurança'
+            : '<i class="fas fa-check-circle"></i> Seguro';
         document.getElementById('sec-status').className = hasCritical ? 'critical' : 'success';
 
         // Performance status
         const perfIssues = results.filter(r => r.tipo?.toLowerCase().includes('performance'));
-        document.getElementById('perf-status').textContent = perfIssues.length > 0 ? `⚠️ ${perfIssues.length} problema(s)` : '✅ Otimizada';
+        document.getElementById('perf-status').innerHTML = perfIssues.length > 0
+            ? `<i class="fas fa-exclamation-triangle"></i> ${perfIssues.length} problema(s)`
+            : '<i class="fas fa-check-circle"></i> Otimizada';
         document.getElementById('perf-status').style.color = perfIssues.length > 0 ? 'var(--warning)' : '#10b981';
 
         // Boas práticas
         const bestPractices = results.filter(r => r.tipo?.toLowerCase().includes('best practice') || r.tipo?.toLowerCase().includes('boa prática'));
-        document.getElementById('best-practices-status').textContent = bestPractices.length === 0 ? '✅ Aplicadas' : `⚠️ ${bestPractices.length} pendente(s)`;
+        document.getElementById('best-practices-status').innerHTML = bestPractices.length === 0
+            ? '<i class="fas fa-check-circle"></i> Aplicadas'
+            : `<i class="fas fa-exclamation-triangle"></i> ${bestPractices.length} pendente(s)`;
         document.getElementById('best-practices-status').style.color = bestPractices.length === 0 ? '#10b981' : 'var(--warning)';
 
         // Documentação
         const docIssues = results.filter(r => r.tipo?.toLowerCase().includes('document'));
-        document.getElementById('docs-status').textContent = docIssues.length > 0 ? `📝 ${docIssues.length} melhoria(s)` : '✅ Completa';
+        document.getElementById('docs-status').innerHTML = docIssues.length > 0
+            ? `<i class="fas fa-book-open"></i> ${docIssues.length} melhoria(s)`
+            : '<i class="fas fa-check-circle"></i> Completa';
         document.getElementById('docs-status').style.color = docIssues.length > 0 ? 'var(--warning)' : '#10b981';
 
         // Souls Feedback
@@ -424,7 +537,7 @@ document.addEventListener('DOMContentLoaded', () => {
         toast.className = `toast toast-${type}`;
 
         const icon = type === 'success' ? 'check-circle' :
-                     type === 'error' ? 'exclamation-circle' : 'info-circle';
+            type === 'error' ? 'exclamation-circle' : 'info-circle';
 
         toast.innerHTML = `
             <i class="fas fa-${icon}"></i>
@@ -531,6 +644,331 @@ document.addEventListener('DOMContentLoaded', () => {
             chartContainer.innerHTML = '<div class="error-state"><i class="fas fa-exclamation-triangle"></i><p>Erro ao carregar dados</p></div>';
             showToast('Erro ao carregar tendências', 'error');
         }
+    }
+
+    // Função para carregar lista de analistas
+    async function loadAnalistas() {
+        const listEl = document.getElementById('analista-list');
+
+        try {
+            const res = await fetch('/api/v1/analistas/lista');
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+            const data = await res.json();
+
+            // Atualizar contadores
+            document.getElementById('total-detectores').textContent = data.categorias?.detectores || 0;
+            document.getElementById('total-plugins').textContent = data.categorias?.plugins || 0;
+            document.getElementById('total-tecnicas').textContent = data.categorias?.tecnicas || 0;
+
+            // Renderizar lista
+            renderAnalistaList(data.analistas || []);
+        } catch (err) {
+            console.error('Erro ao carregar analistas:', err);
+            listEl.innerHTML = '<div class="error-state"><i class="fas fa-exclamation-triangle"></i><p>Erro ao carregar analistas</p></div>';
+        }
+    }
+
+    function renderAnalistaList(analistas) {
+        const listEl = document.getElementById('analista-list');
+        listEl.innerHTML = '';
+
+        // Agrupar por categoria
+        const porCategoria = {};
+        analistas.forEach(a => {
+            const cat = a.categoria || 'Geral';
+            if (!porCategoria[cat]) {
+                porCategoria[cat] = [];
+            }
+            porCategoria[cat].push(a);
+        });
+
+        Object.entries(porCategoria).forEach(([categoria, items]) => {
+            const section = document.createElement('div');
+            section.className = 'analista-category';
+
+            const title = document.createElement('h4');
+            title.className = 'category-title';
+            title.innerHTML = `<i class="fas fa-folder"></i> ${categoria} (${items.length})`;
+            section.appendChild(title);
+
+            const grid = document.createElement('div');
+            grid.className = 'analista-grid';
+
+            items.forEach(analista => {
+                const card = document.createElement('div');
+                card.className = 'analista-card';
+                card.innerHTML = `
+                    <div class="analista-name">${analista.nome}</div>
+                    <div class="analista-desc">${analista.descricao || 'Sem descrição'}</div>
+                `;
+                grid.appendChild(card);
+            });
+
+            section.appendChild(grid);
+            listEl.appendChild(section);
+        });
+    }
+
+    // Função para carregar dados de análise
+    async function loadAnalise() {
+        // Auto-load se já tiver resultados
+        if (state.analiseData) {
+            renderAnaliseResults(state.analiseData);
+            document.getElementById('analise-results').classList.remove('hidden');
+        }
+    }
+
+    function renderAnaliseResults(data) {
+        state.analiseData = data;
+
+        // Atualizar números
+        document.getElementById('analise-erros').textContent = data.ocorrenciasPorNivel?.erro || 0;
+        document.getElementById('analise-avisos').textContent = data.ocorrenciasPorNivel?.aviso || 0;
+        document.getElementById('analise-info').textContent = data.ocorrenciasPorNivel?.info || 0;
+        document.getElementById('analise-arquivos').textContent = data.metricas?.totalArquivos || 0;
+        document.getElementById('analise-tempo').textContent = `${Math.round(data.metricas?.tempoAnalise || 0)}ms`;
+
+        // Preencher tabela de problemas
+        const tbody = document.getElementById('analise-problemas-body');
+        tbody.innerHTML = '';
+
+        const ocorrencias = data.ocorrencias || [];
+        ocorrencias.slice(0, 50).forEach(oc => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${oc.tipo || 'N/A'}</td>
+                <td>${oc.mensagem || ''}</td>
+                <td>${oc.relPath || ''}</td>
+                <td>${oc.linha || '-'}</td>
+                <td><span class="severity ${oc.nivel || 'info'}">${oc.nivel || 'info'}</span></td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // Função para carregar dados de licenças
+    async function loadLicencas() {
+        await loadLicencasData();
+    }
+
+    async function loadLicencasData() {
+        try {
+            const res = await fetch('/api/v1/licensas/scan');
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+            const data = await res.json();
+            renderLicencas(data);
+        } catch (err) {
+            console.error('Erro ao carregar licenças:', err);
+            document.getElementById('licencas-results').innerHTML =
+                '<div class="error-state"><i class="fas fa-exclamation-triangle"></i><p>Erro ao carregar licenças</p></div>';
+        }
+    }
+
+    function renderLicencas(data) {
+        // Atualizar números
+        document.getElementById('licencas-total').textContent = data.totalPackages || 0;
+        document.getElementById('licencas-validas').textContent = (data.totalFiltered || 0) - (data.problematicas?.length || 0);
+        document.getElementById('licencas-problematicas').textContent = data.problematicas?.length || 0;
+
+        // Renderizar gráfico de distribuição
+        renderLicencasChart(data.distribuicao);
+
+        // Top licenças
+        const topList = document.getElementById('licencas-top-list');
+        topList.innerHTML = '';
+        (data.licencas || []).slice(0, 8).forEach(([licenca, count]) => {
+            const li = document.createElement('li');
+            li.className = 'license-item';
+            li.innerHTML = `
+                <span class="license-name">${licenca}</span>
+                <span class="license-count">${count}</span>
+            `;
+            topList.appendChild(li);
+        });
+
+        // Tabela de problemáticas
+        const tbody = document.getElementById('licencas-problematicas-body');
+        tbody.innerHTML = '';
+        (data.problematicas || []).forEach(pkg => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${pkg.name || ''}</td>
+                <td>${pkg.version || ''}</td>
+                <td><span class="severity erro">UNKNOWN</span></td>
+                <td>${pkg.repository || '-'}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        if (data.problematicas?.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" class="empty-state"><i class="fas fa-check-circle"></i> Nenhuma licença problemática encontrada</td></tr>';
+        }
+    }
+
+    function renderLicencasChart(distribuicao) {
+        const ctx = document.getElementById('licencas-chart').getContext('2d');
+        if (window.licencasChart) window.licencasChart.destroy();
+
+        window.licencasChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Permissivas', 'Copyleft', 'Desconhecidas'],
+                datasets: [{
+                    data: [
+                        distribuicao?.permissivas || 0,
+                        distribuicao?.copyleft || 0,
+                        distribuicao?.desconhecidas || 0
+                    ],
+                    backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: '#a4b0be', padding: 15 }
+                    }
+                }
+            }
+        });
+    }
+
+    // Função para carregar métricas de performance
+    async function loadPerformance() {
+        try {
+            const res = await fetch('/api/v1/perf/metricas');
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+            const data = await res.json();
+            renderPerformance(data);
+        } catch (err) {
+            console.error('Erro ao carregar performance:', err);
+        }
+    }
+
+    function renderPerformance(data) {
+        // Métricas atuais
+        const atual = data.atual || {};
+        document.getElementById('perf-tempo').textContent = `${Math.round(atual.tempoExecucao || 0)}ms`;
+        document.getElementById('perf-memoria').textContent = `${Math.round(atual.memoriaUsada || 0)}MB`;
+        document.getElementById('perf-arquivos').textContent = atual.arquivosProcessados || 0;
+
+        // Gráfico de histórico
+        renderPerformanceChart(data.baselines || []);
+
+        // Gráfico de analistas
+        renderAnalistasChart(data.metricas?.analistas || []);
+    }
+
+    function renderPerformanceChart(baselines) {
+        const ctx = document.getElementById('perf-chart').getContext('2d');
+        if (window.perfChart) window.perfChart.destroy();
+
+        window.perfChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: baselines.map((_, i) => `T-${baselines.length - 1 - i}`),
+                datasets: [
+                    {
+                        label: 'Tempo (ms)',
+                        data: baselines.map(b => b.tempoExecucao),
+                        borderColor: '#4ecdc4',
+                        backgroundColor: 'rgba(78, 205, 196, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Memória (MB)',
+                        data: baselines.map(b => b.memoriaUsada),
+                        borderColor: '#ff4757',
+                        backgroundColor: 'rgba(255, 71, 87, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#4ecdc4' }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        grid: { drawOnChartArea: false },
+                        ticks: { color: '#ff4757' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: { color: '#a4b0be' }
+                    }
+                }
+            }
+        });
+    }
+
+    function renderAnalistasChart(analistas) {
+        const ctx = document.getElementById('analistas-chart').getContext('2d');
+        if (window.analistasChart) window.analistasChart.destroy();
+
+        const topAnalistas = analistas
+            .filter(a => a.duracaoMs > 0)
+            .sort((a, b) => b.duracaoMs - a.duracaoMs)
+            .slice(0, 10);
+
+        window.analistasChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: topAnalistas.map(a => a.nome),
+                datasets: [{
+                    label: 'Tempo (ms)',
+                    data: topAnalistas.map(a => a.duracaoMs),
+                    backgroundColor: 'rgba(78, 205, 196, 0.6)',
+                    borderColor: '#4ecdc4',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#a4b0be' }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { color: '#a4b0be' }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
     }
 
     function renderChart(data) {
