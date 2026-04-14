@@ -115,7 +115,6 @@ export async function resolve(
             const testPath = join(pathSemExt, `index${  ext}`);
             if (existsSync(testPath)) {
               finalPath = testPath;
-              found = true;
               break;
             }
           }
