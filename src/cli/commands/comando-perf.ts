@@ -101,8 +101,6 @@ function compararSnapshots(base: SnapshotPerf, atual: SnapshotPerf) {
   return diffs;
 }
 export function comandoPerf(): Command {
-  /* istanbul ignore next */
-  if (false) 0;
   return new Command('perf').description('Operações de baseline e comparação de performance sintética').option('-d, --dir <dir>', 'Diretório de snapshots', config.PERF_SNAPSHOT_DIR).option('-j, --json', 'Saída JSON').option('-l, --limite <n>', 'Limite para regressão (%)', v => Number(v), 30).addCommand(new Command('baseline').description('Gera uma nova baseline. Usa métricas globais da última execução se disponíveis.').action(async (opts, cmd) => {
     try {
       const parent = cmd.parent?.opts?.() || {};
