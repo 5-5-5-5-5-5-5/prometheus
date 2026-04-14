@@ -324,7 +324,6 @@ function detectarPadraoArquitetural(estatisticas: EstatisticasArquivo[]): {
   const aliases = new Set<string>();
   let temNucleo = false;
   let temAnalistas = false;
-  let _temCLI = false;
   let temShared = false;
   let temTipos = false;
 
@@ -334,7 +333,6 @@ function detectarPadraoArquitetural(estatisticas: EstatisticasArquivo[]): {
       Object.keys(stats.aliases).forEach(alias => aliases.add(alias));
       if (stats.aliases['@nucleo']) temNucleo = true;
       if (stats.aliases['@analistas']) temAnalistas = true;
-      if (stats.aliases['@cli']) _temCLI = true;
       if (stats.aliases['@shared']) temShared = true;
       if (stats.aliases['@types']) temTipos = true;
     }
