@@ -2548,6 +2548,20 @@ function formatarGoMinimo(code: string): FormatadorMinimoResult {
       out.push(`${'  '.repeat(indent)}${trimmed}`);
       continue;
     }
+    const singleQuotes = (trimmed.match(/(?<!\\)'/g) || []).length;
+    const doubleQuotes = (trimmed.match(/(?<!\\)"/g) || []).length;
+    if (singleQuotes % 2 === 1) {
+      inString = true;
+      stringChar = "'";
+      out.push(`${'  '.repeat(indent)}${trimmed}`);
+      continue;
+    }
+    if (doubleQuotes % 2 === 1) {
+      inString = true;
+      stringChar = '"';
+      out.push(`${'  '.repeat(indent)}${trimmed}`);
+      continue;
+    }
     if (inString) {
       out.push(`${'  '.repeat(indent)}${trimmed}`);
       if (trimmed.endsWith(stringChar) && !trimmed.endsWith(`\\${stringChar}`)) inString = false;
