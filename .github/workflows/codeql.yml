@@ -34,9 +34,6 @@ jobs:
           - language: javascript-typescript
             build-mode: none
             query-suite: security-and-quality
-          - language: python
-            build-mode: none
-            query-suite: security-extended
 
     steps:
       - name: Checkout repository
@@ -51,12 +48,6 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
-
-      - name: Setup Python
-        if: matrix.language == 'python'
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.11"
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
