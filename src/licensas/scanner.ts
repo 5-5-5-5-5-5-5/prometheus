@@ -63,7 +63,15 @@ export async function scan({
     const licenseValor = await normalizeLicense(rawLicenca || 'UNKNOWN');
     const licenseArquivo = findLicenseFile(pkgDir);
     const repo = data.repository;
-    const repository = repo == null ? null : typeof repo === 'string' ? repo : (typeof repo === 'object' && repo != null && 'url' in repo && typeof (repo as Record<string, unknown>).url === 'string' ? (repo as Record<string, unknown>).url as string : null);
+    const repository =
+      typeof repo === 'string'
+        ? repo
+        : (typeof repo === 'object' &&
+            repo !== null &&
+            'url' in repo &&
+            typeof (repo as Record<string, unknown>).url === 'string'
+            ? ((repo as Record<string, unknown>).url as string)
+            : null);
     resObj.packages.push({
       name,
       version,
