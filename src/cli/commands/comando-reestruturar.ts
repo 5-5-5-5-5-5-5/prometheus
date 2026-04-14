@@ -121,8 +121,6 @@ export function comandoReestruturar(aplicarFlagsGlobais: (opts: Record<string, u
       let fileEntriesComAst: FileEntryWithAst[] = [];
       let analiseParaCorrecao: ResultadoInquisicao | {
         ocorrencias: Ocorrencia[];
-      } = {
-        ocorrencias: []
       };
       try {
         const {
