@@ -426,20 +426,15 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
       try {
         // Heurística simples: se projeto tem tsconfig e tsc --noEmit não reporta erros, rebaixa severidades conhecidas
         const hasTs = fs.existsSync(path.join(baseDir, 'tsconfig.json'));
-        let tsOk = true;
-        if (hasTs) {
-          // Evitar spawn pesado: usar flag existente de sucesso da build no pipeline
-          // Caso não disponível, assume ok para reduzir ruído em modo confiança
-          tsOk = true;
-        }
-        if (tsOk) {
-          ocorrenciasFiltradas = ocorrenciasFiltradas.filter(o => {
-            const regra = o.tipo || '';
-            // regras que o compilador/ESLint normalmente cobrem
-            const cobertas = [/import.*nao.*usado/i, /tipo-inseguro.*unknown/i];
-            return !cobertas.some(r => r.test(regra));
-          });
-        }
+        // Evitar spawn pesado: usar flag existente de sucesso da build no pipeline
+        // Caso não disponível, assume ok para reduzir ruído em modo confiança
+        void hasTs;
+        ocorrenciasFiltradas = ocorrenciasFiltradas.filter(o => {
+          const regra = o.tipo || '';
+          // regras que o compilador/ESLint normalmente cobrem
+          const cobertas = [/import.*nao.*usado/i, /tipo-inseguro.*unknown/i];
+          return !cobertas.some(r => r.test(regra));
+        });
       } catch (err) {
         log.debug(`Erro em processarDiagnostico (trustCompiler): ${  err instanceof Error ? err.message : String(err)}`);
       }
