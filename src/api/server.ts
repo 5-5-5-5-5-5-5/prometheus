@@ -479,8 +479,15 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // Dashboard Estático
-  let filePath = path.join(__dirname, 'static', req.url === '/' || req.url === '/dashboard' ? 'index.html' : req.url!);
+  // Servir arquivos estáticos (dashboard e sub-páginas)
+  let urlPath = req.url === '/' || req.url === '/dashboard' ? 'index.html' : req.url!;
+
+  // Normalizar caminhos para sub-páginas (ex: /workflows/ -> /workflows/index.html)
+  if (urlPath.endsWith('/')) {
+    urlPath += 'index.html';
+  }
+
+  let filePath = path.join(__dirname, 'static', urlPath);
 
   if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
     const ext = path.extname(filePath);
@@ -492,6 +499,7 @@ const server = http.createServer(async (req, res) => {
       '.png': 'image/png',
       '.jpg': 'image/jpg',
       '.svg': 'image/svg+xml',
+      '.mp3': 'audio/mpeg',
     }[ext] || 'text/plain';
 
     res.writeHead(200, { 'Content-Type': contentType });
