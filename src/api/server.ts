@@ -652,42 +652,29 @@ const server = http.createServer(async (req, res) => {
   // License Scan
   if (req.method === 'GET' && req.url === '/api/v1/licensas/scan') {
     try {
-      const pkgPath = path.join(process.cwd(), 'package.json');
-      let licencas: [string, number][] = [];
-      let problematicas: Array<{name: string; version: string; repository: string}> = [];
+      const { scanCommand } = await import('../licensas/scanner.js');
+      const result = await scanCommand({ root: process.cwd(), includeDev: true });
 
-      if (fs.existsSync(pkgPath)) {
-        const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
-        const deps = { ...pkg.dependencies, ...pkg.devDependencies };
-        const counts: Record<string, number> = {};
-
-        for (const [name, info] of Object.entries(deps)) {
-          const depInfo = info as { version?: string; license?: string };
-          const licenca = depInfo.license || 'Unknown';
-          counts[licenca] = (counts[licenca] || 0) + 1;
-
-          if (!licenca || licenca === 'UNKNOWN' || licenca.includes('*')) {
-            problematicas.push({ name, version: depInfo.version || '*', repository: '-' });
-          }
-        }
-
-        licencas = Object.entries(counts).sort((a, b) => b[1] - a[1]);
-      }
+      const licencas = Object.entries(result.licenseCounts).sort((a, b) => b[1] - a[1]);
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({
-        totalPackages: Object.keys(licencas).length,
-        totalFiltered: licencas.reduce((sum, [, c]) => sum + c, 0),
+        totalPackages: result.totalPackages,
+        totalFiltered: result.totalFiltered,
         licencas: licencas.slice(0, 10),
-        problematicas,
+        problematicas: result.problematic.map(p => ({
+          name: p.name,
+          version: p.version,
+          repository: p.repository || '-'
+        })),
         distribuicao: {
           permissivas: licencas.filter(([l]) =>
-            ['MIT', 'ISC', 'Apache-2.0', 'BSD-2-Clause', 'BSD-3-Clause'].includes(l)
+            ['MIT', 'ISC', 'Apache-2.0', 'BSD-2-Clause', 'BSD-3-Clause', 'BlueOak-1.0.0', 'CC0-1.0'].includes(l)
           ).reduce((sum, [, count]) => sum + count, 0),
           copyleft: licencas.filter(([l]) =>
             ['GPL-2.0', 'GPL-3.0', 'LGPL-2.1', 'LGPL-3.0', 'AGPL-3.0', 'MPL-2.0'].includes(l)
           ).reduce((sum, [, count]) => sum + count, 0),
-          desconhecidas: problematicas.length
+          desconhecidas: result.problematic.length
         }
       }));
     } catch (err) {
