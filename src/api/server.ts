@@ -3,9 +3,48 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { spawn } from 'node:child_process';
 import { PrometheusSDK } from '../sdk/index.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+/**
+ * Executa um comando CLI do Prometheus via child_process
+ */
+function executarComandoCli(comando: string, args: string[]): Promise<{ stdout: string; stderr: string; exitCode: number }> {
+  return new Promise((resolve) => {
+    const nodePath = process.execPath;
+    const projectRoot = path.resolve(__dirname, '..', '..');
+    const cliPath = path.join(projectRoot, 'dist', 'bin', 'cli.js');
+
+    const child = spawn(nodePath, [cliPath, comando, ...args], {
+      cwd: projectRoot,
+      shell: false
+    });
+
+    let stdout = '';
+    let stderr = '';
+
+    child.stdout?.on('data', (data) => { stdout += data.toString(); });
+    child.stderr?.on('data', (data) => { stderr += data.toString(); });
+
+    const timeout = setTimeout(() => {
+      child.kill('SIGTERM');
+      stderr += '\nTimeout: Comando excedeu o tempo limite';
+    }, 60000);
+
+    child.on('close', (code) => {
+      clearTimeout(timeout);
+      resolve({ stdout, stderr, exitCode: code ?? 0 });
+    });
+
+    child.on('error', (err) => {
+      clearTimeout(timeout);
+      stderr += err.message;
+      resolve({ stdout, stderr, exitCode: 1 });
+    });
+  });
+}
 
 /**
  * Funções auxiliares para cálculo de métricas reais
@@ -147,16 +186,18 @@ const server = http.createServer(async (req, res) => {
   // Status Geral do Repositório (Guardian + Métricas)
   if (req.method === 'GET' && req.url === '/api/v1/repositorio/status') {
     try {
-      await import('../guardian/sentinela.js');
-
       const workflowDir = path.join(process.cwd(), '.github', 'workflows');
       const hasWorkflows = fs.existsSync(workflowDir);
       const totalWorkflows = hasWorkflows ? fs.readdirSync(workflowDir).filter(f => f.endsWith('.yml') || f.endsWith('.yaml')).length : 0;
 
       // Calcular métricas reais do projeto
       const srcDir = path.join(process.cwd(), 'src');
-      const totalFiles = fs.existsSync(srcDir) ?
-        fs.readdirSync(srcDir, { recursive: true }).filter(f => typeof f === 'string' && (f.endsWith('.ts') || f.endsWith('.js'))).length : 0;
+      let totalFiles = 0;
+      if (fs.existsSync(srcDir)) {
+        try {
+          totalFiles = fs.readdirSync(srcDir, { recursive: true }).filter(f => typeof f === 'string' && (f.endsWith('.ts') || f.endsWith('.js'))).length;
+        } catch (e) { /* ignore */ }
+      }
 
       const pkgPath = path.join(process.cwd(), 'package.json');
       const pkg = fs.existsSync(pkgPath) ? JSON.parse(fs.readFileSync(pkgPath, 'utf-8')) : null;
@@ -181,7 +222,7 @@ const server = http.createServer(async (req, res) => {
           totalFiles,
           dependencies: deps,
           devDependencies: devDeps,
-          integridade: 'Protegido (Guardian Active)',
+          integridade: 'Protegido',
           ultimaAnalise: new Date().toLocaleDateString('pt-BR'),
           radar: {
             seguranca: securityScore,
@@ -262,18 +303,142 @@ const server = http.createServer(async (req, res) => {
 
   // --- Execução de Comandos do Dashboard ---
 
-  // Comando: Diagnosticar Projeto
+  // Comando: Diagnosticar Projeto (executa CLI real)
   if (req.method === 'POST' && req.url === '/api/v1/comando/diagnosticar') {
+    let body = '';
+    req.on('data', (chunk) => (body += chunk));
+    req.on('end', async () => {
+      try {
+        const args: string[] = ['diagnosticar', '--json'];
+
+        if (body) {
+          const payload = JSON.parse(body);
+          if (payload.detalhado) args.push('--detalhado');
+          if (payload.full) args.push('--full');
+          if (payload.fast) args.push('--fast');
+        }
+
+        const result = await executarComandoCli('diagnosticar', args);
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({
+          success: result.exitCode === 0,
+          message: result.exitCode === 0 ? 'Diagnóstico concluído com sucesso!' : 'Erro no diagnóstico',
+          stdout: result.stdout,
+          stderr: result.stderr,
+          exitCode: result.exitCode
+        }));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: String(err) }));
+      }
+    });
+    return;
+  }
+
+  // Comando: Diagnosticar Detalhado
+  if (req.method === 'POST' && req.url === '/api/v1/comando/diagnosticar/detalhado') {
+    let body = '';
+    req.on('data', (chunk) => (body += chunk));
+    req.on('end', async () => {
+      try {
+        const args: string[] = ['diagnosticar', '--json', '--detalhado'];
+
+        if (body) {
+          const payload = JSON.parse(body);
+          if (payload.full) args.push('--full');
+          if (payload.fast) args.push('--fast');
+        }
+
+        const result = await executarComandoCli('diagnosticar', args);
+
+        let cliOutput = null;
+        try {
+          cliOutput = JSON.parse(result.stdout);
+        } catch {
+          cliOutput = { rawOutput: result.stdout };
+        }
+
+        const ocorrencias = cliOutput?.ocorrencias || [];
+        const ocorrenciasPorNivel: Record<string, number> = { erro: 0, aviso: 0, info: 0, sucesso: 0 };
+
+        if (cliOutput?.tiposOcorrencias) {
+          if (cliOutput.tiposOcorrencias.erro) ocorrenciasPorNivel.erro = cliOutput.tiposOcorrencias.erro;
+          if (cliOutput.tiposOcorrencias.aviso) ocorrenciasPorNivel.aviso = cliOutput.tiposOcorrencias.aviso;
+          if (cliOutput.tiposOcorrencias.info) ocorrenciasPorNivel.info = cliOutput.tiposOcorrencias.info;
+        }
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({
+          success: result.exitCode === 0,
+          totalOcorrencias: cliOutput?.totalOcorrencias || 0,
+          temErro: ocorrenciasPorNivel.erro > 0,
+          ocorrenciasPorNivel,
+          metricas: {
+            totalArquivos: cliOutput?.linguagens?.total || 0,
+            tempoTotal: 0,
+            tempoAnalise: 0,
+            analistasExecutados: 0,
+            topProblemas: []
+          },
+          ocorrencias: ocorrencias.slice(0, 100)
+        }));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: String(err) }));
+      }
+    });
+    return;
+  }
+
+  // Comando: Otimizar SVG (executa CLI real)
+  if (req.method === 'POST' && req.url === '/api/v1/comando/otimizar-svg') {
+    let body = '';
+    req.on('data', (chunk) => (body += chunk));
+    req.on('end', async () => {
+      try {
+        const args: string[] = ['otimizar-svg', '--json'];
+
+        const result = await executarComandoCli('otimizar-svg', args);
+
+        let parsedOutput = null;
+        try {
+          parsedOutput = JSON.parse(result.stdout);
+        } catch {
+          parsedOutput = { rawOutput: result.stdout };
+        }
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({
+          success: result.exitCode === 0,
+          output: parsedOutput,
+          exitCode: result.exitCode
+        }));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: String(err) }));
+      }
+    });
+    return;
+  }
+
+  // Comando: Licenças (executa CLI real)
+  if (req.method === 'GET' && req.url === '/api/v1/comando/licencas') {
     try {
-      const { processarDiagnostico } = await import('../cli/processamento-diagnostico.js');
-      // Executa diagnóstico completo
-      const resultado = await processarDiagnostico({ full: true, fast: true });
+      const result = await executarComandoCli('licencas', ['scan']);
+
+      let parsedOutput = null;
+      try {
+        parsedOutput = JSON.parse(result.stdout);
+      } catch {
+        parsedOutput = { rawOutput: result.stdout };
+      }
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({
-        success: true,
-        message: 'Diagnóstico concluído com sucesso!',
-        totalOcorrencias: resultado.totalOcorrencias
+        success: result.exitCode === 0,
+        output: parsedOutput,
+        exitCode: result.exitCode
       }));
     } catch (err) {
       res.writeHead(500, { 'Content-Type': 'application/json' });
@@ -282,32 +447,24 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // Comando: Otimizar SVG
-  if (req.method === 'POST' && req.url === '/api/v1/comando/otimizar-svg') {
+  // Comando: Guardian (executa CLI real)
+  if (req.method === 'GET' && req.url === '/api/v1/comando/guardian') {
     try {
-      const { scanRepository } = await import('../core/execution/scanner.js');
-      const { otimizarSvgLikeSvgo } = await import('../shared/impar/svgs.js');
-      const { salvarEstado } = await import('../shared/persistence/persistencia.js');
+      const result = await executarComandoCli('guardian', ['--json']);
 
-      const files = await scanRepository(process.cwd(), {
-        includeContent: true,
-        filter: (relPath) => relPath.toLowerCase().endsWith('.svg'),
-      });
-
-      let otimizados = 0;
-      for (const e of Object.values(files)) {
-        const src = typeof e.content === 'string' ? e.content : '';
-        if (src && /<svg\b/i.test(src)) {
-          const opt = otimizarSvgLikeSvgo({ svg: src, pretty: true });
-          if (opt.changed) {
-            await salvarEstado(path.resolve(process.cwd(), e.relPath), opt.data);
-            otimizados++;
-          }
-        }
+      let parsedOutput = null;
+      try {
+        parsedOutput = JSON.parse(result.stdout);
+      } catch {
+        parsedOutput = { rawOutput: result.stdout };
       }
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ success: true, otimizados }));
+      res.end(JSON.stringify({
+        success: result.exitCode === 0,
+        output: parsedOutput,
+        exitCode: result.exitCode
+      }));
     } catch (err) {
       res.writeHead(500, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: String(err) }));
@@ -315,17 +472,98 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // Listar Analistas (Detectores + Plugins)
+  // Comando: Metricas (executa CLI real)
+  if (req.method === 'GET' && req.url === '/api/v1/comando/metricas') {
+    try {
+      const result = await executarComandoCli('metricas', ['--json']);
+
+      let parsedOutput = null;
+      try {
+        parsedOutput = JSON.parse(result.stdout);
+      } catch {
+        parsedOutput = { rawOutput: result.stdout };
+      }
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        success: result.exitCode === 0,
+        output: parsedOutput,
+        exitCode: result.exitCode
+      }));
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: String(err) }));
+    }
+    return;
+  }
+
+  // Comando: Perf (executa CLI real)
+  if (req.method === 'GET' && req.url === '/api/v1/comando/perf') {
+    try {
+      const result = await executarComandoCli('perf', ['--json']);
+
+      let parsedOutput = null;
+      try {
+        parsedOutput = JSON.parse(result.stdout);
+      } catch {
+        parsedOutput = { rawOutput: result.stdout };
+      }
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        success: result.exitCode === 0,
+        output: parsedOutput,
+        exitCode: result.exitCode
+      }));
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: String(err) }));
+    }
+    return;
+  }
+
+  // Comando: Analistas (executa CLI real)
+  if (req.method === 'GET' && req.url === '/api/v1/comando/analistas') {
+    try {
+      const result = await executarComandoCli('analistas', ['--json']);
+
+      let parsedOutput = null;
+      try {
+        parsedOutput = JSON.parse(result.stdout);
+      } catch {
+        parsedOutput = { rawOutput: result.stdout };
+      }
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        success: result.exitCode === 0,
+        output: parsedOutput,
+        exitCode: result.exitCode
+      }));
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: String(err) }));
+    }
+    return;
+  }
+
+  // Listar Analistas (Detectores + Plugins) - executa CLI real
   if (req.method === 'GET' && req.url === '/api/v1/analistas/lista') {
     try {
-      const { listarAnalistas } = await import('../analistas/registry/registry.js');
-      const analistas = listarAnalistas();
+      const result = await executarComandoCli('analistas', []);
 
-      // Categorizar analistas
+      let parsedOutput = null;
+      try {
+        parsedOutput = JSON.parse(result.stdout);
+      } catch {
+        parsedOutput = { rawOutput: result.stdout };
+      }
+
+      const analistas = parsedOutput?.analistas || parsedOutput?.plugins || [];
       const categorizados = {
-        detectores: analistas.filter(a => a.nome.startsWith('detector') || a.categoria === 'detecção'),
-        plugins: analistas.filter(a => a.nome.startsWith('analista-') && !a.nome.startsWith('analista-funcoes')),
-        tecnicas: analistas.filter(a => !a.nome.startsWith('detector') && !a.nome.startsWith('analista-'))
+        detectores: analistas.filter((a: { nome: string }) => a.nome.startsWith('detector')),
+        plugins: analistas.filter((a: { nome: string }) => a.nome.startsWith('analista-')),
+        tecnicas: analistas.filter((a: { nome: string }) => !a.nome.startsWith('detector') && !a.nome.startsWith('analista-'))
       };
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -351,48 +589,57 @@ const server = http.createServer(async (req, res) => {
     req.on('data', (chunk) => (body += chunk));
     req.on('end', async () => {
       try {
-        const { processarDiagnostico } = await import('../cli/processamento-diagnostico.js');
-        const payload = body ? JSON.parse(body) : {};
+        const startTime = Date.now();
+        const srcDir = path.join(process.cwd(), 'src');
+        const ocorrencias: Array<{tipo: string; mensagem: string; relPath: string; linha: number; nivel: string}> = [];
 
-        const resultado = await processarDiagnostico({
-          full: payload.full ?? true,
-          fast: payload.fast ?? true,
-          json: true,
-          guardianCheck: payload.guardianCheck ?? false,
-          autoFix: payload.autoFix ?? false
-        });
+        if (fs.existsSync(srcDir)) {
+          const scanDir = (dir: string, baseDir: string) => {
+            const entries = fs.readdirSync(dir, { withFileTypes: true });
+            for (const entry of entries) {
+              const fullPath = path.join(dir, entry.name);
+              const relPath = path.relative(baseDir, fullPath);
+              if (entry.isDirectory() && !entry.name.startsWith('.')) {
+                scanDir(fullPath, baseDir);
+              } else if (entry.isFile() && (entry.name.endsWith('.ts') || entry.name.endsWith('.js'))) {
+                const content = fs.readFileSync(fullPath, 'utf-8');
+                const linhas = content.split('\n');
 
-        // Extrair métricas detalhadas
-        const metricas = resultado.resultadoFinal?.metricas;
-        const ocorrenciasPorNivel: Record<string, number> = {
-          erro: 0,
-          aviso: 0,
-          info: 0,
-          sucesso: 0
-        };
+                linhas.forEach((linha, idx) => {
+                  if (linha.includes('any') && linha.includes(' as ')) {
+                    ocorrencias.push({ tipo: 'type-safety', mensagem: 'Uso de "any" detectado', relPath, linha: idx + 1, nivel: 'aviso' });
+                  }
+                  if (linha.includes('TODO') || linha.includes('FIXME')) {
+                    ocorrencias.push({ tipo: 'comentario', mensagem: 'Comentário TODO/FIXME', relPath, linha: idx + 1, nivel: 'info' });
+                  }
+                  if (linha.includes('console.log') && !linha.includes('//')) {
+                    ocorrencias.push({ tipo: 'debug', mensagem: 'console.log detectado', relPath, linha: idx + 1, nivel: 'info' });
+                  }
+                });
+              }
+            }
+          };
+          scanDir(srcDir, srcDir);
+        }
 
-        resultado.resultadoFinal?.ocorrencias.forEach(oc => {
-          const nivel = oc.nivel || 'info';
-          ocorrenciasPorNivel[nivel] = (ocorrenciasPorNivel[nivel] || 0) + 1;
-        });
+        const tempoAnalise = Date.now() - startTime;
+        const ocorrenciasPorNivel: Record<string, number> = { erro: 0, aviso: 0, info: 0, sucesso: 0 };
+        ocorrencias.forEach(oc => { ocorrenciasPorNivel[oc.nivel] = (ocorrenciasPorNivel[oc.nivel] || 0) + 1; });
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({
           success: true,
-          totalOcorrencias: resultado.totalOcorrencias,
-          temErro: resultado.temErro,
+          totalOcorrencias: ocorrencias.length,
+          temErro: ocorrenciasPorNivel.erro > 0,
           ocorrenciasPorNivel,
           metricas: {
-            totalArquivos: metricas?.totalArquivos || 0,
-            tempoTotal: metricas?.tempoTotal || 0,
-            tempoAnalise: metricas?.tempoAnaliseMs || 0,
-            analistasExecutados: metricas?.analistas?.length || 0,
-            topProblemas: metricas?.analistas
-              ?.filter(a => a.ocorrencias > 0)
-              .sort((a, b) => b.ocorrencias - a.ocorrencias)
-              .slice(0, 10)
+            totalArquivos: 0,
+            tempoTotal: tempoAnalise,
+            tempoAnalise,
+            analistasExecutados: 3,
+            topProblemas: []
           },
-          ocorrencias: resultado.resultadoFinal?.ocorrencias?.slice(0, 100) || []
+          ocorrencias: ocorrencias.slice(0, 100)
         }));
       } catch (err) {
         res.writeHead(500, { 'Content-Type': 'application/json' });
@@ -405,23 +652,34 @@ const server = http.createServer(async (req, res) => {
   // License Scan
   if (req.method === 'GET' && req.url === '/api/v1/licensas/scan') {
     try {
-      const { scanCommand } = await import('../licensas/scanner.js');
-      const resultado = await scanCommand({
-        root: process.cwd(),
-        includeDev: false
-      });
+      const pkgPath = path.join(process.cwd(), 'package.json');
+      let licencas: [string, number][] = [];
+      let problematicas: Array<{name: string; version: string; repository: string}> = [];
 
-      // Calcular estatísticas
-      const licencas = Object.entries(resultado.licenseCounts || {})
-        .filter(([lic]) => lic !== 'UNKNOWN')
-        .sort((a, b) => b[1] - a[1]);
+      if (fs.existsSync(pkgPath)) {
+        const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
+        const deps = { ...pkg.dependencies, ...pkg.devDependencies };
+        const counts: Record<string, number> = {};
+
+        for (const [name, info] of Object.entries(deps)) {
+          const depInfo = info as { version?: string; license?: string };
+          const licenca = depInfo.license || 'Unknown';
+          counts[licenca] = (counts[licenca] || 0) + 1;
+
+          if (!licenca || licenca === 'UNKNOWN' || licenca.includes('*')) {
+            problematicas.push({ name, version: depInfo.version || '*', repository: '-' });
+          }
+        }
+
+        licencas = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+      }
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({
-        totalPackages: resultado.totalPackages,
-        totalFiltered: resultado.totalFiltered,
+        totalPackages: Object.keys(licencas).length,
+        totalFiltered: licencas.reduce((sum, [, c]) => sum + c, 0),
         licencas: licencas.slice(0, 10),
-        problematicas: resultado.problematic || [],
+        problematicas,
         distribuicao: {
           permissivas: licencas.filter(([l]) =>
             ['MIT', 'ISC', 'Apache-2.0', 'BSD-2-Clause', 'BSD-3-Clause'].includes(l)
@@ -429,7 +687,7 @@ const server = http.createServer(async (req, res) => {
           copyleft: licencas.filter(([l]) =>
             ['GPL-2.0', 'GPL-3.0', 'LGPL-2.1', 'LGPL-3.0', 'AGPL-3.0', 'MPL-2.0'].includes(l)
           ).reduce((sum, [, count]) => sum + count, 0),
-          desconhecidas: resultado.problematic?.length || 0
+          desconhecidas: problematicas.length
         }
       }));
     } catch (err) {
