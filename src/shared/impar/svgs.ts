@@ -59,7 +59,7 @@ let previous: string;
 let current = code;
 do {
 previous = current;
-current = current.replace(/<!--[\\s\\S]*?-->/g, '');
+current = current.replace(/<!--[\s\S]*?-->/g, '');
 } while (current !== previous);
 return {
 out: current,
