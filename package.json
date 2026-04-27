@@ -34,7 +34,7 @@
     "perf:gate": "prometheus perf compare --threshold 0",
     "scan": "prometheus licencas scan",
     "add": "prometheus licencas disclaimer add",
-    "scan:root": "prometheus licencas scan --root .",
+    "licensas": "prometheus licencas scan --root .",
     "notices": "prometheus licencas notices generate",
     "verify": "prometheus licencas disclaimer verify",
     "guardian": "prometheus guardian",

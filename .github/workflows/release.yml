@@ -97,7 +97,7 @@ jobs:
         run: npm run build
 
       - name: Generate Notices
-        run: npm run scan:root
+        run: npm run licenses
 
       - name: Upload Release Artifacts
         uses: actions/upload-artifact@v7

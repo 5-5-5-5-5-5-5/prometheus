@@ -48,14 +48,14 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Check License Compatibility
-        run: npm run scan:root
+        run: npm run licenses
 
       - name: Generate Third-Party Notices
-        run: npm run scan:root
+        run: npm run licenses
         continue-on-error: true
 
       - name: Check for Problematic Licenses
-        id: scan:root
+        id: licenses
         run: |
           # List all production dependencies and their licenses
           npx license-checker-rseidelsohn --production --json > /tmp/licenses.json
