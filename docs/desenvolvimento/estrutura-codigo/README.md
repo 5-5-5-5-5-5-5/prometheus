@@ -3,13 +3,13 @@ Proveniência e Autoria: Este documento integra o projeto Prometheus (licença M
 ---
 
 
-# Estrutura de Código - Prometheus 🧬
+# Estrutura de Código - Prometheus
 
 Guia detalhado da organização e estrutura do código do Prometheus.
 
 ---
 
-## 📁 Organização Principal
+##  Organização Principal
 
 ```
 prometheus-dev/
@@ -22,7 +22,7 @@ prometheus-dev/
 
 ---
 
-## 🎯 `src/` - Código-Fonte
+##  `src/` - Código-Fonte
 
 ### Visão Geral
 
@@ -43,7 +43,7 @@ src/
 
 ---
 
-## 📝 `src/bin/` - Pontos de Entrada
+##  `src/bin/` - Pontos de Entrada
 
 **Responsabilidade**: Inicializar a aplicação
 
@@ -68,7 +68,7 @@ cli/handlers/
 
 ---
 
-## ⚙️ `src/cli/` - Interface de Linha de Comando
+##  `src/cli/` - Interface de Linha de Comando
 
 **Responsabilidade**: Processar entrada do usuário
 
@@ -106,7 +106,7 @@ Usuario: prometheus diagnosticar --foo bar
 
 ---
 
-## 🧠 `src/core/` - Núcleo do Sistema
+##  `src/core/` - Núcleo do Sistema
 
 **Responsabilidade**: Lógica central, processamento
 
@@ -246,7 +246,7 @@ Tipos suportados:
 
 ---
 
-## 🔍 `src/analistas/` - Detectores
+##  `src/analistas/` - Detectores
 
 **Responsabilidade**: Detectar problemas específicos
 
@@ -314,7 +314,7 @@ export class DetectorCodigoFragil implements Analista {
 
 ---
 
-## 📊 `src/relatorios/` - Relatórios
+##  `src/relatorios/` - Relatórios
 
 **Responsabilidade**: Formatar e apresentar resultados
 
@@ -348,7 +348,7 @@ Saída Final
 
 ---
 
-## 🔗 `src/shared/` - Código Compartilhado
+##  `src/shared/` - Código Compartilhado
 
 **Responsabilidade**: Utilitários, tipos e operações reutilizáveis
 
@@ -384,7 +384,7 @@ export class ContextoProjeto {
 
 ---
 
-## 👮 `src/guardian/` - Monitor de Saúde
+##  `src/guardian/` - Monitor de Saúde
 
 **Responsabilidade**: Monitorar mudanças no projeto
 
@@ -418,7 +418,7 @@ guardian/
 
 ---
 
-## 📜 `src/licensas/` - Gerenciamento de Licenças
+##  `src/licensas/` - Gerenciamento de Licenças
 
 **Responsabilidade**: Scanner de licenças de dependências
 
@@ -450,7 +450,7 @@ Gerar relatório (THIRD-PARTY-NOTICES.txt)
 
 ---
 
-## ⚡ `src/zeladores/` - Executores de Ação
+##  `src/zeladores/` - Executores de Ação
 
 **Responsabilidade**: Executar correções e ações
 
@@ -468,7 +468,7 @@ Exemplos:
 
 ---
 
-## 🔤 `src/types/` - Definições TypeScript
+##  `src/types/` - Definições TypeScript
 
 **Responsabilidade**: Interfaces e tipos central
 
@@ -505,7 +505,7 @@ export interface ResultadoOcorrencia {
 
 ---
 
-## 🧪 `tests/` - Testes
+##  `tests/` - Testes
 
 **Responsabilidade**: Verificar funcionalidade
 
@@ -531,7 +531,7 @@ analistas/
 
 ---
 
-## 🔄 Fluxo Geral
+##  Fluxo Geral
 
 ```
 ┌─────────────────────────────────────┐
@@ -591,7 +591,7 @@ analistas/
 
 ---
 
-## 🎓 Arquitetura em Camadas
+##  Arquitetura em Camadas
 
 ```
 ┌────────────────────────────┐  User Interface
@@ -613,7 +613,7 @@ analistas/
 
 ---
 
-## 📦 Dependências Internas
+##  Dependências Internas
 
 ```
 bin/
@@ -641,7 +641,7 @@ relatorios/
 
 ---
 
-## 🚀 Adicionando Novo Analista
+##  Adicionando Novo Analista
 
 1. **Criar arquivo** em `src/analistas/detectores/`
 2. **Implementar interface** `Analista`
@@ -653,9 +653,8 @@ Ver [Criar Analista](./desenvolvimento/analistas/CRIAR-ANALISTA.md) para detalhe
 
 ---
 
-## 📚 Referências
+##  Referências
 
 - [Typescript Handbook](https://www.typescriptlang.org/docs/)
 - [Node.js API](https://nodejs.org/api/)
 - [Vitest](https://vitest.dev/)
-

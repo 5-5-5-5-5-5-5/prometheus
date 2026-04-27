@@ -2,10 +2,8 @@
 import type { ParserOptions } from '@babel/parser';
 import { parse as babelParse } from '@babel/parser';
 import type { File as BabelFile } from '@babel/types';
-import { getMessages } from '@core/messages/index.js';
-import { initializeDefaultPlugins } from '@shared/plugins/init.js';
   /* -------------------------- SISTEMA DE PLUGINS - Novo sistema de parsers modular (Fase 1) -------------------------- */
-import { getGlobalRegistry } from '@shared/plugins/registry.js';
+import { getGlobalRegistry,initializeDefaultPlugins } from '@shared/plugins';
 import * as csstree from 'css-tree';
 import { XMLParser } from 'fast-xml-parser';
 // Parsers externos leves para outras linguagens
@@ -13,6 +11,8 @@ import { parseDocument } from 'htmlparser2';
 import { createRequire } from 'module';
 
 import type { DecifrarSintaxeOpts, ParserBabelFileExtra as BabelFileExtra, ParserFunc, ParserOptions as PluginParserOptions, ParserRawAst } from '@';
+
+import { getMessages } from '../messages/index.js';
 
 const { log, logCore, ParserExtraMensagens } = getMessages();
 
@@ -104,9 +104,9 @@ function parseComXml(codigo: string) {
 }
 function parseComPhp(codigo: string) {
   // Heurística simples para PHP: extrai classes, funções e namespaces
-  const classes = Array.from(codigo.matchAll(/\bclass\s+([A-Za-z0-9_]+)/g)).map(m => m[1]);
-  const functions = Array.from(codigo.matchAll(/\bfunction\s+([A-Za-z0-9_]+)/g)).map(m => m[1]);
-  const namespaces = Array.from(codigo.matchAll(/\bnamespace\s+([A-Za-z0-9_\\]+)/g)).map(m => m[1]);
+  const classes = Array.from(codigo.matchAll(/\bclass\s+([A-Za-z0-9_]+)/g)).map((m) => m[1]);
+  const functions = Array.from(codigo.matchAll(/\bfunction\s+([A-Za-z0-9_]+)/g)).map((m) => m[1]);
+  const namespaces = Array.from(codigo.matchAll(/\bnamespace\s+([A-Za-z0-9_\\]+)/g)).map((m) => m[1]);
   log.debug(ParserExtraMensagens.phpParse.replace('{classes}', String(classes.length)).replace('{functions}', String(functions.length)));
   return wrapMinimal('php', {
     classes,
@@ -116,8 +116,8 @@ function parseComPhp(codigo: string) {
 }
 function parseComPython(codigo: string) {
   // Heurística simples para Python: extrai classes e funções (def)
-  const classes = Array.from(codigo.matchAll(/^class\s+([A-Za-z0-9_]+)/gm)).map(m => m[1]);
-  const functions = Array.from(codigo.matchAll(/^def\s+([A-Za-z0-9_]+)/gm)).map(m => m[1]);
+  const classes = Array.from(codigo.matchAll(/^class\s+([A-Za-z0-9_]+)/gm)).map((m) => m[1]);
+  const functions = Array.from(codigo.matchAll(/^def\s+([A-Za-z0-9_]+)/gm)).map((m) => m[1]);
   log.debug(ParserExtraMensagens.pythonParse.replace('{classes}', String(classes.length)).replace('{functions}', String(functions.length)));
   return wrapMinimal('python', {
     classes,
@@ -162,9 +162,9 @@ function parseComVue(codigo: string) {
             allowImportExportEverywhere: true
           });
         } catch {
+
           // Ignorar erros de parsing do script
-        }
-      }
+        }}
     }
 
     // Analisar template como HTML se presente
@@ -174,9 +174,9 @@ function parseComVue(codigo: string) {
           xmlMode: false
         });
       } catch {
+
         // Ignorar erros de parsing do template
-      }
-    }
+      }}
 
     // Analisar style como CSS se presente
     if (style) {
@@ -185,9 +185,9 @@ function parseComVue(codigo: string) {
           positions: false
         });
       } catch {
+
         // Ignorar erros de parsing do style
-      }
-    }
+      }}
     return wrapMinimal('vue', {
       template: template ? 'present' : null,
       script: script ? 'present' : null,
@@ -218,7 +218,7 @@ function parseComCss(codigo: string) {
 export const PARSERS = new Map<string, ParserFunc>([['.js', parseComBabel], ['.jsx', parseComBabel], ['.ts', parseComBabel], ['.tsx', parseComBabel], ['.mjs', parseComBabel], ['.cjs', parseComBabel],
 // Evitamos .d.ts explicitamente: não há AST útil para nossas análises
 ['.d.ts', () => null], ['.xml', parseComXml], ['.html', parseComHtmlFunc], ['.htm', parseComHtmlFunc], ['.vue', parseComVue], ['.css', parseComCss], ['.php', parseComPhp], ['.py', parseComPython]]);
-export const EXTENSOES_SUPORTADAS = Array.from(PARSERS.keys()).filter(ext => ext !== '.d.ts');
+export const EXTENSOES_SUPORTADAS = Array.from(PARSERS.keys()).filter((ext) => ext !== '.d.ts');
 export async function decifrarSintaxe(codigo: string, ext: string, opts: DecifrarSintaxeOpts = {}): Promise<BabelFile | null> {
   // Setar arquivo atual para logs de erro
   setCurrentParsingFile(opts.relPath);
@@ -234,7 +234,7 @@ export async function decifrarSintaxe(codigo: string, ext: string, opts: Decifra
   if (ext === '.ts' || ext === '.tsx') {
     const p = opts.plugins;
     if (Array.isArray(p)) {
-      const lower = p.map(x => String(x).toLowerCase());
+      const lower = p.map((x) => String(x).toLowerCase());
       const hasTs = lower.includes('typescript');
       const hasFlow = lower.includes('flow');
       if (!hasTs || hasFlow) {
@@ -257,7 +257,7 @@ export async function decifrarSintaxe(codigo: string, ext: string, opts: Decifra
     parseResultado = parser(codigo, opts.plugins);
   }
   // Fallbacks específicos para .js/.mjs: tentar Flow quando a primeira tentativa falhar
-  if (parseResultado == null && (ext === '.js' || ext === '.mjs' || ext === '.cjs')) {
+  if (parseResultado === null && (ext === '.js' || ext === '.mjs' || ext === '.cjs')) {
     try {
       // Heurística rápida: detecta uso de Flow
       const pareceFlow = /@flow\b/.test(codigo) || /\bimport\s+type\b/.test(codigo);
@@ -266,17 +266,17 @@ export async function decifrarSintaxe(codigo: string, ext: string, opts: Decifra
         parseResultado = parseComBabel(codigo, flowPlugins);
       }
       // Se ainda nulo e não parece Flow, tenta um conjunto "JS moderno" sem TypeScript (para .js puros)
-      if (parseResultado == null) {
+      if (parseResultado === null) {
         const jsModernPlugins = ['jsx', 'decorators-legacy', 'importAttributes', 'importAssertions', 'classProperties', 'classPrivateProperties', 'classPrivateMethods', 'optionalChaining', 'nullishCoalescingOperator', 'topLevelAwait'];
         parseResultado = parseComBabel(codigo, jsModernPlugins);
       }
     } catch {
+
       // mantém null
-    }
-  }
+    }}
 
   // Fallback usando TypeScript compiler quando Babel falhar em .ts/.tsx
-  if (parseResultado == null && (ext === '.ts' || ext === '.tsx')) {
+  if (parseResultado === null && (ext === '.ts' || ext === '.tsx')) {
     const tsx = ext === '.tsx';
     const tsParsed = parseComTypeScript(codigo, tsx);
     if (tsParsed) {
@@ -287,7 +287,7 @@ export async function decifrarSintaxe(codigo: string, ext: string, opts: Decifra
 
   // Caso especial: se plugins foram passados e o parser de .ts/.tsx retornou null,
   // força fallback para o compilador TS (cobre cenários de plugins conflitantes como 'flow').
-  if (parseResultado == null && opts.plugins && (ext === '.ts' || ext === '.tsx')) {
+  if (parseResultado === null && opts.plugins && (ext === '.ts' || ext === '.tsx')) {
     const tsx = ext === '.tsx';
     const tsParsed = parseComTypeScript(codigo, tsx);
     if (tsParsed) {
@@ -299,7 +299,7 @@ export async function decifrarSintaxe(codigo: string, ext: string, opts: Decifra
     return (async () => {
       let timer: NodeJS.Timeout | null = null;
       try {
-        const race = Promise.race([Promise.resolve(parseResultado), new Promise<null>(resolve => {
+        const race = Promise.race([Promise.resolve(parseResultado), new Promise<null>((resolve) => {
           timer = setTimeout(() => {
             logCore.timeoutParsing(opts.timeoutMs || 0, ext);
             resolve(null);

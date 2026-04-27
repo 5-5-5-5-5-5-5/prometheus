@@ -32,10 +32,10 @@ export function formatCount(v: number | undefined | null): string {
 
 export function formatDiff(a?: number, b?: number): string {
   if (a == null || b == null) return '-';
-  return `${formatMs(a)} => ${formatMs(b)} (${formatPct(((b - a) / (a || 1)) * 100)})`;
+  return `${formatMs(a)} => ${formatMs(b)} (${formatPct((b - a) / (a || 1) * 100)})`;
 }
 
 export function calcPctVar(a?: number, b?: number): number {
   if (a == null || b == null || a === 0) return 0;
-  return ((b - a) / a) * 100;
+  return (b - a) / a * 100;
 }

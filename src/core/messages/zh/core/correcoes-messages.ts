@@ -8,7 +8,7 @@
  * - 自动修复总体
  */
 
-import { buildTypesRelPathPosix, getTypesDirectoryDisplay } from '../../../../core/config/conventions.js';
+import { buildTypesRelPathPosix, getTypesDirectoryDisplay } from '../../../config/conventions.js';
 import { ICONES } from '../../shared/icons.js';
 
 /**
@@ -66,8 +66,8 @@ export const MENSAGENS_AUTOFIX = {
     modoConservador: `${ICONES.comando.guardian} 已激活保守模式 - 仅应用高置信度修复`,
     validacaoEslint: `${ICONES.acao.analise} 正在运行自动修复后的 ESLint 验证...`,
     arquivoMovido: (origem: string, destino: string) => `${ICONES.status.ok} 已移动：${origem} → ${destino}`,
-    arquivoRevertido: (origem: string, destino: string) => `↩️ 文件已还原：${destino} → ${origem}`,
-    arquivoRevertidoConteudo: (origem: string, destino: string) => `↩️ 文件已还原为原始内容：${destino} → ${origem}`
+    arquivoRevertido: (origem: string, destino: string) => `↩ 文件已还原：${destino} → ${origem}`,
+    arquivoRevertidoConteudo: (origem: string, destino: string) => `↩ 文件已还原为原始内容：${destino} → ${origem}`
   },
   // 结果
   resultados: {

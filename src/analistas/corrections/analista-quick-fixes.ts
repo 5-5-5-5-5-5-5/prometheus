@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 import type { NodePath } from '@babel/traverse';
 import type { Node } from '@babel/types';
-import { findQuickFixes, type PatternBasedQuickFix } from '@core/config/auto/fix-config.js';
+import { findQuickFixes, type PatternBasedQuickFix } from '@core/config/auto';
 
 import type { Analista, Ocorrencia } from '@';
 import { criarOcorrencia } from '@';
@@ -41,7 +41,7 @@ export const analistaQuickFixes: Analista = {
         const fixedLine = previewCorrecao.split('\n')[linha - 1] || '';
 
         // Criar sugestão com preview mais detalhado
-        const sugestao = [fixResultado.description, '', `🔧 Correção sugerida:`, `❌ Antes: ${originalLine.trim()}`, `✅ Depois: ${fixedLine.trim()}`, '', `Confiança: ${fixResultado.confidence}%`, `Categoria: ${fixResultado.category}`, `ID do Fix: ${fixResultado.id}`].join('\n');
+        const sugestao = [fixResultado.description, '', ` Correção sugerida:`, ` Antes: ${originalLine.trim()}`, ` Depois: ${fixedLine.trim()}`, '', `Confiança: ${fixResultado.confidence}%`, `Categoria: ${fixResultado.category}`, `ID do Fix: ${fixResultado.id}`].join('\n');
 
         // Mapear categoria para nível
         const nivel = mapearCategoriaNivel(fixResultado.category);

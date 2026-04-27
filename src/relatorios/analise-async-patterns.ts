@@ -11,12 +11,11 @@
 
 import path from 'node:path';
 
-import { getMessages } from '@core/messages/index.js';
-import { salvarEstado } from '@shared/persistence/persistencia.js';
+import { getMessages } from '@core/messages';
+import type { AsyncAnalysisOptions, AsyncAnalysisReport, AsyncArquivoRanqueado, AsyncCategoria, AsyncCategoriaStats, AsyncIssuesArquivo } from '@projeto-types/relatorios';
+import { salvarEstado } from '@shared/persistence';
 
 import type { Ocorrencia } from '@';
-
-import type { AsyncAnalysisOptions, AsyncAnalysisReport, AsyncArquivoRanqueado, AsyncCategoria, AsyncCategoriaStats, AsyncIssuesArquivo } from '../types/relatorios/async-analysis.js';
 
 const { log, MENSAGENS_RELATORIOS_ANALISE, RelatorioAsyncPatternsMensagens } = getMessages();
 
@@ -98,7 +97,7 @@ export async function analisarAsyncPatterns(ocorrencias: Ocorrencia[], options: 
       total,
       nivel
     } = arquivosOrdenados[i];
-    const nivelIcon = nivel === 'erro' ? '🔴' : nivel === 'aviso' ? '⚠️' : 'ℹ️';
+    const nivelIcon = nivel === 'erro' ? '' : nivel === 'aviso' ? '' : 'ℹ';
     log.info(`${i + 1}. ${nivelIcon} ${arquivo}`);
     log.info(RelatorioAsyncPatternsMensagens.promiseSemTratamento.replace('{total}', String(total)));
     log.info(RelatorioAsyncPatternsMensagens.prioridade.replace('{nivel}', nivel.toUpperCase()));

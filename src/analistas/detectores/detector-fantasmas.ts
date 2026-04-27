@@ -2,15 +2,13 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
-import { grafoDependencias } from '@analistas/detectores/detector-dependencias.js';
-import { config } from '@core/config/config.js';
-import { LIMITES_PADRAO } from '@core/config/limites.js';
-import { isInsideSrc } from '@core/config/paths.js';
-import { scanRepository } from '@core/execution/scanner.js';
-import { normalizePath } from '@shared/helpers/path.js';
-import { isTestArquivo } from '@shared/helpers/rule-config.js';
+import { config , isInsideSrc,LIMITES_PADRAO  } from '@core/config';
+import { scanRepository } from '@core/execution';
+import { isTestArquivo,normalizePath  } from '@shared/helpers';
 
 import type { ArquivoFantasma, FileMap } from '@';
+
+import { grafoDependencias } from './detector-dependencias.js';
 
 const EXTENSOES_ALVO = ['.js', '.ts', '.jsx', '.tsx', '.mjs', '.cjs'];
 

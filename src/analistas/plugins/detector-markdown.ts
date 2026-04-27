@@ -15,12 +15,11 @@
 
 import { promises as fs } from 'node:fs';
 
-import { config } from '@core/config/config.js';
-import { getMessages } from '@core/messages/index.js';
+import { config } from '@core/config';
+import { getMessages } from '@core/messages';
+import type { MarkdownAnaliseArquivo, MarkdownDetectorOptions, MarkdownLicensePatterns, MarkdownProblema, MarkdownWhitelistConfig } from '@projeto-types/analistas';
 
 import type { Ocorrencia } from '@';
-
-import type { MarkdownAnaliseArquivo, MarkdownDetectorOptions, MarkdownLicensePatterns, MarkdownProblema, MarkdownWhitelistConfig } from '../../types/analistas/markdown.js';
 
 const { log } = getMessages();
 

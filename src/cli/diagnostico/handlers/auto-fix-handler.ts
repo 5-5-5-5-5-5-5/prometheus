@@ -7,7 +7,7 @@
  * @see docs/REFACTOR-CLI-DIAGNOSTICAR.md - Sprint 2
  */
 
-import { messages } from '@core/messages/index.js';
+import { messages } from '@core/messages';
 
 import type { AutoFixOptions, AutoFixResult, FileEntryWithAst } from '@';
 

@@ -4,16 +4,17 @@
  * Aplica correções automáticas baseadas em análise de uso e confiança
  */
 
-import { type CasoTipoInseguro, exportarRelatoriosFixTypes } from '@cli/handlers/fix-types-exporter.js';
-import { ExitCode, sair } from '@cli/helpers/exit-codes.js';
-import { expandIncludePatterns, processPatternList } from '@cli/helpers/pattern-helpers.js';
-import { config } from '@core/config/config.js';
-import { DICAS, formatarTipoInseguro, gerarResumoCategoria, getMessages,ICONES_FIX_TYPES as ICONES, MENSAGENS_AUTOFIX, MENSAGENS_CLI_CORRECAO_TIPOS, MENSAGENS_ERRO_FIX_TYPES as MENSAGENS_ERRO, MENSAGENS_INICIO_FIX_TYPES as MENSAGENS_INICIO, MENSAGENS_PROGRESSO_FIX_TYPES as MENSAGENS_PROGRESSO, MENSAGENS_RESUMO, MENSAGENS_SUCESSO_FIX_TYPES as MENSAGENS_SUCESSO, TEMPLATE_RESUMO_FINAL, TEXTOS_CATEGORIZACAO_CORRECAO_TIPOS  } from '@core/messages/index.js';
-import { PROJETO_RAIZ } from '@core/registry/paths.js';
+import { config } from '@core/config';
+import { DICAS, formatarTipoInseguro, gerarResumoCategoria, getMessages,ICONES_FIX_TYPES as ICONES, MENSAGENS_AUTOFIX, MENSAGENS_CLI_CORRECAO_TIPOS, MENSAGENS_ERRO_FIX_TYPES as MENSAGENS_ERRO, MENSAGENS_INICIO_FIX_TYPES as MENSAGENS_INICIO, MENSAGENS_PROGRESSO_FIX_TYPES as MENSAGENS_PROGRESSO, MENSAGENS_RESUMO, MENSAGENS_SUCESSO_FIX_TYPES as MENSAGENS_SUCESSO, TEMPLATE_RESUMO_FINAL, TEXTOS_CATEGORIZACAO_CORRECAO_TIPOS  } from '@core/messages';
+import { PROJETO_RAIZ } from '@core/registry';
 import { Command } from 'commander';
 
 import type { FixTypesOptions, Ocorrencia } from '@';
 import { asTecnicas, extrairMensagemErro } from '@';
+
+import { type CasoTipoInseguro, exportarRelatoriosFixTypes } from '../handlers/fix-types-exporter.js';
+import { ExitCode, sair } from '../helpers/exit-codes.js';
+import { expandIncludePatterns, processPatternList } from '../helpers/pattern-helpers.js';
 
 const { log } = getMessages();
 
@@ -64,8 +65,8 @@ async function executarFixTypes(options: FixTypesOptions): Promise<void> {
   let iniciarInquisicao: (baseDir: string, opts?: import('@').InquisicaoOptions, tecnicas?: import('@').Tecnica[]) => Promise<import('@').ResultadoInquisicaoCompleto>;
   let registroAnalistas: (import('@').Analista | import('@').Tecnica)[];
   try {
-    const modInq = await import('@core/execution/inquisidor.js');
-    const modReg = await import('@analistas/registry/registry.js');
+    const modInq = await import('@core/execution');
+    const modReg = await import('@analistas/registry');
     iniciarInquisicao = modInq.iniciarInquisicao;
     registroAnalistas = modReg.registroAnalistas;
   } catch (err) {
@@ -158,10 +159,10 @@ async function executarFixTypes(options: FixTypesOptions): Promise<void> {
   // Importar quick fixes (exportações nomeadas)
   const {
     fixAnyToProperTipo
-  } = await import('@analistas/corrections/quick-fixes/fix-any-to-proper-type.js');
+  } = await import('@analistas/corrections/quick-fixes');
   const {
     fixUnknownToSpecificTipo
-  } = await import('@analistas/corrections/quick-fixes/fix-unknown-to-specific-type.js');
+  } = await import('@analistas/corrections/quick-fixes');
   if (!fixAnyToProperTipo || !fixUnknownToSpecificTipo) {
     log.erro(MENSAGENS_ERRO.modulosNaoEncontrados);
     sair(ExitCode.Failure);
@@ -183,7 +184,7 @@ async function executarFixTypes(options: FixTypesOptions): Promise<void> {
   const {
     categorizarUnknown,
     extractLineContext
-  } = await import('@analistas/corrections/type-safety/context-analyzer.js');
+  } = await import('@analistas/corrections/type-safety');
 
   // Estatísticas de categorização
   const stats = {
@@ -414,7 +415,7 @@ async function executarFixTypes(options: FixTypesOptions): Promise<void> {
     }
   }
 
-  // ✨ APLICAR CORREÇÕES AUTOMÁTICAS
+  //  APLICAR CORREÇÕES AUTOMÁTICAS
   if (!isDryRun && altaPrioridade.length > 0) {
     console.log();
     log.fase?.(MENSAGENS_CLI_CORRECAO_TIPOS.aplicandoCorrecoesAuto);
@@ -422,7 +423,7 @@ async function executarFixTypes(options: FixTypesOptions): Promise<void> {
     try {
       const {
         aplicarCorrecoesEmLote
-      } = await import('@analistas/corrections/auto-fix-engine.js');
+      } = await import('../../analistas/corrections/auto-fix-engine.js');
 
       // Agrupar ocorrências por arquivo
       const porArquivo: Record<string, Array<{

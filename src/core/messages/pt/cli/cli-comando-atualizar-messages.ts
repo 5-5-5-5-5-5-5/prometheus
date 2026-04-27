@@ -2,9 +2,9 @@
 
 export const CliAtualizarExtraMensagens = {
   descricao: 'Atualiza o Prometheus se a integridade estiver preservada',
-  iniciandoAtualizacao: '\n🔄 Iniciando processo de atualização...\n',
+  iniciandoAtualizacao: '\n Iniciando processo de atualização...\n',
   guardianIntegridadeValidada: '{icone} Guardian: integridade validada. Prosseguindo atualização.',
-  guardianBaselineAlterado: '🌀 Guardian gerou novo baseline ou detectou alterações. Prosseguindo com cautela.',
+  guardianBaselineAlterado: ' Guardian gerou novo baseline ou detectou alterações. Prosseguindo com cautela.',
   recomendadoGuardianDiff: 'Recomendado: `prometheus guardian --diff` e `prometheus guardian --accept-baseline` antes de atualizar.',
   falhaAplicarFlags: 'Falha ao aplicar flags: {erro}',
 } as const;

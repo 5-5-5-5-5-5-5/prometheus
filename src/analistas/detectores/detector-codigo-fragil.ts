@@ -1,16 +1,9 @@
 // SPDX-License-Identifier: MIT
 import type { NodePath, Visitor } from '@babel/traverse';
 import type { CatchClause, FunctionDeclaration, Node, NumericLiteral } from '@babel/types';
-import { config } from '@core/config/config.js';
-import { LIMITES_PADRAO } from '@core/config/limites.js';
-import { traverse } from '@core/config/traverse.js';
-import { messages } from '@core/messages/index.js';
-import { agruparPor } from '@shared/helpers/agrupar.js';
-import { detectarComentariosPendentes, detectarLogsDebug } from '@shared/helpers/detectores-comuns.js';
-import { detectarFrameworks } from '@shared/helpers/framework-detector.js';
-import { splitLines } from '@shared/helpers/lines.js';
-import { isWhitelistedConstant } from '@shared/helpers/magic-constants-whitelist.js';
-import { filtrarOcorrenciasSuprimidas } from '@shared/helpers/suppressao.js';
+import { config , LIMITES_PADRAO , traverse } from '@core/config';
+import { messages } from '@core/messages';
+import { agruparPor , detectarComentariosPendentes, detectarFrameworks , detectarLogsDebug , filtrarOcorrenciasSuprimidas,isWhitelistedConstant , splitLines  } from '@shared/helpers';
 
 import type { Analista, Fragilidade, Ocorrencia } from '@';
 import { criarOcorrencia } from '@';

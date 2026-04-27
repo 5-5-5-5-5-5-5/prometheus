@@ -12,13 +12,12 @@
 
 import type { NodePath } from '@babel/traverse';
 import type { Node } from '@babel/types';
-import { getTypesDirectoryDisplay, isInsideTypesDirectory } from '@core/config/conventions.js';
-import { messages } from '@core/messages/index.js';
-import { isInStringOrComment } from '@shared/helpers/context-utils.js';
+import { getTypesDirectoryDisplay, isInsideTypesDirectory } from '@core/config';
+import { messages } from '@core/messages';
+import type { DuplicateEntry,InlineTypeOccurrence } from '@projeto-types/analistas';
+import { isInStringOrComment } from '@shared/helpers';
 
 import type { Analista, InterfaceInlineDetection, Ocorrencia } from '@';
-
-import type { DuplicateEntry,InlineTypeOccurrence } from '../../types/analistas/detectores.js';
 
 const ANALISTA: Analista = {
   nome: 'detector-interfaces-inline',

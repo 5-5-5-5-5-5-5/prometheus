@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 /**
- * 🎯 Sistema de Filtros para Diagnóstico
+ *  Sistema de Filtros para Diagnóstico
  *
  * Gerencia inclusão/exclusão de arquivos para análise
  * - Processa padrões glob
@@ -12,8 +12,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { config } from '@core/config/config.js';
-import { mesclarConfigExcludes } from '@core/config/excludes-padrao.js';
+import { config , mesclarConfigExcludes } from '@core/config';
 
 import type { FiltrosProcessados, OpcoesProcessamentoFiltros, TipoLinguagemProjeto } from '@';
 

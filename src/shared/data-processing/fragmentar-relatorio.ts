@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 import path from 'node:path';
-import { gzipSync } from 'node:zlib';
 
-import { config } from '@core/config/config.js';
-import { salvarBinario, salvarEstado } from '@shared/persistence/persistencia.js';
+import { config } from '@core/config';
 
 import type { FileEntryFragmentacao, FragmentOptions, Manifest, ManifestPartFragmentacao, Ocorrencia, RelatorioCompletoFragmentacao } from '@';
+
+import { salvarEstado } from '../persistence/persistencia.js';
 
 // Aliases para compatibilidade
 type FileEntry = FileEntryFragmentacao;
@@ -50,21 +50,19 @@ export async function fragmentarRelatorio(relatorioFull: RelatorioCompleto, dir:
     delete r.ocorrencias;
     delete r.fileEntries;
   }
-  const metaFilename = `prometheus-relatorio-full-${ts}-meta.json.gz`;
-  const metaBuf = Buffer.from(JSON.stringify(meta, null, 2), 'utf-8');
-  const metaGz = gzipSync(metaBuf);
-  await salvarBinario(path.join(dir, metaFilename), metaGz);
+  const metaFilename = `prometheus-relatorio-full-${ts}-meta.json`;
+  await salvar(path.join(dir, metaFilename), meta);
   manifest.parts.push({
     kind: 'meta',
     file: metaFilename,
-    bytes: metaGz.length
+    bytes: Buffer.byteLength(JSON.stringify(meta), 'utf-8')
   });
 
   // Fragmenta ocorrencias se necessário
   if (ocorrencias.length > 0) {
     const occPedacos = chunkArray(ocorrencias, maxOcorrencias);
     for (let i = 0; i < occPedacos.length; i++) {
-      const fname = `prometheus-relatorio-full-${ts}-ocorrencias-part-${i + 1}.json.gz`;
+      const fname = `prometheus-relatorio-full-${ts}-ocorrencias-part-${i + 1}.json`;
       const payload = {
         shard: {
           kind: 'ocorrencias',
@@ -74,9 +72,7 @@ export async function fragmentarRelatorio(relatorioFull: RelatorioCompleto, dir:
         count: occPedacos[i].length,
         ocorrencias: occPedacos[i]
       };
-      const buf = Buffer.from(JSON.stringify(payload, null, 2), 'utf-8');
-      const gz = gzipSync(buf);
-      await salvarBinario(path.join(dir, fname), gz);
+      await salvar(path.join(dir, fname), payload);
 
       // Gerar resumo por shard: top tipos e top arquivos (relPath)
       const tiposContagem: Record<string, number> = {};
@@ -106,7 +102,7 @@ export async function fragmentarRelatorio(relatorioFull: RelatorioCompleto, dir:
         index: i + 1,
         total: occPedacos.length,
         count: occPedacos[i].length,
-        bytes: gz.length,
+        bytes: Buffer.byteLength(JSON.stringify(payload), 'utf-8'),
         summary: {
           topTipos,
           topArquivos
@@ -119,7 +115,7 @@ export async function fragmentarRelatorio(relatorioFull: RelatorioCompleto, dir:
   if (fileEntries.length > 0) {
     const fePedacos = chunkArray(fileEntries, maxArquivoEntries);
     for (let i = 0; i < fePedacos.length; i++) {
-      const fname = `prometheus-relatorio-full-${ts}-fileentries-part-${i + 1}.json.gz`;
+      const fname = `prometheus-relatorio-full-${ts}-fileentries-part-${i + 1}.json`;
       const payload = {
         shard: {
           kind: 'fileEntries',
@@ -129,9 +125,7 @@ export async function fragmentarRelatorio(relatorioFull: RelatorioCompleto, dir:
         count: fePedacos[i].length,
         fileEntries: fePedacos[i]
       };
-      const buf = Buffer.from(JSON.stringify(payload, null, 2), 'utf-8');
-      const gz = gzipSync(buf);
-      await salvarBinario(path.join(dir, fname), gz);
+      await salvar(path.join(dir, fname), payload);
 
       // Resumo por shard de fileEntries: top arquivos por tamanho (linhas) quando possível
       const arquivosResumo: Array<{
@@ -160,7 +154,7 @@ export async function fragmentarRelatorio(relatorioFull: RelatorioCompleto, dir:
         index: i + 1,
         total: fePedacos.length,
         count: fePedacos[i].length,
-        bytes: gz.length,
+        bytes: Buffer.byteLength(JSON.stringify(payload), 'utf-8'),
         summary: {
           topArquivosByLinhas
         }

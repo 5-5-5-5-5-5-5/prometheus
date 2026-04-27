@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-import type { MetricaExecucao, Ocorrencia } from '@';
+import type { MetricaExecucao, Ocorrencia } from '../../index.js';
 
 export type EstadoIncrementalExecutor = {
   arquivos: Record<

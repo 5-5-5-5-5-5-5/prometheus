@@ -4,7 +4,7 @@ import { parse as babelParse } from '@babel/parser';
 import type { NodePath, Visitor } from '@babel/traverse';
 import traverse from '@babel/traverse';
 import * as t from '@babel/types';
-import { messages } from '@core/messages/index.js';
+import { messages } from '@core/messages';
 
 import { criarAnalista, criarOcorrencia } from '@';
 

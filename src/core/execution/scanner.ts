@@ -2,13 +2,14 @@
 import type { Dirent, Stats } from 'node:fs';
 import { promises as fs } from 'node:fs';
 
-import { config } from '@core/config/config.js';
-import { messages } from '@core/messages/index.js';
-import { lerArquivoTexto, lerEstado } from '@shared/persistence/persistencia.js';
+import { lerArquivoTexto, lerEstado } from '@shared/persistence';
 import micromatch from 'micromatch';
 import path from 'path';
 
 import type { FileEntry, FileMap, ScanOptions } from '@';
+
+import { config } from '../config/config.js';
+import { messages } from '../messages/index.js';
 
 export type { ScanOptions };
 export async function scanRepository(baseDir: string, options: ScanOptions = {}): Promise<FileMap> {
@@ -29,33 +30,33 @@ export async function scanRepository(baseDir: string, options: ScanOptions = {})
   const efetivoIncluirConteudo = includeContent && !config.SCAN_ONLY;
   const fileMap: FileMap = {};
   const statCache = new Map<string, Stats>();
-  // 🔥 CONFIGURAÇÃO SIMPLIFICADA - Apenas CLI e exclude global
+  //  CONFIGURAÇÃO SIMPLIFICADA - Apenas CLI e exclude global
   const gruposRaw = (config as unknown as {
     CLI_INCLUDE_GROUPS?: string[][];
   }).CLI_INCLUDE_GROUPS || [];
   const includeGroups = Array.isArray(gruposRaw) ? gruposRaw : [];
-  const includeGroupsNorm: string[][] = includeGroups.map(g => (g || []).map(p => toPosix(trimDotSlash(String(p || '')))));
+  const includeGroupsNorm: string[][] = includeGroups.map((g) => (g || []).map((p) => toPosix(trimDotSlash(String(p || '')))));
   const includePadroes = Array.isArray(config.CLI_INCLUDE_PATTERNS) ? config.CLI_INCLUDE_PATTERNS as string[] : [];
-  const includePadroesNorm = includePadroes.map(p => toPosix(trimDotSlash(String(p || ''))));
-  const excludePadroesNorm = (Array.isArray(config.CLI_EXCLUDE_PATTERNS) ? config.CLI_EXCLUDE_PATTERNS as string[] : []).map(p => toPosix(String(p || '')));
+  const includePadroesNorm = includePadroes.map((p) => toPosix(trimDotSlash(String(p || ''))));
+  const excludePadroesNorm = (Array.isArray(config.CLI_EXCLUDE_PATTERNS) ? config.CLI_EXCLUDE_PATTERNS as string[] : []).map((p) => toPosix(String(p || '')));
 
-  // 📌 ÚNICO PONTO DE EXCLUDE: globalExcludeGlob da configuração legacy ou campo simplificado
+  //  ÚNICO PONTO DE EXCLUDE: globalExcludeGlob da configuração legacy ou campo simplificado
   const legacyExcludes = config.INCLUDE_EXCLUDE_RULES?.globalExcludeGlob || [];
   const ignorePadroesNorm = (legacyExcludes as string[]).map((p: string) => toPosix(String(p || '')));
   const hasIncluir = includeGroupsNorm.length > 0 || includePadroesNorm.length > 0;
   // Sinaliza quando os includes pedem ocorrências em qualquer profundidade (ex.: '**/nome/**') ou quando
   // o usuário forneceu nomes simples (que o expandIncludes converte em '**/nome/**').
-  const pedeOcorrenciasGlobais = hasIncluir ? [...includePadroesNorm, ...includeGroupsNorm.flat()].some(p => p.startsWith('**/')) : false;
+  const pedeOcorrenciasGlobais = hasIncluir ? [...includePadroesNorm, ...includeGroupsNorm.flat()].some((p) => p.startsWith('**/')) : false;
   // node_modules explicitamente incluído em algum pattern ou grupo de include
-  const includeNodeModulesExplicit = hasIncluir ? [...includePadroesNorm, ...includeGroupsNorm.flat()].some(p => /(^|\/)node_modules(\/|$)/.test(String(p || ''))) : false;
+  const includeNodeModulesExplicit = hasIncluir ? [...includePadroesNorm, ...includeGroupsNorm.flat()].some((p) => /(^|\/)node_modules(\/|$)/.test(String(p || ''))) : false;
 
   // Quando includes estão ativos, derivamos diretórios-raiz a partir dos prefixos antes do primeiro metacaractere
 
   function calcularIncludeRoots(padroes: string[] | undefined, grupos?: string[][]): string[] {
     const roots = new Set<string>();
     const candidatos = new Set<string>();
-    if (Array.isArray(padroes)) padroes.forEach(p => candidatos.add(toPosix(trimDotSlash(p))));
-    if (Array.isArray(grupos)) for (const g of grupos) g.forEach(p => candidatos.add(toPosix(trimDotSlash(p))));
+    if (Array.isArray(padroes)) padroes.forEach((p) => candidatos.add(toPosix(trimDotSlash(p))));
+    if (Array.isArray(grupos)) for (const g of grupos) g.forEach((p) => candidatos.add(toPosix(trimDotSlash(p))));
     if (candidatos.size === 0) return [];
     const META = /[\\*\?\{\}\[\]]/; // caracteres meta de glob
     for (const raw of candidatos) {
@@ -63,7 +64,7 @@ export async function scanRepository(baseDir: string, options: ScanOptions = {})
       if (!p) continue;
       p = toPosix(trimDotSlash(p));
       let anchor = '';
-      if (p.includes('/**')) anchor = p.slice(0, p.indexOf('/**')); else if (p.includes('/*')) anchor = p.slice(0, p.indexOf('/*')); else if (p.includes('/')) anchor = p.split('/')[0]; else anchor = '';
+      if (p.includes('/**')) anchor = p.slice(0, p.indexOf('/**'));else if (p.includes('/*')) anchor = p.slice(0, p.indexOf('/*'));else if (p.includes('/')) anchor = p.split('/')[0];else anchor = '';
       anchor = anchor.replace(/\/+/g, '/').replace(/\/$/, '');
       // Ignora anchors inválidos: vazios, apenas '.', '**' ou contendo metacaracteres (ex.: '**/src')
       if (anchor && anchor !== '.' && anchor !== '**' && !META.test(anchor)) {
@@ -130,7 +131,7 @@ export async function scanRepository(baseDir: string, options: ScanOptions = {})
           patternVariants.push(p);
           porBase.set(base, patternVariants);
         }
-        const allBasesMatch = Array.from(porBase.values()).every(lista => lista.some(p => matchesPadrao(relPath, p)));
+        const allBasesMatch = Array.from(porBase.values()).every((lista) => lista.some((p) => matchesPadrao(relPath, p)));
         if (allBasesMatch) return true;
       }
       // Sem correspondência em nenhum grupo -> não inclui
@@ -235,7 +236,7 @@ export async function scanRepository(baseDir: string, options: ScanOptions = {})
               continue;
             }
           }
-          if (stat == null) {
+          if (stat === null) {
             throw new Error(messages.ExcecoesMensagens.statIndefinidoPara(fullCaminho));
           }
           let mtimeMs = 0;
@@ -273,11 +274,6 @@ export async function scanRepository(baseDir: string, options: ScanOptions = {})
             ultimaModificacao: mtimeMs
           };
           fileMap[relPath] = entryObj;
-          // Logar cada arquivo individualmente para compatibilidade com testes
-          // Evita ruído quando relatórios silenciosos estão ativos (modo --json)
-          if (!config.REPORT_SILENCE_LOGS) {
-            onProgress(`✅ Arquivo lido: ${relPath}`);
-          }
         } catch (err) {
           onProgress(JSON.stringify({
             tipo: 'erro',
@@ -326,9 +322,9 @@ export async function scanRepository(baseDir: string, options: ScanOptions = {})
         await scan(norm);
         continue;
       } catch {
+
         // não é diretório (ou inacessível); tenta fluxo de arquivo abaixo
-      }
-      // Quando o root derivado for um arquivo, processe-o diretamente
+      } // Quando o root derivado for um arquivo, processe-o diretamente
       try {
         let st = statCache.get(norm);
         if (!st) {
@@ -359,9 +355,9 @@ export async function scanRepository(baseDir: string, options: ScanOptions = {})
             await scan(norm);
             continue;
           } catch {
+
             // segue como arquivo
-          }
-          const relPathRaw = path.relative(baseDir, norm);
+          }const relPathRaw = path.relative(baseDir, norm);
           const relPath = toPosix(relPathRaw);
           // Aplica as mesmas regras de filtragem de arquivos
           if (hasIncluir && !matchIncluir(relPath)) {
@@ -386,7 +382,7 @@ export async function scanRepository(baseDir: string, options: ScanOptions = {})
           if (efetivoIncluirConteudo) {
             const emTeste = !!process.env.VITEST;
             try {
-              if (emTeste) content = await lerEstado<string>(norm); else content = await lerArquivoTexto(norm);
+              if (emTeste) content = await lerEstado<string>(norm);else content = await lerArquivoTexto(norm);
             } catch (e) {
               onProgress(JSON.stringify({
                 tipo: 'erro',
@@ -405,9 +401,6 @@ export async function scanRepository(baseDir: string, options: ScanOptions = {})
             content,
             ultimaModificacao: (st && 'mtimeMs' in st ? (st as Stats).mtimeMs : Date.now()) || Date.now()
           };
-          if (!config.REPORT_SILENCE_LOGS) {
-            onProgress(`✅ Arquivo lido: ${relPath}`);
-          }
         }
       } catch (e) {
         onProgress(JSON.stringify({
@@ -424,7 +417,7 @@ export async function scanRepository(baseDir: string, options: ScanOptions = {})
 
   // Log de conclusão da varredura
   const totalArquivos = Object.keys(fileMap).length;
-  const totalDiretorios = new Set(Object.values(fileMap).map(f => path.dirname(f.relPath))).size;
+  const totalDiretorios = new Set(Object.values(fileMap).map((f) => path.dirname(f.relPath))).size;
   messages.logVarredor.completo(totalArquivos, totalDiretorios);
   return fileMap;
 }

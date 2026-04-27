@@ -7,20 +7,15 @@
 
 // Analistas
 export * from './analistas/contexto.js';
-export type {
-  ASTNode,
-  CorrecaoConfig,
-  CorrecaoResult,
-  ResultadoAnaliseEstrutural,
-} from './analistas/corrections.js';
+export * from './analistas/corrections/index.js';
 export * from './analistas/corrections/type-safety.js';
 export * from './analistas/detectores.js';
 export * from './analistas/estrategistas.js';
+export * from './analistas/github-actions-plugins.js';
 export * from './analistas/handlers.js';
 export * from './analistas/metricas.js';
 export * from './analistas/modulos-dinamicos.js';
 export * from './analistas/pontuacao.js';
-export * from './analistas/github-actions-plugins.js';
 
 // CLI
 export * from './cli/comandos.js';
@@ -81,15 +76,8 @@ export * from './core/execution/workers.js';
 export * from './core/parsing/parser.js';
 export * from './core/utils/chalk.js';
 
-// Core Messages (tipos que não conflitam com relatorios)
-export type {
-  AgrupamentoConfig,
-  ConfigPrioridade,
-  FiltrosConfig,
-  MetadadosRelatorioEstendido,
-} from './core/messages.js';
-export * from './core/messages/index.js';
-export * from './core/messages/log.js';
+// Core Messages e Logs (consolidado em messages.js)
+export * from './core/messages.js';
 
 // Core Execution
 export * from './core/execution/ambiente.js';

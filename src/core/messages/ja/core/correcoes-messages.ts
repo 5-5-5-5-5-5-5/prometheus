@@ -8,7 +8,7 @@
  * - 自動修正全般
  */
 
-import { buildTypesRelPathPosix, getTypesDirectoryDisplay } from '../../../../core/config/conventions.js';
+import { buildTypesRelPathPosix, getTypesDirectoryDisplay } from '../../../config/conventions.js';
 import { ICONES } from '../../shared/icons.js';
 
 /**
@@ -66,8 +66,8 @@ export const MENSAGENS_AUTOFIX = {
     modoConservador: `${ICONES.comando.guardian} 保守的モードが有効 - 高信頼度の修正のみを適用します`,
     validacaoEslint: `${ICONES.acao.analise} 自動修正後のESLintバリデーションを実行中...`,
     arquivoMovido: (origem: string, destino: string) => `${ICONES.status.ok} 移動完了: ${origem} → ${destino}`,
-    arquivoRevertido: (origem: string, destino: string) => `↩️ ファイルを復元しました: ${destino} → ${origem}`,
-    arquivoRevertidoConteudo: (origem: string, destino: string) => `↩️ 元のコンテンツでファイルを復元しました: ${destino} → ${origem}`
+    arquivoRevertido: (origem: string, destino: string) => `↩ ファイルを復元しました: ${destino} → ${origem}`,
+    arquivoRevertidoConteudo: (origem: string, destino: string) => `↩ 元のコンテンツでファイルを復元しました: ${destino} → ${origem}`
   },
   // 結果
   resultados: {

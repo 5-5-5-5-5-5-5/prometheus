@@ -2,14 +2,21 @@
 
 import type { NodePath } from '@babel/traverse';
 import type { Node } from '@babel/types';
-import { messages } from '@core/messages/index.js';
+import { messages } from '@core/messages';
 
-import type { ContextoExecucao, Ocorrencia } from '@';
+import type { ContextoExecucao, Ocorrencia } from '../index.js';
 
 /**
  * Resultado que uma técnica pode retornar
  */
 export type TecnicaAplicarResultado = Ocorrencia | Ocorrencia[] | null | undefined;
+
+export interface ResultadoAnaliseSdk {
+  score: number;
+  problemas: Ocorrencia[];
+  sugestoes: string[];
+  tempoAnalise: number;
+}
 
 /**
  * Interface base para técnicas - versão unificada e compatível
@@ -48,7 +55,7 @@ export function criarAnalista<A extends Analista>(def: A): A {
 export function isAnalista(item: Tecnica | Analista): item is Analista {
   return 'nome' in item && typeof item.nome === 'string' && item.nome.length > 0;
 }
-export function asTecnicas(items: (Tecnica | Analista)[]): import('@').Tecnica[] {
+export function asTecnicas(items: (Tecnica | Analista)[]): import('../index.js').Tecnica[] {
   return items.map(raw => {
     // Trate o item como desconhecido e faça guards em runtime para evitar exceptions
     const item = raw as unknown as Record<string, unknown> | null;
@@ -57,18 +64,22 @@ export function asTecnicas(items: (Tecnica | Analista)[]): import('@').Tecnica[]
     const test = item && typeof item.test === 'function' ? item.test as (r: string) => boolean : undefined;
 
     // preparar aplicar com fallback seguro (no-op retorna array vazio)
-    const aplicar = item && typeof item.aplicar === 'function' ? async (conteudo: string, relPath: string, ast: object | null, fullCaminho?: string, contextoGlobal?: import('@').ContextoExecucao) => {
+    const aplicar = item && typeof item.aplicar === 'function' ? async (conteudo: string, relPath: string, ast: object | null, fullCaminho?: string, contextoGlobal?: import('../index.js').ContextoExecucao) => {
       const astParam = ast as import('@babel/traverse').NodePath<import('@babel/types').Node> | null;
 
-      // Chamamos usando a assinatura esperada da Técnica, sem `any`.
       const aplicarFn = item.aplicar as unknown as Tecnica['aplicar'];
-      return await aplicarFn(conteudo, relPath, astParam, fullCaminho, contextoGlobal);
-    } : async (): Promise<import('@').Ocorrencia[]> => [];
+      try {
+        const res = await aplicarFn(conteudo, relPath, astParam, fullCaminho, contextoGlobal);
+        return res as import('../index.js').Ocorrencia[];
+      } catch {
+        return [];
+      }
+    } : async (): Promise<import('../index.js').Ocorrencia[]> => [];
     return {
       nome,
       global,
       test,
       aplicar
-    } as import('@').Tecnica;
+    } as import('../index.js').Tecnica;
   });
 }

@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 import path from 'node:path';
 
-import { messages } from '@core/messages/index.js';
-import { lerArquivoTexto, salvarEstado } from '@shared/persistence/persistencia.js';
+import { messages } from '@core/messages';
+import { lerArquivoTexto, salvarEstado } from '@shared/persistence';
 
 import type { ResultadoDeteccaoArquetipo } from '@';
 
@@ -146,7 +146,7 @@ export async function exportarRelatorioArquetiposJson(destino: string, candidato
 }, detalhado = false): Promise<void> {
   const {
     criarRelatorioComVersao
-  } = await import('@core/schema/version.js');
+  } = await import('@core/schema');
   const relatorio = {
     origem: contexto?.origem ?? null,
     candidatos: candidatos.map(c => {

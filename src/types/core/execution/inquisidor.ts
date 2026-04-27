@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
 import type { Node } from '@babel/types';
 
-import type { FileEntryWithAst, Ocorrencia } from '@';
-
 import type { GuardianResult } from '../../guardian/resultado.js';
+import type { FileEntryWithAst, Ocorrencia } from '../../index.js';
 
 export interface SimbolosLog {
   info: string;

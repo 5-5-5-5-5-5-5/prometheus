@@ -160,7 +160,7 @@ export interface ProblemaWorkflow {
 /**
  * Resultado da análise de workflows
  */
-export interface ResultadoAnalise {
+export interface ResultadoAnaliseWorkflow {
   problemas: ProblemaWorkflow[];
   score: number;
   resumo: string;

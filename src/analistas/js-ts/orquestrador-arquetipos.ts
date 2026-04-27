@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: MIT
-import { ARQUETIPOS } from '@analistas/estrategistas/arquetipos-defs.js';
-import { detectarArquetipoNode } from '@analistas/plugins/detector-node.js';
-import { detectarArquetipoXML } from '@analistas/plugins/detector-xml.js';
-import { pontuarTodos } from '@analistas/pontuadores/pontuador.js';
-import { detectarContextoProjeto } from '@shared/contexto-projeto.js';
+import { detectarContextoProjeto } from '@shared';
 
 import type { ArquetipoDeteccaoAnomalia, ArquetipoEstruturaDef, ResultadoDeteccaoArquetipo } from '@';
+
+import { ARQUETIPOS } from '../estrategistas/arquetipos-defs.js';
+import { detectarArquetipoNode } from '../plugins/detector-node.js';
+import { detectarArquetipoXML } from '../plugins/detector-xml.js';
+import { pontuarTodos } from '../pontuadores/pontuador.js';
 
 // Evita warning de unused import - função usada em runtime
 void detectarContextoProjeto;

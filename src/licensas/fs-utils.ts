@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import type { LicenseFileResult } from '../types/licensas/licensas.js';
+import type { LicenseFileResult } from '@projeto-types/licensas';
 
 /**
  * Check whether a path exists on the filesystem.

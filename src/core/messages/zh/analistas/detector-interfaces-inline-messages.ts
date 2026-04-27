@@ -6,7 +6,7 @@
  * 提取到专用的类型文件，以及检测重复类型。
  */
 
-import type { TipoDuplicadoArgs } from '../../../../types/analistas/detectores.js';
+import type { TipoDuplicadoArgs } from '@projeto-types/analistas';
 
 export const DetectorInterfacesInlineMensagens = {
   moverTipoParaTipos: (nomeTipo: string, tiposDir = 'src/tipos') => `将类型 '${nomeTipo}' 移至 ${tiposDir.endsWith('/') ? tiposDir : `${tiposDir}/`}`,

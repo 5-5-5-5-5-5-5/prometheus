@@ -14,14 +14,14 @@ Sistema aprimorado de captura e relatório de erros que fornece **stack traces c
 **Antes:**
 
 ```
-❌ Erro no analista: tipo-inseguro
+ Erro no analista: tipo-inseguro
 Detalhes: Análise falhou
 ```
 
 **Depois:**
 
 ```
-❌ Erro em 'detector-tipos-inseguros' para src/app.ts: TypeError: Cannot read property 'type' of undefined
+ Erro em 'detector-tipos-inseguros' para src/app.ts: TypeError: Cannot read property 'type' of undefined
 Stack trace:
 Error: TypeError: Cannot read property 'type' of undefined
     at analisarTipo (src/analistas/detectores/detector-tipos-inseguros.ts:145:21)
@@ -45,7 +45,7 @@ catch (error) {
       mensagem: `Falha na técnica '${tecnica.nome}' para ${entry.relPath}: ${err.message}`,
       relPath: entry.relPath,
       origem: tecnica.nome,
-      stack: !isTimeout && err.stack ? err.stack : undefined,  // ✨ Novo
+      stack: !isTimeout && err.stack ? err.stack : undefined,  //  Novo
     }),
   );
 }
@@ -72,14 +72,14 @@ O sistema distingue entre diferentes tipos de falhas:
 #### Erros de Análise
 
 ```typescript
-❌ Erro em 'detector-seguranca' para src/auth.ts: ReferenceError: crypto is not defined
+ Erro em 'detector-seguranca' para src/auth.ts: ReferenceError: crypto is not defined
 Stack trace: [completo]
 ```
 
 #### Timeouts
 
 ```typescript
-⏰ Timeout na técnica 'detector-complexidade' para src/large.ts: 30000ms excedido
+ Timeout na técnica 'detector-complexidade' para src/large.ts: 30000ms excedido
 [Sem stack trace - não é um erro de código]
 ```
 
@@ -89,13 +89,13 @@ Stack trace: [completo]
 // src/tipos/comum/ocorrencias.ts
 export interface OcorrenciaErroAnalista extends OcorrenciaAnalista {
   tipo: "ERRO_ANALISTA";
-  stack?: string; // ✨ Stack trace opcional
+  stack?: string; //  Stack trace opcional
 }
 
 export function ocorrenciaErroAnalista(data: {
   mensagem: string;
   relPath: string;
-  stack?: string; // ✨ Aceita stack trace
+  stack?: string; //  Aceita stack trace
   origem?: string;
 }): OcorrenciaErroAnalista;
 ```
@@ -186,7 +186,7 @@ npm run diagnosticar -- --json > resultado.json
 ```bash
 $ npm run diagnosticar -- --verbose
 
-❌ Erro em 'parser-js' para src/broken.ts: SyntaxError: Unexpected token
+ Erro em 'parser-js' para src/broken.ts: SyntaxError: Unexpected token
 Stack trace:
 SyntaxError: Unexpected token
     at Module._compile (node:internal/modules/cjs/loader:1198:18)
@@ -200,7 +200,7 @@ SyntaxError: Unexpected token
 ```bash
 $ npm run diagnosticar -- --verbose
 
-❌ Erro em 'detector-tipos-inseguros' para src/utils.ts: TypeError: Cannot read property 'type' of undefined
+ Erro em 'detector-tipos-inseguros' para src/utils.ts: TypeError: Cannot read property 'type' of undefined
 Stack trace:
 TypeError: Cannot read property 'type' of undefined
     at analisarNo (src/analistas/detectores/detector-tipos-inseguros.ts:234:42)
@@ -213,7 +213,7 @@ TypeError: Cannot read property 'type' of undefined
 ```bash
 $ npm run diagnosticar -- --verbose
 
-⏰ Timeout na técnica 'detector-duplicacoes' para src/massive.ts: 30000ms excedido
+ Timeout na técnica 'detector-duplicacoes' para src/massive.ts: 30000ms excedido
 [Aviso] Considere aumentar ANALISE_TIMEOUT_POR_ANALISTA_MS ou usar --fast
 ```
 
@@ -259,11 +259,11 @@ npm test -- tests/auto/error-reporting.test.ts
 
 **Cobertura:**
 
-- ✅ Criação de ocorrências com stack trace
-- ✅ Ocorrências sem stack (timeouts)
-- ✅ Preservação de informações de origem
-- ✅ Stack traces multi-nível
-- ✅ Contexto de arquivo e linha
+- Criação de ocorrências com stack trace
+- Ocorrências sem stack (timeouts)
+- Preservação de informações de origem
+- Stack traces multi-nível
+- Contexto de arquivo e linha
 
 ### Resultado
 
@@ -276,10 +276,10 @@ Tests  8 passed (8)
 
 | Ferramenta            | Stack Traces | Contexto de Arquivo | Modo Verbose |
 | --------------------- | ------------ | ------------------- | ------------ |
-| **Prometheus (novo)** | ✅            | ✅                   | ✅            |
-| ESLint                | ✅            | ✅                   | ✅            |
-| TypeScript            | ✅            | ✅                   | ⚠️ Limitado  |
-| Prometheus (antigo)   | ❌            | ⚠️ Parcial          | ❌            |
+| **Prometheus (novo)** |              |                     |              |
+| ESLint                |              |                     |              |
+| TypeScript            |              |                     | Limitado     |
+| Prometheus (antigo)   |              | Parcial             |              |
 
 ## Próximos Passos
 
@@ -292,7 +292,7 @@ Tests  8 passed (8)
 2. **Error Codes**
 
    ```
-   ❌ [ORA-E001] Erro em 'detector-tipos-inseguros'...
+    [ORA-E001] Erro em 'detector-tipos-inseguros'...
    ```
 
    - Códigos de erro únicos
@@ -301,7 +301,7 @@ Tests  8 passed (8)
 3. **Agregação de Erros**
 
    ```
-   ❌ 5 arquivos falharam com mesmo erro:
+    5 arquivos falharam com mesmo erro:
    TypeError: Cannot read property 'type' of undefined
    Arquivos afetados: src/a.ts, src/b.ts, ...
    ```
@@ -330,7 +330,7 @@ Para melhorar o sistema de erros:
        ocorrenciaErroAnalista({
          mensagem: `Falha: ${(error as Error).message}`,
          relPath,
-         stack: (error as Error).stack, // ✨ Importante
+         stack: (error as Error).stack, //  Importante
          origem: "meu-analista",
        }),
      );
@@ -340,10 +340,10 @@ Para melhorar o sistema de erros:
 2. **Mensagens descritivas**
 
    ```typescript
-   // ❌ Ruim
+   //  Ruim
    mensagem: "Erro";
 
-   // ✅ Bom
+   //  Bom
    mensagem: `Falha ao analisar tipos em ${arquivo}: ${erro.message}`;
    ```
 
@@ -356,4 +356,4 @@ Para melhorar o sistema de erros:
 
 **Implementado em:** Fase 6
 **Problema resolvido:** #7 do feedback - Mensagens de erro genéricas
-**Status:** ✅ Completo e testado
+**Status:**  Completo e testado

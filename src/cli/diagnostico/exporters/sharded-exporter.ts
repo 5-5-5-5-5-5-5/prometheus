@@ -210,8 +210,8 @@ export function validarOptionsSharding(options: Partial<ShardingOptions>): {
 
   if (!options.formato) {
     erros.push('Formato é obrigatório');
-  } else if (options.formato !== 'json' && options.formato !== 'markdown') {
-    erros.push('Formato deve ser "json" ou "markdown"');
+  } else if (options.formato !== 'json') {
+    erros.push('Formato deve ser "json"');
   }
 
   if (!options.ocorrenciasPorShard || options.ocorrenciasPorShard <= 0) {

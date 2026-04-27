@@ -2,48 +2,66 @@
 
 import type { FormatadorMinimoResult } from '@';
 
-import { normalizarFimDeLinha, normalizarNewlinesFinais, removerBom } from './utils.js';
+import { limitarLinhasEmBranco,normalizarFimDeLinha, normalizarNewlinesFinais, removerBom } from './utils.js';
+
+/* ────────────────────────── Dockerfile ────────────────────────── */
+
+const DOCKER_KEYWORDS = new Set([
+  'from', 'run', 'cmd', 'label', 'maintainer', 'expose', 'env',
+  'add', 'copy', 'entrypoint', 'volume', 'user', 'workdir', 'arg',
+  'onbuild', 'stopsignal', 'healthcheck', 'shell', 'as',
+]);
 
 export function formatarDockerfileMinimo(code: string): FormatadorMinimoResult {
   const normalized = normalizarFimDeLinha(removerBom(code));
   const lines = normalized.split('\n');
   const out: string[] = [];
-  const DOCKER_KEYWORDS = new Set([
-    'from', 'run', 'cmd', 'label', 'maintainer', 'expose', 'env',
-    'add', 'copy', 'entrypoint', 'volume', 'user', 'workdir', 'arg',
-    'onbuild', 'stopsignal', 'healthcheck', 'shell', 'as',
-  ]);
+  let prevIsContinuation = false;
+
   for (const raw of lines) {
     const trimmed = raw.trim();
+
+    // Empty lines
     if (!trimmed) {
-      if (out.length > 0 && out[out.length - 1] !== '') {
+      if (out.length > 0 && out[out.length - 1] !== '' && !prevIsContinuation) {
         out.push('');
       }
+      prevIsContinuation = false;
       continue;
     }
+
+    // Comments — preserve as-is
     if (trimmed.startsWith('#')) {
       out.push(trimmed);
+      prevIsContinuation = false;
       continue;
     }
+
+    // If this is a continuation of a previous line (after \), preserve indentation
+    if (prevIsContinuation) {
+      // Preserve original indentation for continuation lines
+      const leadingSpaces = raw.match(/^(\s*)/)?.[1] ?? '';
+      const indented = leadingSpaces.length >= 2
+        ? leadingSpaces + trimmed
+        : `    ${  trimmed}`; // Default 4-space indent for continuation
+      out.push(indented);
+      prevIsContinuation = trimmed.endsWith('\\');
+      continue;
+    }
+
+    // Uppercase Docker keywords
     const firstWord = trimmed.split(/\s+/)[0]?.toLowerCase() ?? '';
     if (DOCKER_KEYWORDS.has(firstWord)) {
       const upper = firstWord.toUpperCase();
-      const rest = trimmed.slice(firstWord.length).trim();
-      out.push(`${upper} ${rest}`);
-      continue;
-    }
-    if (/^[A-Z]+/.test(trimmed)) {
-      out.push(trimmed);
+      const rest = trimmed.slice(firstWord.length);
+      out.push(`${upper}${rest}`);
     } else {
-      const firstWordUpper = trimmed.split(/\s+/)[0]?.toUpperCase() ?? '';
-      if (DOCKER_KEYWORDS.has(firstWordUpper.toLowerCase())) {
-        const rest = trimmed.slice(firstWord.length).trim();
-        out.push(`${firstWordUpper} ${rest}`);
-        continue;
-      }
       out.push(trimmed);
     }
+
+    prevIsContinuation = trimmed.endsWith('\\');
   }
+
   const formatted = normalizarNewlinesFinais(out.join('\n'));
   const baseline = normalizarNewlinesFinais(normalized);
   return {
@@ -55,42 +73,49 @@ export function formatarDockerfileMinimo(code: string): FormatadorMinimoResult {
   };
 }
 
+/* ────────────────────────── Shell ────────────────────────── */
+
 export function formatarShellMinimo(code: string): FormatadorMinimoResult {
   const normalized = normalizarFimDeLinha(removerBom(code));
   const lines = normalized.split('\n');
   const out: string[] = [];
   let inHereDoc = false;
   let hereDocDelimiter = '';
+
   for (const raw of lines) {
-    const trimmed = raw.trimEnd();
+    // Preserve indentation, only remove trailing whitespace
+    const trimEnd = raw.replace(/[ \t]+$/, '');
+
+    // In here-doc: preserve exactly as-is
     if (inHereDoc) {
-      out.push(trimmed);
-      if (trimmed.trim() === hereDocDelimiter) {
+      out.push(trimEnd);
+      if (trimEnd.trim() === hereDocDelimiter) {
         inHereDoc = false;
         hereDocDelimiter = '';
       }
       continue;
     }
-    if (!trimmed) {
+
+    // Empty lines
+    if (!trimEnd.trim()) {
       if (out.length > 0 && out[out.length - 1] !== '') {
         out.push('');
       }
       continue;
     }
-    if (trimmed.startsWith('#')) {
-      out.push(trimmed);
-      continue;
-    }
-    const hereDocMatch = trimmed.match(/<<-?\s*['"]?(\w+)['"]?/);
+
+    // Check for here-doc start
+    const hereDocMatch = trimEnd.match(/<<-?\s*['"]?(\w+)['"]?/);
     if (hereDocMatch) {
       inHereDoc = true;
       hereDocDelimiter = hereDocMatch[1] ?? '';
-      out.push(trimmed);
-      continue;
     }
-    out.push(trimmed.replace(/[ \t]+$/, ''));
+
+    out.push(trimEnd);
   }
-  const formatted = normalizarNewlinesFinais(out.join('\n'));
+
+  const { code: limitedBlanks } = limitarLinhasEmBranco(out.join('\n'), 2);
+  const formatted = normalizarNewlinesFinais(limitedBlanks);
   const baseline = normalizarNewlinesFinais(normalized);
   return {
     ok: true,

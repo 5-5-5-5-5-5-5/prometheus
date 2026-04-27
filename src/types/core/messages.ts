@@ -1,14 +1,61 @@
 // SPDX-License-Identifier: MIT
 /**
- * Tipos para sistema de mensagens e relatórios
- * Consolidação de: src/core/messages/filtro-config.ts, relatorio-templates.ts e versão anterior
+ * Tipos para sistema de mensagens, logs e relatórios
  */
 
 export type PrioridadeNivel = 'critica' | 'alta' | 'media' | 'baixa';
+export type Nivel = 'info' | 'sucesso' | 'erro' | 'aviso' | 'debug';
+export type LogLevel = Nivel;
+
+export interface FormatOptions {
+  nivel: Nivel;
+  mensagem: string;
+  sanitize?: boolean;
+}
+
+/**
+ * Interface para blocos de log (dados)
+ */
+export interface LogBlockData {
+  titulo: string;
+  linhas: string[];
+  nivel?: Nivel;
+}
+
+/**
+ * Interface para o logger com extensões de bloco
+ */
+export interface LogComBloco {
+  info: (msg: string) => void;
+  sucesso: (msg: string) => void;
+  erro: (msg: string) => void;
+  aviso: (msg: string) => void;
+  debug: (msg: string) => void;
+  imprimirBloco: (titulo: string, linhas: string[], estilo?: unknown, largura?: number) => void;
+  calcularLargura: (titulo: string, linhas: string[], larguraMax?: number) => number;
+}
+
+/**
+ * Contexto de log adaptativo
+ */
+export type LogContext = 'simples' | 'medio' | 'complexo' | 'ci';
+export type LogTemplate = string;
+export type LogData = Record<string, unknown>;
+
+/**
+ * Métricas do projeto para adaptação de log
+ */
+export interface ProjetoMetricas {
+  totalArquivos: number;
+  linguagens: string[];
+  estruturaComplexidade: 'simples' | 'media' | 'complexa';
+  temCI: boolean;
+  temTestes: boolean;
+  temDependencias: boolean;
+}
 
 /**
  * Configuração de prioridade de problemas
- * Originalmente em: src/core/messages/filtro-config.ts
  */
 export interface ConfigPrioridade {
   prioridade: PrioridadeNivel;
@@ -18,7 +65,6 @@ export interface ConfigPrioridade {
 
 /**
  * Configuração de agrupamento inteligente por padrão de mensagem
- * Originalmente em: src/core/messages/filtro-config.ts
  */
 export interface AgrupamentoConfig {
   padrao: RegExp;
@@ -30,8 +76,7 @@ export interface AgrupamentoConfig {
 }
 
 /**
- * Metadados estendidos para relatório (inclui campos opcionais de manifest)
- * Originalmente em: src/core/messages/relatorio-templates.ts
+ * Metadados estendidos para relatório
  */
 export interface MetadadosRelatorioEstendido {
   dataISO: string;
@@ -44,7 +89,6 @@ export interface MetadadosRelatorioEstendido {
 
 /**
  * Configuração de filtros (sistema de supressão para OCORRÊNCIAS)
- * Originalmente em: src/core/parsing/filters.ts
  */
 export interface FiltrosConfig {
   suppressRules?: string[];
@@ -53,3 +97,32 @@ export interface FiltrosConfig {
   suppressByPath?: string[];
   suppressByFilePattern?: string[];
 }
+
+/**
+ * JSON com metadados versionados
+ */
+export interface JsonComMetadados<T> {
+  _metadata: {
+    schema: string;
+    versao: string;
+    geradoEm: string;
+    descricao?: string;
+  };
+  dados: T;
+}
+
+/**
+ * Tipo para valores de mensagens (string ou objeto com label/descricao)
+ */
+export interface CampoMensagem {
+  label: string;
+  descricao: string;
+}
+
+export interface SecaoMensagemComCampos {
+  label: string;
+  descricao: string;
+  campos: Record<string, string>;
+}
+
+export type ValorMensagem = string | CampoMensagem | SecaoMensagemComCampos;

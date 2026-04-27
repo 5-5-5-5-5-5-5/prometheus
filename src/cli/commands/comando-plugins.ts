@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: MIT
-import { listarAnalistas } from '@analistas/registry/registry.js';
-import { ExitCode, sair } from '@cli/helpers/exit-codes.js';
-import { messages } from '@core/messages/index.js';
+import { listarAnalistas } from '@analistas/registry';
+import { messages } from '@core/messages';
 import { Command } from 'commander';
+
+import { ExitCode, sair } from '../helpers/exit-codes.js';
 
 const log = messages.log;
 

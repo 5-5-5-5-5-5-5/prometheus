@@ -60,12 +60,3 @@ export interface RegrasSuprimidas {
   blocosAtivos: Set<string>;
 }
 
-/**
- * Mensagem em memória de conversação
- */
-interface MemoryMessage {
-  role: 'user' | 'assistant' | 'system';
-  content: string;
-  timestamp: string;
-  metadata?: Record<string, unknown>;
-}

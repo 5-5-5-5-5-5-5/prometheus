@@ -12,14 +12,15 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
-import { ARQUETIPOS } from '@analistas/estrategistas/arquetipos-defs.js';
 // NOTA: parseFileAST ainda não foi implementado no módulo de parsing
-// import { parseFileAST } from '@core/parsing/parser.js';
-import { getMessages } from '@core/messages/index.js';
-import { PROMETHEUS_ARQUIVOS } from '@core/registry/paths.js';
-import { lerEstado, salvarEstado } from '@shared/persistence/persistencia.js';
+// import { parseFileAST } from '@core/parsing';
+import { getMessages } from '@core/messages';
+import { PROMETHEUS_ARQUIVOS } from '@core/registry';
+import { lerEstado, salvarEstado } from '@shared/persistence';
 
 import type { ArquetipoEstruturaDef, ArquetipoPersonalizado } from '@';
+
+import { ARQUETIPOS } from '../estrategistas/arquetipos-defs.js';
 
 const { log, ArquetiposExtraMensagens } = getMessages();
 

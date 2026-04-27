@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
 /**
  * Handler para exportação de relatórios do Guardian
- * Gera relatórios Markdown e JSON padronizados
+ * Gera relatórios JSON padronizados
  */
 
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
-import { config } from '@core/config/config.js';
-import { messages } from '@core/messages/index.js';
+import { config } from '@core/config';
+import { messages } from '@core/messages';
 
 import type { GuardianBaseline, GuardianExportOptions, GuardianExportResult } from '@';
 
@@ -52,104 +52,6 @@ async function gerarRelatorioJson(caminho: string, options: GuardianExportOption
   await fs.writeFile(caminho, JSON.stringify(relatorio, null, 2));
 }
 
-/**
- * Gera relatório Markdown legível
- */
-async function gerarRelatorioMarkdown(caminho: string, options: GuardianExportOptions): Promise<void> {
-  const {
-    status,
-    baseline,
-    drift,
-    erros,
-    warnings
-  } = options;
-  const lines: string[] = [];
-
-  // Cabeçalho
-  lines.push('# Relatório Guardian - Verificação de Integridade');
-  lines.push('');
-  lines.push(`**Gerado em:** ${new Date().toISOString()}`);
-  lines.push(`**Comando:** \`prometheus guardian\``);
-  lines.push('');
-
-  // Status
-  const statusIcon = status === 'ok' ? '[SUCESSO]' : status === 'erro' ? '[ERRO]' : '[AVISO]';
-  lines.push(`## ${statusIcon} Status: ${status}`);
-  lines.push('');
-
-  // Baseline
-  if (baseline) {
-    lines.push('## [INFO] Baseline');
-    lines.push('');
-    lines.push('```json');
-    lines.push(JSON.stringify(baseline, null, 2));
-    lines.push('```');
-    lines.push('');
-  }
-
-  // Drift
-  if (drift) {
-    lines.push('## 🔄 Drift Detectado');
-    lines.push('');
-    lines.push(`- **Arquétipo alterado:** ${drift.alterouArquetipo ? 'Sim' : 'Não'}`);
-    if (drift.deltaConfidence) {
-      lines.push(`- **Delta de confiança:** ${drift.deltaConfidence}%`);
-    }
-    if (drift.arquivosNovos && drift.arquivosNovos.length > 0) {
-      lines.push('');
-      lines.push('### Arquivos Novos');
-      drift.arquivosNovos.forEach(arquivo => {
-        lines.push(`- ${arquivo}`);
-      });
-    }
-    if (drift.arquivosRemovidos && drift.arquivosRemovidos.length > 0) {
-      lines.push('');
-      lines.push('### Arquivos Removidos');
-      drift.arquivosRemovidos.forEach(arquivo => {
-        lines.push(`- ${arquivo}`);
-      });
-    }
-    lines.push('');
-  }
-
-  // Erros
-  if (erros && erros.length > 0) {
-    lines.push('## [ERRO] Erros');
-    lines.push('');
-    erros.forEach((erro, idx) => {
-      lines.push(`### ${idx + 1}. ${erro.arquivo}`);
-      lines.push('');
-      lines.push(`**Mensagem:** ${erro.mensagem}`);
-      lines.push('');
-    });
-  }
-
-  // Warnings
-  if (warnings && warnings.length > 0) {
-    lines.push('## [AVISO] Avisos');
-    lines.push('');
-    warnings.forEach((warning, idx) => {
-      lines.push(`### ${idx + 1}. ${warning.arquivo}`);
-      lines.push('');
-      lines.push(`**Mensagem:** ${warning.mensagem}`);
-      lines.push('');
-    });
-  }
-
-  // Recomendações
-  lines.push('## [INFO] Recomendações');
-  lines.push('');
-  if (status === 'ok') {
-    lines.push('- [SUCESSO] Projeto está íntegro - nenhuma ação necessária');
-  } else if (status === 'erro') {
-    lines.push('- [ERRO] Resolver erros críticos antes de prosseguir');
-    lines.push('- [INFO] Revisar arquivos listados acima');
-  } else if (drift?.alterouArquetipo) {
-    lines.push('- [AVISO] Drift de arquétipo detectado - revisar mudanças');
-    lines.push('- [INFO] Considerar atualizar baseline se mudanças forem intencionais');
-  }
-  await fs.writeFile(caminho, lines.join('\n'));
-}
 
 /**
  * Exporta relatórios do Guardian (Markdown e JSON)
@@ -174,24 +76,15 @@ export async function exportarRelatoriosGuardian(options: GuardianExportOptions)
       recursive: true
     });
 
-    // Gerar timestamp único para os arquivos
     const ts = new Date().toISOString().replace(/[:.]/g, '-');
     const nomeBase = `prometheus-guardian-${ts}`;
 
-    // Gerar relatório Markdown
-    const caminhoMd = path.join(dir, `${nomeBase}.md`);
-    await gerarRelatorioMarkdown(caminhoMd, options);
-
-    // Gerar relatório JSON
     const caminhoJson = path.join(dir, `${nomeBase}.json`);
     await gerarRelatorioJson(caminhoJson, options);
 
-    // Log de sucesso
     log.sucesso(messages.CliExportersMensagens.guardian.relatoriosExportadosTitulo);
-    log.info(messages.CliExportersMensagens.guardian.caminhoMarkdown(caminhoMd));
     log.info(messages.CliExportersMensagens.guardian.caminhoJson(caminhoJson));
     return {
-      markdown: caminhoMd,
       json: caminhoJson,
       dir
     };

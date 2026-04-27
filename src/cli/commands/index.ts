@@ -16,15 +16,19 @@ export * from './comando-guardian.js';
 export * from './comando-licensas.js';
 export * from './comando-metricas.js';
 export * from './comando-otimizar-svg.js';
+export * from './comando-padronizador.js';
 export * from './comando-perf.js';
+export * from './comando-plugins.js';
 export * from './comando-podar.js';
 export * from './comando-reestruturar.js';
-export * from './comando-plugins.js';
-export * from './comando-dashboard.js';
 
 // Comando de reversão (diferente padrão de export)
+export * from './comando-importer.js';
 export * from './comando-reverter.js';
 
 // Comandos de manutenção de nomes
 export * from './comando-names.js';
 export * from './comando-rename.js';
+
+// Utilitários
+export * from './comando-ignore.js';

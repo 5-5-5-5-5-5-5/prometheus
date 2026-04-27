@@ -3,13 +3,13 @@ Proveniência e Autoria: Este documento integra o projeto Prometheus (licença M
 ---
 
 
-# Árvore Arquitetural - Prometheus 🏗️
+# Árvore Arquitetural - Prometheus
 
 Estrutura completa de diretórios e componentes do Prometheus.
 
 ---
 
-## 📦 Estrutura de Diretórios
+##  Estrutura de Diretórios
 
 ```
 prometheus/
@@ -148,7 +148,7 @@ prometheus/
 
 ---
 
-## 🔄 Fluxo de Dados e Processamento
+##  Fluxo de Dados e Processamento
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -207,7 +207,7 @@ prometheus/
 
 ---
 
-## 🎭 Camadas da Arquitetura
+##  Camadas da Arquitetura
 
 ### 1. **Camada CLI** (Interface)
 
@@ -246,7 +246,7 @@ prometheus/
 
 ---
 
-## 🔌 Componentes Chave
+##  Componentes Chave
 
 ### Analistas
 
@@ -275,7 +275,7 @@ prometheus/
 
 ---
 
-## 📊 Metricas e Pontuação
+##  Metricas e Pontuação
 
 ```
 ┌──────────────────────────────────────────┐
@@ -308,7 +308,7 @@ prometheus/
 
 ---
 
-## 🔗 Dependências Principais
+##  Dependências Principais
 
 - **Node.js**: v24.14.1+
 - **TypeScript**: v5.x
@@ -318,10 +318,9 @@ prometheus/
 
 ---
 
-## 📝 Próximas Etapas de Documentação
+##  Próximas Etapas de Documentação
 
 Veja também:
 - [Como Criar Analistas](../desenvolvimento/analistas/CRIAR-ANALISTA.md)
 - [Padrões de Desenvolvimento](../desenvolvimento/PADROES.md)
 - [Sistema de Plugins](../desenvolvimento/SISTEMA-PLUGINS.md)
-

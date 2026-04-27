@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
-import { messages } from '@core/messages/index.js';
-import { isLikelyIntentionalDuplicate, lintCssLikeStylelint } from '@shared/impar/stylelint.js';
+import { messages } from '@core/messages';
+import { isLikelyIntentionalDuplicate, lintCssLikeStylelint } from '@shared/impar';
 import postcss, { type AtRule, type Container, type Declaration, type Root, type Rule, type Syntax } from 'postcss';
 import postcssSass from 'postcss-sass';
 import postcssScss from 'postcss-scss';

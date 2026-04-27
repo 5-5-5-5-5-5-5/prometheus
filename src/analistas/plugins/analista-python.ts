@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
-import { messages } from '@core/messages/index.js';
-import { createLineLookup } from '@shared/helpers/line-lookup.js';
-import { maskPythonComments, maskPythonStringsAndComments } from '@shared/helpers/masking.js';
+import { messages } from '@core/messages';
+import { createLineLookup , maskPythonComments, maskPythonStringsAndComments } from '@shared/helpers';
 
 import { criarAnalista, criarOcorrencia } from '@';
 

@@ -3,13 +3,45 @@
 import type { NodePath } from '@babel/traverse';
 import type { Node } from '@babel/types';
 import * as t from '@babel/types';
-import { traverse } from '@core/config/traverse.js';
-import { messages } from '@core/messages/index.js';
-import { detectarContextoProjeto } from '@shared/contexto-projeto.js';
-import { garantirArray, incrementar } from '@shared/helpers/helpers-analistas.js';
+import { traverse } from '@core/config';
+import { messages } from '@core/messages';
+import { detectarContextoProjeto } from '@shared';
+import { garantirArray, incrementar } from '@shared/helpers';
 
-import type { ContextoExecucao, Estatisticas, Ocorrencia, TecnicaAplicarResultado, Contador } from '@';
+import type { Contador, ContextoExecucao, Estatisticas, Ocorrencia, TecnicaAplicarResultado } from '@';
 import { criarOcorrencia, ocorrenciaErroAnalista } from '@';
+
+/**
+ * Métricas de uso de padrões em análise de código
+ */
+export type EstatisticasUso = {
+  requires: Record<string, number>;
+  consts: Record<string, number>;
+  exports: Record<string, number>;
+  vars: Record<string, number>;
+  lets: Record<string, number>;
+  evals: Record<string, number>;
+  withs: Record<string, number>;
+};
+
+/**
+ * Contexto de execução da análise
+ */
+export type ContextoAnalise = {
+  isTest: boolean;
+  moduloAtual?: string;
+};
+
+/**
+ * Resultado de uma ocorrência detectada
+ */
+export type ResultadoOcorrencia = {
+  tipo: 'info' | 'alerta' | 'erro';
+  mensagem: string;
+  relPath: string;
+  linha?: number;
+  coluna?: number;
+};
 
 // Estatísticas globais (mantidas)
 export const estatisticasUsoGlobal: Estatisticas = {
@@ -21,6 +53,9 @@ export const estatisticasUsoGlobal: Estatisticas = {
   evals: {} as Contador,
   withs: {} as Contador
 };
+/**
+ * Analista de padrões de uso de código
+ */
 export const analistaPadroesUso = {
   nome: 'analista-padroes-uso',
   global: false,
@@ -60,13 +95,13 @@ export const analistaPadroesUso = {
       ___RESET_DONE___?: boolean;
     };
     if (!statsFlag.___RESET_DONE___) {
-      estatisticasUsoGlobal.requires = {};
-      estatisticasUsoGlobal.consts = {};
-      estatisticasUsoGlobal.exports = {};
-      estatisticasUsoGlobal.vars = {};
-      estatisticasUsoGlobal.lets = {};
-      estatisticasUsoGlobal.evals = {};
-      estatisticasUsoGlobal.withs = {};
+      estatisticasUsoGlobal.requires = Object.create(null) as Contador;
+      estatisticasUsoGlobal.consts = Object.create(null) as Contador;
+      estatisticasUsoGlobal.exports = Object.create(null) as Contador;
+      estatisticasUsoGlobal.vars = Object.create(null) as Contador;
+      estatisticasUsoGlobal.lets = Object.create(null) as Contador;
+      estatisticasUsoGlobal.evals = Object.create(null) as Contador;
+      estatisticasUsoGlobal.withs = Object.create(null) as Contador;
       statsFlag.___RESET_DONE___ = true;
     }
 

@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 import type { NodePath } from '@babel/traverse';
 import type { Node } from '@babel/types';
-import { config } from '@core/config/config.js';
-import { detectarContextoProjeto } from '@shared/contexto-projeto.js';
+import { config } from '@core/config';
+import { detectarContextoProjeto } from '@shared';
 
 import type { FileLike, FunctionLikeNode, Ocorrencia } from '@';
 import { criarAnalista, isBabelNode } from '@';
@@ -64,7 +64,7 @@ export const analistaFuncoesLongas = criarAnalista({
       }
 
       // Verifica se a função não tem comentário - menos rigoroso para testes
-      if (fn.leadingComments == null || Array.isArray(fn.leadingComments) && fn.leadingComments.length === 0) {
+      if (fn.leadingComments === null || Array.isArray(fn.leadingComments) && fn.leadingComments.length === 0) {
         if (!contextoArquivo.isTest) {
           // Testes não precisam comentários obrigatórios
           pushOcorrencia('FUNCAO_SEM_COMENTARIO', 'info', startLine, `Função sem comentário acima.`);

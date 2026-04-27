@@ -1,21 +1,21 @@
 // SPDX-License-Identifier: MIT
 // @prometheus-disable tipo-literal-inline-complexo
 // Justificativa: tipos inline para opções de comando CLI são locais e não precisam de extração
-import { OperarioEstrutura } from '@analistas/estrategistas/operario-estrutura.js';
-import { registroAnalistas as tecnicas } from '@analistas/registry/registry.js';
-import { exportarRelatoriosReestruturacao } from '@cli/handlers/reestruturacao-exporter.js';
-import { exibirMolduraConflitos, exibirMolduraPlano } from '@cli/helpers/exibir-moldura.js';
-import { ExitCode, sair } from '@cli/helpers/exit-codes.js';
-import { parsearCategorias } from '@cli/helpers/flags-helpers.js';
-import { chalk } from '@core/config/chalk-safe.js';
-import { config } from '@core/config/config.js';
-import { executarInquisicao, prepararComAst } from '@core/execution/inquisidor.js';
-import { CABECALHOS, messages } from '@core/messages/index.js';
+import { OperarioEstrutura } from '@analistas/estrategistas';
+import { registroAnalistas as tecnicas } from '@analistas/registry';
+import { chalk , config } from '@core/config';
+import { executarInquisicao, prepararComAst } from '@core/execution';
+import { CABECALHOS, messages } from '@core/messages';
 import { Command } from 'commander';
 import ora from 'ora';
 
 import type { FileEntry, FileEntryWithAst, Ocorrencia, ResultadoInquisicao } from '@';
 import { extrairMensagemErro } from '@';
+
+import { exportarRelatoriosReestruturacao } from '../handlers/reestruturacao-exporter.js';
+import { exibirMolduraConflitos, exibirMolduraPlano } from '../helpers/exibir-moldura.js';
+import { ExitCode, sair } from '../helpers/exit-codes.js';
+import { parsearCategorias } from '../helpers/flags-helpers.js';
 
 const { log, CliReestruturarExtraMensagens } = messages;
 
@@ -125,7 +125,7 @@ export function comandoReestruturar(aplicarFlagsGlobais: (opts: Record<string, u
       try {
         const {
           scanRepository
-        } = await import('@core/execution/scanner.js');
+        } = await import('@core/execution');
         const fileMap = await scanRepository(baseDir, {});
         const fileEntries: FileEntry[] = Object.values(fileMap);
         fileEntriesComAst = typeof prepararComAst === 'function' ? await prepararComAst(fileEntries, baseDir) : fileEntries.map(entry => ({
@@ -135,7 +135,7 @@ export function comandoReestruturar(aplicarFlagsGlobais: (opts: Record<string, u
         // Se iniciarInquisicao existir, use para alinhar com mocks dos testes
         let analise;
         try {
-          const { iniciarInquisicao } = await import('@core/execution/inquisidor.js');
+          const { iniciarInquisicao } = await import('@core/execution');
 if (typeof iniciarInquisicao === 'function') {
   analise = await iniciarInquisicao(baseDir, { skipExec: false }, tecnicas);
 

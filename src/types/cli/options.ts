@@ -71,7 +71,7 @@ export type ModoOperacao = 'compact' | 'full' | 'executive' | 'quick';
 /**
  * Formato de saída
  */
-export type FormatoSaida = 'console' | 'json' | 'markdown';
+export type FormatoSaida = 'console' | 'json';
 
 /**
  * Nível de log

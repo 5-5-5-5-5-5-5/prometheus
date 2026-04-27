@@ -9,69 +9,36 @@ function mapTsConfigAliases(rootAbs: string): VitestAlias[] {
   try {
     const tsconfigPath = path.join(rootAbs, 'tsconfig.json');
     const raw = fs.readFileSync(tsconfigPath, 'utf8');
-    // Simplesmente tenta remover comentários de linha que iniciam com // para permitir JSON.parse
     const withoutComments = raw
       .split('\n')
       .filter((l) => !l.trim().startsWith('//'))
       .join('\n');
     const json = JSON.parse(withoutComments);
-    const paths: Record<string, string[]> = json?.compilerOptions?.paths ?? {};
+    const tsPaths: Record<string, string[]> = json?.compilerOptions?.paths ?? {};
     const entries: VitestAlias[] = [];
-    const mapPrefix = (aliasPrefix: string, rel: string) => ({
-      find: aliasPrefix,
-      replacement: path.resolve(rootAbs, 'src', rel).replace(/\\/g, '/'),
-    });
-    if (paths['@core/*']) entries.push(mapPrefix('@core', 'core'));
-    if (paths['@nucleo/*']) entries.push(mapPrefix('@nucleo', 'nucleo'));
-    if (paths['@shared/*']) entries.push(mapPrefix('@shared', 'shared'));
-    if (paths['@analistas/*'])
-      entries.push(mapPrefix('@analistas', 'analistas'));
-    if (paths['@auto/*']) entries.push(mapPrefix('@auto', 'auto'));
-    if (paths['@arquitetos/*'])
-      entries.push(mapPrefix('@arquitetos', 'arquitetos'));
-    if (paths['@zeladores/*'])
-      entries.push(mapPrefix('@zeladores', 'zeladores'));
-    if (paths['@relatorios/*'])
-      entries.push(mapPrefix('@relatorios', 'relatorios'));
-    if (paths['@messages/*']) entries.push(mapPrefix('@messages', 'messages'));
-    if (paths['@guardian/*']) entries.push(mapPrefix('@guardian', 'guardian'));
-    if (paths['@cli/*']) entries.push(mapPrefix('@cli', 'cli'));
-    if (paths['@tipos/*']) entries.push(mapPrefix('@tipos', 'tipos'));
-    if (paths['@/*']) entries.push(mapPrefix('@', ''));
-    if (paths['@/resolver.js'] || paths['@/resolver']) {
-      // O arquivo "src/resolver.ts" foi abandonado/excluído em algumas
-      // branches. Só adiciona o mapping se o arquivo realmente existir para
-      // evitar que o Vitest/ESLint reclamem sobre um alias apontando para
-      // caminho inexistente.
-      const resolverCandidate = path.resolve(rootAbs, 'src', 'resolver.ts');
-      if (fs.existsSync(resolverCandidate)) {
+
+    for (const [aliasKey, aliasValues] of Object.entries(tsPaths)) {
+      if (aliasKey.includes('*')) continue;
+      if (!aliasValues || aliasValues.length === 0) continue;
+
+      const rel = aliasValues[0].replace(/^\.\//, '');
+      const replacement = path.resolve(rootAbs, 'src', rel).replace(/\\/g, '/');
+
+      entries.push({
+        find: aliasKey.endsWith('/') ? aliasKey.slice(0, -1) : aliasKey,
+        replacement,
+      });
+
+      if (aliasKey.endsWith('/')) {
         entries.push({
-          find: '@/resolver.js',
-          replacement: resolverCandidate.replace(/\\/g, '/'),
-        });
-        entries.push({
-          find: '@/resolver',
-          replacement: resolverCandidate.replace(/\\/g, '/'),
+          find: aliasKey,
+          replacement: path.resolve(rootAbs, 'src', rel).replace(/\\/g, '/'),
         });
       }
     }
 
-    // Alias bare '@' (mapeado em tsconfig para types/index.ts) — necessário
-    // porque alguns módulos fazem import runtime de `from '@'`.
-    if (paths['@']) {
-      const rel = paths['@'][0] as string;
-      // Se o rel já começa com ./src/, não adicionamos 'src' novamente via path.resolve(rootAbs, 'src', rel)
-      const replacement = rel.startsWith('./')
-        ? path.resolve(rootAbs, rel).replace(/\\/g, '/')
-        : path.resolve(rootAbs, 'src', rel).replace(/\\/g, '/');
-
-      entries.push({
-        find: '@',
-        replacement,
-      });
-    }
-
-    return entries;
+    const sortedEntries = entries.sort((a, b) => b.find.length - a.find.length);
+    return sortedEntries;
   } catch {
     return [];
   }

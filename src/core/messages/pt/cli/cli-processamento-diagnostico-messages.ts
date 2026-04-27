@@ -82,7 +82,7 @@ export const CliProcessamentoDiagnosticoMensagens = {
   relatorioScanSalvo: (dir: string) => `Relatório de scan salvo em ${dir}`,
   falhaExportarRelatorioScanOnly: (errMsg: string) => `Falha ao exportar relatório de scan-only: ${errMsg}`,
   autoFixModoAgressivo: 'Modo agressivo ativado - aplicando mais correções (use com cuidado)',
-  falhaGerarRelatorioMarkdownMetadados: (errMsg: string) => `Falha ao gerar relatório Markdown com metadados: ${errMsg}`,
+  falhaGerarRelatorioJson: (errMsg: string) => `Falha ao gerar relatório JSON: ${errMsg}`,
   relatoriosExportadosPara: (dir: string) => `Relatórios exportados para ${dir}`,
   falhaSalvarRelatorioJson: (errMsg: string) => `Falha ao salvar relatório JSON: ${errMsg}`,
   falhaExportarRelatorios: (errMsg: string) => `Falha ao exportar relatórios: ${errMsg}`,

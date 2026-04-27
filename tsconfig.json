@@ -33,65 +33,179 @@
       "node"
     ],
     "paths": {
-      "@core/*": [
-        "./src/core/*"
-      ],
-      "@shared/*": [
-        "./src/shared/*"
-      ],
-      "@analistas/*": [
-        "./src/analistas/*"
-      ],
-      "@relatorios/*": [
-        "./src/relatorios/*"
-      ],
-      "@guardian/*": [
-        "./src/guardian/*"
-      ],
-      "@licensas/*": [
-        "./src/licensas/*"
-      ],
-      "@cli/*": [
-        "./src/cli/*"
-      ],
-      "@zeladores/*": [
-        "./src/zeladores/*"
-      ],
-      "@api/*": [
-        "./src/api/*"
-      ],
-      "@sdk/*": [
-        "./src/sdk/*"
-      ],
-      "@types/*": [
-        "./src/types/*"
-      ],
-      "@types/types": [
-        "./src/types/index.ts"
-      ],
-      "@types/analistas": [
-        "./src/types/analistas/index.ts"
-      ],
-      "@types/guardian": [
-        "./src/types/guardian/index.ts"
-      ],
-      "@types/cli": [
-        "./src/types/cli/index.ts"
-      ],
-      "@types/core": [
-        "./src/types/core/index.ts"
-      ],
-      "@types/relatorios": [
-        "./src/types/relatorios/index.ts"
-      ],
-      "@types/shared": [
-        "./src/types/shared/index.ts"
-      ],
-      "@types/projeto": [
-        "./src/types/projeto/index.ts"
-      ],
       "@": [
         "./src/types/index.ts"
+      ],
+      "@/": [
+        "./src/"
+      ],
+      "@analistas/arquitetos": [
+        "./src/analistas/arquitetos/index.ts"
+      ],
+      "@analistas/corrections/quick-fixes": [
+        "./src/analistas/corrections/quick-fixes/index.ts"
+      ],
+      "@analistas/corrections/type-safety": [
+        "./src/analistas/corrections/type-safety/index.ts"
+      ],
+      "@analistas/detectores": [
+        "./src/analistas/detectores/index.ts"
+      ],
+      "@analistas/estrategistas": [
+        "./src/analistas/estrategistas/index.ts"
+      ],
+      "@analistas/js-ts": [
+        "./src/analistas/js-ts/index.ts"
+      ],
+      "@analistas/plugins": [
+        "./src/analistas/plugins/index.ts"
+      ],
+      "@analistas/pontuadores": [
+        "./src/analistas/pontuadores/index.ts"
+      ],
+      "@analistas/registry": [
+        "./src/analistas/registry/index.ts"
+      ],
+      "@bin": [
+        "./src/bin/index.ts"
+      ],
+      "@cli": [
+        "./src/cli/index.ts"
+      ],
+      "@cli/commands": [
+        "./src/cli/commands/index.ts"
+      ],
+      "@cli/diagnostico": [
+        "./src/cli/diagnostico/index.ts"
+      ],
+      "@cli/diagnostico/exporters": [
+        "./src/cli/diagnostico/exporters/index.ts"
+      ],
+      "@cli/diagnostico/handlers": [
+        "./src/cli/diagnostico/handlers/index.ts"
+      ],
+      "@cli/handlers": [
+        "./src/cli/handlers/index.ts"
+      ],
+      "@cli/helpers": [
+        "./src/cli/helpers/index.ts"
+      ],
+      "@cli/options": [
+        "./src/cli/options/index.ts"
+      ],
+      "@cli/processing": [
+        "./src/cli/processing/index.ts"
+      ],
+      "@core/config": [
+        "./src/core/config/index.ts"
+      ],
+      "@core/config/auto": [
+        "./src/core/config/auto/index.ts"
+      ],
+      "@core/execution": [
+        "./src/core/execution/index.ts"
+      ],
+      "@core/messages": [
+        "./src/core/messages/index.ts"
+      ],
+      "@core/parsing": [
+        "./src/core/parsing/index.ts"
+      ],
+      "@core/registry": [
+        "./src/core/registry/index.ts"
+      ],
+      "@core/reporting": [
+        "./src/core/reporting/index.ts"
+      ],
+      "@core/schema": [
+        "./src/core/schema/index.ts"
+      ],
+      "@core/utils": [
+        "./src/core/utils/index.ts"
+      ],
+      "@core/workers": [
+        "./src/core/workers/index.ts"
+      ],
+      "@guardian": [
+        "./src/guardian/index.ts"
+      ],
+      "@licensas": [
+        "./src/licensas/index.ts"
+      ],
+      "@projeto-types": [
+        "./src/types/index.ts"
+      ],
+      "@projeto-types/analistas": [
+        "./src/types/analistas/index.ts"
+      ],
+      "@projeto-types/analistas/corrections": [
+        "./src/types/analistas/corrections/index.ts"
+      ],
+      "@projeto-types/cli": [
+        "./src/types/cli/index.ts"
+      ],
+      "@projeto-types/comum": [
+        "./src/types/comum/index.ts"
+      ],
+      "@projeto-types/core": [
+        "./src/types/core/index.ts"
+      ],
+      "@projeto-types/core/messages": [
+        "./src/types/core/messages/index.ts"
+      ],
+      "@projeto-types/estrutura": [
+        "./src/types/estrutura/index.ts"
+      ],
+      "@projeto-types/guardian": [
+        "./src/types/guardian/index.ts"
+      ],
+      "@projeto-types/licensas": [
+        "./src/types/licensas/index.ts"
+      ],
+      "@projeto-types/projeto": [
+        "./src/types/projeto/index.ts"
+      ],
+      "@projeto-types/relatorios": [
+        "./src/types/relatorios/index.ts"
+      ],
+      "@projeto-types/shared": [
+        "./src/types/shared/index.ts"
+      ],
+      "@projeto-types/zeladores": [
+        "./src/types/zeladores/index.ts"
+      ],
+      "@relatorios": [
+        "./src/relatorios/index.ts"
+      ],
+      "@sdk": [
+        "./src/sdk/index.ts"
+      ],
+      "@shared": [
+        "./src/shared/index.ts"
+      ],
+      "@shared/data-processing": [
+        "./src/shared/data-processing/index.ts"
+      ],
+      "@shared/helpers": [
+        "./src/shared/helpers/index.ts"
+      ],
+      "@shared/impar": [
+        "./src/shared/impar/index.ts"
+      ],
+      "@shared/persistence": [
+        "./src/shared/persistence/index.ts"
+      ],
+      "@shared/plugins": [
+        "./src/shared/plugins/index.ts"
+      ],
+      "@shared/validation": [
+        "./src/shared/validation/index.ts"
+      ],
+      "@src/": [
+        "./src/"
+      ],
+      "@zeladores": [
+        "./src/zeladores/index.ts"
       ]
     }
   },

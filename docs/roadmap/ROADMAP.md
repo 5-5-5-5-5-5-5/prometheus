@@ -3,7 +3,7 @@ Proveniência e Autoria: Este documento integra o projeto Prometheus (licença M
 ---
 
 
-# Roadmap - Prometheus 🗺️
+# Roadmap - Prometheus
 
 ## Versão Atual: 0.6.0
 
@@ -11,11 +11,13 @@ Planejamento estratégico do desenvolvimento do Prometheus, incluindo features p
 
 ---
 
-## ✅ Versões Concluídas
+##  Versões Concluídas
 
-### v0.6.0 - Integração Web (Q2 2026) ✅ CONCLUÍDO
+### v0.6.0 - Integração Web (Q2 2026)  CONCLUÍDO
 
 **Objetivo**: Dashboard web para visualização de resultados.
+
+**Abandonado depois de feito porque eu nao gostei**
 
 #### Features Implementadas
 
@@ -39,7 +41,7 @@ Planejamento estratégico do desenvolvimento do Prometheus, incluindo features p
 
 ---
 
-### v0.5.0 - Sistema de Analistas Extensível (Q1 2026) ✅ CONCLUÍDO
+### v0.5.0 - Sistema de Analistas Extensível (Q1 2026)  CONCLUÍDO
 
 **Objetivo**: Permitir que usuários criem e compartilhem analistas personalizados.
 
@@ -53,18 +55,18 @@ Planejamento estratégico do desenvolvimento do Prometheus, incluindo features p
 
 ---
 
-## 📅 Próximas Versões
+##  Próximas Versões
 
-### v0.7.0 - AI-Powered Analysis (Q3 2026)
+### v0.7.0 - AI-Powered Analysis (Q3 2026)  EM PROGRESSO
 
 **Objetivo**: Integração com modelos de IA para análise mais profunda.
 
 #### Features Planejadas
 
-- [ ] Sugestões baseadas em IA
-- [ ] Detecção de padrões avançada
-- [ ] Recomendações de refatoração automática
-- [ ] Análise de segurança com IA
+- [x] Sugestões baseadas em IA
+- [x] Detecção de padrões avançada
+- [x] Recomendações de refatoração automática
+- [x] Análise de segurança com IA
 
 ---
 
@@ -82,7 +84,7 @@ Planejamento estratégico do desenvolvimento do Prometheus, incluindo features p
 
 ---
 
-## 🎯 Visão de Longo Prazo
+##  Visão de Longo Prazo
 
 ### Ano 1 (2026)
 
@@ -107,19 +109,19 @@ Planejamento estratégico do desenvolvimento do Prometheus, incluindo features p
 
 ---
 
-## 🚀 Em Desenvolvimento
+##  Em Desenvolvimento
 
 | Feature                   | Status          | ETA    | Lead   |
 | ------------------------- | --------------- | ------ | ------ |
-| Marketplace de Analistas  | 🔨 Em Progresso | v0.5   | Team   |
-| Dashboard Web             | 🔴 Planejado    | v0.6   | -      |
-| Integração IA             | 🔴 Planejado    | v0.7   | -      |
-| Suporte PHP Avançado      | 🟡 Pesquisa     | v0.5.x | -      |
-| Performance Optimizations | 🟡 Em Backlog   | vNext  | -      |
+| Marketplace de Analistas  | Em Progresso    | v0.5   | Team   |
+| Dashboard Web             | Planejado       | v0.6   | -      |
+| Integração IA             | Planejado       | v0.7   | -      |
+| Suporte PHP Avançado      | Pesquisa        | v0.5.x | -      |
+| Performance Optimizations | Em Backlog      | vNext  | -      |
 
 ---
 
-## 💡 Ideias em Discussão
+##  Ideias em Discussão
 
 - [ ] Plugin system para extensões
 - [ ] IDE integrations (VSCode, IntelliJ)
@@ -130,7 +132,7 @@ Planejamento estratégico do desenvolvimento do Prometheus, incluindo features p
 
 ---
 
-## 📞 Feedback e Sugestões
+##  Feedback e Sugestões
 
 Tem uma ideia? Abra uma [issue no GitHub](https://github.com/5-5-5-5-5-5-5/prometheus/issues) ou participe das discussões!
 

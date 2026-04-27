@@ -2,14 +2,10 @@
 // @prometheus-disable seguranca vulnerabilidade-seguranca
 import type { NodePath } from '@babel/traverse';
 import type { CallExpression, NewExpression, Node } from '@babel/types';
-import { traverse } from '@core/config/traverse.js';
-import { messages } from '@core/messages/index.js';
-import { detectarContextoProjeto } from '@shared/contexto-projeto.js';
-import { agruparPor } from '@shared/helpers/agrupar.js';
-import { detectarSegredosHardcoded } from '@shared/helpers/detectores-comuns.js';
-import { splitLines } from '@shared/helpers/lines.js';
-import { criarErroAnalise } from '@shared/helpers/ocorrencias.js';
-import { filtrarOcorrenciasSuprimidas } from '@shared/helpers/suppressao.js';
+import { traverse } from '@core/config';
+import { messages } from '@core/messages';
+import { detectarContextoProjeto } from '@shared';
+import { agruparPor , criarErroAnalise , detectarSegredosHardcoded , filtrarOcorrenciasSuprimidas,splitLines  } from '@shared/helpers';
 
 import type { Analista, Ocorrencia, ProblemaSeguranca } from '@';
 import { criarOcorrencia } from '@';

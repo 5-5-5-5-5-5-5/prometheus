@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
-import { LIMITES_PADRAO } from '@core/config/limites.js';
-import { isContextoDocumentacao } from '@shared/contexto-projeto.js';
+import { LIMITES_PADRAO } from '@core/config';
+import type { ResultadoSegredo } from '@projeto-types/analistas';
 
-import type { ResultadoSegredo } from '../../types/analistas/detectores.js';
+import { isContextoDocumentacao } from '../contexto-projeto.js';
 
 export type { ResultadoSegredo };
 

@@ -3,7 +3,26 @@
  * Tipos para handlers de exportação da CLI
  */
 
-import type { Pendencia } from '@';
+import type { Pendencia } from '../index.js';
+
+/* ================================
+   SCAN HANDLERS TYPES
+   ================================ */
+
+export interface ScanIgnoreOptions {
+  baseDir: string;
+  silent?: boolean;
+}
+
+export interface ScanImportsOptions {
+  baseDir: string;
+  silent?: boolean;
+}
+
+export interface ScanPadronizacaoOptions {
+  baseDir: string;
+  silent?: boolean;
+}
 
 /* ================================
    FIX-TYPES HANDLER TYPES
@@ -49,8 +68,6 @@ export interface FixTypesExportOptions {
  * Resultado da exportação de fix-types
  */
 export interface FixTypesExportResult {
-  /** Caminho do relatório Markdown gerado */
-  markdown: string;
   /** Caminho do relatório JSON gerado */
   json: string;
   /** Diretório onde foram salvos */
@@ -99,8 +116,6 @@ export interface GuardianExportOptions {
  * Resultado da exportação do Guardian
  */
 export interface GuardianExportResult {
-  /** Caminho do relatório Markdown gerado */
-  markdown: string;
   /** Caminho do relatório JSON gerado */
   json: string;
   /** Diretório onde foram salvos */
@@ -135,8 +150,6 @@ export interface ReestruturacaoExportOptions {
  * Resultado da exportação de reestruturação
  */
 export interface ReestruturacaoExportResult {
-  /** Caminho do relatório Markdown gerado */
-  markdown: string;
   /** Caminho do relatório JSON gerado */
   json: string;
   /** Diretório onde foram salvos */
@@ -165,8 +178,6 @@ export interface PodaExportOptions {
  * Resultado da exportação de poda
  */
 export interface PodaExportResult {
-  /** Caminho do relatório Markdown gerado */
-  markdown: string;
   /** Caminho do relatório JSON gerado */
   json: string;
   /** Diretório onde foram salvos */

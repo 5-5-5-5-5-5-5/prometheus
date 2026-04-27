@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
-import { getMessages } from '@core/messages/index.js';
-import { salvarEstado } from '@shared/persistence/persistencia.js';
+import { getMessages } from '@core/messages';
+import { salvarEstado } from '@shared/persistence';
 
 import type { OpcoesRelatorioPoda, Pendencia, PendenciaProcessavel } from '@';
 

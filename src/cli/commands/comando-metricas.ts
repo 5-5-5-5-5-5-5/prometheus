@@ -3,14 +3,14 @@
 // Justificativa: tipos inline para opções de comando CLI são locais e não precisam de extração
 import path from 'node:path';
 
-import { ExitCode, sair } from '@cli/helpers/exit-codes.js';
-import { config } from '@core/config/config.js';
-import { formatMs } from '@core/config/format.js';
-import { messages } from '@core/messages/index.js';
-import { lerEstado, salvarEstado } from '@shared/persistence/persistencia.js';
+import { config , formatMs } from '@core/config';
+import { messages } from '@core/messages';
+import { lerEstado, salvarEstado } from '@shared/persistence';
 import { Command } from 'commander';
 
 import type { MetricaExecucao } from '@';
+
+import { ExitCode, sair } from '../helpers/exit-codes.js';
 
 const { log, logMetricas } = messages;
 

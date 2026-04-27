@@ -3,13 +3,13 @@ Proveniência e Autoria: Este documento integra o projeto Prometheus (licença M
 ---
 
 
-# Sistema de Plugins - Prometheus 🔌
+# Sistema de Plugins - Prometheus
 
 Guia completo sobre como funciona o sistema de plugins e registry do Prometheus.
 
 ---
 
-## 📋 Visão Geral
+##  Visão Geral
 
 O Prometheus usa um sistema baseado em **Registry Pattern** para descoberta e carregamento dinâmico de componentes:
 
@@ -19,14 +19,14 @@ O Prometheus usa um sistema baseado em **Registry Pattern** para descoberta e ca
 - **Processadores de arquivo**
 
 Isso permite:
-✅ Extensibilidade sem modificar código core
-✅ Carregamento seletivo de componentes
-✅ Plugins separados em arquivos
-✅ Descoberta automática de novos analistas
+ Extensibilidade sem modificar código core
+ Carregamento seletivo de componentes
+ Plugins separados em arquivos
+ Descoberta automática de novos analistas
 
 ---
 
-## 🏗️ Arquitetura de Registry
+##  Arquitetura de Registry
 
 ### Componentes
 
@@ -95,18 +95,18 @@ class LoaderPlugins {
 
 ---
 
-## 📍 Estrutura de Plugins
+##  Estrutura de Plugins
 
 ### Localizações
 
 ```
 prometheus-dev/
 ├── src/analistas/
-│   ├── detectores/          # ✅ Built-in analistas
+│   ├── detectores/          #  Built-in analistas
 │   │   ├── fragil.ts
 │   │   ├── morto.ts
 │   │   └── ...
-│   ├── plugins/             # ✅ Espaço para plugins
+│   ├── plugins/             #  Espaço para plugins
 │   │   ├── meu-plugin.ts
 │   │   └── ...
 │   └── registry/            # Registry centralized
@@ -146,7 +146,7 @@ export default MeuPluginAnalista;
 
 ---
 
-## 🔍 Descoberta Automática
+##  Descoberta Automática
 
 O Prometheus realiza descoberta automática de plugins:
 
@@ -211,7 +211,7 @@ function implementaInterface(classe: any): boolean {
 
 ---
 
-## ⚙️ Registro e Carregamento
+##  Registro e Carregamento
 
 ### 1. Registrar Plugin
 
@@ -304,7 +304,7 @@ async function analisarComPlugins(
 
 ---
 
-## 🛠️ Criar Plugin Customizado
+##  Criar Plugin Customizado
 
 ### Exemplo: Detector de TODO Comments
 
@@ -418,7 +418,7 @@ describe('DetectorTODOComments', () => {
 
 ---
 
-## 📦 Plugin Externo
+##  Plugin Externo
 
 Plugins podem estar fora do repositório principal:
 
@@ -458,7 +458,7 @@ registro.registrar('MeuPlugin', MeuPluginDetector);
 
 ---
 
-## 🔄 Lifecycle de Plugin
+##  Lifecycle de Plugin
 
 ```
 1. DISCOVERY
@@ -486,18 +486,18 @@ registro.registrar('MeuPlugin', MeuPluginDetector);
 
 ---
 
-## 🎯 Boas Práticas
+##  Boas Práticas
 
 ### 1. Naming Convention
 
 ```typescript
-// ✅ Bom
+//  Bom
 export class DetectorVariaveisNaoUsadas implements Analista {
   nome = 'VariaveisNaoUsadas';  // PascalCase
   // ...
 }
 
-// ❌ Ruim
+//  Ruim
 export class detector_variaveis implements Analista {
   nome = 'detector-variaveis';  // snake_case
   // ...
@@ -507,7 +507,7 @@ export class detector_variaveis implements Analista {
 ### 2. Error Handling
 
 ```typescript
-// ✅ Bom
+//  Bom
 try {
   const resultado = this.analisar(arquivo, conteudo);
   return resultado;
@@ -516,31 +516,31 @@ try {
   return [];  // Não quebrar pipeline
 }
 
-// ❌ Ruim
+//  Ruim
 // Deixar erro subir sem tratar
 ```
 
 ### 3. Logging
 
 ```typescript
-// ✅ Bom
+//  Bom
 logger.debug(`${this.nome}: analisando ${arquivo.relPath}`);
 
-// ❌ Ruim
+//  Ruim
 console.log('analyzing...');  // Sem contexto
 ```
 
 ### 4. Type Safety
 
 ```typescript
-// ✅ Bom
+//  Bom
 export class Detector implements Analista {
   analisar(arquivo: Arquivo, conteudo: string): ResultadoOcorrencia[] {
     // tipificado
   }
 }
 
-// ❌ Ruim
+//  Ruim
 analisar(arquivo: any, conteudo: any): any[] {
   // sem tipos
 }
@@ -549,7 +549,7 @@ analisar(arquivo: any, conteudo: any): any[] {
 ### 5. Performance
 
 ```typescript
-// ✅ Bom: Cache de regex compilada
+//  Bom: Cache de regex compilada
 private regexFragil = /regex-pattern/g;
 
 analisar(arquivo: Arquivo, conteudo: string): ResultadoOcorrencia[] {
@@ -559,7 +559,7 @@ analisar(arquivo: Arquivo, conteudo: string): ResultadoOcorrencia[] {
   }
 }
 
-// ❌ Ruim: Compilar regex a cada execução
+//  Ruim: Compilar regex a cada execução
 analisar(arquivo: Arquivo, conteudo: string): ResultadoOcorrencia[] {
   const matches = conteudo.match(/regex-pattern/g);  // recompila sempre
 }
@@ -567,7 +567,7 @@ analisar(arquivo: Arquivo, conteudo: string): ResultadoOcorrencia[] {
 
 ---
 
-## 🚀 Próximas Etapas
+##  Próximas Etapas
 
 1. **Criar Plugin**: [CRIAR-ANALISTA.md](./analistas/CRIAR-ANALISTA.md)
 2. **Padrões**: [PADROES.md](./PADROES.md)
@@ -576,9 +576,8 @@ analisar(arquivo: Arquivo, conteudo: string): ResultadoOcorrencia[] {
 
 ---
 
-## 📚 Referências
+##  Referências
 
 - Visitor Pattern: https://en.wikipedia.org/wiki/Visitor_pattern
 - Registry Pattern: https://en.wikipedia.org/wiki/Registry_pattern
 - Plugin Architecture: https://en.wikipedia.org/wiki/Plug-in_(computing)
-

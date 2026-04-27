@@ -4,8 +4,8 @@
  * Fornece fallback para ambientes onde log.bloco não está disponível
  */
 
-import { messages } from '@core/messages/index.js';
-import { normalizePath } from '@shared/helpers/path.js';
+import { messages } from '@core/messages';
+import { normalizePath } from '@shared/helpers';
 
 const log = messages.log;
 

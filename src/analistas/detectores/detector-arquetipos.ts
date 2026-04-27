@@ -2,16 +2,17 @@
 // Nota: manter ARQUETIPOS importado visível como lembrete para integração futura
 import path from 'node:path';
 
-import { extrairSinaisAvancados } from '@analistas/arquitetos/sinais-projeto-avancados.js';
-import { ARQUETIPOS } from '@analistas/estrategistas/arquetipos-defs.js';
-import { OperarioEstrutura } from '@analistas/estrategistas/operario-estrutura.js';
-import { carregarArquetipoPersonalizado, integrarArquetipos, obterArquetipoOficial } from '@analistas/js-ts/arquetipos-personalizados.js';
-import { scoreArquetipoAvancado } from '@analistas/pontuadores/pontuador.js';
-import { config } from '@core/config/config.js';
-import { getMessages } from '@core/messages/index.js';
-import { lerEstado, salvarEstado } from '@shared/persistence/persistencia.js';
+import { config } from '@core/config';
+import { getMessages } from '@core/messages';
+import { lerEstado, salvarEstado } from '@shared/persistence';
 
 import type { ArquetipoDrift, ArquetipoEstruturaDef, ArquetipoPersonalizado, ContextoExecucao, PackageJson, ResultadoContexto, ResultadoDeteccaoArquetipo, SinaisProjetoAvancados, SnapshotEstruturaBaseline } from '@';
+
+import { extrairSinaisAvancados } from '../arquitetos/sinais-projeto-avancados.js';
+import { ARQUETIPOS } from '../estrategistas/arquetipos-defs.js';
+import { OperarioEstrutura } from '../estrategistas/operario-estrutura.js';
+import { carregarArquetipoPersonalizado, integrarArquetipos, obterArquetipoOficial } from '../js-ts/arquetipos-personalizados.js';
+import { scoreArquetipoAvancado } from '../pontuadores/pontuador.js';
 
 const { DetectorArquetiposExtraMensagens } = getMessages();
 
@@ -93,7 +94,7 @@ export async function detectarArquetipos(contexto: Pick<ContextoExecucao, 'arqui
   // Pontua todos os arquétipos disponíveis usando sinais avançados
   let candidatos: ResultadoDeteccaoArquetipo[] = arquetiposParaAvaliar.map((def: ArquetipoEstruturaDef) => scoreArquetipoAvancado(def, arquivos, sinaisAvancados));
 
-  // 🚀 INTEGRAÇÃO SISTEMA INTELIGENTE: Aplicar boost contextual
+  //  INTEGRAÇÃO SISTEMA INTELIGENTE: Aplicar boost contextual
   if (!options?.quiet && config.VERBOSE) {
     console.log(DetectorArquetiposExtraMensagens.debugContextual);
   }

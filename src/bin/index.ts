@@ -1,79 +1,118 @@
 #!/usr/bin/env node
 // SPDX-License-Identifier: MIT
-// Bootstrap do binário: registra o loader ESM programaticamente e importa ./cli.js
-import path from 'node:path';
+import fs from 'node:fs';
+import { register } from 'node:module';
+import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { getMessages } from '@core/messages/index.js';
-
-import type { ErrorLike } from '@';
-import { extrairMensagemErro } from '@';
-
-const { CliBinMensagens } = getMessages();
-
-// Resolve o diretório raiz do dist usando import.meta.url para funcionar em instalações globais
+/**
+ * Bootstrap: Registro do loader ESM programaticamente.
+ * Isso permite que o Prometheus suporte aliases do tsconfig.json em tempo de execução
+ * sem a necessidade de passar flags --loader na linha de comando.
+ */
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const distRaiz = path.resolve(__dirname, '..');
-// Observação: usar o loader compilado 'node.loader.js'
-const loaderCaminho = path.resolve(distRaiz, 'node.loader.js');
-const loaderUrl = pathToFileURL(loaderCaminho).toString();
-const entryCaminho = path.resolve(distRaiz, 'bin', 'cli.js');
-const entryUrl = pathToFileURL(entryCaminho).toString();
+const __dirname = dirname(__filename);
 
-// Registra o loader sem usar --experimental-loader (evita ExperimentalWarning)
-(async () => {
+// No ambiente de desenvolvimento (src/), o loader está em src/node.loader.ts
+// No ambiente de build (dist/), o loader está em dist/node.loader.js
+const projetoRaiz = resolve(__dirname, '..', '..');
+let loaderCaminho = resolve(projetoRaiz, 'src', 'node.loader.ts');
+
+if (!fs.existsSync(loaderCaminho)) {
+  const distRaiz = resolve(__dirname, '..');
+  loaderCaminho = resolve(distRaiz, 'node.loader.js');
+}
+
+const loaderUrl = pathToFileURL(loaderCaminho).toString();
+
+try {
+  register(loaderUrl, pathToFileURL('./'));
+} catch {
+  console.warn('Aviso: Não foi possível registrar o loader ESM automaticamente. Aliases podem não funcionar.');
+}
+
+/**
+ * Lógica principal do CLI
+ */
+async function mainCli() {
+  const { Command } = await import('commander');
+  const { registrarComandos } = await import('@cli');
+  const { comandoPerf } = await import('@cli/commands');
+  const { ExitCode, sair } = await import('@cli/helpers');
+  const { chalk, aplicarConfigParcial, inicializarConfigDinamica } = await import('@core/config');
+  const { getMessages } = await import('@core/messages');
+  const { getDefaultContextMemory } = await import('@shared');
+  const { lerArquivoTexto } = await import('@shared/persistence');
+  const { extrairMensagemErro } = await import('@');
+
+  const { log, CliBinMensagens } = getMessages();
+  const program = new Command();
+
+  async function getVersion(): Promise<string> {
+    try {
+      const packageCaminho = resolve(__dirname, '..', '..', 'package.json');
+      const raw = await lerArquivoTexto(packageCaminho);
+      const pkg = raw ? JSON.parse(raw) : ({} as Record<string, unknown>);
+      return (pkg && (pkg as { version?: string }).version) || '0.0.0';
+    } catch (err) {
+      log.debug(`Erro ao obter versão: ${err instanceof Error ? err.message : String(err)}`);
+      return '0.0.0';
+    }
+  }
+
+  async function aplicarFlagsGlobais(opts: unknown) {
+    const { sanitizarFlags } = await import('@shared/validation');
+    try {
+      sanitizarFlags(opts as Record<string, unknown>);
+    } catch (e) {
+      console.error(chalk.red(CliBinMensagens.flagsInvalidas.replace('{erro}', (e as Error).message)));
+      sair(ExitCode.InvalidUsage);
+    }
+
+    const flags = opts as { verbose?: boolean; debug?: boolean; profile?: boolean };
+    if (flags.verbose || flags.debug) {
+      process.env.PROMETHEUS_LOG_LEVEL = flags.debug ? 'debug' : 'info';
+    }
+
+    if (Object.keys(flags).length) {
+      aplicarConfigParcial(flags);
+    }
+  }
+
   try {
-    const {
-      register
-    } = await import('node:module');
-    register(loaderUrl, pathToFileURL('./'));
-    // Importa o módulo CLI e, quando presente, invoca explicitamente a função mainCli
-    type CliModule = {
-      mainCli?: () => unknown;
-    };
-    const cliMod = (await import(entryUrl)) as unknown;
-    const maybeCli = cliMod as CliModule;
-    if (maybeCli && typeof maybeCli.mainCli === 'function') {
-      await maybeCli.mainCli();
+    const version = await getVersion();
+
+    program
+      .name('prometheus')
+      .version(version)
+      .description('C.L.I modular para análise, diagnóstico e manutenção de projetos')
+      .option('-v, --verbose', 'Exibe logs detalhados')
+      .option('--debug', 'Habilita modo de debug')
+      .option('--profile', 'Habilita profiling de performance')
+      .hook('preAction', async (thisCommand) => {
+        await aplicarFlagsGlobais(thisCommand.opts());
+      });
+
+    registrarComandos(program, (o) => aplicarFlagsGlobais(o));
+    program.addCommand(comandoPerf());
+
+    await inicializarConfigDinamica();
+    await getDefaultContextMemory();
+
+    await program.parseAsync(process.argv);
+  } catch (err) {
+    if (err && typeof err === 'object' && 'code' in err) {
+      const code = (err as { code: string }).code;
+      if (code.startsWith('commander.')) return;
     }
-  } catch (err: unknown) {
-    // Commander lança códigos especiais quando --version ou --help são usados —
-    // tratá-los como sucesso silencioso (exit 0) em vez de logar como erro.
-    const code = err && typeof err === 'object' && 'code' in err ? (err as {
-      code?: unknown;
-    }).code : undefined;
-    const message = err && typeof err === 'object' && 'message' in err ? (err as {
-      message?: unknown;
-    }).message : typeof err === 'string' ? err : undefined;
-    if (code === 'commander.version' || code === 'commander.help' || code === 'commander.helpDisplayed' || message === 'outputHelp' || message === '(outputHelp)') {
-      process.exit(0);
-    }
-    const msg = typeof message === 'string' ? message : extrairMensagemErro(err);
-    console.error(CliBinMensagens.erroInicializacao, msg);
-    if (err && typeof err === 'object' && 'stack' in err) {
-      console.error((err as {
-        stack?: string;
-      }).stack);
-    }
-    process.exit(1);
+    const mensagem = extrairMensagemErro(err);
+    console.error(chalk.red(`\n${CliBinMensagens.erroInicializacao} ${mensagem}`));
+    if (process.env.PROMETHEUS_LOG_LEVEL === 'debug') console.error(err);
+    sair(ExitCode.Critical);
   }
-})().catch((err: ErrorLike) => {
-  const code = err && typeof err === 'object' && 'code' in err ? (err as {
-    code?: unknown;
-  }).code : undefined;
-  const message = err && typeof err === 'object' && 'message' in err ? (err as {
-    message?: unknown;
-  }).message : typeof err === 'string' ? err : undefined;
-  if (code === 'commander.version' || code === 'commander.help' || code === 'commander.helpDisplayed' || message === 'outputHelp' || message === '(outputHelp)') {
-    process.exit(0);
-  }
-  const msg = typeof message === 'string' ? message : extrairMensagemErro(err);
-  console.error('Erro ao inicializar o prometheus:', msg);
-  if (err && typeof err === 'object' && 'stack' in err) {
-    console.error((err as {
-      stack?: string;
-    }).stack);
-  }
+}
+
+mainCli().catch((err) => {
+  console.error('Erro fatal na inicialização:', err);
   process.exit(1);
 });

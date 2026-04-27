@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 import type { NodePath, Visitor } from '@babel/traverse';
 import type { CallExpression, Node } from '@babel/types';
-import { traverse } from '@core/config/traverse.js';
-import { shouldSuppressOccurrence } from '@shared/helpers/rule-config.js';
+import { traverse } from '@core/config';
+import { shouldSuppressOccurrence } from '@shared/helpers';
 
 import type { Analista, MemoriaVisitorState, Ocorrencia } from '@';
 import { criarOcorrencia } from '@';

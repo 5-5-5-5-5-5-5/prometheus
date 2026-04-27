@@ -3,7 +3,7 @@
 
 import {
   getMessages,
-} from '@core/messages/index.js';
+} from '@core/messages';
 
 import type { LogComBloco } from '@';
 

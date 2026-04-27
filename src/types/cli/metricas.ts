@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-import type { MetricaAnalista, TopAnalista } from '@';
+import type { MetricaAnalista, TopAnalista } from '../index.js';
 
 /**
  * Métrica simplificada de analista (evita dependência circular)
@@ -80,7 +80,7 @@ export interface MetricaExecucao {
  * Estrutura de resultados da execução de análise
  */
 export interface ResultadoExecucao {
-  ocorrencias: import('@').Ocorrencia[];
+  ocorrencias: import('../index.js').Ocorrencia[];
   metricas: MetricaExecucao;
   estruturaIdentificada?: unknown;
   linguagens?: {

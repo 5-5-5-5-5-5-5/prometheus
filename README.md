@@ -17,53 +17,46 @@ Proveniência e Autoria: Este documento integra o projeto Prometheus (licença M
 
 ---
 
-[![CI](https://github.com/5-5-5-5-5-5-5/prometheus/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/5-5-5-5-5-5-5/prometheus/actions/workflows/ci.yml)
-[![Build](https://github.com/5-5-5-5-5-5-5/prometheus/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/5-5-5-5-5-5-5/prometheus/actions/workflows/build.yml)
-[![CodeQL](https://github.com/5-5-5-5-5-5-5/prometheus/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/5-5-5-5-5-5-5/prometheus/actions/workflows/codeql.yml)
-[![perf-gate](https://github.com/5-5-5-5-5-5-5/prometheus/actions/workflows/perf-gate.yml/badge.svg?branch=main)](https://github.com/5-5-5-5-5-5-5/prometheus/actions/workflows/perf-gate.yml)
-
 ---
 
-![version](https://img.shields.io/badge/version-0.6.1-black?style=flat-square)
-![node](https://img.shields.io/badge/node-%3E%3D24.14.1-brightgreen?style=flat-square)
-![license](https://img.shields.io/badge/license-MIT--0-red?style=flat-square)
-[![issues](https://img.shields.io/github/issues/5-5-5-5-5-5-5/prometheus?style=flat-square)](https://github.com/5-5-5-5-5-5-5/prometheus/issues)
-![TypeScript](https://img.shields.io/badge/typescript-%3E%3D6.0.2-informational?style=flat-square)
-
+<img src="svg/badge-versao.svg"/>
+<img src="svg/badge-node.svg"/>
+<img src="svg/badge-typescript.svg"/>
+<a href="https://github.com/5-5-5-5-5-5-5/prometheus/issues">
+<img src="svg/badge-issues.svg"/>
+</a>
 </div>
 
 ---
 
 <div align="center">
 
-CLI modular para **análise, diagnóstico e manutenção** de projetos JavaScript/TypeScript com suporte extensível para HTML, CSS, XML, Python, PHP, Shell, SQL e mais.
-
-[🚀 Começar Rápido](#-começar-rápido) • [📚 Documentação](#-documentação-completa) • [💡 Exemplos](#-exemplos) • [🔧 Instalar](#instalação) • [🤝 Contribuir](#-desenvolvimento)
+**[ Começar Rápido](#-começar-rápido) - • - [ Documentação](#-documentação-completa) - • - [ Exemplos](#-exemplos) - • - [ Instalar](#instalação) - • - [ Contribuir](#-desenvolvimento)**
 
 </div>
 
 ---
 
-## 📋 Sumário
+##  Sumário
 
-- [✨ Características](#-características-principais)
-- [🚀 Começar Rápido](#-começar-rápido)
-- [📥 Instalação](#instalação)
-- [🔄 Fluxo Recomendado](#fluxo-recomendado)
-- [⚙️ Configuração](#configuração)
-- [📚 Comandos Disponíveis](#-comandos-disponíveis)
-- [📚 Documentação Completa](#-documentação-completa)
-- [💡 Exemplos](#-exemplos)
-- [🏗️ Arquitetura](#-estrutura-do-projeto)
-- [👨‍💻 Desenvolvimento](#-desenvolvimento)
-- [🤝 Contribuir](#-desenvolvimento)
-- [📞 Suporte](#-suporte)
+- [ Características](#-características-principais)
+- [ Começar Rápido](#-começar-rápido)
+- [ Instalação](#instalação)
+- [ Fluxo Recomendado](#fluxo-recomendado)
+- [ Configuração](#configuração)
+- [ Comandos Disponíveis](#-comandos-disponíveis)
+- [ Documentação Completa](#-documentação-completa)
+- [ Exemplos](#-exemplos)
+- [ Arquitetura](#-estrutura-do-projeto)
+- [‍ Desenvolvimento](#-desenvolvimento)
+- [ Contribuir](#-desenvolvimento)
+- [ Suporte](#-suporte)
 
-## ✨ Características Principais
+##  Características Principais
 
 Prometheus oferece uma suite completa de ferramentas para análise e manutenção de código:
 
-### 🔍 Análise Inteligente
+###  Análise Inteligente
 
 - **Diagnóstico Completo**: Detecta problemas de qualidade, segurança e arquitetura
 - **15+ Analisadores Especializados**: Código frágil, duplicação, complexidade, performance, vazamentos de memória, tipos inseguros, etc.
@@ -71,7 +64,7 @@ Prometheus oferece uma suite completa de ferramentas para análise e manutençã
 - **Sistema de Registro Inteligente**: Descoberta automática de analistas built-in e plugins customizados
 - **Multi-linguagem**: JavaScript/TypeScript nativo + HTML, CSS, XML, Python, PHP, Shell, SQL (Java/Kotlin disponíveis)
 
-### 🛡️ Manutenção Assistida
+###  Manutenção Assistida
 
 - **Auto-fix Seguro**: Correções automáticas com validação de segurança (comando `corrigir`)
 - **Guardian**: Monitoramento contínuo de saúde do projeto com baselines e verificação de integridade
@@ -82,7 +75,7 @@ Prometheus oferece uma suite completa de ferramentas para análise e manutençã
 - **Names/Rename**: Extração e renomeação em massa de variáveis com mapeamento inteligente
 - **Reverter**: Gerenciamento de mapa de reversão para moves aplicados
 
-### 📊 Relatórios Profissionais
+###  Relatórios Profissionais
 
 - **Múltiplos Formatos**: JSON, Markdown, HTML, CSV com export sharded para projetos grandes
 - **Análise Arquitetural**: Detecção de padrões arquiteturais e dependências
@@ -90,7 +83,7 @@ Prometheus oferece uma suite completa de ferramentas para análise e manutençã
 - **Baseline de Performance**: Snapshots e comparação de performance ao longo do tempo
 - **Scan de Licenças**: Verificação de licenças de dependências e geração de THIRD-PARTY-NOTICES
 
-### 🔌 Extensível
+###  Extensível
 
 - **Plugin System**: Crie analistas customizados com autodiscovery automático
 - **API Modular**: Use Prometheus como biblioteca em seu código
@@ -100,7 +93,7 @@ Prometheus oferece uma suite completa de ferramentas para análise e manutençã
 
 ---
 
-## 🚀 Começar Rápido
+##  Começar Rápido
 
 ### Instalação Básica
 
@@ -145,11 +138,11 @@ prometheus names
 prometheus rename
 ```
 
-👉 **Quer aprender mais?** Veja [Guia de Início Rápido](./docs/guias/GUIA-INICIO-RAPIDO.md) para tutorial completo.
+ **Quer aprender mais?** Veja [Guia de Início Rápido](./docs/guias/GUIA-INICIO-RAPIDO.md) para tutorial completo.
 
 ---
 
-## 📥 Visão Geral
+##  Visão Geral
 
 O Prometheus foi projetado para operar como ferramenta de análise estática e manutenção assistida de repositórios. O projeto combina:
 
@@ -170,7 +163,7 @@ O Prometheus foi projetado para operar como ferramenta de análise estática e m
 
 ## Instalação
 
-### 📥 npm (Recomendado)
+###  npm (Recomendado)
 
 **Uso Global**
 ```bash
@@ -184,7 +177,7 @@ npm install --save-dev prometheus
 npx prometheus --help
 ```
 
-### 📦 Do Repositório
+###  Do Repositório
 
 **Clone e Setup Local**
 ```bash
@@ -202,7 +195,7 @@ npm install --save-dev /caminho/para/prometheus
 npx prometheus --help
 ```
 
-### ✅ Verificar Instalação
+###  Verificar Instalação
 
 ```bash
 # Versão
@@ -215,7 +208,7 @@ prometheus --help
 prometheus analista --listar
 ```
 
-### 🐳 Docker (Opcional)
+###  Docker (Opcional)
 
 ```bash
 # Build da imagem
@@ -227,9 +220,9 @@ docker run --rm -v $(pwd):/project prometheus diagnosticar
 
 ---
 
-### 🚀 Fluxo Recomendado
+###  Fluxo Recomendado
 
-#### 1️⃣ Diagnóstico Inicial
+#### 1⃣ Diagnóstico Inicial
 
 Analise seu projeto para descobrir problemas:
 
@@ -247,7 +240,7 @@ prometheus diagnosticar --relatorio json --saida analise.json
 prometheus diagnosticar --gravidade critic
 ```
 
-#### 2️⃣ Estabelecer Baseline de Saúde
+#### 2⃣ Estabelecer Baseline de Saúde
 
 Criar snapshot inicial para comparações futuras:
 
@@ -262,7 +255,7 @@ prometheus guardian --verificar
 prometheus guardian --confirmar
 ```
 
-#### 3️⃣ Correções Automáticas
+#### 3⃣ Correções Automáticas
 
 Aplicar fixes com segurança:
 
@@ -280,7 +273,7 @@ prometheus corrigir --auto
 prometheus fix-types --auto
 ```
 
-#### 4️⃣ Monitoramento Contínuo
+#### 4⃣ Monitoramento Contínuo
 
 Ativar monitoramento em tempo real:
 
@@ -299,7 +292,7 @@ prometheus perf snapshot --baseline
 prometheus perf compare
 ```
 
-#### 5️⃣ Manutenção de Nomes (Opcional)
+#### 5⃣ Manutenção de Nomes (Opcional)
 
 Extrair e renomear variáveis:
 
@@ -316,7 +309,7 @@ prometheus reverter listar
 
 ---
 
-## ⚙️ Configuração
+##  Configuração
 
 O arquivo principal de configuração é [`prometheus.config.json`](./prometheus.config.json) na raiz do projeto.
 
@@ -372,7 +365,7 @@ Para configuração completa, veja [GUIA-CONFIGURACAO.md](./docs/guias/GUIA-CONF
 
 ---
 
-## 📋 Comandos Disponíveis
+##  Comandos Disponíveis
 
 ### Comandos Principais
 
@@ -431,7 +424,7 @@ Para referência completa de comandos, veja [Referência de Comandos](./docs/ref
 
 ---
 
-## 💡 Exemplos
+##  Exemplos
 
 ### Diagnóstico
 
@@ -533,42 +526,42 @@ prometheus licencas disclaimer add
 prometheus licencas disclaimer verify
 ```
 
-👉 **Mais exemplos?** Veja [Exemplos de Uso](./docs/exemplos/EXEMPLOS-USO.md).
+ **Mais exemplos?** Veja [Exemplos de Uso](./docs/exemplos/EXEMPLOS-USO.md).
 
 ---
 
-## 📚 Documentação Completa
+##  Documentação Completa
 
 Prometheus possui documentação extensiva e atualizada:
 
-### 📖 Para Começar
+###  Para Começar
 
 - **[Guia de Início Rápido](./docs/guias/GUIA-INICIO-RAPIDO.md)** - Tutorial de 10 minutos
 - **[Guia de Configuração](./docs/guias/GUIA-CONFIGURACAO.md)** - Customizar seu setup
 - **[Guia de Comandos](./docs/guias/GUIA-COMANDOS.md)** - Referência completa
 
-### 🏗️ Para Arquitetos
+###  Para Arquitetos
 
 - **[Árvore Arquitetural](./docs/arquitetura/ARVORE-ARQUITETURAL.md)** - Estrutura visual completa
 - **[Type Safety](./docs/arquitetura/TYPE-SAFETY.md)** - Garantias de tipo
 - **[Segurança](./docs/arquitetura/SEGURANCA.md)** - Práticas de segurança
 - **[Sistema de Erros](./docs/arquitetura/SISTEMA-ERROS.md)** - Tratamento de erros
 
-### 👨‍💻 Para Desenvolvedores
+### ‍ Para Desenvolvedores
 
 - **[Como Criar Analistas](./docs/desenvolvimento/analistas/CRIAR-ANALISTA.md)** - Guia prático (6 passos)
 - **[Estrutura de Código](./docs/desenvolvimento/estrutura-codigo/README.md)** - Organização do src/
 - **[Padrões de Desenvolvimento](./docs/desenvolvimento/PADROES.md)** - Convenções e boas práticas
 - **[Sistema de Plugins](./docs/desenvolvimento/SISTEMA-PLUGINS.md)** - Como estender
 
-### 🔗 Referência
+###  Referência
 
 - **[Referência de Comandos](./docs/referencia/comandos/README.md)** - Todos os comandos detalhados
 - **[Exemplos de Uso](./docs/exemplos/EXEMPLOS-USO.md)** - Casos reais e CI/CD
 - **[Roadmap](./docs/roadmap/ROADMAP.md)** - Futuro do projeto
 - **[Índice Completo](./docs/INDICE.md)** - Navegação por tópico
 
-### 💻 Desenvolvimento
+###  Desenvolvimento
 
 - **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Como contribuir
 - **[CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)** - Código de conduta
@@ -576,7 +569,7 @@ Prometheus possui documentação extensiva e atualizada:
 
 ---
 
-## 🏗️ Estrutura do Projeto
+##  Estrutura do Projeto
 
 ```
 prometheus-dev/
@@ -661,23 +654,23 @@ prometheus-dev/
 
 | Linguagem   | Parser          | Status                       |
 | ----------- | --------------- | ---------------------------- |
-| JavaScript  | Babel           | ✅ Nativo                     |
-| TypeScript  | Babel           | ✅ Nativo                     |
-| HTML        | htmlparser2     | ✅ Nativo                     |
-| CSS         | css-tree        | ✅ Nativo                     |
-| XML         | fast-xml-parser | ✅ Nativo                     |
-| Python      | Heurístico      | ✅ Nativo                     |
-| PHP         | Heurístico      | ✅ Nativo                     |
-| Shell       | Heurístico      | ✅ Plugin                     |
-| SQL         | Heurístico      | ✅ Plugin                     |
-| Java        | java-parser     | ⚙️ Disponível (desabilitado) |
-| Kotlin      | Heurístico      | ⚙️ Disponível (desabilitado) |
+| JavaScript  | Babel           | Nativo                       |
+| TypeScript  | Babel           | Nativo                       |
+| HTML        | htmlparser2     | Nativo                       |
+| CSS         | css-tree        | Nativo                       |
+| XML         | fast-xml-parser | Nativo                       |
+| Python      | Heurístico      | Nativo                       |
+| PHP         | Heurístico      | Nativo                       |
+| Shell       | Heurístico      | Plugin                       |
+| SQL         | Heurístico      | Plugin                       |
+| Java        | java-parser     | Disponível (desabilitado)    |
+| Kotlin      | Heurístico      | Disponível (desabilitado)    |
 
 Para detalhes sobre cada diretório, veja [Estrutura de Código](./docs/desenvolvimento/estrutura-codigo/README.md).
 
 ---
 
-## 👨‍💻 Desenvolvimento
+## ‍ Desenvolvimento
 
 ### Setup para Desenvolvimento
 
@@ -775,17 +768,17 @@ npm run perf:gate
 
 Ao contribuir, siga os padrões em [PADROES.md](./docs/desenvolvimento/PADROES.md):
 
-- ✅ TypeScript type-safe (sem `any` ou `unknown` sem necessidade)
-- ✅ Nomes descritivos em camelCase/PascalCase
-- ✅ JSDoc para funções públicas e APIs
-- ✅ Testes com cobertura > 80%
-- ✅ Sem console.log em produção (use sistema de mensagens)
-- ✅ Imports organizados e ordenados
-- ✅ Padrões arquiteturais (Registry, Strategy, Singleton)
+- TypeScript type-safe (sem `any` ou `unknown` sem necessidade)
+- Nomes descritivos em camelCase/PascalCase
+- JSDoc para funções públicas e APIs
+- Testes com cobertura > 80%
+- Sem console.log em produção (use sistema de mensagens)
+- Imports organizados e ordenados
+- Padrões arquiteturais (Registry, Strategy, Singleton)
 
 ---
 
-## 🤝 Desenvolvimento & Contribuição
+##  Desenvolvimento & Contribuição
 
 Prometheus é um projeto open-source e recebe contribuições de toda a comunidade.
 
@@ -800,11 +793,11 @@ Prometheus é um projeto open-source e recebe contribuições de toda a comunida
 
 ### Tipos de Contribuição
 
-- 🐛 **Bug fixes** - Reportar e corrigir bugs
-- ✨ **Novas features** - Analistas, comandos, melhorias
-- 📚 **Documentação** - Guias, exemplos, explanação
-- 🧪 **Testes** - Aumentar cobertura
-- 🔄 **Padrões** - Melhorias de qualidade
+- **Bug fixes** - Reportar e corrigir bugs
+- **Novas features** - Analistas, comandos, melhorias
+- **Documentação** - Guias, exemplos, explanação
+- **Testes** - Aumentar cobertura
+- **Padrões** - Melhorias de qualidade
 
 ### Criando um Novo Analista ou Detector
 
@@ -831,42 +824,42 @@ npm run diagnosticar
 
 ### Recursos para Desenvolvedores
 
-- 📖 [Como Criar Analistas](./docs/desenvolvimento/analistas/CRIAR-ANALISTA.md) - Guia com 6 passos
-- 🏗️ [Estrutura de Código](./docs/desenvolvimento/estrutura-codigo/README.md) - Mapa do src/
-- 📝 [Padrões de Desenvolvimento](./docs/desenvolvimento/PADROES.md) - Convenções
-- 🔌 [Sistema de Plugins](./docs/desenvolvimento/SISTEMA-PLUGINS.md) - Como estender
+- [Como Criar Analistas](./docs/desenvolvimento/analistas/CRIAR-ANALISTA.md) - Guia com 6 passos
+- [Estrutura de Código](./docs/desenvolvimento/estrutura-codigo/README.md) - Mapa do src/
+- [Padrões de Desenvolvimento](./docs/desenvolvimento/PADROES.md) - Convenções
+- [Sistema de Plugins](./docs/desenvolvimento/SISTEMA-PLUGINS.md) - Como estender
 
 ---
 
-## 📞 Suporte
+##  Suporte
 
 ### Documentação
 
-- 📖 [Documentação Completa](./docs/)
-- 🚀 [Guia de Início Rápido](./docs/guias/GUIA-INICIO-RAPIDO.md)
-- 💡 [Exemplos de Uso](./docs/exemplos/EXEMPLOS-USO.md)
-- 🏗️ [Arquitetura](./docs/arquitetura/ARVORE-ARQUITETURAL.md)
+- [Documentação Completa](./docs/)
+- [Guia de Início Rápido](./docs/guias/GUIA-INICIO-RAPIDO.md)
+- [Exemplos de Uso](./docs/exemplos/EXEMPLOS-USO.md)
+- [Arquitetura](./docs/arquitetura/ARVORE-ARQUITETURAL.md)
 
 ### Comunidade
 
-- 🐛 [Reportar Bug](https://github.com/5-5-5-5-5-5-5/prometheus/issues)
-- 💡 [Solicitar Feature](https://github.com/5-5-5-5-5-5-5/prometheus/issues/new?labels=enhancement)
-- 💬 [Discussões](https://github.com/5-5-5-5-5-5-5/prometheus/discussions)
-- 🤝 [Contribuir](./CONTRIBUTING.md)
+- [Reportar Bug](https://github.com/5-5-5-5-5-5-5/prometheus/issues)
+- [Solicitar Feature](https://github.com/5-5-5-5-5-5-5/prometheus/issues/new?labels=enhancement)
+- [Discussões](https://github.com/5-5-5-5-5-5-5/prometheus/discussions)
+- [Contribuir](./CONTRIBUTING.md)
 
 ### Links Importantes
 
 | Link                                                                | Descrição        |
 | ------------------------------------------------------------------- | ---------------- |
-| [📦 npm Package](https://www.npmjs.com/package/prometheus)          | Instalar via npm |
-| [🐙 GitHub Repository](https://github.com/5-5-5-5-5-5-5/prometheus) | Código-fonte     |
-| [🐛 Issues](https://github.com/5-5-5-5-5-5-5/prometheus/issues)     | Reportar bugs    |
-| [📋 Releases](https://github.com/5-5-5-5-5-5-5/prometheus/releases) | Versões          |
-| [📝 License](./LICENSE)                                             | MIT-0            |
+| [ npm Package](https://www.npmjs.com/package/prometheus)            | Instalar via npm |
+| [ GitHub Repository](https://github.com/5-5-5-5-5-5-5/prometheus)   | Código-fonte     |
+| [ Issues](https://github.com/5-5-5-5-5-5-5/prometheus/issues)       | Reportar bugs    |
+| [ Releases](https://github.com/5-5-5-5-5-5-5/prometheus/releases)   | Versões          |
+| [ License](./LICENSE)                                               | MIT-0            |
 
 ---
 
-## 📊 Roadmap & Versioning
+##  Roadmap & Versioning
 
 ### Versioning
 
@@ -878,15 +871,15 @@ Prometheus segue [Semantic Versioning](https://semver.org/):
 
 ### Histórico de Versões
 
-- ✅ **v0.4.3** (Atual) - Estabilidade, correções de bugs, melhorias de performance
-- ✅ **v0.4.2** - Melhorias de estabilidade e documentação
-- ✅ **v0.4.1** - Correções de bugs
-- ✅ **v0.4.0** - Refinamento de tipos e robustez
-- ✅ **v0.3.9** - Gerenciamento de nomes (names/rename), segurança de tipagem
-- ✅ **v0.3.6** - Extração avançada de sinais, validações aprimoradas
-- ✅ **v0.3.0** - Novos comandos, plugins multi-linguagem, Node.js 24+
-- ✅ **v0.2.0** - Worker Pool, Schema Versioning, Pontuação Adaptativa
-- ✅ **v0.1.0** - Lançamento inicial
+- **v0.4.3** (Atual) - Estabilidade, correções de bugs, melhorias de performance
+- **v0.4.2** - Melhorias de estabilidade e documentação
+- **v0.4.1** - Correções de bugs
+- **v0.4.0** - Refinamento de tipos e robustez
+- **v0.3.9** - Gerenciamento de nomes (names/rename), segurança de tipagem
+- **v0.3.6** - Extração avançada de sinais, validações aprimoradas
+- **v0.3.0** - Novos comandos, plugins multi-linguagem, Node.js 24+
+- **v0.2.0** - Worker Pool, Schema Versioning, Pontuação Adaptativa
+- **v0.1.0** - Lançamento inicial
 
 ### Roadmap Futuro
 
@@ -895,24 +888,24 @@ Prometheus segue [Semantic Versioning](https://semver.org/):
 - **v0.7.0** - Análise assistida por IA
 - **v1.0.0** - Estabilidade completa e API pública consolidada
 
-👉 Veja [ROADMAP.md](./docs/roadmap/ROADMAP.md) para detalhes completos.
+ Veja [ROADMAP.md](./docs/roadmap/ROADMAP.md) para detalhes completos.
 
 ---
 
-## ✅ Verificação de Qualidade
+##  Verificação de Qualidade
 
 O Prometheus é mantido em altos padrões de qualidade:
 
-- ✅ TypeScript 6.0+ (type-safe, sem `any` desnecessários)
-- ✅ Testes com Vitest (cobertura target: 80%+)
-- ✅ ESLint 9.x + configuração strict
-- ✅ Worker Pool para processamento paralelo
-- ✅ Schema Versioning em relatórios JSON
-- ✅ Pontuação Adaptativa baseada no tamanho do projeto
-- ✅ Sistema i18n (PT, EN, ZH, JA)
-- ✅ Segurança auditada (CodeQL, path traversal protection)
-- ✅ Performance benchmarked (snapshots e gates)
-- ✅ Sem dependências externas desnecessárias
+- TypeScript 6.0+ (type-safe, sem `any` desnecessários)
+- Testes com Vitest (cobertura target: 80%+)
+- ESLint 9.x + configuração strict
+- Worker Pool para processamento paralelo
+- Schema Versioning em relatórios JSON
+- Pontuação Adaptativa baseada no tamanho do projeto
+- Sistema i18n (PT, EN, ZH, JA)
+- Segurança auditada (CodeQL, path traversal protection)
+- Performance benchmarked (snapshots e gates)
+- Sem dependências externas desnecessárias
 
 ### Dependências Principais
 
@@ -931,7 +924,7 @@ O Prometheus é mantido em altos padrões de qualidade:
 
 ---
 
-## 📄 Licença & Atribuição
+##  Licença & Atribuição
 
 Prometheus é licenciado sob **MIT-0** (veja [LICENSE](./LICENSE)).
 
@@ -945,6 +938,6 @@ Dependências de terceiros listadas em [THIRD-PARTY-NOTICES.txt](./THIRD-PARTY-N
 
 <div align="center">
 
-**Feito com ❤️‍🩹 para os iniciantes**
+**Feito com ‍🩹 para os iniciantes**
 
-[⬆ Topo](#prometheus)
+[ Topo](#prometheus)

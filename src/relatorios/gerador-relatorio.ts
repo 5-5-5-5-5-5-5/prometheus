@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 // Gerador de relatórios: Markdown e JSON
-import { getMessages } from '@core/messages/index.js';
+import { getMessages } from '@core/messages';
 
 import type { GeradorMarkdownOptions, Ocorrencia, ResultadoInquisicaoCompleto } from '@';
 
@@ -12,7 +12,8 @@ export async function gerarRelatorioMarkdown(resultado: ResultadoInquisicaoCompl
     ocorrencias = [],
     guardian,
     timestamp = Date.now(),
-    duracaoMs = 0
+    duracaoMs = 0,
+    metricas
   } = (resultado || {}) as ResultadoInquisicaoCompleto;
   const dataISO = new Date(timestamp).toISOString();
 
@@ -21,7 +22,7 @@ export async function gerarRelatorioMarkdown(resultado: ResultadoInquisicaoCompl
     const {
       processarRelatorioResumo,
       gerarRelatorioMarkdownResumo
-    } = await import('@relatorios/filtro-inteligente.js');
+    } = await import('./filtro-inteligente.js');
     const relatorioResumo = processarRelatorioResumo(ocorrencias);
     await gerarRelatorioMarkdownResumo(relatorioResumo, outputCaminho);
     return;
@@ -55,6 +56,41 @@ export async function gerarRelatorioMarkdown(resultado: ResultadoInquisicaoCompl
     totalArquivos,
     totalOcorrencias: ocorrencias.length
   }));
+
+  // Adicionar métricas importantes no início para desenvolvedor
+  if (metricas) {
+    lines.push('## Métricas do Projeto');
+    lines.push('');
+    lines.push('| Métrica | Valor |');
+    lines.push('|--------|-------|');
+    if (metricas.totalArquivos !== undefined) {
+      lines.push(`| Total de Arquivos | ${metricas.totalArquivos} |`);
+    }
+    if (metricas.tempoParsingMs !== undefined) {
+      lines.push(`| Tempo de Parsing | ${(metricas.tempoParsingMs / 1000).toFixed(2)}s |`);
+    }
+    if (metricas.tempoAnaliseMs !== undefined) {
+      lines.push(`| Tempo de Análise | ${(metricas.tempoAnaliseMs / 1000).toFixed(2)}s |`);
+    }
+    if (metricas.cacheAstHits !== undefined && metricas.cacheAstMiss !== undefined) {
+      const hitRate = metricas.cacheAstMiss > 0 ? (metricas.cacheAstHits / (metricas.cacheAstHits + metricas.cacheAstMiss) * 100).toFixed(1) : '100';
+      lines.push(`| Cache AST | ${hitRate}% (${metricas.cacheAstHits} hits / ${metricas.cacheAstMiss} miss) |`);
+    }
+    // Top analistas por duração
+    if (metricas.analistas && metricas.analistas.length > 0) {
+      lines.push('');
+      lines.push('### Analistas mais lentos');
+      lines.push('');
+      lines.push('| Analista | Duração | Ocorrências |');
+      lines.push('|----------|---------|------------|');
+      const topAnalistas = [...metricas.analistas].sort((a, b) => (b.duracaoMs || 0) - (a.duracaoMs || 0)).slice(0, 5);
+      for (const a of topAnalistas) {
+        lines.push(`| ${a.nome} | ${(a.duracaoMs || 0).toFixed(0)}ms | ${a.ocorrencias || 0} |`);
+      }
+    }
+    lines.push('');
+    lines.push('---\n');
+  }
 
   // Se houver manifest, adiciona link e sumário rápido
   if (options && options.manifestFile && options.relatoriosDir) {
@@ -92,19 +128,19 @@ export async function gerarRelatorioMarkdown(resultado: ResultadoInquisicaoCompl
   }
   const {
     salvarEstado
-  } = await import('@shared/persistence/persistencia.js');
+  } = await import('@shared/persistence');
   await salvarEstado(outputCaminho, lines.join('\n'));
 }
 export async function gerarRelatorioJson(resultado: ResultadoInquisicaoCompleto, outputCaminho: string): Promise<void> {
   // Importar sistema de versionamento
   const {
     criarRelatorioComVersao
-  } = await import('@core/schema/version.js');
+  } = await import('@core/schema');
 
   // Criar relatório versionado (mantemos metadados, mas salvamos os dados brutos para compatibilidade)
   const relatorioVersionado = criarRelatorioComVersao(resultado, undefined, 'Relatório completo de diagnóstico do Prometheus');
   const {
     salvarEstado
-  } = await import('@shared/persistence/persistencia.js');
+  } = await import('@shared/persistence');
   await salvarEstado(outputCaminho, relatorioVersionado.dados ?? resultado);
 }

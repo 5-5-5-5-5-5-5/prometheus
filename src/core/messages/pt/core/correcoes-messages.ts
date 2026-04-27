@@ -66,8 +66,8 @@ export const MENSAGENS_AUTOFIX = {
     modoConservador: `${ICONES.comando.guardian} Modo conservador ativado - aplicando apenas correções de alta confiança`,
     validacaoEslint: `${ICONES.acao.analise} Executando validação ESLint pós-auto-fix...`,
     arquivoMovido: (origem: string, destino: string) => `${ICONES.status.ok} Movido: ${origem} → ${destino}`,
-    arquivoRevertido: (origem: string, destino: string) => `↩️ Arquivo revertido: ${destino} → ${origem}`,
-    arquivoRevertidoConteudo: (origem: string, destino: string) => `↩️ Arquivo revertido com conteúdo original: ${destino} → ${origem}`
+    arquivoRevertido: (origem: string, destino: string) => `↩ Arquivo revertido: ${destino} → ${origem}`,
+    arquivoRevertidoConteudo: (origem: string, destino: string) => `↩ Arquivo revertido com conteúdo original: ${destino} → ${origem}`
   },
   // Resultados
   resultados: {

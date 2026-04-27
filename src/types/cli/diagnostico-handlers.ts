@@ -3,7 +3,7 @@
  * Tipos para handlers de diagnóstico (Guardian, Arquetipo, Auto-Fix)
  */
 
-import type { IntegridadeStatus, ResultadoGuardian } from '@';
+import type { IntegridadeStatus, ResultadoGuardian } from '../index.js';
 
 /* ================================
    GUARDIAN HANDLER TYPES

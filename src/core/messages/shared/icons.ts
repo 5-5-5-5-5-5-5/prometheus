@@ -156,16 +156,50 @@ export const ICONES_RELATORIO = {
  * Ícones de zeladores
  */
 export const ICONES_ZELADOR = {
-  inicio: '[START]',
-  sucesso: `${CORES.VERDE}[OK]${CORES.RESET}`,
-  erro: `${CORES.VERMELHO}[ERR]${CORES.RESET}`,
-  aviso: `${CORES.AMARELO}[!]${CORES.RESET}`,
-  resumo: '[SUMMARY]',
-  arquivo: '[FILE]',
-  diretorio: '[DIR]',
-  correcao: '[FIX]',
+  alerta: '[!]',
+  verificar: '[CHECK]',
+  OK: '[OK]',
+  NG: '[NG]',
+  sano: '[OK]',
+  risco: '[!]',
+  critica: '[!!]',
+  info: '[i]',
+  sucesso: '[OK]',
+  erro: '[!]',
+  aviso: '[!]',
+  inicio: '[SCAN]',
   dryRun: '[DRY]',
-  estatistica: '[STATS]',
+  resumo: '[RESUMO]',
+  arquivo: '[ARQ]',
+} as const;
+
+/**
+ * Ícones de TUI/Agent
+ */
+export const ICONES_TUI = {
+  agent: 'PROMETHEUS',
+  usuario: '👤 Voce',
+  erro: '[!]',
+  sucesso: '[OK]',
+  falha: '[X]',
+  aviso: '[!]',
+  pergunta: '[?]',
+  ferramentas: '[TOOLS]',
+  provider: '[PROVIDER]',
+  history: '[HISTORY]',
+  status: '[STATUS]',
+  clear: '[CLEAR]',
+  list: '[LIST]',
+  enable: '[ON]',
+  disable: '[OFF]',
+  key: '[KEY]',
+  exit: '[BYE]',
+  ajuda: '[HELP]',
+  exec: '[>]',
+  chat: '[CHAT]',
+  dica: '[DICA]',
+  loading: '[...]',
+  processing: '[...]',
 } as const;
 
 /**
@@ -224,6 +258,7 @@ export const ICONES = {
   comando: ICONES_COMANDO,
   relatorio: ICONES_RELATORIO,
   zelador: ICONES_ZELADOR,
+  tui: ICONES_TUI,
 } as const;
 export const ICONES_CENTRAL = ICONES;
 export const ICONES_DIAGNOSTICO_CENTRAL = ICONES_DIAGNOSTICO;

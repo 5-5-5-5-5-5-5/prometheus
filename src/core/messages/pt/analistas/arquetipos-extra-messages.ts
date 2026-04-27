@@ -1,11 +1,11 @@
 export const ArquetiposExtraMensagens = {
-  naoEncontrado: '⚠️ Arquétipo personalizado não encontrado em {novo} nem {legado}',
-  salvo: '✅ Arquétipo personalizado salvo em {caminho}',
-  projetoPersonalizado: '🌟 Projeto personalizado detectado: "{nome}"',
+  naoEncontrado: ' Arquétipo personalizado não encontrado em {novo} nem {legado}',
+  salvo: ' Arquétipo personalizado salvo em {caminho}',
+  projetoPersonalizado: ' Projeto personalizado detectado: "{nome}"',
   descricaoPersonalizado: 'O Prometheus identificou uma estrutura de projeto que não corresponde a arquétipos oficiais,\nmas você pode criar um arquétipo personalizado para receber sugestões otimizadas!',
-  estruturaDetectada: '📁 Estrutura detectada:',
-  arquivosRaiz: '📄 Arquivos na raiz:',
-  dicaCriar: '💡 Para criar seu arquétipo personalizado, execute:',
+  estruturaDetectada: ' Estrutura detectada:',
+  arquivosRaiz: ' Arquivos na raiz:',
+  dicaCriar: ' Para criar seu arquétipo personalizado, execute:',
   comandoCriar: '   prometheus diagnosticar --criar-arquetipo',
   explicacaoCriar: 'Isso criará um arquivo \'prometheus.repo.arquetipo.json\' com base na estrutura atual,\nque o Prometheus usará para oferecer sugestões personalizadas mantendo as melhores práticas.',
   validacao: {

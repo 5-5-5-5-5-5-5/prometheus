@@ -7,13 +7,14 @@ registrarDetectorGithubActions({
   nome: 'security-hardening',
   descricao: 'Regras adicionais de segurança para workflows',
   severidade: 'alta',
-  testar: (workflow) => {
-    const problemas: any[] = [];
-    if (!workflow || !workflow.jobs) return problemas;
+  testar: (workflow: unknown) => {
+    const problemas: import('@').ProblemaWorkflow[] = [];
+    const wf = workflow as { jobs?: Record<string, { permissions?: unknown }>, permissions?: unknown } | null | undefined;
+    if (!wf || !wf.jobs) return problemas;
 
-    for (const [jobId, job] of Object.entries(workflow.jobs) as [string, any][]) {
+    for (const [jobId, job] of Object.entries(wf.jobs)) {
       // Regra: Todo job deve ter permissões explícitas
-      if (!job.permissions && !workflow.permissions) {
+      if (!job.permissions && !wf.permissions) {
         problemas.push({
           tipo: 'security-hardening',
           descricao: `Job '${jobId}' não define permissões explícitas (usa default GITHUB_TOKEN)`,

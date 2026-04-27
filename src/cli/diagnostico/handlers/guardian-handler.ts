@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 /**
- * 🛡️ Guardian Handler
+ *  Guardian Handler
  *
  * Gerencia verificação de integridade do Guardian
  * - Executa scan de integridade
@@ -9,8 +9,8 @@
  * - Formata resultados
  */
 
-import { messages } from '@core/messages/index.js';
-import { scanSystemIntegrity } from '@guardian/sentinela.js';
+import { messages } from '@core/messages';
+import { scanSystemIntegrity } from '@guardian';
 
 import type {
   FileEntry,

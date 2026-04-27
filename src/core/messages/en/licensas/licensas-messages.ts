@@ -6,7 +6,7 @@ export const LicensasMensagens = {
   erroObterLicenca: 'Failed to obtain license information via cache, API or npx',
   disclaimerNaoEncontrado: 'Disclaimer not found: {caminho}',
   validacaoContexto: '[Validation] Failed{contexto}, using fallback',
-  exclusaoInsegura: '⚠️ Some exclusion patterns were considered unsafe and were ignored: {padroes}',
-  erroValidarSeguranca: '⚠️ Error validating correction safety {fixId}: {erro}',
+  exclusaoInsegura: ' Some exclusion patterns were considered unsafe and were ignored: {padroes}',
+  erroValidarSeguranca: ' Error validating correction safety {fixId}: {erro}',
   detectorMarkdownPath: 'detector-markdown: fullPath not provided for {arquivo}',
 } as const;

@@ -7,7 +7,7 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
-import { buildTypesFsPath } from '@core/config/conventions.js';
+import { buildTypesFsPath } from '@core/config';
 
 import type { ExistingType, TypeAnalysis } from '@';
 

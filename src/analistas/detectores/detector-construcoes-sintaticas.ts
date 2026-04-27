@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 import type { NodePath } from '@babel/traverse';
 import type { ArrowFunctionExpression, ClassDeclaration, FunctionDeclaration, ImportDeclaration, NewExpression, Node, TSEnumDeclaration, TSInterfaceDeclaration, TSTypeAliasDeclaration, VariableDeclaration } from '@babel/types';
-import { traverse } from '@core/config/traverse.js';
-import { messages } from '@core/messages/index.js';
-import { criarErroAnalise } from '@shared/helpers/ocorrencias.js';
+import { traverse } from '@core/config';
+import { messages } from '@core/messages';
+import { criarErroAnalise } from '@shared/helpers';
 
 import { type Analista, type ConstrucaoSintatica, criarOcorrencia, type Ocorrencia } from '@';
 

@@ -69,6 +69,7 @@ export type SvgoMinimoMudanca =
   | 'remover-enable-background'
   | 'colapsar-espacos-entre-tags'
   | 'normalizar-eol'
+  | 'converter-literal-n'
   | 'trim-final';
 
 export type SvgoMinimoResult = {

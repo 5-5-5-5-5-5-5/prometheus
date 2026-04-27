@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 import type { NodePath } from '@babel/traverse';
 import type { ArrowFunctionExpression, ClassMethod, FunctionDeclaration, FunctionExpression, Node, ObjectMethod } from '@babel/types';
-import { traverse } from '@core/config/traverse.js';
-import { messages } from '@core/messages/index.js';
+import { traverse } from '@core/config';
+import { messages } from '@core/messages';
 import { createHash } from 'crypto';
 
 import type { Analista, BlocoFuncao, ContextoExecucao, DuplicacaoEncontrada, Ocorrencia } from '@';

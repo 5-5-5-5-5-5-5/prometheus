@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 import type { NodePath } from '@babel/traverse';
 import type { Node } from '@babel/types';
-import { findQuickFixes, type PatternBasedQuickFix } from '@core/config/auto/fix-config.js';
+import { findQuickFixes, type PatternBasedQuickFix } from '@core/config/auto';
 
 import type { Analista, Ocorrencia } from '@';
 import { criarOcorrencia } from '@';
@@ -59,7 +59,7 @@ export const analistaQuickFixes: Analista = {
         const previewCorrecao = fixResultado.fix(match, src);
         const originalLine = src.split('\n')[linha - 1] || '';
         const fixedLine = previewCorrecao.split('\n')[linha - 1] || '';
-        const sugestao = [fixResultado.description, '', `🔧 Correção sugerida:`, `❌ Antes: ${originalLine.trim()}`, `✅ Depois: ${fixedLine.trim()}`, '', `Confiança: ${fixResultado.confidence}%`, `Categoria: ${fixResultado.category}`, `ID do Fix: ${fixResultado.id}`].join('\n');
+        const sugestao = [fixResultado.description, '', ` Correção sugerida:`, ` Antes: ${originalLine.trim()}`, ` Depois: ${fixedLine.trim()}`, '', `Confiança: ${fixResultado.confidence}%`, `Categoria: ${fixResultado.category}`, `ID do Fix: ${fixResultado.id}`].join('\n');
         const nivel = mapearCategoriaNivel(fixResultado.category);
         const ocorrencia = criarOcorrencia({
           tipo: 'auto-fix-disponivel',

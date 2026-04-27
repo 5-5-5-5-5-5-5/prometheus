@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
-import { messages } from '@core/messages/index.js';
-import { createLineLookup } from '@shared/helpers/line-lookup.js';
-import { maskHtmlComments, maskTagBlocks } from '@shared/helpers/masking.js';
+import { messages } from '@core/messages';
+import { createLineLookup , maskHtmlComments, maskTagBlocks } from '@shared/helpers';
 import type { AnyNode, Document, Element, Text } from 'domhandler';
 import { parseDocument } from 'htmlparser2';
 

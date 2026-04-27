@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 import path from 'node:path';
 
-import { messages } from '@core/messages/index.js';
+import { messages } from '@core/messages';
 
 import type { ErroValidacaoCombinacao } from '@';
 

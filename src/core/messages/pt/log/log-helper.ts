@@ -7,9 +7,8 @@
  * Remove duplicação e centraliza lógica via log-engine
  */
 
-import { config } from '@core/config/config.js';
-import { ICONES_ARQUIVO, ICONES_DIAGNOSTICO, ICONES_FEEDBACK, ICONES_STATUS } from '@core/messages/shared/icons.js';
-
+import { config } from '../../../config/config.js';
+import { ICONES_ARQUIVO, ICONES_DIAGNOSTICO, ICONES_FEEDBACK, ICONES_STATUS } from '../../shared/icons.js';
 import { logEngine } from './log-engine.js';
 import { LogMensagens } from './log-messages.js';
 
@@ -38,7 +37,7 @@ export const logAnalistas = {
   },
   /** Log de inicio de analista (agora apenas registra) */
   iniciandoAnalista(nomeAnalista: string, arquivo: string, tamanho: number): void {
-    // 🔕 ANTI-SPAM: Só loga analistas individuais em contextos específicos
+    //  ANTI-SPAM: Só loga analistas individuais em contextos específicos
     const deveLogarIndividual = logEngine.contexto === 'complexo' || config.DEV_MODE || process.env.VERBOSE === 'true';
     if (deveLogarIndividual) {
       logEngine.log('debug', LogMensagens.analistas.execucao.inicio_detalhado, {

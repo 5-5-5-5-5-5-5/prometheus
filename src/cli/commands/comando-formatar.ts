@@ -2,22 +2,22 @@
 
 import path from 'node:path';
 
-import { ExitCode, sair } from '@cli/helpers/exit-codes.js';
-import { processPatternList } from '@cli/helpers/pattern-helpers.js';
-import { configurarFiltros } from '@cli/processing/filters.js';
-import { chalk } from '@core/config/chalk-safe.js';
-import { config } from '@core/config/config.js';
-import { scanRepository } from '@core/execution/scanner.js';
-import { getMessages } from '@core/messages/index.js';
+import { chalk , config } from '@core/config';
+import { scanRepository } from '@core/execution';
+import { getMessages } from '@core/messages';
 import {
   formatarComPrettierProjeto,
   formatarPrettierMinimo,
-} from '@shared/impar/formater.js';
-import { salvarEstado } from '@shared/persistence/persistencia.js';
+} from '@shared/impar';
+import { salvarEstado } from '@shared/persistence';
 import { Command } from 'commander';
 import micromatch from 'micromatch';
 
 import type { FormatarCommandOpts, FormatResult } from '@';
+
+import { ExitCode, sair } from '../helpers/exit-codes.js';
+import { processPatternList } from '../helpers/pattern-helpers.js';
+import { configurarFiltros } from '../processing/filters.js';
 
 const { log, CliFormatarExtraMensagens } = getMessages();
 

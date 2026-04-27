@@ -8,6 +8,7 @@ export * from './configuracao-pontuacao.js';
 export * from './conventions.js';
 export * from './excludes-padrao.js';
 export * from './format.js';
+export * from './generator.js';
 export * from './include-exclude.js';
 export * from './limites.js';
 export * from './paths.js';

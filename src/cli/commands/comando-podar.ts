@@ -1,18 +1,18 @@
 // SPDX-License-Identifier: MIT
 
-import { removerArquivosOrfaos } from '@analistas/corrections/poda.js';
-import { registroAnalistas } from '@analistas/registry/registry.js';
-import { exportarRelatoriosPoda } from '@cli/handlers/poda-exporter.js';
-import { ExitCode, sair } from '@cli/helpers/exit-codes.js';
-import { expandIncludePatterns, processPatternList } from '@cli/helpers/pattern-helpers.js';
-import { chalk } from '@core/config/chalk-safe.js';
-import { config } from '@core/config/config.js';
-import { iniciarInquisicao } from '@core/execution/inquisidor.js';
-import { messages } from '@core/messages/index.js';
+import { registroAnalistas } from '@analistas/registry';
+import { chalk , config } from '@core/config';
+import { iniciarInquisicao } from '@core/execution';
+import { messages } from '@core/messages';
 import { Command } from 'commander';
 
 import type { ArquivoFantasma, ResultadoPoda, Tecnica } from '@';
 import { asTecnicas } from '@';
+
+import { removerArquivosOrfaos } from '../../analistas/corrections/poda.js';
+import { exportarRelatoriosPoda } from '../handlers/poda-exporter.js';
+import { ExitCode, sair } from '../helpers/exit-codes.js';
+import { expandIncludePatterns, processPatternList } from '../helpers/pattern-helpers.js';
 
 const { log, logSistema } = messages;
 
@@ -45,7 +45,7 @@ export function comandoPodar(aplicarFlagsGlobais: (opts: Record<string, unknown>
       if (includeList.length) config.CLI_INCLUDE_PATTERNS = includeList;
       if (excludeList.length) config.CLI_EXCLUDE_PATTERNS = excludeList;
 
-      // 🔥 SIMPLIFICADO: sem sync de padrões obsoletos
+      //  SIMPLIFICADO: sem sync de padrões obsoletos
       // CLI flags dominam globalExcludeGlob automaticamente
 
       const tecnicas = asTecnicas(registroAnalistas as Tecnica[]);

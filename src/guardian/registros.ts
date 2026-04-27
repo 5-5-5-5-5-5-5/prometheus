@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 import path from 'node:path';
 
-import { config } from '@core/config/config.js';
-import { getMessages } from '@core/messages/index.js';
-import { ensureDir } from '@shared/helpers/fs.js';
-import { lerEstado, salvarEstado } from '@shared/persistence/persistencia.js';
+import { config } from '@core/config';
+import { getMessages } from '@core/messages';
+import { ensureDir } from '@shared/helpers';
+import { lerEstado, salvarEstado } from '@shared/persistence';
 
 import type { FileEntry, RegistroIntegridade } from '@';
 

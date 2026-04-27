@@ -3,28 +3,28 @@ Proveniência e Autoria: Este documento integra o projeto Prometheus (licença M
 ---
 
 
-# Padrões de Desenvolvimento - Prometheus 📋
+# Padrões de Desenvolvimento - Prometheus
 
 Convenções e padrões utilizados no desenvolvimento do Prometheus.
 
 ---
 
-## 📝 Padrões de Código
+##  Padrões de Código
 
 ### 1. Nomenclatura
 
 #### Classes e Interfaces
 
 ```typescript
-// ✅ PascalCase para classes
+//  PascalCase para classes
 export class DetectorCodigoFragil { }
 export class CliAutoFixHandler { }
 
-// ✅ Interface com sufixo
+//  Interface com sufixo
 export interface ResultadoAnalise { }
 export interface ConfiguracaoProjeto { }
 
-// ✅ Type com sufixo
+//  Type com sufixo
 export type CaminhoArquivo = string;
 export type ResultadoOuErro<T> = T | Error;
 ```
@@ -32,11 +32,11 @@ export type ResultadoOuErro<T> = T | Error;
 #### Funções e Variáveis
 
 ```typescript
-// ✅ camelCase para funções e variáveis
+//  camelCase para funções e variáveis
 function analisarArquivo() { }
 const totalArquivos = 0;
 
-// ✅ CONSTANT_CASE para constantes
+//  CONSTANT_CASE para constantes
 const LIMITE_LINHAS = 50;
 const VERSAO_MINIMA = '24.12.0';
 ```
@@ -44,12 +44,12 @@ const VERSAO_MINIMA = '24.12.0';
 #### Arquivos
 
 ```typescript
-// ✅ kebab-case para nomes de arquivo
+//  kebab-case para nomes de arquivo
 - detector-codigo-fragil.ts
 - cli-auto-fix-handler.ts
 - guardar-relatorio.ts
 
-// ❌ Evitar
+//  Evitar
 - DetectorCodigoFragil.ts  (use snake_case é OK para tipos específicos)
 - cliAutoFixHandler.ts
 ```
@@ -57,7 +57,7 @@ const VERSAO_MINIMA = '24.12.0';
 ### 2. Organizaçã o de Imports
 
 ```typescript
-// ✅ Ordem recomendada:
+//  Ordem recomendada:
 // 1. Imports de tipos
 import type { Arquivo, ResultadoAnalise } from '@/types/analistas.js';
 import type { Config } from '@/types/core/config/config.js';
@@ -73,19 +73,19 @@ import { RegistroAnalistas } from '@/analistas/registry/index.js';
 // 4. Imports relativos (quando necessário)
 import { utilitario } from './utils.js';
 
-// ✅ Use absolute paths (@/) quando possível
-// ❌ Evite caminhos relativos complexos como ../../../
+//  Use absolute paths (@/) quando possível
+//  Evite caminhos relativos complexos como ../../../
 ```
 
 ### 3. Type Safety
 
 ```typescript
-// ✅ Sempre tipifique
+//  Sempre tipifique
 export function analisar(arquivo: Arquivo, conteudo: string): ResultadoAnalise {
   // ...
 }
 
-// ✅ Use generics quando apropriado
+//  Use generics quando apropriado
 export class Cache<T> {
   private dados: Map<string, T> = new Map();
 
@@ -94,7 +94,7 @@ export class Cache<T> {
   }
 }
 
-// ❌ Avoid any
+//  Avoid any
 function processar(dados: any) { } // RUIM
 function processar(dados: unknown) { } // Melhor
 function processar(dados: ProcessarConfig) { } // Ótimo
@@ -103,7 +103,7 @@ function processar(dados: ProcessarConfig) { } // Ótimo
 ### 4. Tratamento de Erros
 
 ```typescript
-// ✅ Use classes de erro customizadas
+//  Use classes de erro customizadas
 export class AnalistaError extends Error {
   constructor(
     public readonly analista: string,
@@ -115,7 +115,7 @@ export class AnalistaError extends Error {
   }
 }
 
-// ✅ Tratar erros sempre
+//  Tratar erros sempre
 try {
   await analisarArquivo(caminho);
 } catch (erro) {
@@ -126,7 +126,7 @@ try {
   }
 }
 
-// ❌ Evitar erros silenciosos
+//  Evitar erros silenciosos
 try {
   await analisarArquivo(caminho);
 } catch (erro) {
@@ -137,7 +137,7 @@ try {
 ### 5. Async/Await
 
 ```typescript
-// ✅ Prefira async/await
+//  Prefira async/await
 async function processarProjeto(caminho: string): Promise<void> {
   const arquivos = await obterArquivos(caminho);
   for (const arquivo of arquivos) {
@@ -145,18 +145,18 @@ async function processarProjeto(caminho: string): Promise<void> {
   }
 }
 
-// ✅ Use Promise.all para paralelismo
+//  Use Promise.all para paralelismo
 async function analisarTodos(arquivos: Arquivo[]): Promise<Resultado[]> {
   return Promise.all(arquivos.map(analisar));
 }
 
-// ❌ Evitar .then() chains (quando possível)
+//  Evitar .then() chains (quando possível)
 obterArquivos().then(arquivos => arquivos.map(analisar));
 ```
 
 ---
 
-## 🏗️ Padrões Arquiteturais
+##  Padrões Arquiteturais
 
 ### 1. Padrão Registry
 
@@ -247,7 +247,7 @@ class AnalisadorRetProcesso implements Visitante {
 
 ---
 
-## 📚 Padrões de Documentação
+##  Padrões de Documentação
 
 ### 1. JSDoc/TSDoc
 
@@ -278,14 +278,14 @@ export function analisar(
 ### 2. Comentários Explicativos
 
 ```typescript
-// ✅ Explicar POR QUÊ, não O QUÊ
+//  Explicar POR QUÊ, não O QUÊ
 // Evitamos regex global aqui porque há overhead de estado
 
-// ❌ Evitar
+//  Evitar
 // Define o limite
 const LIMITE = 50;
 
-// ✅ Melhor
+//  Melhor
 // 50 linhas é benchmark de legibilidade baseado em estudos
 const LIMITE = 50;
 ```
@@ -307,7 +307,7 @@ const LIMITE = 50;
 
 ---
 
-## 🧪 Padrões de Testes
+##  Padrões de Testes
 
 ### 1. Estrutura AAA (Arrange-Act-Assert)
 
@@ -334,7 +334,7 @@ describe('DetectorProblema', () => {
 ### 2. Cobertura de Testes
 
 ```typescript
-// ✅ Testar casos:
+//  Testar casos:
 // - Caso feliz (sucesso)
 // - Casos extremos (edge cases)
 // - Casos de erro
@@ -352,7 +352,7 @@ describe('Analisador', () => {
 ### 3. Mocks e Fixtures
 
 ```typescript
-// ✅ Usar factories
+//  Usar factories
 function criarMockArquivo(sobrescrita?: Partial<Arquivo>): Arquivo {
   return {
     relPath: 'default.ts',
@@ -362,7 +362,7 @@ function criarMockArquivo(sobrescrita?: Partial<Arquivo>): Arquivo {
   };
 }
 
-// ✅ Usar no teste
+//  Usar no teste
 it('analisa', () => {
   const arquivo = criarMockArquivo({ relPath: 'custom.ts' });
   // ...
@@ -371,12 +371,12 @@ it('analisa', () => {
 
 ---
 
-## 🎯 Padrões de Performance
+##  Padrões de Performance
 
 ### 1. Lazy Loading
 
 ```typescript
-// ✅ Carregar sob demanda
+//  Carregar sob demanda
 class RegistroAnalistas {
   private cache: Map<string, Analista> = new Map();
 
@@ -394,7 +394,7 @@ class RegistroAnalistas {
 ### 2. Memoização
 
 ```typescript
-// ✅ Cache de resultados
+//  Cache de resultados
 function memoizar<T, R>(fn: (arg: T) => R): (arg: T) => R {
   const cache = new Map<T, R>();
 
@@ -415,7 +415,7 @@ const analisarComCache = memoizar((arquivo: string) => expensive(arquivo));
 ### 3. Streaming para Grandes Arquivos
 
 ```typescript
-// ✅ Processar em chunks
+//  Processar em chunks
 async function analisarArquivoGrande(caminho: string): Promise<void> {
   const stream = fs.createReadStream(caminho, { highWaterMark: 64 * 1024 });
 
@@ -427,12 +427,12 @@ async function analisarArquivoGrande(caminho: string): Promise<void> {
 
 ---
 
-## 🔒 Padrões de Segurança
+##  Padrões de Segurança
 
 ### 1. Validação de Entrada
 
 ```typescript
-// ✅ Sempre validar entrada
+//  Sempre validar entrada
 export function processar(entrada: unknown): ProcessarConfig {
   if (typeof entrada !== 'object' || entrada === null) {
     throw new Error('Entrada inválida');
@@ -450,7 +450,7 @@ export function processar(entrada: unknown): ProcessarConfig {
 ### 2. Path Traversal Protection
 
 ```typescript
-// ✅ Prevenir directory traversal
+//  Prevenir directory traversal
 import path from 'path';
 
 function lerArquivo(base: string, arquivo: string): string {
@@ -468,7 +468,7 @@ function lerArquivo(base: string, arquivo: string): string {
 
 ---
 
-## 📦 Padrões de Versionamento
+##  Padrões de Versionamento
 
 ### Semantic Versioning
 
@@ -503,7 +503,7 @@ Exemplo: v1.2.3
 
 ---
 
-## ✅ Checklist de Qualidade
+##  Checklist de Qualidade
 
 Antes de submeter código:
 
@@ -519,10 +519,9 @@ Antes de submeter código:
 
 ---
 
-## 🔗 Referências
+##  Referências
 
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/)
 - [ESLint Rules](https://eslint.org/docs/rules/)
 - [Vitest Documentation](https://vitest.dev/)
 - [Node.js Best Practices](https://nodejs.org/en/docs/guides/)
-

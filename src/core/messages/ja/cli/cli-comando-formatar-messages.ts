@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 export const CliFormatarExtraMensagens = {
-  titulo: '🧽 フォーマット',
+  titulo: ' フォーマット',
   scanOnlyAtivo: 'SCAN_ONLYが有効です。フォーマットコマンドはコンテンツの読み取りが必要です。',
   falhaFormatar: '{arquivo} のフォーマットに失敗しました: {erro}',
   errosEncontrados: 'エラー: {total}件',

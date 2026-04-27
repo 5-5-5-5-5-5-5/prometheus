@@ -1,15 +1,14 @@
 // SPDX-License-Identifier: MIT
 import path from 'node:path';
 
-import { detectarFantasmas } from '@analistas/detectores/detector-fantasmas.js';
-import { config } from '@core/config/config.js';
-import { getMessages } from '@core/messages/index.js';
+import { config } from '@core/config';
+import { getMessages } from '@core/messages';
 import {
   gerarRelatorioPodaJson,
   gerarRelatorioPodaMarkdown,
-} from '@relatorios/relatorio-poda.js';
-import { ensureDir } from '@shared/helpers/fs.js';
-import { lerEstado, salvarEstado } from '@shared/persistence/persistencia.js';
+} from '@relatorios';
+import { ensureDir } from '@shared/helpers';
+import { lerEstado, salvarEstado } from '@shared/persistence';
 import pLimit from 'p-limit';
 
 import type {
@@ -18,6 +17,8 @@ import type {
   Pendencia,
   ResultadoPoda,
 } from '@';
+
+import { detectarFantasmas } from '../detectores/detector-fantasmas.js';
 
 const { log, logAuto } = getMessages();
 
@@ -80,11 +81,11 @@ const {
 export async function executarPodaCiclica(
   executarRealmente = false,
 ): Promise<void> {
-  log.info('\n🌿 Iniciando poda automática...\n');
+  log.info('\n Iniciando poda automática...\n');
 
   if (!executarRealmente) {
     log.aviso(
-      '🧪 Modo de simulação ativado (SIMULADO). Nenhum arquivo será movido.\n',
+      ' Modo de simulação ativado (SIMULADO). Nenhum arquivo será movido.\n',
     );
   }
 
@@ -121,7 +122,7 @@ export async function executarPodaCiclica(
     await moverArquivos(aPodar, base, historico);
     await salvarEstado(PATH_PENDENTES, aManter);
     await salvarEstado(PATH_HISTORICO, historico);
-    log.sucesso('🧹 Podagem concluída.');
+    log.sucesso(' Podagem concluída.');
   } else {
     // Mesmo em simulação, mostramos contagem para cobrir mensagem esperada
     logAuto.podaPodandoSimulado(aPodar.length);
@@ -164,7 +165,7 @@ async function moverArquivos(
           logAuto.podaArquivoMovido(pend.arquivo);
         } catch (err) {
           log.erro(
-            `❌ Falha ao mover ${pend.arquivo}: ${typeof err === 'object' && err && 'message' in err ? (err as { message: string }).message : String(err)}`,
+            ` Falha ao mover ${pend.arquivo}: ${typeof err === 'object' && err && 'message' in err ? (err as { message: string }).message : String(err)}`,
           );
         }
       }),

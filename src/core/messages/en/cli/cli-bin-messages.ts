@@ -5,7 +5,7 @@ export const CliBinMensagens = {
   unhandledRejection: 'Prometheus: unhandled rejection',
   excecaoNaoCapturada: 'Uncaught exception: {mensagem}',
   resumoConversa: {
-    titulo: '\n📊 CONVERSATION SUMMARY',
+    titulo: '\n CONVERSATION SUMMARY',
     total: 'Total: {total}',
     usuario: 'User: {total}',
     prometheus: 'Prometheus: {total}',

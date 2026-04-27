@@ -13,6 +13,7 @@ export interface OcorrenciaBase {
   origem?: string;
   arquivo?: string;
   sugestao?: string;
+  extras?: Record<string, unknown>; // Para metadados adicionais
 }
 
 // Versão estendida para analistas (tipo obrigatório)

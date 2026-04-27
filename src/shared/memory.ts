@@ -1,73 +1,20 @@
 // SPDX-License-Identifier: MIT
+// @prometheus-disable tipo-permissivo-object
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 
-import type { MemoryMessage, PrometheusContextState, PrometheusRunRecord } from '@';
+import type { RunEndUpdate, RunStartInput } from '@projeto-types/shared';
 
-import type { RunEndUpdate, RunStartInput } from '../types/shared/memory.js';
+import type { PrometheusContextState, PrometheusRunRecord } from '@';
 
 // Re-exporta para compatibilidade com código existente
-export type { MemoryMessage, PrometheusContextState, PrometheusRunRecord, RunEndUpdate, RunStartInput };
-export class ConversationMemory {
-  private history: MemoryMessage[] = [];
-  constructor(private maxHistory = 10, private persistCaminho?: string) { }
-  async init(): Promise<void> {
-    if (!this.persistCaminho) return;
-    try {
-      const raw = await readFile(this.persistCaminho, 'utf-8');
-      this.history = JSON.parse(raw);
-    } catch {
-      this.history = [];
-    }
-  }
-  async addMessage(message: MemoryMessage): Promise<void> {
-    this.history.push(message);
-    if (this.history.length > this.maxHistory * 2) {
-      this.history = this.history.slice(-this.maxHistory * 2);
-    }
-    await this.persist();
-  }
-  getContext(lastN?: number): MemoryMessage[] {
-    if (lastN) return this.history.slice(-lastN);
-    return [...this.history];
-  }
-  getSummary(): {
-    // @prometheus-disable: tipo-literal-inline-complexo
-    totalMessages: number;
-    userMessages: number;
-    assistantMessages: number;
-    firstMessage?: string;
-    lastMessage?: string;
-  } {
-    return {
-      totalMessages: this.history.length,
-      userMessages: this.history.filter(m => m.role === 'user').length,
-      assistantMessages: this.history.filter(m => m.role === 'assistant').length,
-      firstMessage: this.history[0]?.timestamp,
-      lastMessage: this.history[this.history.length - 1]?.timestamp
-    };
-  }
-  async clear(): Promise<void> {
-    this.history = [];
-    await this.persist();
-  }
-  private async persist(): Promise<void> {
-    if (!this.persistCaminho) return;
-    try {
-      await mkdir(dirname(this.persistCaminho), {
-        recursive: true
-      });
-      await writeFile(this.persistCaminho, JSON.stringify(this.history, null, 2), 'utf-8');
-    } catch {
-      // ignore persist errors
-    }
-  }
-}
+export type { PrometheusContextState, PrometheusRunRecord, RunEndUpdate, RunStartInput };
+
 export class PrometheusContextMemory {
   private state: PrometheusContextState = {
     schemaVersion: 1,
     lastRuns: [],
-    preferences: {} as Record<string, unknown>
+    preferences: Object.create(null) as Record<string, unknown>
   };
   constructor(private maxRuns = 20, private persistCaminho?: string) { }
   async init(): Promise<void> {
@@ -80,7 +27,7 @@ export class PrometheusContextMemory {
           // @prometheus-disable: tipo-literal-inline-complexo
           schemaVersion: 1,
           lastRuns: Array.isArray(parsed.lastRuns) ? parsed.lastRuns as PrometheusRunRecord[] : [],
-          preferences: parsed.preferences && typeof parsed.preferences === 'object' ? parsed.preferences as Record<string, unknown> : {} as Record<string, unknown>
+          preferences: parsed.preferences && typeof parsed.preferences === 'object' ? parsed.preferences as Record<string, unknown> : Object.create(null) as Record<string, unknown>
         };
       }
     } catch {
@@ -140,7 +87,7 @@ export class PrometheusContextMemory {
   }
   async clear(): Promise<void> {
     this.state.lastRuns = [];
-    this.state.preferences = {} as Record<string, unknown>;
+    this.state.preferences = Object.create(null) as Record<string, unknown>;
     await this.persist();
   }
   private async persist(): Promise<void> {
@@ -155,13 +102,7 @@ export class PrometheusContextMemory {
     }
   }
 }
-export async function getDefaultMemory(): Promise<ConversationMemory> {
-  // Preferimos memória por projeto (cwd) para evitar misturar repositórios.
-  const persistCaminho = join(process.cwd(), '.prometheus', 'history.json');
-  const mem = new ConversationMemory(10, persistCaminho);
-  await mem.init();
-  return mem;
-}
+
 export async function getDefaultContextMemory(): Promise<PrometheusContextMemory> {
   const persistCaminho = join(process.cwd(), '.prometheus', 'context.json');
   const mem = new PrometheusContextMemory(20, persistCaminho);

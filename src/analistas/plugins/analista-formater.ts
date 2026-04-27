@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
-import { messages } from '@core/messages/index.js';
-import { formatarPrettierMinimo } from '@shared/impar/formater.js';
+import { messages } from '@core/messages';
+import { formatarPrettierMinimo } from '@shared/impar';
 
 import { criarAnalista, criarOcorrencia } from '@';
 

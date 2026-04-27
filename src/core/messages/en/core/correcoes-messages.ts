@@ -8,7 +8,7 @@
  * - Auto-fix in general
  */
 
-import { buildTypesRelPathPosix, getTypesDirectoryDisplay } from '../../../../core/config/conventions.js';
+import { buildTypesRelPathPosix, getTypesDirectoryDisplay } from '../../../config/conventions.js';
 import { ICONES } from '../../shared/icons.js';
 
 /**
@@ -66,8 +66,8 @@ export const MENSAGENS_AUTOFIX = {
     modoConservador: `${ICONES.comando.guardian} Conservative mode activated - applying only high-confidence fixes`,
     validacaoEslint: `${ICONES.acao.analise} Running ESLint validation post-auto-fix...`,
     arquivoMovido: (origem: string, destino: string) => `${ICONES.status.ok} Moved: ${origem} → ${destino}`,
-    arquivoRevertido: (origem: string, destino: string) => `↩️ File reverted: ${destino} → ${origem}`,
-    arquivoRevertidoConteudo: (origem: string, destino: string) => `↩️ File reverted with original content: ${destino} → ${origem}`
+    arquivoRevertido: (origem: string, destino: string) => `↩ File reverted: ${destino} → ${origem}`,
+    arquivoRevertidoConteudo: (origem: string, destino: string) => `↩ File reverted with original content: ${destino} → ${origem}`
   },
   // Results
   resultados: {

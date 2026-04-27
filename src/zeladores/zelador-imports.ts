@@ -15,7 +15,7 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
-import { messages } from '@core/messages/index.js';
+import { messages } from '@core/messages';
 
 import type { AliasConfig, ImportCorrecao, ImportCorrecaoArquivo, ImportCorrecaoOptions } from '@';
 
@@ -294,9 +294,9 @@ export async function corrigirImports(dirs: string[] = ['src', 'tests'], options
   for (const linha of resumo) {
     if (linha === '') {
       console.log();
-    } else if (linha.includes('✅')) {
+    } else if (linha.includes('')) {
       log.sucesso(linha);
-    } else if (linha.includes('⚠️')) {
+    } else if (linha.includes('')) {
       log.aviso(linha);
     } else {
       log.info(linha);

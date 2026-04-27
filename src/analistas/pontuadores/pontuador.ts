@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
-import { grafoDependencias } from '@analistas/detectores/detector-dependencias.js';
-import { ARQUETIPOS, normalizarCaminho } from '@analistas/estrategistas/arquetipos-defs.js';
-
 import type { ArquetipoDeteccaoAnomalia, ArquetipoEstruturaDef, ResultadoDeteccaoArquetipo, SinaisProjetoAvancados } from '@';
+
+import { grafoDependencias } from '../detectores/detector-dependencias.js';
+import { ARQUETIPOS, normalizarCaminho } from '../estrategistas/arquetipos-defs.js';
 
 const PENALIDADE_MISSING_REQUIRED = 20;
 const PESO_OPTIONAL = 5;
@@ -198,11 +198,11 @@ export function scoreArquetipoAvancado(def: ArquetipoEstruturaDef, arquivos: str
     case 'next-js':
       if (frameworks.includes('Next.js') || deps.includes('next')) {
         score += 30;
-        explicacao += '\n✓ Framework Next.js detectado via dependências e análise de código.';
+        explicacao += '\n Framework Next.js detectado via dependências e análise de código.';
       }
       if (sinaisAvancados.pastasPadrao?.includes('pages') || sinaisAvancados.pastasPadrao?.includes('app')) {
         score += 20;
-        explicacao += '\n✓ Estrutura de roteamento Next.js (pages ou app dir) confirmada.';
+        explicacao += '\n Estrutura de roteamento Next.js (pages ou app dir) confirmada.';
       }
       // Bônus por tecnologias detectadas
       if (sinaisAvancados.tecnologiasDominantes.includes('frontend-framework')) {
@@ -213,137 +213,137 @@ export function scoreArquetipoAvancado(def: ArquetipoEstruturaDef, arquivos: str
       // Detecção específica para Next.js fullstack
       if (frameworks.includes('Next.js') || deps.includes('next')) {
         score += 35;
-        explicacao += '\n✓ Framework Next.js detectado - aplicação fullstack moderna.';
+        explicacao += '\n Framework Next.js detectado - aplicação fullstack moderna.';
       }
       if (sinaisAvancados.pastasPadrao?.includes('api')) {
         score += 25;
-        explicacao += '\n✓ API routes Next.js detectadas - backend integrado.';
+        explicacao += '\n API routes Next.js detectadas - backend integrado.';
       }
       if (sinaisAvancados.pastasPadrao?.includes('pages')) {
         score += 20;
-        explicacao += '\n✓ Páginas Next.js (Pages Router) detectadas.';
+        explicacao += '\n Páginas Next.js (Pages Router) detectadas.';
       }
       if (sinaisAvancados.pastasPadrao?.includes('app')) {
         score += 25;
-        explicacao += '\n✓ App Router Next.js detectado - arquitetura moderna.';
+        explicacao += '\n App Router Next.js detectado - arquitetura moderna.';
       }
       if (deps.includes('prisma') || deps.includes('@prisma/client')) {
         score += 20;
-        explicacao += '\n✓ Prisma ORM detectado - banco de dados integrado.';
+        explicacao += '\n Prisma ORM detectado - banco de dados integrado.';
       }
       if (sinaisAvancados.tecnologiasDominantes.includes('frontend-framework')) {
         score += 15;
-        explicacao += '\n✓ Tecnologias frontend modernas detectadas.';
+        explicacao += '\n Tecnologias frontend modernas detectadas.';
       }
       if (sinaisAvancados.tecnologiasDominantes.includes('backend-api')) {
         score += 15;
-        explicacao += '\n✓ APIs backend detectadas no fullstack.';
+        explicacao += '\n APIs backend detectadas no fullstack.';
       }
       break;
     case 'vite':
       if (frameworks.includes('Vite') || deps.includes('vite')) {
         score += 30;
-        explicacao += '\n✓ Build tool Vite detectado.';
+        explicacao += '\n Build tool Vite detectado.';
       }
       if (sinaisAvancados.arquivosConfiguracao?.some(f => f.includes('vite.config'))) {
         score += 15;
-        explicacao += '\n✓ Arquivo de configuração Vite presente.';
+        explicacao += '\n Arquivo de configuração Vite presente.';
       }
       break;
     case 'api-rest-express':
       if (frameworks.includes('Express') || deps.includes('express')) {
         score += 25;
-        explicacao += '\n✓ Framework Express detectado.';
+        explicacao += '\n Framework Express detectado.';
       }
       if (frameworks.includes('Fastify') || deps.includes('fastify')) {
         score += 25;
-        explicacao += '\n✓ Framework Fastify detectado - alta performance.';
+        explicacao += '\n Framework Fastify detectado - alta performance.';
       }
       if (frameworks.includes('NestJS') || deps.includes('@nestjs/core')) {
         score += 30;
-        explicacao += '\n✓ Framework NestJS detectado - arquitetura enterprise.';
+        explicacao += '\n Framework NestJS detectado - arquitetura enterprise.';
       }
       if (frameworks.includes('Koa') || deps.includes('koa')) {
         score += 20;
-        explicacao += '\n✓ Framework Koa detectado.';
+        explicacao += '\n Framework Koa detectado.';
       }
       if (frameworks.includes('Hapi') || deps.includes('@hapi/hapi')) {
         score += 20;
-        explicacao += '\n✓ Framework Hapi detectado.';
+        explicacao += '\n Framework Hapi detectado.';
       }
       if (sinaisAvancados.pastasPadrao?.includes('routes') || sinaisAvancados.pastasPadrao?.includes('api') || sinaisAvancados.pastasPadrao?.includes('controllers')) {
         score += 15;
-        explicacao += '\n✓ Estrutura de rotas/controllers API detectada.';
+        explicacao += '\n Estrutura de rotas/controllers API detectada.';
       }
       if (deps.includes('cors') || deps.includes('helmet') || deps.includes('@fastify/cors')) {
         score += 10;
-        explicacao += '\n✓ Middleware de segurança/CORS presente.';
+        explicacao += '\n Middleware de segurança/CORS presente.';
       }
       if (deps.includes('joi') || deps.includes('@hapi/joi')) {
         score += 10;
-        explicacao += '\n✓ Validação de dados detectada.';
+        explicacao += '\n Validação de dados detectada.';
       }
       if (deps.includes('prisma') || deps.includes('mongoose') || deps.includes('typeorm')) {
         score += 15;
-        explicacao += '\n✓ ORM/Database layer detectado.';
+        explicacao += '\n ORM/Database layer detectado.';
       }
       // Bônus por padrões arquiteturais
       if (sinaisAvancados.padroesArquiteturais.includes('repository-service')) {
         score += 10;
-        explicacao += '\n✓ Padrão Repository/Service compatível com APIs REST.';
+        explicacao += '\n Padrão Repository/Service compatível com APIs REST.';
       }
       if (sinaisAvancados.tecnologiasDominantes.includes('backend-api')) {
         score += 20;
-        explicacao += '\n✓ Foco em desenvolvimento backend/API confirmado.';
+        explicacao += '\n Foco em desenvolvimento backend/API confirmado.';
       }
       break;
     case 'vue-spa':
       // Detecção específica para Vue.js SPA
       if (frameworks.includes('Vue') || deps.includes('vue')) {
         score += 30;
-        explicacao += '\n✓ Framework Vue.js detectado - SPA moderna.';
+        explicacao += '\n Framework Vue.js detectado - SPA moderna.';
       }
       if (deps.includes('vue-router')) {
         score += 20;
-        explicacao += '\n✓ Vue Router detectado - roteamento SPA.';
+        explicacao += '\n Vue Router detectado - roteamento SPA.';
       }
       if (deps.includes('vuex') || deps.includes('pinia')) {
         score += 20;
-        explicacao += '\n✓ State management detectado (Vuex/Pinia).';
+        explicacao += '\n State management detectado (Vuex/Pinia).';
       }
       if (deps.includes('@vue/cli-service') || deps.includes('vite')) {
         score += 15;
-        explicacao += '\n✓ Build tool Vue detectado (CLI/Vite).';
+        explicacao += '\n Build tool Vue detectado (CLI/Vite).';
       }
       if (sinaisAvancados.pastasPadrao?.includes('src/components')) {
         score += 15;
-        explicacao += '\n✓ Estrutura de componentes Vue detectada.';
+        explicacao += '\n Estrutura de componentes Vue detectada.';
       }
       if (sinaisAvancados.pastasPadrao?.includes('src/composables')) {
         score += 15;
-        explicacao += '\n✓ Composables Vue 3 detectados - arquitetura moderna.';
+        explicacao += '\n Composables Vue 3 detectados - arquitetura moderna.';
       }
       if (sinaisAvancados.pastasPadrao?.includes('src/views')) {
         score += 10;
-        explicacao += '\n✓ Estrutura de views/pages detectada.';
+        explicacao += '\n Estrutura de views/pages detectada.';
       }
       if (deps.includes('nuxt') || deps.includes('nuxt3')) {
         score += 25;
-        explicacao += '\n✓ Nuxt.js detectado - SSR/SSG framework.';
+        explicacao += '\n Nuxt.js detectado - SSR/SSG framework.';
       }
       if (sinaisAvancados.tecnologiasDominantes.includes('frontend-framework')) {
         score += 15;
-        explicacao += '\n✓ Foco em desenvolvimento frontend confirmado.';
+        explicacao += '\n Foco em desenvolvimento frontend confirmado.';
       }
       break;
     case 'react-app':
       if (frameworks.includes('React') || deps.includes('react')) {
         score += 30;
-        explicacao += '\n✓ Framework React detectado.';
+        explicacao += '\n Framework React detectado.';
       }
       if (sinaisAvancados.pastasPadrao?.includes('components') || sinaisAvancados.pastasPadrao?.includes('src')) {
         score += 15;
-        explicacao += '\n✓ Estrutura React típica com components detectada.';
+        explicacao += '\n Estrutura React típica com components detectada.';
       }
       // Bônus por tecnologias detectadas
       if (sinaisAvancados.tecnologiasDominantes.includes('frontend-framework')) {
@@ -353,65 +353,65 @@ export function scoreArquetipoAvancado(def: ArquetipoEstruturaDef, arquivos: str
     case 'vue-app':
       if (frameworks.includes('Vue') || deps.includes('vue')) {
         score += 30;
-        explicacao += '\n✓ Framework Vue detectado.';
+        explicacao += '\n Framework Vue detectado.';
       }
       if (sinaisAvancados.pastasPadrao?.includes('components') || sinaisAvancados.arquivosPadrao?.some(f => f.endsWith('.vue'))) {
         score += 15;
-        explicacao += '\n✓ Estrutura Vue com components detectada.';
+        explicacao += '\n Estrutura Vue com components detectada.';
       }
       break;
     case 'typescript-lib':
       if (sinaisAvancados.tipos?.length > 0) {
         score += 20;
-        explicacao += `\n✓ Tipos TypeScript detectados (${sinaisAvancados.tipos.length} tipos).`;
+        explicacao += `\n Tipos TypeScript detectados (${sinaisAvancados.tipos.length} tipos).`;
       }
       if (deps.includes('typescript') || sinaisAvancados.arquivosConfiguracao?.some(f => f.includes('tsconfig'))) {
         score += 15;
-        explicacao += '\n✓ Configuração TypeScript presente.';
+        explicacao += '\n Configuração TypeScript presente.';
       }
       if (scripts.includes('build') || scripts.includes('compile')) {
         score += 10;
-        explicacao += '\n✓ Scripts de build detectados.';
+        explicacao += '\n Scripts de build detectados.';
       }
       // Bônus por TypeScript avançado
       if (sinaisAvancados.tecnologiasDominantes.includes('typescript-advanced')) {
         score += 20;
-        explicacao += '\n✓ Uso avançado de TypeScript detectado.';
+        explicacao += '\n Uso avançado de TypeScript detectado.';
       }
       break;
     case 'monorepo':
       if (sinaisAvancados.arquivosConfiguracao?.some(f => f.includes('lerna.json') || f.includes('pnpm-workspace'))) {
         score += 25;
-        explicacao += '\n✓ Configuração de monorepo detectada (Lerna ou pnpm).';
+        explicacao += '\n Configuração de monorepo detectada (Lerna ou pnpm).';
       }
       if (sinaisAvancados.pastasPadrao?.includes('packages') || sinaisAvancados.pastasPadrao?.includes('apps')) {
         score += 20;
-        explicacao += '\n✓ Estrutura de workspaces/packages detectada.';
+        explicacao += '\n Estrutura de workspaces/packages detectada.';
       }
       // Bônus por complexidade alta
       if (sinaisAvancados.complexidadeEstrutura === 'alta') {
         score += 20;
-        explicacao += '\n✓ Complexidade estrutural alta compatível com monorepo.';
+        explicacao += '\n Complexidade estrutural alta compatível com monorepo.';
       }
       break;
     case 'cli':
       if (sinaisAvancados.pastasPadrao?.includes('bin') || sinaisAvancados.pastasPadrao?.includes('cli')) {
         score += 20;
-        explicacao += '\n✓ Estrutura de CLI detectada (bin ou cli).';
+        explicacao += '\n Estrutura de CLI detectada (bin ou cli).';
       }
       if (deps.includes('commander') || deps.includes('yargs') || deps.includes('inquirer')) {
         score += 15;
-        explicacao += '\n✓ Biblioteca de CLI detectada (commander/yargs/inquirer).';
+        explicacao += '\n Biblioteca de CLI detectada (commander/yargs/inquirer).';
       }
       // Bônus por padrões CLI
       if (sinaisAvancados.padroesArquiteturais.includes('cli-patterns')) {
         score += 25;
-        explicacao += '\n✓ Padrões específicos de CLI detectados.';
+        explicacao += '\n Padrões específicos de CLI detectados.';
       }
       // Penalizar se tem estrutura web
       if (sinaisAvancados.tecnologiasDominantes.includes('frontend-framework')) {
         score -= 30;
-        explicacao += '\n✗ Estrutura web detectada, incompatível com CLI.';
+        explicacao += '\n Estrutura web detectada, incompatível com CLI.';
       }
       break;
   }
@@ -419,23 +419,23 @@ export function scoreArquetipoAvancado(def: ArquetipoEstruturaDef, arquivos: str
   // Análises genéricas aplicáveis a todos os arquétipos
   if (detalhes.testRunner) {
     score += 5;
-    explicacao += `\n✓ Test runner detectado: ${detalhes.testRunner}.`;
+    explicacao += `\n Test runner detectado: ${detalhes.testRunner}.`;
   }
   if (detalhes.linter) {
     score += 3;
-    explicacao += `\n✓ Linter configurado: ${detalhes.linter}.`;
+    explicacao += `\n Linter configurado: ${detalhes.linter}.`;
   }
   if (detalhes.bundler && !['vite', 'webpack', 'rollup'].includes(def.nome)) {
     score += 5;
-    explicacao += `\n✓ Bundler detectado: ${detalhes.bundler}.`;
+    explicacao += `\n Bundler detectado: ${detalhes.bundler}.`;
   }
 
   // Detectar complexidade do projeto baseado nos sinais
   const complexidade = (sinaisAvancados.funcoes || 0) + (sinaisAvancados.classes || 0) + (sinaisAvancados.variaveis || 0);
   if (complexidade > 100) {
-    explicacao += `\n📊 Projeto de complexidade alta (${complexidade} elementos).`;
+    explicacao += `\n Projeto de complexidade alta (${complexidade} elementos).`;
   } else if (complexidade > 50) {
-    explicacao += `\n📊 Projeto de complexidade média (${complexidade} elementos).`;
+    explicacao += `\n Projeto de complexidade média (${complexidade} elementos).`;
   }
 
   // Recalcular confidence baseado no novo score

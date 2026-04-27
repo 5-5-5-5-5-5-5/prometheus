@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-import { config } from '@core/config/config.js';
-import { getMessages } from '@core/messages/index.js';
-import { ensureDir } from '@shared/helpers/fs.js';
-import { normalizePath } from '@shared/helpers/path.js';
+import { config } from '@core/config';
+import { getMessages } from '@core/messages';
+import { ensureDir , normalizePath } from '@shared/helpers';
 import micromatch from 'micromatch';
 
 import type { FileEntry } from '@';
@@ -49,7 +48,7 @@ export async function scanSystemIntegrity(fileEntries: FileEntry[], options?: {
   try {
     baselineAnterior = await carregarBaseline();
   } catch (err) {
-    log.aviso(`⚠️ Baseline inválido ou corrompido: ${typeof err === 'object' && err && 'message' in err ? (err as {
+    log.aviso(` Baseline inválido ou corrompido: ${typeof err === 'object' && err && 'message' in err ? (err as {
       message: string;
     }).message : String(err)}`);
   }
@@ -62,7 +61,7 @@ export async function scanSystemIntegrity(fileEntries: FileEntry[], options?: {
   });
   if (config.DEV_MODE) {
     const removidos = fileEntries.length - filtrados.length;
-    log.info(`⚙️ Guardian filtro aplicado: ${filtrados.length} arquivos considerados (removidos ${removidos}).`);
+    log.info(` Guardian filtro aplicado: ${filtrados.length} arquivos considerados (removidos ${removidos}).`);
   }
   // Usa import dinâmico para alinhar com mocks de teste (vi.mock/vi.doMock)
   const {
@@ -102,7 +101,7 @@ export async function scanSystemIntegrity(fileEntries: FileEntry[], options?: {
   }
   if (process.argv.includes('--aceitar')) {
     if (!options?.suppressLogs) {
-      log.info(`✅ Guardian: baseline aceito manualmente (--aceitar).`);
+      log.info(` Guardian: baseline aceito manualmente (--aceitar).`);
     }
     await salvarBaseline(snapshotAtual);
     return {

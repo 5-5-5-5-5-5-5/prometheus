@@ -108,4 +108,11 @@ export default [
       'relatorios/**',
     ],
   },
+  // Override para arquivos que usam fetch/APIs externas: permite any para parsing de respostas
+  {
+    files: ['src/shared/ia/llm-client.ts', 'src/analistas/ia/provider-manager.ts'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
 ];

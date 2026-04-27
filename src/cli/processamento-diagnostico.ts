@@ -2,26 +2,24 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { detectarArquetipos } from '@analistas/detectores/detector-arquetipos.js';
-import { normalizarOcorrenciaParaJson } from '@cli/diagnostico/normalizar-ocorrencias-json.js';
-import { exibirBlocoFiltros, listarAnalistas } from '@cli/processing/display.js';
-import { configurarFiltros, expandIncludes, processPatternGroups, processPatternListAchatado } from '@cli/processing/filters.js';
-import { chalk } from '@core/config/chalk-safe.js';
-import { config } from '@core/config/config.js';
-import { isInsideConfigDirectory, isInsideTestsDirectory } from '@core/config/conventions.js';
-import { isInsideSrc } from '@core/config/paths.js';
-import { executarInquisicao, iniciarInquisicao, prepararComAst, registrarUltimasMetricas } from '@core/execution/inquisidor.js';
-import { messages } from '@core/messages/index.js';
-import { aplicarSupressaoOcorrencias } from '@core/parsing/filters.js';
-import { scanSystemIntegrity } from '@guardian/sentinela.js';
-import { emitirConselhoPrometheus } from '@relatorios/conselheiro-prometheus.js';
-import { gerarRelatorioMarkdown } from '@relatorios/gerador-relatorio.js';
-import { fragmentarRelatorio } from '@shared/data-processing/fragmentar-relatorio.js';
-import { stringifyJsonEscaped } from '@shared/data-processing/json.js';
-import { dedupeOcorrencias } from '@shared/data-processing/ocorrencias.js';
+import { detectarArquetipos } from '@analistas/detectores';
+import { chalk , config , isInsideConfigDirectory, isInsideSrc,isInsideTestsDirectory  } from '@core/config';
+import { executarInquisicao, iniciarInquisicao, prepararComAst, registrarUltimasMetricas } from '@core/execution';
+import { messages } from '@core/messages';
+import { aplicarSupressaoOcorrencias } from '@core/parsing';
+import { scanSystemIntegrity } from '@guardian';
+import { emitirConselhoPrometheus , gerarRelatorioJson } from '@relatorios';
+import { dedupeOcorrencias,fragmentarRelatorio , stringifyJsonEscaped  } from '@shared/data-processing';
 
 // Importar tipos centralizados (consolidado)
 import { asTecnicas, converterResultadoGuardian, type FileEntry, type FileEntryWithAst, type FiltrosConfig, IntegridadeStatus, type LinguagensJson, type LogExtensions, type OpcoesProcessamentoDiagnostico, type ParseErrosJson, type ResultadoGuardian, type ResultadoInquisicaoCompleto, type ResultadoProcessamentoDiagnostico, type SaidaJsonDiagnostico } from '@';
+
+import { scanIgnore } from './diagnostico/handlers/ignore-handler.js';
+import { scanImports } from './diagnostico/handlers/importer-handler.js';
+import { scanPadronizacao } from './diagnostico/handlers/padronizador-handler.js';
+import { normalizarOcorrenciaParaJson } from './diagnostico/normalizar-ocorrencias-json.js';
+import { exibirBlocoFiltros, listarAnalistas } from './processing/display.js';
+import { configurarFiltros, expandIncludes, processPatternGroups, processPatternListAchatado } from './processing/filters.js';
 
 const { log, logGuardian, logRelatorio, logSistema, MENSAGENS_AUTOFIX, CliProcessamentoExtraMensagens } = messages;
 
@@ -45,7 +43,7 @@ async function getSalvarEstado(): Promise<(caminho: string, dados: unknown) => P
 
   // Fallback: importar pelo alias oficial
   if (!salvarEstado) {
-    const mod = await import('@shared/persistence/persistencia.js');
+    const mod = await import('@shared/persistence');
     salvarEstado = (mod as {
       salvarEstado: (c: string, d: unknown) => Promise<void>;
     }).salvarEstado;
@@ -53,7 +51,7 @@ async function getSalvarEstado(): Promise<(caminho: string, dados: unknown) => P
   return salvarEstado;
 }
 // Reexports para compatibilidade com testes que importam utilitários diretamente deste módulo
-export { configurarFiltros, getDefaultExcludes } from '@cli/processing/filters.js';
+export { configurarFiltros, getDefaultExcludes } from './processing/filters.js';
 // registroAnalistas será importado dinamicamente quando necessário
 
 // Helpers deduplicação/agrupamento: agora centralizados em @shared/data-processing/ocorrencias
@@ -137,7 +135,6 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
 
   // Configurar filtros no config global
   configurarFiltros(includeGroupsRaw, includeListFlat, excludeList, incluiNodeModules);
-  let iniciouDiagnostico = false;
   const baseDir = process.cwd();
   let guardianResultado: ResultadoGuardian | undefined;
   let fileEntries: FileEntryWithAst[] = [];
@@ -165,7 +162,6 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
       (log as typeof log & LogExtensions).fase?.('Iniciando diagnóstico completo');
     } else {
       (log as typeof log & LogExtensions).fase?.('Diagnóstico (modo compacto)');
-      iniciouDiagnostico = true;
     }
 
     // 1) Primeira varredura rápida (sem AST) apenas para obter entries e opcionalmente rodar Guardian
@@ -226,7 +222,7 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
         const {
           criarTemplateArquetipoPersonalizado,
           salvarArquetipoPersonalizado
-        } = await import('@analistas/js-ts/arquetipos-personalizados.js');
+        } = await import('@analistas/js-ts');
         const arquetipo = criarTemplateArquetipoPersonalizado(nomeProjeto, estruturaDetectada, arquivosRaiz, 'generico');
         if (opts.salvarArquetipo) {
           await salvarArquetipoPersonalizado(arquetipo, baseDir);
@@ -375,7 +371,7 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
 
     // Continuar com o processamento restante...
     // Em fast-mode, reduz o conjunto de analistas para acelerar
-    const registro = (await import('@analistas/registry/registry.js')).registroAnalistas;
+    const registro = (await import('@analistas/registry')).registroAnalistas;
     let tecnicas = asTecnicas(registro);
     if (fastMode) {
       const fmIncluirSrc: unknown = (config as unknown as Record<string, unknown>).fastMode && (config as unknown as Record<string, unknown>).fastMode as Record<string, unknown>;
@@ -465,7 +461,7 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
             const tipo = String(item.tipo || '');
             if (tipo.startsWith('tipo-inseguro')) {
               item.nivel = 'aviso';
-              item.mensagem = `${item.mensagem} | 🤝 Conciliação: inferência e tipagem explícita em conflito; revisar caso`;
+              item.mensagem = `${item.mensagem} |  Conciliação: inferência e tipagem explícita em conflito; revisar caso`;
             }
           }
         }
@@ -473,11 +469,41 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
     } catch (err) {
       log.debug(`Erro em processarDiagnostico (conciliação analistas): ${  err instanceof Error ? err.message : String(err)}`);
     }
+
+    // Scanners de padronização, imports e gitignore — mesclar aos findings
+    try {
+      (log as typeof log & LogExtensions).fase?.('Verificando padronização, imports e .gitignore');
+      const [padOcorrencias, impOcorrencias, ignoreOcorrencias] = await Promise.all([
+        scanPadronizacao({ baseDir }).catch(() => []),
+        scanImports({ baseDir }).catch(() => []),
+        scanIgnore({ baseDir }).catch(() => []),
+      ]);
+      if (padOcorrencias.length > 0) {
+        ocorrenciasFiltradas.push(...padOcorrencias);
+        if (config.VERBOSE) {
+          log.info(`  Padronização: ${padOcorrencias.length} ocorrência(s) encontrada(s)`);
+        }
+      }
+      if (impOcorrencias.length > 0) {
+        ocorrenciasFiltradas.push(...impOcorrencias);
+        if (config.VERBOSE) {
+          log.info(`  Imports: ${impOcorrencias.length} problema(s) encontrado(s)`);
+        }
+      }
+      if (ignoreOcorrencias.length > 0) {
+        ocorrenciasFiltradas.push(...ignoreOcorrencias);
+        if (config.VERBOSE) {
+          log.info(`  .gitignore: ${ignoreOcorrencias.length} problema(s) encontrado(s)`);
+        }
+      }
+    } catch (err) {
+      log.debug(`Erro em scanners de padronização/imports/ignore: ${  err instanceof Error ? err.message : String(err)}`);
+    }
     // Aplicar supressões configuradas em prometheus.config.json
     ocorrenciasFiltradas = aplicarSupressaoOcorrencias(ocorrenciasFiltradas, config as unknown as FiltrosConfig || undefined);
     const totalOcorrenciasProcessadas = ocorrenciasFiltradas.length;
 
-    // 🚀 PROCESSAMENTO DE FLAGS INTUITIVAS
+    //  PROCESSAMENTO DE FLAGS INTUITIVAS
     // Mapear flags intuitivas para as flags internas
     if (opts.fix && !opts.autoFix) {
       opts.autoFix = true;
@@ -497,10 +523,10 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
         const {
           findQuickFixes,
           applyQuickFix
-        } = await import('@core/config/auto/fix-config.js');
+        } = await import('@core/config/auto');
         const {
           getAutoFixConfig
-        } = await import('@core/config/auto/auto-fix-config.js');
+        } = await import('@core/config/auto');
 
         // Determinar configuração do auto-fix
         let autoCorrecaoMode = opts.autoCorrecaoMode || 'balanced';
@@ -654,7 +680,7 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
                   });
                 }
               } catch (err) {
-                log.aviso(`⚠️  Validação ESLint não executada: ${err instanceof Error ? err.message : String(err)}`);
+                log.aviso(`  Validação ESLint não executada: ${err instanceof Error ? err.message : String(err)}`);
               }
             }
           } else {
@@ -668,7 +694,7 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
           totalOcorrencias = ocorrenciasSemQuickFixes.length;
         }
       } catch (err) {
-        log.erro(`❌ Falha ao executar auto-fix: ${err instanceof Error ? err.message : String(err)}`);
+        log.erro(` Falha ao executar auto-fix: ${err instanceof Error ? err.message : String(err)}`);
       }
     } else {
       // CRÍTICO: Definir totalOcorrencias no fluxo normal (sem auto-fix)
@@ -796,7 +822,7 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
         // Mostrar por nível de severidade
         log.info(messages.CliProcessamentoDiagnosticoMensagens.porSeveridadeTitulo);
         Array.from(nivelOcorrencias.entries()).sort((a, b) => b[1] - a[1]).forEach(([nivel, count]) => {
-          const emoji = nivel === 'erro' ? '🔴' : nivel === 'aviso' ? '🟡' : '🔵';
+          const emoji = nivel === 'erro' ? '' : nivel === 'aviso' ? '' : '';
           log.info(messages.CliProcessamentoDiagnosticoMensagens.porSeveridadeLinha(emoji, nivel, count));
         });
 
@@ -1113,11 +1139,11 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
         let todasOcorrencias = [...naoTodos, ...todosAgregados];
         todasOcorrencias = dedupeOcorrencias(todasOcorrencias);
 
-        // Em modo --json: emitir apenas erros e localizações (sem métricas/caches/tempos).
+        // Em modo --json: emitir ocorrências de nível aviso, erro e info (sem métricas/caches/tempos).
         // Antes, normaliza para enriquecer `linha/coluna` quando disponível via `loc`.
         const ocorrenciasParaJson = todasOcorrencias.map(o => normalizarOcorrenciaParaJson(o)).filter(o => {
           const nivel = (o.nivel || 'info') as string;
-          return nivel === 'erro' || o.tipo === 'PARSE_ERRO';
+          return nivel === 'erro' || nivel === 'aviso' || nivel === 'info' || o.tipo === 'PARSE_ERRO';
         });
         const totalOcorrenciasJson = ocorrenciasParaJson.length;
 
@@ -1269,7 +1295,7 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
           if (opts.executive) {
             const {
               gerarResumoExecutivo
-            } = await import('@relatorios/filtro-inteligente.js');
+            } = await import('@relatorios');
             const resumoExec = gerarResumoExecutivo(ocorrenciasFiltradas);
             if (resumoExec.detalhes.length > 0) {
               const linhasExec = resumoExec.detalhes.map(problema => `${problema.icone} ${problema.titulo.padEnd(25)} ${problema.quantidade.toString().padStart(6)}`);
@@ -1328,15 +1354,31 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
         };
         emitirConselhoPrometheus(contextoConselho);
         if (config.REPORT_EXPORT_ENABLED) {
-          const ts = new Date().toISOString().replace(/[:.]/g, '-');
           const dir = typeof config.REPORT_OUTPUT_DIR === 'string' ? config.REPORT_OUTPUT_DIR : path.join(baseDir, 'reports');
           const fs = await import('node:fs');
           await fs.promises.mkdir(dir, {
             recursive: true
           });
-          const outputCaminho = path.join(dir, `relatorio-${ts}.md`);
+
+          // Determinar próximo número sequencial lendo arquivos existentes no diretório
+          let nextSeq = 1;
+          try {
+            const existingFiles = await fs.promises.readdir(dir);
+            const seqPattern = /^(?:erro|aviso|info|metricas)-(\d+)\.json$/;
+            for (const f of existingFiles) {
+              const match = seqPattern.exec(f);
+              if (match) {
+                const num = parseInt(match[1], 10);
+                if (num >= nextSeq) nextSeq = num + 1;
+              }
+            }
+          } catch { /* diretório vazio ou inacessível — começa em 001 */ }
+          const seq = String(nextSeq).padStart(3, '0');
+          const ts = seq; // alias para compatibilidade com fragmentarRelatorio/SVG exporter
+          const outputCaminho = path.join(dir, `relatorio-${seq}.json`);
           const resultadoCompleto = {
             ...resultadoExecucao,
+            ocorrencias: ocorrenciasFiltradas,
             fileEntries: fileEntriesComAst,
             guardian: guardianResultado
           } as ResultadoInquisicaoCompleto;
@@ -1382,8 +1424,8 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
               analistas: analistasResumidos
             };
 
-            // Ocorrências limpas: apenas campos essenciais
-            const ocorrenciasLimpas = dedupeOcorrencias(resultadoExecucao.ocorrencias || []).slice(0, 2000).map(oc => {
+            // Ocorrências limpas: apenas campos essenciais (usar filtradas para relatório)
+            const ocorrenciasLimpas = dedupeOcorrencias(ocorrenciasFiltradas).slice(0, 2000).map(oc => {
               const ocAny = oc as Record<string, unknown>;
               return {
                 tipo: oc.tipo,
@@ -1397,18 +1439,30 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
                 } : {})
               };
             });
-            const relatorioResumo = {
-              timestamp: new Date().toISOString(),
-              totalOcorrencias: ocorrenciasLimpas.length,
-              baselineModificado: Boolean(guardianResultado && (guardianResultado as unknown as {
-                baselineModificado?: boolean;
-              }).baselineModificado),
-              // versão resumida: métricas agregadas e ocorrências limpas
-              metricas: metricasResumidas,
-              ocorrencias: ocorrenciasLimpas
-            };
+            // Separar ocorrências por nível
+            const erros = ocorrenciasLimpas.filter(o => o.nivel === 'erro' || o.nivel === 'error' || o.nivel === 'critical' || o.nivel === 'critic');
+            const avisos = ocorrenciasLimpas.filter(o => o.nivel === 'warning' || o.nivel === 'aviso' || o.nivel === 'warn' || o.nivel === 'major');
+            const infos = ocorrenciasLimpas.filter(o => o.nivel === 'info' || o.nivel === 'information' || o.nivel === 'minor');
+            const outros = ocorrenciasLimpas.filter(o => !erros.includes(o) && !avisos.includes(o) && !infos.includes(o));
+
+            // Salvar 4 arquivos separados: métricas + por nível (aviso, erro, info)
             const salvar = await getSalvarEstado();
-            await salvar(path.join(dir, `relatorio-${ts}.json`), relatorioResumo);
+            await salvar(path.join(dir, `metricas-${seq}.json`), metricasResumidas);
+            await salvar(path.join(dir, `erro-${seq}.json`), {
+              timestamp: new Date().toISOString(),
+              total: erros.length,
+              erros
+            });
+            await salvar(path.join(dir, `aviso-${seq}.json`), {
+              timestamp: new Date().toISOString(),
+              total: avisos.length,
+              avisos
+            });
+            await salvar(path.join(dir, `info-${seq}.json`), {
+              timestamp: new Date().toISOString(),
+              total: infos.length + outros.length,
+              info: [...infos, ...outros]
+            });
 
             // Se exportação full estiver ativa, grava também o payload completo em arquivo separado
             let fragmentResultado: {
@@ -1434,29 +1488,23 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
                 log.info(messages.CliProcessamentoDiagnosticoMensagens.relatorioFullFragmentado(fragmentResultado.manifestFile));
               } catch {
                 // Fallback: salvar como único arquivo caso a fragmentação falhe
-                await salvar(path.join(dir, `prometheus-relatorio-full-${ts}.json`), relatorioFull);
+                await salvar(path.join(dir, `prometheus-relatorio-full-${seq}.json`), relatorioFull);
               }
             }
 
-            // Gerar o Markdown do diagnóstico agora (inclui links/manifest quando disponível)
+            // Gerar o JSON do diagnóstico agora (inclui links/manifest quando disponível)
             try {
-              await gerarRelatorioMarkdown(resultadoCompleto, outputCaminho, !opts.full, {
-                manifestFile: fragmentResultado?.manifestFile,
-                relatoriosDir: dir,
-                ts,
-                hadFull: Boolean(fragmentResultado)
-              });
+              await gerarRelatorioJson(resultadoCompleto, outputCaminho);
             } catch (e) {
-              log.aviso(messages.CliProcessamentoDiagnosticoMensagens.falhaGerarRelatorioMarkdownMetadados((e as Error).message));
-              // Tenta gerar sem opções como fallback
-              await gerarRelatorioMarkdown(resultadoCompleto, outputCaminho, !opts.full);
+              log.aviso(messages.CliProcessamentoDiagnosticoMensagens.falhaGerarRelatorioJson((e as Error).message));
+              await gerarRelatorioJson(resultadoCompleto, outputCaminho);
             }
 
             // Relatório adicional: otimização de SVG (agrupado por diretório)
             try {
               const {
                 exportarRelatorioSvgOtimizacao
-              } = await import('@cli/diagnostico/exporters/svg-otimizacao-exporter.js');
+              } = await import('./diagnostico/exporters/svg-otimizacao-exporter.js');
               await exportarRelatorioSvgOtimizacao({
                 entries: fileEntriesComAst,
                 relatoriosDir: dir,
@@ -1540,10 +1588,10 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
       todasOcorrencias = dedupeOcorrencias(todasOcorrencias);
 
       // Em modo --json, queremos reduzir o payload ao essencial.
-      // Emitimos apenas ocorrências de nível "erro" (inclui PARSE_ERRO).
+      // Em modo --json, emitimos ocorrências de nível "erro", "aviso" e "info" (inclui PARSE_ERRO).
       const ocorrenciasParaJson = todasOcorrencias.filter(o => {
         const nivel = (o.nivel || 'info') as string;
-        return nivel === 'erro' || o.tipo === 'PARSE_ERRO';
+        return nivel === 'erro' || nivel === 'aviso' || nivel === 'info' || o.tipo === 'PARSE_ERRO';
       });
       const tiposOcorrencias: Record<string, number> = {};
       const parseErros: ParseErrosJson = {
@@ -1645,14 +1693,27 @@ export async function processarDiagnostico(opts: OpcoesProcessamentoDiagnostico)
           // Se a exportação estiver habilitada via flags globais/locais, salvamos o JSON em disco
           if (config.REPORT_EXPORT_ENABLED) {
             try {
-              const ts = new Date().toISOString().replace(/[:.]/g, '-');
               const dir = typeof config.REPORT_OUTPUT_DIR === 'string' ? config.REPORT_OUTPUT_DIR : path.join(baseDir, 'reports');
               const fs = await import('node:fs');
               await fs.promises.mkdir(dir, {
                 recursive: true
               });
+              // Determinar próximo número sequencial
+              let nextSeq = 1;
+              try {
+                const existingFiles = await fs.promises.readdir(dir);
+                const seqPattern = /^(?:erro|aviso|info|metricas)-(\d+)\.json$/;
+                for (const f of existingFiles) {
+                  const match = seqPattern.exec(f);
+                  if (match) {
+                    const num = parseInt(match[1], 10);
+                    if (num >= nextSeq) nextSeq = num + 1;
+                  }
+                }
+              } catch { /* começa em 001 */ }
+              const seq = String(nextSeq).padStart(3, '0');
               const salvar = await getSalvarEstado();
-              await salvar(path.join(dir, `prometheus-diagnostico-${ts}.json`), saidaComMeta);
+              await salvar(path.join(dir, `prometheus-diagnostico-${seq}.json`), saidaComMeta);
               log.sucesso(messages.CliProcessamentoDiagnosticoMensagens.relatoriosExportadosPara(dir));
             } catch (e) {
               log.erro(messages.CliProcessamentoDiagnosticoMensagens.falhaSalvarRelatorioJson((e as Error).message));

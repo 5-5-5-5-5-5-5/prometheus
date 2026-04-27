@@ -8,7 +8,7 @@
  * - Exclusões por padrão de arquivo
  */
 
-import { config } from '@core/config/config.js';
+import { config } from '@core/config';
 import { minimatch } from 'minimatch';
 
 import type { RuleConfig, RuleOverride } from '@';

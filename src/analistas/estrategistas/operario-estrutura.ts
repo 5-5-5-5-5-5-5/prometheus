@@ -1,13 +1,12 @@
 // SPDX-License-Identifier: MIT
 // @prometheus-disable tipo-literal-inline-complexo
 // Justificativa: tipos locais para operações de estrutura
-import { gerarPlanoEstrategico } from '@analistas/arquitetos/estrategista-estrutura.js';
-import { extrairSinaisAvancados } from '@analistas/arquitetos/sinais-projeto-avancados.js';
-import { corrigirEstrutura } from '@analistas/corrections/corretor-estrutura.js';
-import { detectarArquetipos } from '@analistas/detectores/detector-arquetipos.js';
-import { config } from '@core/config/config.js';
-import { getMessages } from '@core/messages/index.js';
+import { config } from '@core/config';
+import { getMessages } from '@core/messages';
 
+/**
+ * Tipos de entrada para planejamento de operações de estrutura
+ */
 import type {
   FileEntryWithAst,
   Ocorrencia,
@@ -16,6 +15,11 @@ import type {
   PlanoSugestaoEstrutura,
   ResultadoPlanejamento,
 } from '@';
+
+import { gerarPlanoEstrategico } from '../arquitetos/estrategista-estrutura.js';
+import { extrairSinaisAvancados } from '../arquitetos/sinais-projeto-avancados.js';
+import { corrigirEstrutura } from '../corrections/corretor-estrutura.js';
+import { detectarArquetipos } from '../detectores/detector-arquetipos.js';
 
 const { log, MENSAGENS_ARQUETIPOS_HANDLER } = getMessages();
 

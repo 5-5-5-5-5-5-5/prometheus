@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 import type { NodePath } from '@babel/traverse';
-import { detectarContextoProjeto } from '@shared/contexto-projeto.js';
-import { detectarComentariosPendentes } from '@shared/helpers/detectores-comuns.js';
+import { detectarContextoProjeto } from '@shared';
+import { detectarComentariosPendentes } from '@shared/helpers';
 
 import type { Analista, TecnicaAplicarResultado } from '@';
 import { criarOcorrencia } from '@';

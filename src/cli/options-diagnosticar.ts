@@ -124,7 +124,7 @@ export const optionsDiagnosticar: DiagnosticarOption[] = [
     desc: 'Atalho para --auto-fix --auto-fix-mode conservative (aplica apenas correções com alta confiança)',
     defaultValue: false,
   },
-  // 🚀 NOVAS FLAGS INTUITIVAS
+  //  NOVAS FLAGS INTUITIVAS
   {
     flags: '--fix',
     desc: 'Alias intuitivo para --auto-fix (aplica correções automáticas detectadas)',

@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
 /**
  * Handler para exportação de relatórios de fix-types
- * Gera relatórios Markdown e JSON padronizados
+ * Gera relatórios JSON padronizados
  */
 
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
-import { config } from '@core/config/config.js';
-import { messages } from '@core/messages/index.js';
+import { config } from '@core/config';
+import { messages } from '@core/messages';
 
 import type { CasoTipoInseguro, FixTypesExportOptions, FixTypesExportResult } from '@';
 
@@ -90,116 +90,6 @@ async function gerarRelatorioJson(caminho: string, options: FixTypesExportOption
   await fs.writeFile(caminho, JSON.stringify(relatorio, null, 2));
 }
 
-/**
- * Gera relatório Markdown legível
- */
-async function gerarRelatorioMarkdown(caminho: string, options: FixTypesExportOptions): Promise<void> {
-  const {
-    casos,
-    stats,
-    minConfidence
-  } = options;
-  const total = stats.legitimo + stats.melhoravel + stats.corrigir;
-  const mediaConfianca = total > 0 ? Math.round(stats.totalConfianca / total) : 0;
-  const lines: string[] = [];
-
-  // Cabeçalho
-  lines.push('# Relatório de Análise de Tipos Inseguros');
-  lines.push('');
-  lines.push(`**Gerado em:** ${new Date().toISOString()}`);
-  lines.push(`**Comando:** \`prometheus fix-types\``);
-  lines.push(`**Confiança Mínima:** ${minConfidence}%`);
-  lines.push('');
-
-  // Resumo Executivo
-  lines.push('## 📊 Resumo Executivo');
-  lines.push('');
-  lines.push(`- **Total de Casos:** ${total}`);
-  lines.push(`- **Confiança Média:** ${mediaConfianca}%`);
-  lines.push('');
-  lines.push('### Distribuição por Categoria');
-  lines.push('');
-  lines.push('| Categoria | Total | Percentual | Descrição |');
-  lines.push('|-----------|-------|------------|-----------|');
-  lines.push(`| [SUCESSO] LEGÍTIMO | ${stats.legitimo} | ${total > 0 ? Math.round(stats.legitimo / total * 100) : 0}% | Uso correto - nenhuma ação necessária |`);
-  lines.push(`| [AVISO] MELHORÁVEL | ${stats.melhoravel} | ${total > 0 ? Math.round(stats.melhoravel / total * 100) : 0}% | Pode ser mais específico - revisão manual recomendada |`);
-  lines.push(`| [ERRO] CORRIGIR | ${stats.corrigir} | ${total > 0 ? Math.round(stats.corrigir / total * 100) : 0}% | Deve ser substituído - correção necessária |`);
-  lines.push('');
-
-  // Casos de Alta Prioridade
-  const altaPrioridade = casos.filter(c => c.categoria === 'corrigir' && c.confianca >= 85);
-  if (altaPrioridade.length > 0) {
-    lines.push('## [ERRO] Correções de Alta Prioridade (≥85% confiança)');
-    lines.push('');
-    altaPrioridade.forEach((caso, idx) => {
-      lines.push(`### ${idx + 1}. ${caso.arquivo}:${caso.linha || '?'} (${caso.confianca}%)`);
-      lines.push('');
-      lines.push(`**Motivo:** ${caso.motivo}`);
-      if (caso.sugestao) {
-        lines.push(`**Sugestão:** ${caso.sugestao}`);
-      }
-      if (caso.contexto) {
-        lines.push('');
-        lines.push('```typescript');
-        lines.push(caso.contexto);
-        lines.push('```');
-      }
-      lines.push('');
-    });
-  }
-
-  // Casos Incertos
-  const casosIncertos = casos.filter(c => c.confianca < 70 && c.variantes && c.variantes.length > 0);
-  if (casosIncertos.length > 0) {
-    lines.push('## [AVISO] Casos com Análise Incerta (<70% confiança)');
-    lines.push('');
-    lines.push('*Estes casos requerem revisão manual cuidadosa - múltiplas possibilidades detectadas*');
-    lines.push('');
-    casosIncertos.forEach((caso, idx) => {
-      lines.push(`### ${idx + 1}. ${caso.arquivo}:${caso.linha || '?'} (${caso.confianca}%)`);
-      lines.push('');
-      lines.push(`**Motivo:** ${caso.motivo}`);
-      if (caso.sugestao) {
-        lines.push(`**Sugestão:** ${caso.sugestao}`);
-      }
-      if (caso.variantes && caso.variantes.length > 0) {
-        lines.push('');
-        lines.push('**Possibilidades Alternativas:**');
-        caso.variantes.forEach((variante, vIdx) => {
-          lines.push(`${vIdx + 1}. ${variante}`);
-        });
-      }
-      if (caso.contexto) {
-        lines.push('');
-        lines.push('```typescript');
-        lines.push(caso.contexto);
-        lines.push('```');
-      }
-      lines.push('');
-    });
-  }
-
-  // Lista Completa por Categoria
-  lines.push('## [INFO] Lista Completa de Casos');
-  lines.push('');
-  for (const categoria of ['legitimo', 'melhoravel', 'corrigir'] as const) {
-    const casosPorCategoria = casos.filter(c => c.categoria === categoria);
-    if (casosPorCategoria.length === 0) continue;
-    const prefixo = categoria === 'legitimo' ? '[SUCESSO]' : categoria === 'melhoravel' ? '[AVISO]' : '[ERRO]';
-    const titulo = categoria.toUpperCase();
-    lines.push(`### ${prefixo} ${titulo} (${casosPorCategoria.length} casos)`);
-    lines.push('');
-    casosPorCategoria.forEach(caso => {
-      lines.push(`- **${caso.arquivo}:${caso.linha || '?'}** (${caso.confianca}%)`);
-      lines.push(`  - ${caso.motivo}`);
-      if (caso.sugestao) {
-        lines.push(`  - [INFO] ${caso.sugestao}`);
-      }
-    });
-    lines.push('');
-  }
-  await fs.writeFile(caminho, lines.join('\n'));
-}
 
 /**
  * Agrupa casos por arquivo
@@ -254,24 +144,15 @@ export async function exportarRelatoriosFixTypes(options: FixTypesExportOptions)
       recursive: true
     });
 
-    // Gerar timestamp único para os arquivos
     const ts = new Date().toISOString().replace(/[:.]/g, '-');
     const nomeBase = `prometheus-fix-types-${ts}`;
 
-    // Gerar relatório Markdown
-    const caminhoMd = path.join(dir, `${nomeBase}.md`);
-    await gerarRelatorioMarkdown(caminhoMd, options);
-
-    // Gerar relatório JSON
     const caminhoJson = path.join(dir, `${nomeBase}.json`);
     await gerarRelatorioJson(caminhoJson, options);
 
-    // Log de sucesso
     log.sucesso(messages.CliExportersMensagens.fixTypes.relatoriosExportadosTitulo);
-    log.info(messages.CliExportersMensagens.fixTypes.caminhoMarkdown(caminhoMd));
     log.info(messages.CliExportersMensagens.fixTypes.caminhoJson(caminhoJson));
     return {
-      markdown: caminhoMd,
       json: caminhoJson,
       dir
     };

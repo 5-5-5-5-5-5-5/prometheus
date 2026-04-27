@@ -18,4 +18,5 @@ export * from './detector-contexto-extra-messages.js';
 export * from './detector-dependencias-messages.js';
 export * from './detector-estrutura-messages.js';
 export * from './detector-interfaces-inline-messages.js';
+export * from './ia-assistente-messages.js';
 export * from './mapa-reversao-extra-messages.js';

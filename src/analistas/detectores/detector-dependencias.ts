@@ -3,11 +3,9 @@ import path from 'node:path';
 
 import type { NodePath } from '@babel/traverse';
 import type * as t from '@babel/types';
-import { config } from '@core/config/config.js';
-import { traverse } from '@core/config/traverse.js';
-import { messages } from '@core/messages/index.js';
-import { normalizarPosix, resolverModulo } from '@shared/helpers/imports.js';
-import { normalizePath } from '@shared/helpers/path.js';
+import { config , traverse } from '@core/config';
+import { messages } from '@core/messages';
+import { normalizarPosix, normalizePath,resolverModulo  } from '@shared/helpers';
 
 import type { ContextoExecucao, Ocorrencia, TecnicaAplicarResultado } from '@';
 
@@ -25,7 +23,7 @@ function ehImportSomenteTipo(node: t.ImportDeclaration): boolean {
     importKind?: string;
   }).importKind;
   if (kind === 'type') return true;
-  // Caso: import { type A } from './x'
+  // Caso: import { type A } from './x.js'
   const specifiers = node.specifiers || [];
   if (specifiers.length === 0) return false; // import side-effect sempre é runtime
   return specifiers.every(s => {

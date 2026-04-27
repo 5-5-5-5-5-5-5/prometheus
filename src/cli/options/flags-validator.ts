@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 /**
- * 🎯 Validação e Normalização de Flags do Comando Diagnosticar
+ *  Validação e Normalização de Flags do Comando Diagnosticar
  *
  * Sistema robusto para:
  * - Validar flags e detectar conflitos
@@ -87,11 +87,8 @@ export function validateAndNormalizeFlags(opts: FlagsBrutas): ResultadoValidacao
   }
 
   /* -------------------------- 2. FORMATO DE SAÍDA -------------------------- */
-  const formatosAtivos = [opts.json && 'json', opts.markdown && 'markdown'].filter(Boolean) as string[];
-  if (formatosAtivos.length > 1) {
-    errors.push(`Conflito: apenas um formato pode ser ativo (${formatosAtivos.join(', ')})`);
-  } else if (formatosAtivos.length === 1) {
-    normalized.output.format = formatosAtivos[0] as 'json' | 'markdown';
+  if (opts.json) {
+    normalized.output.format = 'json';
   }
 
   // JSON ASCII escaping
@@ -237,29 +234,29 @@ export function gerarSugestoes(flags: FlagsNormalizadas): string[] {
 
   // Modo
   if (flags.mode === 'compact') {
-    sugestoes.push('💡 Use --full para relatório detalhado com todas as informações');
+    sugestoes.push(' Use --full para relatório detalhado com todas as informações');
   } else if (flags.mode === 'executive') {
-    sugestoes.push('👔 Modo executivo: mostrando apenas problemas críticos');
+    sugestoes.push(' Modo executivo: mostrando apenas problemas críticos');
   }
 
   // Export
   if (!flags.output.export && flags.output.format === 'json') {
-    sugestoes.push('💡 Combine --json com --export para salvar o relatório');
+    sugestoes.push(' Combine --json com --export para salvar o relatório');
   }
 
   // Auto-fix
   if (flags.autoFix.enabled && !flags.autoFix.dryRun) {
-    sugestoes.push('⚠️  Auto-fix ativo! Use --dry-run para simular sem modificar arquivos');
+    sugestoes.push('  Auto-fix ativo! Use --dry-run para simular sem modificar arquivos');
   }
 
   // Guardian
   if (!flags.guardian.enabled) {
-    sugestoes.push('🛡️  Guardian desativado. Use --guardian para verificar integridade');
+    sugestoes.push('  Guardian desativado. Use --guardian para verificar integridade');
   }
 
   // Filtros
   if (flags.filters.include.length === 0) {
-    sugestoes.push('📂 Analisando todo o projeto. Use --include para focar em diretórios específicos');
+    sugestoes.push(' Analisando todo o projeto. Use --include para focar em diretórios específicos');
   }
   return sugestoes;
 }

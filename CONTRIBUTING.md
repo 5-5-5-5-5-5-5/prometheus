@@ -3,9 +3,9 @@ Proveniência e Autoria: Este documento integra o projeto Prometheus (licença M
 ---
 
 
-# 🤝 Guia de Contribuição para o Projeto Prometheus
+#  Guia de Contribuição para o Projeto Prometheus
 
-**Agradecemos seu interesse em contribuir para o Prometheus!** 🎉
+**Agradecemos seu interesse em contribuir para o Prometheus!**
 
 O Prometheus é uma ferramenta de análise de código estático desenvolvida para ajudar desenvolvedores a manterem código de alta qualidade. Valorizamos todas as formas de contribuição, desde correções de bugs e novas funcionalidades até melhorias na documentação e relatórios de issues.
 
@@ -13,7 +13,7 @@ Este guia visa facilitar sua participação no projeto, garantindo que suas cont
 
 ---
 
-## 📋 Pré-requisitos
+##  Pré-requisitos
 
 Antes de começar a contribuir, certifique-se de que possui:
 
@@ -24,7 +24,7 @@ Antes de começar a contribuir, certifique-se de que possui:
 
 ---
 
-## 🚀 Configuração do Ambiente de Desenvolvimento
+##  Configuração do Ambiente de Desenvolvimento
 
 ### 1. Fork e Clone
 
@@ -73,15 +73,15 @@ git checkout -b feature/sua-contribuicao-descritiva
 
 ---
 
-## 🎯 Áreas de Contribuição
+##  Áreas de Contribuição
 
-### 🐛 Correção de Bugs
+###  Correção de Bugs
 
 - Issues com label [`bug`](https://github.com/5-5-5-5-5-5-5/prometheus/labels/bug)
 - Issues com label [`good-first-issue`](https://github.com/5-5-5-5-5-5-5/prometheus/labels/good-first-issue)
 - Priorize bugs críticos e regressions
 
-### ✨ Novas Funcionalidades
+###  Novas Funcionalidades
 
 - Analistas de código adicionais
 - Suporte para novas linguagens/frameworks
@@ -89,7 +89,7 @@ git checkout -b feature/sua-contribuicao-descritiva
 - Melhorias na interface da linha de comando
 - Relatórios customizados e formatos de saída
 
-### 📚 Documentação
+###  Documentação
 
 - Melhorias no README e guias
 - Traduções para outros idiomas
@@ -97,14 +97,14 @@ git checkout -b feature/sua-contribuicao-descritiva
 - Documentação da API
 - Guias de migração
 
-### 🧪 Testes e Qualidade
+###  Testes e Qualidade
 
 - Aumento da cobertura de testes
 - Testes de integração e E2E
 - Testes de performance
 - Validação em diferentes plataformas (Windows/Linux/macOS)
 
-### 🔧 Manutenção
+###  Manutenção
 
 - Atualização de dependências
 - Refatoração de código
@@ -113,7 +113,7 @@ git checkout -b feature/sua-contribuicao-descritiva
 
 ---
 
-## 📝 Processo de Contribuição
+##  Processo de Contribuição
 
 ### 1. Planejamento
 
@@ -159,7 +159,7 @@ npm run typecheck
 
 ---
 
-## 📏 Padrões de Código
+##  Padrões de Código
 
 ### TypeScript
 
@@ -193,7 +193,7 @@ import type { Configuracao } from "@types/config";
 
 ---
 
-## 📝 Padrões de Commit
+##  Padrões de Commit
 
 Utilizamos [Conventional Commits](https://www.conventionalcommits.org/) para manter um histórico claro e automatizar releases:
 
@@ -231,7 +231,7 @@ chore(deps): atualiza dependências para Node.js 25
 
 ---
 
-## 🔍 Pull Request
+##  Pull Request
 
 ### Antes de Submeter
 
@@ -267,7 +267,7 @@ Use o template padrão do repositório e inclua:
 
 ---
 
-## 🤝 Comunicação
+##  Comunicação
 
 ### Canais Oficiais
 
@@ -284,7 +284,7 @@ Use o template padrão do repositório e inclua:
 
 ---
 
-## 📚 Recursos Adicionais
+##  Recursos Adicionais
 
 - [Documentação Completa](docs/README.md)
 - [Guia de Comandos](docs/guias/GUIA-COMANDOS.md)
@@ -295,7 +295,7 @@ Use o template padrão do repositório e inclua:
 
 ---
 
-## 🙏 Reconhecimento
+##  Reconhecimento
 
 Contribuições são essenciais para o crescimento do projeto! Reconhecemos nossos colaboradores através de:
 
@@ -305,11 +305,10 @@ Contribuições são essenciais para o crescimento do projeto! Reconhecemos noss
 
 ---
 
-## 📄 Licença
+##  Licença
 
 Ao contribuir para este projeto, você concorda que suas contribuições serão licenciadas sob a **MIT License**, conforme especificado no arquivo LICENSE deste repositório.
 
 ---
 
 **Obrigado por contribuir para o Prometheus!**
-

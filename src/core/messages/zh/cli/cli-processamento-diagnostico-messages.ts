@@ -82,7 +82,7 @@ export const CliProcessamentoDiagnosticoMensagens = {
   relatorioScanSalvo: (dir: string) => `扫描报告已保存到 ${dir}`,
   falhaExportarRelatorioScanOnly: (errMsg: string) => `导出仅扫描报告失败：${errMsg}`,
   autoFixModoAgressivo: '已激活激进模式 - 应用更多修复（请谨慎使用）',
-  falhaGerarRelatorioMarkdownMetadados: (errMsg: string) => `生成带元数据的 Markdown 报告失败：${errMsg}`,
+  falhaGerarRelatorioJson: (errMsg: string) => `生成 JSON 报告失败：${errMsg}`,
   relatoriosExportadosPara: (dir: string) => `报告已导出到 ${dir}`,
   falhaSalvarRelatorioJson: (errMsg: string) => `保存 JSON 报告失败：${errMsg}`,
   falhaExportarRelatorios: (errMsg: string) => `导出报告失败：${errMsg}`,

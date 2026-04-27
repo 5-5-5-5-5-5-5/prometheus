@@ -21,6 +21,10 @@ export interface WorkerPoolOptions {
   timeoutMs?: number;
   /** Se deve usar workers (padrão: true se disponível) */
   enabled?: boolean;
+  /** Estratégia de processamento: auto, sequential, parallel, streaming */
+  strategy?: 'auto' | 'sequential' | 'parallel' | 'streaming';
+  /** Se deve fazer parsing inline dentro do worker */
+  parseInline?: boolean;
 }
 
 /**
@@ -28,9 +32,22 @@ export interface WorkerPoolOptions {
  */
 export interface WorkerTask {
   files: FileEntryWithAst[];
-  techniques: Tecnica[];
+  techniques: Tecnica[] | SerializedTechnique[];
   context: ContextoExecucao;
   workerId: number;
+  timeoutMs?: number;
+  parseInline?: boolean;
+  extensions?: string[];
+  batchSize?: number;
+}
+
+export interface SerializedTechnique {
+  nome?: string;
+  test?: (relPath: string) => boolean;
+  global?: boolean;
+  _hasTest?: boolean;
+  _testSource?: string | null;
+  [key: string]: unknown;
 }
 
 /**
@@ -43,6 +60,7 @@ export interface WorkerResult {
   processedArquivos: number;
   errors: string[];
   duration: number;
+  cacheStats?: { hits: number; misses: number };
 }
 
 /**
@@ -53,4 +71,5 @@ export interface ProcessFilesResult {
   metrics: MetricaAnalista[];
   totalProcessed: number;
   duration: number;
+  cacheStats?: { hits: number; misses: number };
 }

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+import type { GuardianResult } from '../../guardian/resultado.js';
 import type {
   EstruturaIdentificadaJson,
   FileEntryWithAst,
@@ -6,9 +7,7 @@ import type {
   MetricaExecucao,
   Ocorrencia,
   ParseErrosJson,
-} from '@';
-
-import type { GuardianResult } from '../../guardian/resultado.js';
+} from '../../index.js';
 
 export interface ResultadoInquisicao {
   totalArquivos: number;

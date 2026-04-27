@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-import { messages } from '@core/messages/index.js';
+import { messages } from '@core/messages';
 
 import type { Ocorrencia } from '@';
 import { criarAnalista, criarOcorrencia } from '@';

@@ -1,11 +1,11 @@
 export const ArquetiposExtraMensagens = {
-  naoEncontrado: '⚠️ カスタムアーキタイプが{novo}および{legado}のどちらにも見つかりませんでした',
-  salvo: '✅ カスタムアーキタイプを{caminho}に保存しました',
-  projetoPersonalizado: '🌟 カスタムプロジェクトが検出されました: "{nome}"',
+  naoEncontrado: ' カスタムアーキタイプが{novo}および{legado}のどちらにも見つかりませんでした',
+  salvo: ' カスタムアーキタイプを{caminho}に保存しました',
+  projetoPersonalizado: ' カスタムプロジェクトが検出されました: "{nome}"',
   descricaoPersonalizado: 'Prometheusは公式アーキタイプに一致しないプロジェクト構造を特定しましたが、\nカスタムアーキタイプを作成することで最適化された提案を受け取ることができます！',
-  estruturaDetectada: '📁 検出された構造:',
-  arquivosRaiz: '📄 ルートファイル:',
-  dicaCriar: '💡 カスタムアーキタイプを作成するには、以下を実行してください:',
+  estruturaDetectada: ' 検出された構造:',
+  arquivosRaiz: ' ルートファイル:',
+  dicaCriar: ' カスタムアーキタイプを作成するには、以下を実行してください:',
   comandoCriar: '   prometheus diagnosticar --criar-arquetipo',
   explicacaoCriar: 'これにより、現在の構造に基づいた\'prometheus.repo.arquetipo.json\'ファイルが作成され、\nPrometheusがベストプラクティスを維持しながらパーソナライズされた提案を提供するために使用します。',
   validacao: {

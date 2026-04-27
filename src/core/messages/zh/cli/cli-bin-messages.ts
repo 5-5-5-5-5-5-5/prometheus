@@ -6,7 +6,7 @@ export const CliBinMensagens = {
   excecaoNaoCapturada: '未捕获的异常：{mensagem}',
   erroInicializacao: '初始化 Prometheus 时出错：',
   resumoConversa: {
-    titulo: '\n📊 对话摘要',
+    titulo: '\n 对话摘要',
     total: '总计：{total}',
     usuario: '用户：{total}',
     prometheus: 'Prometheus：{total}',

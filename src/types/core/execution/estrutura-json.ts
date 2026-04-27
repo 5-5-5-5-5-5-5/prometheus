@@ -4,7 +4,7 @@ import type {
   ArquetipoDrift,
   ResultadoDeteccaoArquetipo,
   SnapshotEstruturaBaseline,
-} from '@';
+} from '../../index.js';
 
 export interface EstruturaIdentificadaJson {
   melhores: ResultadoDeteccaoArquetipo[];

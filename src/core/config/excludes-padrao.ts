@@ -313,7 +313,7 @@ export function mesclarConfigExcludes(
 
     if (padroesValidos.length !== configUsuario.length) {
       console.warn(
-        `⚠️ Alguns padrões de exclusão foram considerados inseguros e foram ignorados: ${configUsuario
+        ` Alguns padrões de exclusão foram considerados inseguros e foram ignorados: ${configUsuario
           .filter((p) => !isPadraoExclusaoSeguro(p))
           .join(', ')}`,
       );

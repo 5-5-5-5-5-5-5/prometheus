@@ -11,10 +11,10 @@
 
 import path from 'node:path';
 
-import { normalizePath } from '@shared/helpers/path.js';
-import { lerEstado } from '@shared/persistence/persistencia.js';
-
 import type { NomeacaoEstilo, OpcoesEstrategista, ParseNomeResultado } from '@';
+
+import { lerEstado } from '../persistence/persistencia.js';
+import { normalizePath } from './path.js';
 
 // Re-exporta os tipos para compatibilidade
 export type { NomeacaoEstilo, OpcoesEstrategista, ParseNomeResultado };

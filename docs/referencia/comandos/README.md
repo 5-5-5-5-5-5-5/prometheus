@@ -3,37 +3,40 @@ Proveniência e Autoria: Este documento integra o projeto Prometheus (licença M
 ---
 
 
-# Referência de Comandos - Prometheus 📖
+# Referência de Comandos - Prometheus
 
 Guia completo e detalhado de todos os comandos disponíveis no Prometheus.
 
 ---
 
-## 📋 Sumário de Comandos
+##  Sumário de Comandos
 
-| Comando             | Descrição                           | Categoria       |
-| ------------------- | ----------------------------------- | --------------- |
-| `diagnosticar`      | Análise completa do projeto         | Principal       |
-| `guardian`          | Monitor de integridade estrutural   | Monitoramento   |
-| `formatar`          | Formatação de código                | Manutenção      |
-| `otimizar-svg`      | Otimização de arquivos SVG          | Manutenção      |
-| `podar`             | Remoção de código morto             | Limpeza         |
-| `reestruturar`      | Reestruturação inteligente          | Refatoração     |
-| `atualizar`         | Atualização de padrões e estruturas | Manutenção      |
-| `analistas`         | Listar e gerenciar analistas        | Consulta        |
-| `metricas`          | Exibir métricas do projeto          | Consulta        |
-| `fix-types`         | Correção de tipos inseguros         | Correção        |
-| `licencas`          | Gestão de licenças de dependências  | Compliance      |
-| `names`             | Extração de nomes de variáveis      | Mapeamento      |
-| `rename`            | Renomeação em massa de variáveis    | Refatoração     |
-| `reverter`          | Reversão de renomeações             | Reversão        |
-| `perf`              | Benchmark de performance da CLI     | Performance     |
-| `dashboard`         | Iniciar dashboard web interativo    | Visualização    |
-| `plugins`           | Gerenciar plugins de análise        | Extensões       |
+| Comando             | Descrição                              | Categoria       |
+| ------------------- | -------------------------------------- | --------------- |
+| `diagnosticar`      | Análise completa do projeto            | Principal       |
+| `guardian`          | Monitor de integridade estrutural      | Monitoramento   |
+| `formatar`          | Formatação de código                   | Manutenção      |
+| `otimizar-svg`      | Otimização de arquivos SVG             | Manutenção      |
+| `podar`             | Remoção de código morto                | Limpeza         |
+| `reestruturar`      | Reestruturação inteligente             | Refatoração     |
+| `atualizar`         | Atualização de padrões e estruturas    | Manutenção      |
+| `analistas`         | Listar e gerenciar analistas           | Consulta        |
+| `metricas`          | Exibir métricas do projeto             | Consulta        |
+| `fix-types`         | Correção de tipos inseguros            | Correção        |
+| `licencas`          | Gestão de licenças de dependências     | Compliance      |
+| `names`             | Extração de nomes de variáveis         | Mapeamento      |
+| `rename`            | Renomeação em massa de variáveis       | Refatoração     |
+| `reverter`          | Reversão de renomeações                | Reversão        |
+| `perf`              | Benchmark de performance da CLI        | Performance     |
+| `ignore`            | Gera .gitignore baseado em tecnologias | Utilitário      |
+| `importer`          | Analisa imports e path aliases         | Análise         |
+| `padronizador`      | Escaneia e aplica padrões de código    | Refatoração     |
+
+| `plugins` | Gerenciar plugins de análise | Extensões |
 
 ---
 
-## 🔍 `prometheus diagnosticar`
+##  `prometheus diagnosticar`
 
 Comando principal - analisa o projeto inteiro.
 
@@ -124,71 +127,7 @@ prometheus diagnosticar --pode-corrigir
 
 ---
 
-## ✅ `prometheus corrigir`
-
-Auto-fix automático de problemas.
-
-### Sintaxe
-
-```bash
-prometheus corrigir [opções]
-```
-
-### Opções
-
-| Opção       | Tipo    | Padrão   | Descrição                         |
-| ----------- | ------- | -------- | --------------------------------- |
-| `--auto`    | boolean | `false`  | Aplicar correções automaticamente |
-| `--revisar` | boolean | `false`  | Revisar antes de aplicar          |
-| `--tipo`    | string  | Todos    | Tipo específico para corrigir     |
-| `--arquivo` | string  | Todos    | Arquivo específico                |
-| `--backup`  | boolean | `true`   | Criar backup antes                |
-| `--dry-run` | boolean | `false`  | Simular sem aplicar               |
-
-### Exemplos
-
-```bash
-# Ver o que pode ser corrigido
-prometheus corrigir
-
-# Aplicar todas as correções
-prometheus corrigir --auto
-
-# Revisar antes de aplicar
-prometheus corrigir --revisar
-
-# Corrigir apenas variáveis não usadas
-prometheus corrigir --tipo variavel-nao-usada --auto
-
-# Dry-run: simular sem aplicar
-prometheus corrigir --dry-run
-
-# Apenas um arquivo
-prometheus corrigir --arquivo src/main.ts --auto
-
-# Sem backup (cuidado!)
-prometheus corrigir --auto --backup false
-```
-
-### Output
-
-```
-✓ Corrigido: src/api/handler.ts
-  - Variável 'temp' removida (linha 12)
-  - 2 console.log removidos (linhas 45, 67)
-
-✓ Corrigido: src/utils/parser.ts
-  - 3 espaços em branco limpos
-
-✗ Falha: src/config.ts (requer revisão manual)
-  - Função muito longa (89 linhas)
-
-Resumo: 23 arquivos corrigidos, 2 falhas
-```
-
----
-
-## 👮 `prometheus guardian`
+##  `prometheus guardian`
 
 Monitor contínuo de saúde do projeto.
 
@@ -286,42 +225,8 @@ prometheus guardian --monitorar
 }
 ```
 
----
 
-## 🖥️ `prometheus dashboard`
-
-Iniciar o dashboard web interativo.
-
-### Sintaxe
-
-```bash
-prometheus dashboard [opções]
-```
-
-### Opções
-
-| Opção        | Tipo   | Padrão | Descrição                        |
-| ------------ | ------ | ------ | -------------------------------- |
-| `--port`     | number | `3000` | Porta para o servidor web        |
-
-### Exemplos
-
-```bash
-prometheus dashboard
-prometheus dashboard --port 8080
-```
-
-### Funcionalidades do Dashboard
-
-- Visualização de workflows GitHub Actions
-- Gráficos de saúde do projeto
-- Métricas automáticas (segurança, performance, documentação, arquitetura, qualidade)
-- Histórico de tendências
-- Ferramentas rápidas (diagnosticar, otimizar SVG)
-
----
-
-## 🔌 `prometheus plugins`
+##  `prometheus plugins`
 
 Gerenciar plugins de análise.
 
@@ -359,7 +264,122 @@ prometheus plugins remover nome-do-plugin
 
 ---
 
-## 📝 `prometheus names`
+##  `prometheus ignore`
+
+Gera um arquivo `.gitignore` completo baseado nas tecnologias detectadas no projeto.
+
+### Sintaxe
+
+```bash
+prometheus ignore [opções]
+```
+
+### Opções
+
+| Opção             | Tipo    | Padrão       | Descrição                                   |
+| ----------------- | ------- | ------------ | ------------------------------------------- |
+| `-o, --output`    | string  | `.gitignore` | Caminho do arquivo .gitignore               |
+| `-a, --all`       | boolean | `false`      | Inclui TODOS os padrões, sem detecção       |
+| `-f, --force`     | boolean | `false`      | Sobrescreve arquivo existente sem confirmar |
+
+### Exemplos
+
+```bash
+# Gera .gitignore com detecção automática
+prometheus ignore
+
+# Define caminho customizado
+prometheus ignore -o .gitignore-personalizado
+
+# Inclui todos os padrões possíveis
+prometheus ignore --all
+
+# Sobrescreve sem confirmar
+prometheus ignore --force
+```
+
+---
+
+##  `prometheus importer`
+
+Analisa imports e path aliases do projeto TypeScript/JavaScript.
+
+### Sintaxe
+
+```bash
+prometheus importer [opções]
+```
+
+### Opções
+
+| Opção            | Tipo    | Padrão   | Descrição                            |
+| ---------------- | ------- | -------- | ------------------------------------ |
+| `--verbose`      | boolean | `false`  | Exibe detalhes dos imports           |
+| `--output`       | string  | -        | Arquivo de saída JSON                |
+| `--only-missing` | boolean | `false`  | Mostra apenas imports não resolvidos |
+
+### Exemplos
+
+```bash
+# Análise básica
+prometheus importer
+
+# Com detalhes
+prometheus importer --verbose
+
+# Exportar para JSON
+prometheus importer --output imports.json
+
+# Apenas imports não resolvidos
+prometheus importer --only-missing
+```
+
+### Output Exemplo
+
+```json
+{
+  "totalImports": 156,
+  "resolved": 148,
+  "unresolved": 8,
+  "aliases": {
+    "@core": "./src/core",
+    "@shared": "./src/shared"
+  }
+}
+```
+
+---
+
+##  `prometheus padronizador`
+
+Escaneia o código e reporta padrões não padronizados. Pode aplicar correções automáticas.
+
+### Sintaxe
+
+```bash
+prometheus padronizador [opções]
+```
+
+### Opções
+
+| Opção       | Tipo    | Padrão   | Descrição                           |
+| ----------- | ------- | -------- | ----------------------------------- |
+| `--scan`    | boolean | `false`  | Apenas escaneia e reporta           |
+| `--replace` | boolean | `false`  | Aplica padronização automática      |
+
+### Exemplos
+
+```bash
+# Apenas escanear e relatar
+prometheus padronizador --scan
+
+# Aplicar correções automáticas
+prometheus padronizador --replace
+```
+
+---
+
+##  `prometheus names`
 
 Extrair nomes de variáveis do projeto.
 
@@ -384,7 +404,7 @@ prometheus names --legacy
 
 ---
 
-## ✏️ `prometheus rename`
+##  `prometheus rename`
 
 Aplicar renomeações de variáveis em massa.
 
@@ -402,7 +422,7 @@ prometheus rename
 
 ---
 
-## ↩️ `prometheus reverter`
+## ↩ `prometheus reverter`
 
 Reverter renomeações aplicadas.
 
@@ -420,85 +440,63 @@ prometheus reverter
 
 ---
 
-## 📚 `prometheus analista`
+##  `prometheus analistas`
 
-Informações sobre analistas disponíveis.
+Lista analistas registrados e seus metadados atuais.
 
-### Subcomandos
-
-#### `prometheus analista --listar`
-
-Listar todos os analistas:
+### Sintaxe
 
 ```bash
-prometheus analista --listar
-
-# Output:
-# CodigoFragil      - Detecta código frágil (ts, js)
-# CodigoMorto       - Identifica código morto (ts, js)
-# Duplicacao        - Encontra duplicação (ts, js, python)
-# ...
-```
-
-#### `prometheus analista --info NOME`
-
-Informações detalhadas:
-
-```bash
-prometheus analista --info CodigoFragil
-
-# Output:
-# Nome: CodigoFragil
-# Descrição: Detecta padrões de código frágil
-# Linguagens: typescript, javascript
-# Problemas detectados: 12
-# Tempo: 245ms
-# Referência: docs/analistas/codigo-fragil.md
-```
-
-#### `prometheus analista --status`
-
-Status de todos os analistas:
-
-```bash
-prometheus analista --status
-
-# Mostra qual está habilitado/desabilitado
-```
-
-#### `prometheus analista --test NOME`
-
-Testar um analista específico:
-
-```bash
-prometheus analista --test CodigoFragil
-
-# Executa em arquivo de teste
-# Mostra se está funcionando
+prometheus analistas [opções]
 ```
 
 ### Opções
 
+| Opção          | Tipo    | Descrição                                |
+| -------------- | ------- | ---------------------------------------- |
+| `-j, --json`   | boolean | Saída em formato JSON                    |
+| `-o, --output` | string  | Arquivo para exportar JSON de analistas  |
+| `-d, --doc`    | string  | Gera documentação Markdown dos analistas |
+
+### Exemplos
+
 ```bash
---info              string    Nome do analista
---listar           boolean   Listar todos
---status           boolean   Status de cada um
---test             string    Testar um analista
---arquivo          string    Arquivo para teste
---habilitados      boolean   Apenas habilitados
---linguagem        string    Filtrar por linguagem
+# Listar todos os analistas
+prometheus analysts
+
+# Saída em JSON
+prometheus analysts --json
+
+# Exportar para arquivo
+prometheus analysts --output analistas.json
+
+# Gerar documentação Markdown
+prometheus analysts --doc docs/analistas.md
+```
+
+### Output Exemplo
+
+```
+┌─────────────────┬──────────────────────────────┬────────┐
+│ Analista        │ Descrição                    │ Status │
+├─────────────────┼──────────────────────────────┼────────┤
+│ CodigoFragil    │ Detecta código frágil        │ ativo  │
+│ CodigoMorto     │ Identifica código morto      │ ativo  │
+│ Duplicacao      │ Encontra duplicação          │ ativo  │
+└─────────────────┴──────────────────────────────┴────────┘
+Total: 12 analistas
 ```
 
 ---
 
-## 🎯 Dicas Úteis
+##  Dicas Úteis
 
 ### 1. Pipeline de Análise Completa
 
 ```bash
 #!/bin/bash
 
-echo "🔍 Iniciando análise completa..."
+echo " Iniciando análise completa..."
 
 # 1. Verificar baseline
 prometheus guardian --verificar
@@ -506,17 +504,10 @@ prometheus guardian --verificar
 # 2. Análise detalhada
 prometheus diagnosticar --verbose --paralelo 8 --relatorio json --saida analysis.json
 
-# 3. Auto-fix (com revisão)
-prometheus corrigir --revisar
-
-# 4. Gerar relatórios
-prometheus relatorio arquitetura --saida docs/ARQUITETURA.md
-prometheus relatorio padroes --saida docs/PADROES.md
-
-# 5. Confirmar mudanças
+# 3. Confirmar mudanças
 prometheus guardian --confirmar
 
-echo "✅ Análise completa finalizada!"
+echo " Análise completa finalizada!"
 ```
 
 ### 2. CI/CD Integration
@@ -525,11 +516,11 @@ echo "✅ Análise completa finalizada!"
 # Falhar se problemas críticos
 prometheus diagnosticar --analista-critico > /dev/null
 if [ $? -ne 0 ]; then
-  echo "❌ Problemas críticos encontrados"
+  echo " Problemas críticos encontrados"
   exit 1
 fi
 
-echo "✅ CI Check passou"
+echo " CI Check passou"
 ```
 
 ### 3. Pre-commit Hook
@@ -549,7 +540,7 @@ exit $?
 
 ---
 
-## 🚨 Troubleshooting
+##  Troubleshooting
 
 ### Comando não encontrado
 
@@ -560,16 +551,6 @@ npm list -g prometheus
 
 # Reinstalar
 npm install -g prometheus
-```
-
-### Config não carregada
-
-```bash
-# Validar config
-prometheus config --validar
-
-# Resetar
-prometheus config --reset --force
 ```
 
 ### Análise muito lenta
@@ -594,7 +575,7 @@ prometheus diagnosticar | less
 
 ---
 
-## 📚 Referências
+##  Referências
 
 - [Exemplos de Uso](../exemplos/EXEMPLOS-USO.md)
 - [Documentação Completa](../INDICE.md)

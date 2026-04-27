@@ -6,9 +6,9 @@
  * garantindo compatibilidade futura e evolução controlada dos formatos.
  */
 
-import { messages } from '@core/messages/index.js';
-
 import type { RelatorioComVersao, SchemaMetadata } from '@';
+
+import { messages } from '../messages/index.js';
 
 // Re-exporta os tipos para compatibilidade
 export type { RelatorioComVersao, SchemaMetadata };

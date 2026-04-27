@@ -3,13 +3,13 @@ Proveniência e Autoria: Este documento integra o projeto Prometheus (licença M
 ---
 
 
-# Exemplos de Uso - Prometheus 🚀
+# Exemplos de Uso - Prometheus
 
 Exemplos práticos e casos de uso reais do Prometheus.
 
 ---
 
-## 📊 Exemplo 1: Análise Básica de Projeto
+##  Exemplo 1: Análise Básica de Projeto
 
 Analisar um projeto JavaScript/TypeScript simples:
 
@@ -53,7 +53,7 @@ prometheus diagnosticar --relatorio json --saida ./relatorio.json
 
 ---
 
-## 🔧 Exemplo 2: Auto-fix de Problemas
+##  Exemplo 2: Auto-fix de Problemas
 
 Corrigir automaticamente problemas encontrados:
 
@@ -89,7 +89,7 @@ prometheus corrigir --revisar
 
 ---
 
-## 👮 Exemplo 3: Guardian - Monitorar Saúde
+##  Exemplo 3: Guardian - Monitorar Saúde
 
 Configurar Guardian para monitorar continuamente:
 
@@ -125,7 +125,7 @@ prometheus guardian --confirmar
 
 ---
 
-## 📈 Exemplo 4: Relatórios Detalhados
+##  Exemplo 4: Relatórios Detalhados
 
 Gerar diferentes tipos de relatório:
 
@@ -155,7 +155,7 @@ prometheus relatorio-arquitetura --saida arquitetura.md
 
 - **Arquivos**: 45
 - **Linhas**: 12,500
-- **Problemas**: 47 (🔴 3 críticos, 🟠 15 maiores)
+- **Problemas**: 47 ( 3 críticos,  15 maiores)
 
 ## Problemas por Tipo
 
@@ -168,7 +168,7 @@ prometheus relatorio-arquitetura --saida arquitetura.md
 
 ---
 
-## 🔍 Exemplo 5: Criar Analista Customizado
+##  Exemplo 5: Criar Analista Customizado
 
 Criar novo detector para suas necessidades:
 
@@ -239,7 +239,7 @@ registroAnalistas.registrar('AsyncSemAwait', DetectorAsyncSemAwait);
 
 ---
 
-## 🐛 Exemplo 6: Debug e Diagnóstico
+##  Exemplo 6: Debug e Diagnóstico
 
 Quando algo não funciona:
 
@@ -275,7 +275,7 @@ prometheus diagnosticar --debug > dados-debug.json
 
 ---
 
-## 🚀 Exemplo 7: Integração com CI/CD
+##  Exemplo 7: Integração com CI/CD
 
 ### GitHub Actions
 
@@ -304,7 +304,7 @@ jobs:
         run: |
           PROBLEMS=$(jq '.resumo.totalProblemas' analysis.json)
           if [ "$PROBLEMS" -gt 20 ]; then
-            echo "❌ Muito problemas detectados: $PROBLEMS"
+            echo " Muito problemas detectados: $PROBLEMS"
             exit 1
           fi
 
@@ -327,7 +327,7 @@ prometheus-analysis:
     - |
       PROBLEMS=$(jq '.resumo.totalProblemas' analysis.json)
       if [ "$PROBLEMS" -gt 20 ]; then
-        echo "❌ Código com muitos problemas"
+        echo " Código com muitos problemas"
         exit 1
       fi
   artifacts:
@@ -337,7 +337,7 @@ prometheus-analysis:
 
 ---
 
-## 📝 Exemplo 8: Pré-commit Hook
+##  Exemplo 8: Pré-commit Hook
 
 Rodar Prometheus automaticamente em commit:
 
@@ -345,15 +345,15 @@ Rodar Prometheus automaticamente em commit:
 #!/bin/bash
 # .git/hooks/pre-commit
 
-echo "🔍 Executando Prometheus..."
+echo " Executando Prometheus..."
 prometheus diagnosticar --arquivo . --tipo critic
 
 if [ $? -ne 0 ]; then
-  echo "❌ Commit bloqueado: problemas críticos encontrados"
+  echo " Commit bloqueado: problemas críticos encontrados"
   exit 1
 fi
 
-echo "✅ Análise passou"
+echo " Análise passou"
 exit 0
 ```
 
@@ -369,7 +369,7 @@ chmod +x .git/hooks/pre-commit
 
 ---
 
-## 🎓 Exemplo 9: Workflow de Aprendizado
+##  Exemplo 9: Workflow de Aprendizado
 
 Para aprender Prometheus gradualmente:
 
@@ -424,7 +424,7 @@ git commit --allow-empty -m "Test prometheus hook"
 
 ---
 
-## 🏢 Exemplo 10: Projeto Grande
+##  Exemplo 10: Projeto Grande
 
 Para projetos com múltiplos pacote:
 
@@ -468,7 +468,7 @@ prometheus guardian --comparar semana
 
 ---
 
-## 📚 Próximos Passos
+##  Próximos Passos
 
 1. **Explore**: Rodar `prometheus --help` para ver todos comandos
 2. **Configure**: Ajustar `prometheus.config.json` para seu projeto
@@ -478,10 +478,9 @@ prometheus guardian --comparar semana
 
 ---
 
-## 💬 Suporte
+##  Suporte
 
-- 📖 [Documentação Completa](./INDICE.md)
-- 🏗️ [Arquitetura](./arquitetura/ARVORE-ARQUITETURAL.md)
-- 👨‍💻 [Criar Analista](./desenvolvimento/analistas/CRIAR-ANALISTA.md)
-- 🔧 [Referência de Comandos](./referencia/comandos/)
-
+- [Documentação Completa](./INDICE.md)
+- [Arquitetura](./arquitetura/ARVORE-ARQUITETURAL.md)
+- ‍ [Criar Analista](./desenvolvimento/analistas/CRIAR-ANALISTA.md)
+- [Referência de Comandos](./referencia/comandos/)

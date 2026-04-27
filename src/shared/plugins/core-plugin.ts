@@ -2,8 +2,8 @@
 import type { ParserOptions as BabelParserOptions } from '@babel/parser';
 import { parse as babelParse } from '@babel/parser';
 import type { File as BabelFile } from '@babel/types';
-import { getMessages , PluginCoreMensagens } from '@core/messages/index.js';
-import { getCurrentParsingFile } from '@core/parsing/parser.js';
+import { getMessages , PluginCoreMensagens } from '@core/messages';
+import { getCurrentParsingFile } from '@core/parsing';
 import * as csstree from 'css-tree';
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
 import { parseDocument } from 'htmlparser2';
@@ -247,7 +247,7 @@ export class CorePlugin implements ParserPlugin {
       const isValid = XMLValidator.validate(codigo);
       if (isValid !== true) {
         log.debug(
-          `⚠️ XML inválido: ${typeof isValid === 'object' ? (isValid as { err?: { msg?: string } }).err?.msg : 'desconhecido'}`,
+          ` XML inválido: ${typeof isValid === 'object' ? (isValid as { err?: { msg?: string } }).err?.msg : 'desconhecido'}`,
         );
         return null;
       }

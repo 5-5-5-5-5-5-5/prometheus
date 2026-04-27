@@ -82,7 +82,7 @@ export const CliProcessamentoDiagnosticoMensagens = {
   relatorioScanSalvo: (dir: string) => `スキャンレポートが ${dir} に保存されました`,
   falhaExportarRelatorioScanOnly: (errMsg: string) => `スキャンオンリーレポートのエクスポートに失敗しました: ${errMsg}`,
   autoFixModoAgressivo: 'アグレッシブモードが有効になりました - より多くの修正を適用します（注意して使用してください）',
-  falhaGerarRelatorioMarkdownMetadados: (errMsg: string) => `メタデータ付きMarkdownレポートの生成に失敗しました: ${errMsg}`,
+  falhaGerarRelatorioJson: (errMsg: string) => `JSONレポートの生成に失敗しました: ${errMsg}`,
   relatoriosExportadosPara: (dir: string) => `レポートを ${dir} にエクスポートしました`,
   falhaSalvarRelatorioJson: (errMsg: string) => `JSONレポートの保存に失敗しました: ${errMsg}`,
   falhaExportarRelatorios: (errMsg: string) => `レポートのエクスポートに失敗しました: ${errMsg}`,

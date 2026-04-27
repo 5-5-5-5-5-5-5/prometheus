@@ -2,7 +2,7 @@
 Proveniência e Autoria: Documentação completa do Prometheus (licença MIT-0).
 ---
 
-# 📚 Documentação - Prometheus
+#  Documentação - Prometheus
 
 **Bem-vindo à documentação completa do Prometheus!**
 
@@ -10,24 +10,24 @@ Prometheus é uma ferramenta CLI poderosa para análise, diagnóstico e manuten�
 
 ---
 
-## 🚀 Comece Aqui
+##  Comece Aqui
 
 **Procurando algo específico?**
 
 | Na                        | Consulte                                                            |
 | ------------------------- | ------------------------------------------------------------------- |
-| ⏱️ Começar rápido         | [Guia de Início Rápido](guias/GUIA-INICIO-RAPIDO.md)                |
-| 📖 Todos os comandos      | [Referência de Comandos](referencia/comandos/README.md)             |
-| ⚙️ Configurar             | [Guia de Configuração](guias/GUIA-CONFIGURACAO.md)                  |
-| 👨‍💻 Criar analista      | [Como Criar Analistas](desenvolvimento/analistas/CRIAR-ANALISTA.md) |
-| 🏗️ Entender arquitetura  | [Árvore Arquitetural](arquitetura/ARVORE-ARQUITETURAL.md)           |
-| 💡 Exemplos práticos      | [Exemplos de Uso](exemplos/EXEMPLOS-USO.md)                         |
-| 🔌 Sistema de plugins     | [Sistema de Plugins](desenvolvimento/SISTEMA-PLUGINS.md)            |
-| 📋 Tudo (índice completo) | [INDICE.md](INDICE.md)                                              |
+| Começar rápido            | [Guia de Início Rápido](guias/GUIA-INICIO-RAPIDO.md)                |
+| Todos os comandos         | [Referência de Comandos](referencia/comandos/README.md)             |
+| Configurar                | [Guia de Configuração](guias/GUIA-CONFIGURACAO.md)                  |
+| ‍ Criar analista          | [Como Criar Analistas](desenvolvimento/analistas/CRIAR-ANALISTA.md) |
+| Entender arquitetura      | [Árvore Arquitetural](arquitetura/ARVORE-ARQUITETURAL.md)           |
+| Exemplos práticos         | [Exemplos de Uso](exemplos/EXEMPLOS-USO.md)                         |
+| Sistema de plugins        | [Sistema de Plugins](desenvolvimento/SISTEMA-PLUGINS.md)            |
+| Tudo (índice completo)    | [INDICE.md](INDICE.md)                                              |
 
 ---
 
-## 📂 Estrutura de Documentação
+##  Estrutura de Documentação
 
 ```
 docs/
@@ -70,9 +70,9 @@ docs/
 
 ---
 
-## 🎯 Caminhos de Aprendizado
+##  Caminhos de Aprendizado
 
-### Para Usuários 👤
+### Para Usuários
 
 ```
 1. Guia Início Rápido
@@ -84,7 +84,7 @@ docs/
 4. Exemplos de Uso
 ```
 
-### Para Desenvolvedores 👨‍💻
+### Para Desenvolvedores ‍
 
 ```
 1. Árvore Arquitetural
@@ -98,21 +98,21 @@ docs/
 5. Sistema de Plugins
 ```
 
-### Por Tópico específico 🔍
+### Por Tópico específico
 
 Consulte o [INDICE.md completo](INDICE.md)
 
 ---
 
-## 📚 Seções Principais
+##  Seções Principais
 
-### 🚀 Guias
+###  Guias
 
 - Instalação e setup
 - Configuração de projeto
 - Guia de todos os comandos
 
-### 🏗️ Arquitetura
+###  Arquitetura
 
 - Estrutura de diretórios
 - Fluxo de execução
@@ -126,21 +126,21 @@ Consulte o [INDICE.md completo](INDICE.md)
 - **Dashboard Web**: Interface interativa premium para visualização de métricas e grafos de dependência.
 - **Extensível**: Sistema de plugins robusto para adicionar novas detecções sob medida.
 
-### 👨‍💻 Desenvolvimento
+### ‍ Desenvolvimento
 
 - Como criar novos analistas/detectores
 - Estrutura detalhada do código
 - Padrões de desenvolvimento (nomenclatura, imports, tipos)
 - Sistema de plugins e registry
 
-### 📖 Referência
+###  Referência
 
 - Documentação de TODOS os comandos
 - Flags e opções
 - Exemplos de uso
 - Troubleshooting
 
-### 💡 Exemplos
+###  Exemplos
 
 - Análise básica
 - Auto-fix
@@ -148,29 +148,29 @@ Consulte o [INDICE.md completo](INDICE.md)
 - CI/CD integration
 - Criar analista customizado
 
-### 🗺️ Roadmap
+###  Roadmap
 
 - v0.5 - v0.7 planejadas
 - Visão de longo termo
 
 ---
 
-## ✨ Destaques Recentes
+##  Destaques Recentes
 
 **Documentação atualizada em 2026-02-15:**
 
-- ⭐ [INDICE.md](INDICE.md) - Índice completo com navegação por tópico
-- ⭐ [ARVORE-ARQUITETURAL.md](arquitetura/ARVORE-ARQUITETURAL.md) - Mapa completo da estrutura
-- ⭐ [CRIAR-ANALISTA.md](desenvolvimento/analistas/CRIAR-ANALISTA.md) - Guia prático com exemplos
-- ⭐ [PADROES.md](desenvolvimento/PADROES.md) - Convenções e boas práticas
-- ⭐ [SISTEMA-PLUGINS.md](desenvolvimento/SISTEMA-PLUGINS.md) - Como estender com plugins
-- ⭐ [estrutura-codigo/](desenvolvimento/estrutura-codigo/README.md) - src/ mapeado e explicado
-- ⭐ [EXEMPLOS-USO.md](exemplos/EXEMPLOS-USO.md) - Casos práticos e CI/CD
-- ⭐ [referencia/comandos/](referencia/comandos/README.md) - Cada comando documentado
+- [INDICE.md](INDICE.md) - Índice completo com navegação por tópico
+- [ARVORE-ARQUITETURAL.md](arquitetura/ARVORE-ARQUITETURAL.md) - Mapa completo da estrutura
+- [CRIAR-ANALISTA.md](desenvolvimento/analistas/CRIAR-ANALISTA.md) - Guia prático com exemplos
+- [PADROES.md](desenvolvimento/PADROES.md) - Convenções e boas práticas
+- [SISTEMA-PLUGINS.md](desenvolvimento/SISTEMA-PLUGINS.md) - Como estender com plugins
+- [estrutura-codigo/](desenvolvimento/estrutura-codigo/README.md) - src/ mapeado e explicado
+- [EXEMPLOS-USO.md](exemplos/EXEMPLOS-USO.md) - Casos práticos e CI/CD
+- [referencia/comandos/](referencia/comandos/README.md) - Cada comando documentado
 
 ---
 
-## 💬 Procurando algo?
+##  Procurando algo?
 
 | Pergunta               | Resposta                                                         |
 | ---------------------- | ---------------------------------------------------------------- |
@@ -187,28 +187,28 @@ Consulte o [INDICE.md completo](INDICE.md)
 
 ---
 
-## 📋 Checklist de Documentação
+##  Checklist de Documentação
 
-Documentação completa e atualizada ✅
+Documentação completa e atualizada
 
-- ✅ Instalação e início rápido
-- ✅ Configuração e customização
-- ✅ Referência de TODOS os comandos
-- ✅ Arquitetura e design
-- ✅ Estrutura completa do código
-- ✅ Como criar analistas
-- ✅ Padrões de desenvolvimento
-- ✅ Sistema de plugins/extensão
-- ✅ Exemplos práticos
-- ✅ Integração CI/CD
-- ✅ Type safety
-- ✅ Sistema de erros
-- ✅ i18n (4 idiomas)
-- ✅ Segurança
+- Instalação e início rápido
+- Configuração e customização
+- Referência de TODOS os comandos
+- Arquitetura e design
+- Estrutura completa do código
+- Como criar analistas
+- Padrões de desenvolvimento
+- Sistema de plugins/extensão
+- Exemplos práticos
+- Integração CI/CD
+- Type safety
+- Sistema de erros
+- i18n (4 idiomas)
+- Segurança
 
 ---
 
-## 🔗 Links Importantes
+##  Links Importantes
 
 - **Repositório**: [GitHub](https://github.com/prometheus-dev/prometheus)
 - **Issues**: [GitHub Issues](https://github.com/prometheus-dev/prometheus/issues)
@@ -217,7 +217,7 @@ Documentação completa e atualizada ✅
 
 ---
 
-## 📝 Manutenção da Documentação
+##  Manutenção da Documentação
 
 Se você atualizar a documentação:
 
@@ -229,16 +229,16 @@ Se você atualizar a documentação:
 
 ---
 
-## 🎓 Próximos Passos
+##  Próximos Passos
 
-👉 **Novo com Prometheus?** Comece com [Guia de Início Rápido](guias/GUIA-INICIO-RAPIDO.md)
+ **Novo com Prometheus?** Comece com [Guia de Início Rápido](guias/GUIA-INICIO-RAPIDO.md)
 
-👉 **Já conhece?** Veja [INDICE.md](INDICE.md) completo com navegação por tópico
+ **Já conhece?** Veja [INDICE.md](INDICE.md) completo com navegação por tópico
 
-👉 **Developer?** Vá direto para [Como Criar Analistas](desenvolvimento/analistas/CRIAR-ANALISTA.md)
+ **Developer?** Vá direto para [Como Criar Analistas](desenvolvimento/analistas/CRIAR-ANALISTA.md)
 
 ---
 
 **Versão**: v0.5.0+
 **Última atualização**: 2026-02-15
-**Status**: ✅ Documentação completa
+**Status**:  Documentação completa

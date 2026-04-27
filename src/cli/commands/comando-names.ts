@@ -2,13 +2,14 @@
 
 import { parse } from '@babel/parser';
 import traverseModule from '@babel/traverse';
-import { ExitCode, sair } from '@cli/helpers/exit-codes.js';
-import { getSourceFiles } from '@cli/helpers/get-files-src.js';
-import { chalk } from '@core/config/chalk-safe.js';
-import { getMessages } from '@core/messages/index.js';
+import { chalk } from '@core/config';
+import { getMessages } from '@core/messages';
 import { Command } from 'commander';
 import * as fs from 'fs';
 import * as path from 'path';
+
+import { ExitCode, sair } from '../helpers/exit-codes.js';
+import { getSourceFiles } from '../helpers/get-files-src.js';
 
 const { log, CliComandoNamesMensagens } = getMessages();
 

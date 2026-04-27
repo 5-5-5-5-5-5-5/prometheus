@@ -4,7 +4,7 @@
 // Sistema inteligente de filtragem e priorização de relatórios
 // Agrupa problemas similares e prioriza por impacto para evitar sobrecarga de informação
 
-import { getMessages } from '@core/messages/index.js';
+import { getMessages } from '@core/messages';
 
 import type { Ocorrencia, OcorrenciaNivel, ProblemaAgrupado, RelatorioResumo } from '@';
 
@@ -285,7 +285,7 @@ export async function gerarRelatorioMarkdownResumo(relatorioResumo: RelatorioRes
   linhas.push(`**Relatório gerado em**: ${new Date().toLocaleString('pt-BR')}`);
   const {
     salvarEstado
-  } = await import('@shared/persistence/persistencia.js');
+  } = await import('@shared/persistence');
   await salvarEstado(outputCaminho, linhas.join('\n'));
 }
 

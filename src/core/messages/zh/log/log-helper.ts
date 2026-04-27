@@ -7,9 +7,8 @@
  * 消除重复并通过 log-engine 集中逻辑
  */
 
-import { config } from '@core/config/config.js';
-import { ICONES_ARQUIVO, ICONES_DIAGNOSTICO, ICONES_FEEDBACK, ICONES_STATUS } from '@core/messages/shared/icons.js';
-
+import { config } from '../../../config/config.js';
+import { ICONES_ARQUIVO, ICONES_DIAGNOSTICO, ICONES_FEEDBACK, ICONES_STATUS } from '../../shared/icons.js';
 import { logEngine } from './log-engine.js';
 import { LogMensagens } from './log-messages.js';
 
@@ -38,7 +37,7 @@ export const logAnalistas = {
   },
   /** 分析师开始日志 (现在仅注册) */
   iniciandoAnalista(nomeAnalista: string, arquivo: string, tamanho: number): void {
-    // 🔕 反垃圾: 仅在特定上下文中记录单个分析师
+    //  反垃圾: 仅在特定上下文中记录单个分析师
     const deveLogarIndividual = logEngine.contexto === 'complexo' || config.DEV_MODE || process.env.VERBOSE === 'true';
     if (deveLogarIndividual) {
       logEngine.log('debug', LogMensagens.analistas.execucao.inicio_detalhado, {

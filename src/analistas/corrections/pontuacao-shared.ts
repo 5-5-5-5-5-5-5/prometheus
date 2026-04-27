@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-import { isInStringOrComment } from '@shared/helpers/context-utils.js';
+import { isInStringOrComment } from '@shared/helpers';
 
 import type { ConfiguracaoPontuacaoZelador, IntlComDisplayNames, ProblemaPontuacao } from '@';
 

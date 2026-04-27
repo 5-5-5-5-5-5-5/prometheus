@@ -11,7 +11,7 @@
  *   3. Padrão: "pt" (Português)
  *
  * Uso:
- *   import { messages, setLocale, getLocale, t, getMessages } from '@core/messages/index.js';
+ *   import { messages, setLocale, getLocale, t, getMessages } from './index.js';
  *
  *   // Definir locale:
  *   setLocale('en');

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-import type { PlanoSugestaoEstrutura } from '@';
+import type { PlanoSugestaoEstrutura } from '../index.js';
 
 export interface ArquetipoEstruturaDef {
   nome: string;

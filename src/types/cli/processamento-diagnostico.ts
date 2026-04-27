@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 
 // Importações dos tipos unificados
-import type { detectarArquetipos } from '@analistas/detectores/detector-arquetipos.js';
+import type { detectarArquetipos } from '@analistas/detectores';
 
-import type { FileEntryWithAst, ResultadoExecucao, ResultadoGuardian } from '@';
+import type { FileEntryWithAst, ResultadoExecucao, ResultadoGuardian } from '../index.js';
 
 export interface OpcoesProcessamentoDiagnostico {
   guardianCheck?: boolean;
@@ -22,7 +22,7 @@ export interface OpcoesProcessamentoDiagnostico {
   autoCorrecaoMode?: string;
   autoFixConservative?: boolean;
   fast?: boolean; // Modo rápido: processamento paralelo
-  // 🚀 NOVAS FLAGS INTUITIVAS
+  //  NOVAS FLAGS INTUITIVAS
   fix?: boolean;
   fixSafe?: boolean;
   showFixes?: boolean;

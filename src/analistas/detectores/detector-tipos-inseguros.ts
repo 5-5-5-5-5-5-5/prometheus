@@ -10,14 +10,14 @@
  * - Sempre recomenda revisão manual para casos complexos
  */
 
-import { categorizarUnknown, extractVariableName, isAnyInGenericFunction, isInStringOrComment, isLegacyOrVendorFile, isTypeScriptContext, isUnknownInGenericContext } from '@analistas/corrections/type-safety/context-analyzer.js';
 import type { NodePath } from '@babel/traverse';
 import type { Node } from '@babel/types';
-import { config } from '@core/config/config.js';
-import { splitLines } from '@shared/helpers/lines.js';
-import { isTestArquivo, shouldSuppressOccurrence } from '@shared/helpers/rule-config.js';
+import { config } from '@core/config';
+import { isTestArquivo, shouldSuppressOccurrence,splitLines  } from '@shared/helpers';
 
 import type { Analista, Ocorrencia } from '@';
+
+import { categorizarUnknown, extractVariableName, isAnyInGenericFunction, isInStringOrComment, isLegacyOrVendorFile, isTypeScriptContext, isUnknownInGenericContext } from '../corrections/type-safety/context-analyzer.js';
 
 const ANALISTA: Analista = {
   nome: 'detector-tipos-inseguros',
@@ -110,11 +110,11 @@ const ANALISTA: Analista = {
       // Adicionar contexto adicional baseado no arquivo
       let contextoAdicional = '';
       if (fullCaminho?.includes('tipos/')) {
-        contextoAdicional = ' | ⚠️  Arquivo de tipos - impacta toda base de código';
+        contextoAdicional = ' |   Arquivo de tipos - impacta toda base de código';
       } else if (fullCaminho?.includes('core/') || fullCaminho?.includes('shared/')) {
-        contextoAdicional = ' | ⚠️  Módulo core/shared - usado por muitos componentes';
+        contextoAdicional = ' |   Módulo core/shared - usado por muitos componentes';
       }
-      const mensagemCompleta = `${mensagem} | 💡 ${sugestao}${contextoAdicional} | 🔍 Revisão manual obrigatória`;
+      const mensagemCompleta = `${mensagem} |  ${sugestao}${contextoAdicional} |  Revisão manual obrigatória`;
 
       // Verifica se regra está suprimida para este arquivo
       if (shouldSuppressOccurrence('tipo-inseguro-any', relPath)) {
@@ -175,7 +175,7 @@ const ANALISTA: Analista = {
       ocorrencias.push({
         tipo: 'tipo-permissivo-object',
         nivel: 'aviso',
-        mensagem: `${mensagem} | 💡 ${sugestao}`,
+        mensagem: `${mensagem} |  ${sugestao}`,
         relPath,
         linha,
         contexto: lineContext
@@ -210,7 +210,7 @@ const ANALISTA: Analista = {
       } else {
         sugestao = 'Substitua por tipo específico ou use unknown com validação runtime';
       }
-      const mensagemCompleta = `${mensagem} | 💡 ${sugestao} | 🚨 CRÍTICO: Type safety completamente desabilitado | 🔍 Revisão manual obrigatória`;
+      const mensagemCompleta = `${mensagem} |  ${sugestao} |  CRÍTICO: Type safety completamente desabilitado |  Revisão manual obrigatória`;
 
       // Verifica se regra está suprimida para este arquivo
       if (shouldSuppressOccurrence('tipo-inseguro-any-assertion', relPath)) {
@@ -239,7 +239,7 @@ const ANALISTA: Analista = {
       }
       const linha = splitLines(src.substring(0, position)).length;
       const lineContext = splitLines(src)[linha - 1]?.trim() || '';
-      const mensagemCompleta = "Type casting '<any>' (sintaxe legada) desabilita type safety | 💡 Use sintaxe 'as' moderna e tipo específico | 🚨 CRÍTICO: Migrar para sintaxe moderna e tipo correto | 🔍 Revisão manual obrigatória";
+      const mensagemCompleta = "Type casting '<any>' (sintaxe legada) desabilita type safety |  Use sintaxe 'as' moderna e tipo específico |  CRÍTICO: Migrar para sintaxe moderna e tipo correto |  Revisão manual obrigatória";
 
       // Verifica se regra está suprimida para este arquivo
       if (shouldSuppressOccurrence('tipo-inseguro-any-cast', relPath)) {
@@ -294,7 +294,7 @@ const ANALISTA: Analista = {
 
         // Se tem sugestão, adicionar
         if (categorizacao.sugestao) {
-          mensagem += ` | 💡 ${categorizacao.sugestao}`;
+          mensagem += ` |  ${categorizacao.sugestao}`;
         }
       } else if (categorizacao.categoria === 'melhoravel') {
         // Melhorável - aviso com sugestão
@@ -302,20 +302,20 @@ const ANALISTA: Analista = {
         mensagem = varNome ? `Tipo 'unknown' em '${varNome}' pode ser melhorado (${categorizacao.confianca}% confiança)` : `Tipo 'unknown' pode ser melhorado (${categorizacao.confianca}% confiança)`;
         mensagem += ` | ${categorizacao.motivo}`;
         if (categorizacao.sugestao) {
-          mensagem += ` | 💡 ${categorizacao.sugestao}`;
+          mensagem += ` |  ${categorizacao.sugestao}`;
         } else {
-          mensagem += ` | 💡 Revisar uso para inferir tipo mais específico`;
+          mensagem += ` |  Revisar uso para inferir tipo mais específico`;
         }
-        mensagem += ` | ⚠️  Revisão manual recomendada`;
+        mensagem += ` |   Revisão manual recomendada`;
       } else {
         // Corrigir - erro que deve ser tratado
         nivel = 'erro';
         mensagem = varNome ? `Tipo 'unknown' em '${varNome}' deve ser corrigido (${categorizacao.confianca}% confiança)` : `Tipo 'unknown' deve ser corrigido (${categorizacao.confianca}% confiança)`;
         mensagem += ` | ${categorizacao.motivo}`;
         if (categorizacao.sugestao) {
-          mensagem += ` | ✏️  ${categorizacao.sugestao}`;
+          mensagem += ` |   ${categorizacao.sugestao}`;
         }
-        mensagem += ` | 🔍 Revisão manual obrigatória`;
+        mensagem += ` |  Revisão manual obrigatória`;
       }
 
       // Verifica se regra está suprimida para este arquivo

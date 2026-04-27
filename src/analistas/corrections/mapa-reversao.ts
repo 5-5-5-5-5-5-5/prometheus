@@ -2,9 +2,9 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
-import { messages } from '@core/messages/index.js';
-import { PROMETHEUS_ARQUIVOS } from '@core/registry/paths.js';
-import { lerEstado, salvarEstado } from '@shared/persistence/persistencia.js';
+import { messages } from '@core/messages';
+import { PROMETHEUS_ARQUIVOS } from '@core/registry';
+import { lerEstado, salvarEstado } from '@shared/persistence';
 
 import type { MapaReversao, MoveReversao } from '@';
 
@@ -275,9 +275,9 @@ export class GerenciadorMapaReversao {
       const dataFormatada = new Date(move.timestamp).toLocaleString('pt-BR');
       const reescritos = move.importsReescritos ? ' (imports reescritos)' : '';
       resultado += `${move.id}:\n`;
-      resultado += `  📅 ${dataFormatada}\n`;
-      resultado += `  📁 ${move.origem} → ${move.destino}\n`;
-      resultado += `  💬 ${move.motivo}${reescritos}\n\n`;
+      resultado += `   ${dataFormatada}\n`;
+      resultado += `   ${move.origem} → ${move.destino}\n`;
+      resultado += `   ${move.motivo}${reescritos}\n\n`;
     }
     return resultado;
   }

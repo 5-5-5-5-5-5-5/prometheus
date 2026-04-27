@@ -7,9 +7,8 @@
  * 重複を排除し、logEngine経由でロジックを集中化
  */
 
-import { config } from '@core/config/config.js';
-import { ICONES_ARQUIVO, ICONES_DIAGNOSTICO, ICONES_FEEDBACK, ICONES_STATUS } from '@core/messages/shared/icons.js';
-
+import { config } from '../../../config/config.js';
+import { ICONES_ARQUIVO, ICONES_DIAGNOSTICO, ICONES_FEEDBACK, ICONES_STATUS } from '../../shared/icons.js';
 import { logEngine } from './log-engine.js';
 import { LogMensagens } from './log-messages.js';
 
@@ -38,7 +37,7 @@ export const logAnalistas = {
   },
   /** アナリスト開始ログ（現在は登録のみ） */
   iniciandoAnalista(nomeAnalista: string, arquivo: string, tamanho: number): void {
-    // 🔕 アンチスパム: 特定のコンテキストでのみ個別アナリストをログに記録
+    //  アンチスパム: 特定のコンテキストでのみ個別アナリストをログに記録
     const deveLogarIndividual = logEngine.contexto === 'complexo' || config.DEV_MODE || process.env.VERBOSE === 'true';
     if (deveLogarIndividual) {
       logEngine.log('debug', LogMensagens.analistas.execucao.inicio_detalhado, {

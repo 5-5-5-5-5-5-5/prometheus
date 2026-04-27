@@ -4,15 +4,15 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
-import { mapaReversao } from '@analistas/corrections/mapa-reversao.js';
-import { config } from '@core/config/config.js';
-import { resolverPluginSeguro } from '@core/config/seguranca.js';
-import { getMessages } from '@core/messages/index.js';
-import { importarModuloSeguro } from '@core/utils/import-safe.js';
-import { reescreverImports } from '@shared/helpers/imports.js';
+import { config , resolverPluginSeguro } from '@core/config';
+import { getMessages } from '@core/messages';
+import { importarModuloSeguro } from '@core/utils';
+import { reescreverImports } from '@shared/helpers';
 import pLimit from 'p-limit';
 
 import type { ConfigPlugin, ErroComMensagem, FileEntryWithAst, ResultadoEstrutural } from '@';
+
+import { mapaReversao } from './mapa-reversao.js';
 
 const { log, logAuto, CorretorEstruturaExtraMensagens } = getMessages();
 

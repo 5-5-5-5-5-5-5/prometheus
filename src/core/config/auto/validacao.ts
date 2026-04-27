@@ -4,9 +4,9 @@
  * Integra com o sistema existente de detectores do Prometheus
  */
 
-import { getMessages } from '@core/messages/index.js';
-
 import type { ValidationResult } from '@';
+
+import { getMessages } from '../../messages/index.js';
 
 const { log } = getMessages();
 
@@ -181,7 +181,7 @@ export function isSafeToApplyFix(code: string, fixId: string, match: RegExpMatch
     }
     return true;
   } catch (error) {
-    log.aviso(`⚠️ Erro ao validar segurança da correção ${fixId}: ${error instanceof Error ? error.message : String(error)}`);
+    log.aviso(` Erro ao validar segurança da correção ${fixId}: ${error instanceof Error ? error.message : String(error)}`);
     return false;
   }
 }

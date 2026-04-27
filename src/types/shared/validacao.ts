@@ -120,21 +120,6 @@ export interface GlobalComVitest {
   expect?: unknown;
 }
 
-/**
- * Pendência processável (estende Pendencia base)
- */
-interface PendenciaProcessavel {
-  arquivo: string;
-  motivo: string;
-  detectedAt: number;
-  scheduleAt: number;
-  diasInativo?: number;
-  categoria?: 'critico' | 'importante' | 'baixa-prioridade' | 'informativo';
-  prioridade?: 'alta' | 'media' | 'baixa';
-  status?: 'pendente' | 'processando' | 'concluido' | 'erro' | 'cancelado';
-  tentativas?: number;
-  ultimoErro?: string;
-}
 
 /**
  * Configuração com plugins
@@ -203,19 +188,6 @@ export interface EntradaMapaReversao {
   hash?: string;
 }
 
-/**
- * Contexto de relatório
- */
-interface ContextoRelatorio {
-  total: number;
-  processados: number;
-  erros: number;
-  tempo?: number;
-  avisos?: number;
-  sucessos?: number;
-  fase?: string;
-  detalhes?: string;
-}
 
 /**
  * Erro de validação de combinação de flags

@@ -4,10 +4,9 @@
  * Todos os tipos relacionados a geração de relatórios (MD/JSON)
  */
 
-import type { Ocorrencia } from '@';
-
 // PrioridadeNivel é definido em filtro-config, mas vamos duplicar aqui para evitar dependência circular
-export type PrioridadeNivel = 'critica' | 'alta' | 'media' | 'baixa';
+import type { PrioridadeNivel } from '../core/messages.js';
+import type { Ocorrencia } from '../index.js';
 
   /* -------------------------- ANÁLISE ASYNC PATTERNS -------------------------- */
 

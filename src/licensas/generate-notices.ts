@@ -4,15 +4,14 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { promisify } from 'node:util';
 
-import type { GenerateNoticesOptions, RenderPackageMeta } from '../types/licensas/licensas.js';
-import type { HeaderOptions } from '../types/licensas/header-options.js';
+import type { GenerateNoticesOptions, HeaderOptions , RenderPackageMeta } from '@projeto-types/licensas';
 
-export type { GenerateNoticesOptions, RenderPackageMeta, HeaderOptions };
+export type { GenerateNoticesOptions, HeaderOptions, RenderPackageMeta };
 
 const exec = promisify(_exec);
 const execFile = promisify(_execFile);
 function s(v: string | string[] | number | boolean | null | undefined): string {
-  return v == null ? '' : String(v);
+  return v === null ? '' : String(v);
 }
 function nl(txt: string): string {
   return txt.replace(/\r\n?|\n/g, '\n');
@@ -69,7 +68,7 @@ async function renderPackageBlock(pkgId: string, meta: RenderPackageMeta): Promi
           }
           break;
         }
-      } catch { }
+      } catch {}
     }
   }
   lines.push('');
@@ -91,7 +90,7 @@ export async function generateNotices({
   try {
     const buf = await fs.readFile(cacheCaminho, 'utf-8');
     results = JSON.parse(buf);
-  } catch { }
+  } catch {}
   if (!results) {
     try {
       const {
@@ -107,13 +106,13 @@ export async function generateNotices({
           relativeLicensePath: true,
           json: true
         }, (err: Error | null, json: Record<string, RenderPackageMeta>) => {
-          if (err) reject(err); else resolve(json);
+          if (err) reject(err);else resolve(json);
         });
       });
     } catch {
+
       // ignore
-    }
-  }
+    }}
   if (!results) {
     try {
       const {
@@ -142,7 +141,7 @@ export async function generateNotices({
       recursive: true
     });
     await fs.writeFile(path.join(dir, 'licenses.json'), JSON.stringify(results, null, 2), 'utf-8');
-  } catch { }
+  } catch {}
   const entries = Object.entries(results || {}).filter(([id]) => !id.startsWith(`${pkg.name}@`)).sort((a, b) => a[0].localeCompare(b[0]));
   const parts = [header({
     projectNome,

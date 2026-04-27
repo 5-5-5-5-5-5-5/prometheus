@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 export const CliFormatarExtraMensagens = {
-  titulo: '🧽 格式化',
+  titulo: ' 格式化',
   scanOnlyAtivo: 'SCAN_ONLY 模式已激活；格式化命令需要读取内容。',
   falhaFormatar: '格式化 {arquivo} 失败：{erro}',
   errosEncontrados: '错误：{total}',

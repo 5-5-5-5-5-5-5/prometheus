@@ -3,13 +3,13 @@ Proveniência e Autoria: Este documento integra o projeto Prometheus (licença M
 ---
 
 
-# 🛡️ Robustez e Segurança do Prometheus
+#  Robustez e Segurança do Prometheus
 
-## 📋 Visão Geral
+##  Visão Geral
 
 O Prometheus implementa múltiplas camadas de segurança e robustez para garantir análises seguras e confiáveis em qualquer ambiente.
 
-## 🔒 Modelo de Segurança
+##  Modelo de Segurança
 
 ### Princípios Fundamentais
 
@@ -19,7 +19,7 @@ O Prometheus implementa múltiplas camadas de segurança e robustez para garanti
 4. **Input Validation** - Validação rigorosa de entradas
 5. **Output Sanitization** - Sanitização de saídas
 
-## 🎯 Modo Seguro (Safe Mode)
+##  Modo Seguro (Safe Mode)
 
 ### Ativação
 
@@ -42,14 +42,14 @@ prometheus diagnosticar
 
 Quando `SAFE_MODE=true`:
 
-- ❌ **Plugins externos desabilitados**
-- ❌ **Execução de comandos bloqueada**
-- ❌ **Modificações no filesystem limitadas**
-- ❌ **Auto-fix estrutural desabilitado**
-- ✅ **Apenas leitura e análise**
-- ✅ **Relatórios JSON permitidos**
+- **Plugins externos desabilitados**
+- **Execução de comandos bloqueada**
+- **Modificações no filesystem limitadas**
+- **Auto-fix estrutural desabilitado**
+- **Apenas leitura e análise**
+- **Relatórios JSON permitidos**
 
-## 🔐 Sistema de Plugins
+##  Sistema de Plugins
 
 ### Whitelist de Extensões
 
@@ -111,18 +111,18 @@ const plugin: Analista = {
 export default plugin;
 ```
 
-## 🛡️ Proteções de Filesystem
+##  Proteções de Filesystem
 
 ### Acesso Seguro
 
 ```typescript
 import { lerEstado, salvarEstado } from "@shared/persistence/persistencia.js";
 
-// ❌ NUNCA faça isso
+//  NUNCA faça isso
 import fs from "fs";
 fs.readFileSync("/etc/passwd");
 
-// ✅ Use funções seguras
+//  Use funções seguras
 const dados = await lerEstado("meu-arquivo.json");
 await salvarEstado("meu-arquivo.json", dados);
 ```
@@ -174,7 +174,7 @@ function processGlob(pattern: string) {
 }
 ```
 
-## 🔍 Validação de Entrada
+##  Validação de Entrada
 
 ### Sanitização de Flags
 
@@ -212,7 +212,7 @@ function processarTimeout(valor: unknown): number {
 }
 ```
 
-## 📤 Sanitização de Saída
+##  Sanitização de Saída
 
 ### Escape de Unicode
 
@@ -223,7 +223,7 @@ import { stringifyJsonEscaped } from "@shared/helpers/json.js";
 const jsonSeguro = stringifyJsonEscaped(dados, 2);
 
 // Output: caracteres > U+007F são escapados como \uXXXX
-// Exemplo: "😀" → "\ud83d\ude00"
+// Exemplo: "" → "\ud83d\ude00"
 ```
 
 ### Sanitização de Logs
@@ -238,7 +238,7 @@ function logSeguro(mensagem: string) {
 }
 ```
 
-## ⏱️ Timeouts e Limites
+##  Timeouts e Limites
 
 ### Timeout por Analista
 
@@ -280,7 +280,7 @@ setInterval(() => {
 }, HEARTBEAT_INTERVAL);
 ```
 
-## 🚦 Rate Limiting
+##  Rate Limiting
 
 ### Limite de Arquivos
 
@@ -309,7 +309,7 @@ function monitorarMemoria() {
 }
 ```
 
-## 🔐 Segurança em CI/CD
+##  Segurança em CI/CD
 
 ### Configuração Recomendada
 
@@ -342,15 +342,15 @@ STRUCTURE_AUTO_FIX=false
 NODE_ENV=production
 ```
 
-## 🛡️ Proteção contra Ataques
+##  Proteção contra Ataques
 
 ### 1. Path Traversal
 
 ```typescript
-// ❌ Vulnerável
+//  Vulnerável
 const file = fs.readFileSync(userInput);
 
-// ✅ Seguro
+//  Seguro
 const safePath = sanitizePath(userInput);
 const file = await lerEstado(safePath);
 ```
@@ -358,23 +358,23 @@ const file = await lerEstado(safePath);
 ### 2. Command Injection
 
 ```typescript
-// ❌ Vulnerável
+//  Vulnerável
 exec(`git diff ${userBranch}`);
 
-// ✅ Seguro
+//  Seguro
 execFile("git", ["diff", userBranch]);
 ```
 
 ### 3. ReDoS (Regular Expression DoS)
 
 ```typescript
-// ❌ Vulnerável - backtracking exponencial
+//  Vulnerável - backtracking exponencial
 const regex = /(a+)+$/;
 
-// ✅ Seguro - sem backtracking
+//  Seguro - sem backtracking
 const regex = /a+$/;
 
-// ✅ Com timeout
+//  Com timeout
 function safeRegexTest(pattern: RegExp, text: string, timeoutMs = 1000) {
   return Promise.race([
     Promise.resolve(pattern.test(text)),
@@ -388,14 +388,14 @@ function safeRegexTest(pattern: RegExp, text: string, timeoutMs = 1000) {
 ### 4. Prototype Pollution
 
 ```typescript
-// ❌ Vulnerável
+//  Vulnerável
 function merge(target: any, source: any) {
   for (const key in source) {
     target[key] = source[key];
   }
 }
 
-// ✅ Seguro
+//  Seguro
 function safeMerge(target: any, source: any) {
   for (const key in source) {
     if (Object.prototype.hasOwnProperty.call(source, key)) {
@@ -408,7 +408,7 @@ function safeMerge(target: any, source: any) {
 }
 ```
 
-## 🔍 Auditoria e Logging
+##  Auditoria e Logging
 
 ### Logs Estruturados
 
@@ -444,7 +444,7 @@ function logAcao(acao: string, detalhes: Record<string, unknown>) {
 }
 ```
 
-## 🧪 Testes de Segurança
+##  Testes de Segurança
 
 ### Testes de Sanitização
 
@@ -480,23 +480,23 @@ describe("timeout de analistas", () => {
 });
 ```
 
-## 📊 Métricas de Segurança
+##  Métricas de Segurança
 
 ### Checklist de Segurança
 
-- ✅ Modo seguro implementado
-- ✅ Whitelist de plugins
-- ✅ Sanitização de paths
-- ✅ Validação de globs
-- ✅ Timeouts configurados
-- ✅ Rate limiting implementado
-- ✅ Escape de unicode
-- ✅ Proteção contra ReDoS
-- ✅ Proteção contra prototype pollution
-- ✅ Logs estruturados
-- ✅ Testes de segurança
+- Modo seguro implementado
+- Whitelist de plugins
+- Sanitização de paths
+- Validação de globs
+- Timeouts configurados
+- Rate limiting implementado
+- Escape de unicode
+- Proteção contra ReDoS
+- Proteção contra prototype pollution
+- Logs estruturados
+- Testes de segurança
 
-## 📖 Referências
+##  Referências
 
 ### Documentação Relacionada
 
@@ -514,4 +514,3 @@ describe("timeout de analistas", () => {
 
 **Última atualização:** 29 de novembro de 2025
 **Versão:** 1.0.0
-

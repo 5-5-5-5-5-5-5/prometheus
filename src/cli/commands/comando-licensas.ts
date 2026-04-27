@@ -5,10 +5,11 @@
 
 import path from 'node:path';
 
-import { ExitCode, sair } from '@cli/helpers/exit-codes.js';
-import { getMessages } from '@core/messages/index.js';
-import * as licensas from '@licensas/licensas.js';
+import { getMessages } from '@core/messages';
+import * as licensas from '@licensas';
 import { Command } from 'commander';
+
+import { ExitCode, sair } from '../helpers/exit-codes.js';
 
 const { log } = getMessages();
 

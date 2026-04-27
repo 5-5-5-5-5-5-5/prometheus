@@ -12,11 +12,8 @@ export * from './markdown.js';
 // Detectores
 export * from './detectores.js';
 
-// Contexto (já exportado em detectores, mas mantido para compatibilidade)
-export * from './contexto.js';
-
 // Estrategistas
 export * from './estrategistas.js';
 
 // Correções
-export * from './corrections.js';
+export * from './corrections/index.js';

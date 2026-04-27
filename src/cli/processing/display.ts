@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
 // @prometheus-disable tipo-literal-inline-complexo
 // Justificativa: tipos locais para formatação de display
-import { chalk } from '@core/config/chalk-safe.js';
-import { config } from '@core/config/config.js';
-import { getMessages } from '@core/messages/index.js';
+import { chalk, config } from '@core/config';
+import { getMessages } from '@core/messages';
 
 const { log } = getMessages();
 
@@ -71,7 +70,7 @@ export async function listarAnalistas(): Promise<void> {
   try {
     // Importação dinâmica para evitar dependência circular
     listaAnalistas = (
-      await import('@analistas/registry/registry.js')
+      await import('@analistas/registry')
     ).listarAnalistas();
   } catch (err) {
     listaAnalistas = [];

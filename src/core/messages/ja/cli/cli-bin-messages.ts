@@ -6,7 +6,7 @@ export const CliBinMensagens = {
   excecaoNaoCapturada: '未捕捉の例外: {mensagem}',
   erroInicializacao: 'prometheusの初期化エラー:',
   resumoConversa: {
-    titulo: '\n📊 会話の概要',
+    titulo: '\n 会話の概要',
     total: '合計: {total}',
     usuario: 'ユーザー: {total}',
     prometheus: 'Prometheus: {total}',

@@ -2,9 +2,9 @@
 import { statSync } from 'node:fs';
 import path from 'node:path';
 
-import { getTypesDirectoryRelPosix } from '@core/config/conventions.js';
-import type { OpcoesEstrategista } from '@shared/helpers/estrutura.js';
-import { carregarConfigEstrategia, destinoPara, deveIgnorar, normalizarRel } from '@shared/helpers/estrutura.js';
+import { getTypesDirectoryRelPosix } from '@core/config';
+import type { OpcoesEstrategista } from '@shared/helpers';
+import { carregarConfigEstrategia, destinoPara, deveIgnorar, normalizarRel } from '@shared/helpers';
 
 import type { ContextoExecucao, PlanoMoverItem, PlanoSugestaoEstrutura } from '@';
 
@@ -49,7 +49,7 @@ export async function gerarPlanoEstrategico(contexto: Pick<ContextoExecucao, 'ar
     const alreadyInTarget = currentDir === res.destinoDir || currentDir.startsWith(`${res.destinoDir}/`);
     if (alreadyInTarget) continue;
 
-    // 🚀 INTELIGÊNCIA CONTEXTUAL: Ajustar destino baseado em sinais avançados
+    //  INTELIGÊNCIA CONTEXTUAL: Ajustar destino baseado em sinais avançados
     let destinoDirAjustado = res.destinoDir;
     const motivoAjustado = res.motivo || 'Reorganização padrão';
     if (sinaisAvancados) {
@@ -198,7 +198,7 @@ function inferirDominio(nomeArquivo: string): string | null {
     product: ['product', 'item', 'catalog', 'inventory', 'stock'],
     order: ['order', 'cart', 'purchase', 'sale'],
     notification: ['notification', 'email', 'message', 'alert'],
-    report: ['report', 'analytics', 'metric', 'dashboard'],
+    report: ['report', 'analytics', 'metric'],
     admin: ['admin', 'management', 'config', 'setting']
   };
   const nomeLower = nomeArquivo.toLowerCase();

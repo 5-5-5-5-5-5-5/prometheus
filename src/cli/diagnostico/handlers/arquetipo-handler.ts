@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 /**
- * 🏗️ Arquetipo Handler
+ *  Arquetipo Handler
  *
  * Gerencia detecção e análise de estrutura do projeto
  * - Detecta arquetipos com timeout
@@ -9,9 +9,9 @@
  * - Formata resultados
  */
 
-import { detectarArquetipos } from '@analistas/detectores/detector-arquetipos.js';
-import { config } from '@core/config/config.js';
-import { messages } from '@core/messages/index.js';
+import { detectarArquetipos } from '@analistas/detectores';
+import { config } from '@core/config';
+import { messages } from '@core/messages';
 
 import type { ArquetipoOptions, ArquetipoResult, FileEntryWithAst } from '@';
 
@@ -196,34 +196,34 @@ export function gerarSugestoesArquetipo(result: ArquetipoResult): string[] {
   // Sugestões baseadas no tipo de projeto
   switch (tipo.toLowerCase()) {
     case 'monorepo':
-      sugestoes.push('💡 Monorepo detectado: considere usar filtros por workspace');
-      sugestoes.push('💡 Use --include packages/* para analisar workspaces específicos');
+      sugestoes.push(' Monorepo detectado: considere usar filtros por workspace');
+      sugestoes.push(' Use --include packages/* para analisar workspaces específicos');
       break;
     case 'biblioteca':
     case 'library':
-      sugestoes.push('💡 Biblioteca detectada: foque em exports públicos e documentação');
-      sugestoes.push('💡 Use --guardian para verificar API pública');
+      sugestoes.push(' Biblioteca detectada: foque em exports públicos e documentação');
+      sugestoes.push(' Use --guardian para verificar API pública');
       break;
     case 'cli':
     case 'cli-tool':
-      sugestoes.push('💡 CLI detectado: priorize testes de comandos e flags');
+      sugestoes.push(' CLI detectado: priorize testes de comandos e flags');
       break;
     case 'api':
     case 'api-rest':
     case 'api-server':
-      sugestoes.push('💡 API detectada: foque em endpoints e contratos');
-      sugestoes.push('💡 Considere testes de integração para rotas');
+      sugestoes.push(' API detectada: foque em endpoints e contratos');
+      sugestoes.push(' Considere testes de integração para rotas');
       break;
     case 'frontend':
     case 'web-app':
-      sugestoes.push('💡 Frontend detectado: priorize componentes e state management');
+      sugestoes.push(' Frontend detectado: priorize componentes e state management');
       break;
   }
 
   // Sugestão baseada em confiança
   if (confianca < 70) {
-    sugestoes.push('⚠️  Confiança baixa na detecção: estrutura pode ser híbrida');
-    sugestoes.push('💡 Use --criar-arquetipo --salvar-arquetipo para personalizar');
+    sugestoes.push('  Confiança baixa na detecção: estrutura pode ser híbrida');
+    sugestoes.push(' Use --criar-arquetipo --salvar-arquetipo para personalizar');
   }
   return sugestoes;
 }

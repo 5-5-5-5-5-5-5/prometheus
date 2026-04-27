@@ -1,6 +1,6 @@
 {
   "name": "prometheus",
-  "version": "0.6.1",
+  "version": "0.10.2",
   "type": "module",
   "description": "C.L.I modular para análise, diagnóstico e manutenção de projetos JavaScript/TypeScript e multi-stack leve",
   "author": "5 5 5",
@@ -12,16 +12,18 @@
     ".": "./dist/bin/index.js"
   },
   "engines": {
-    "node": ">=24.14.1"
+    "node": ">=24.15.0"
   },
   "scripts": {
     "prebuild": "rimraf dist bin",
-    "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json && mkdir -p dist/api/static && cp -r src/api/static/* dist/api/static/ && cp src/core/workers/worker-executor.js dist/core/workers/worker-executor.js",
+    "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
     "prepare": "npm run build",
     "start": "prometheus",
     "diagnosticar": "prometheus diagnosticar",
-    "diagnosticar:json": "prometheus diagnosticar --json",
+    "padronizar": "prometheus padronizador",
+    "importer": "prometheus importer",
     "formatar": "prometheus formatar --write",
+    "otimizar": "prometheus otimizar-svg --write",
     "reestruturar": "prometheus reestruturar",
     "podar": "prometheus podar",
     "fix-types": "prometheus fix-types",
@@ -36,7 +38,6 @@
     "notices": "prometheus licencas notices generate",
     "verify": "prometheus licencas disclaimer verify",
     "guardian": "prometheus guardian",
-    "dashboard": "prometheus dashboard",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint --ext .ts src",
     "test": "vitest run --passWithNoTests",
@@ -83,13 +84,13 @@
     "chalk": "^5.6.2",
     "commander": "^14.0.3",
     "css-tree": "^3.2.1",
-    "fast-xml-parser": "^5.6.0",
+    "fast-xml-parser": "^5.7.2",
     "htmlparser2": "^12.0.0",
     "java-parser": "^3.0.1",
     "micromatch": "^4.0.8",
-    "ora": "^9.3.0",
+    "ora": "^9.4.0",
     "p-limit": "^7.3.0",
-    "prometheus": "file:prometheus-0.6.1.tgz",
+    "prometheus": "file:prometheus-0.10.2.tgz",
     "xxhashjs": "^0.2.2",
     "yaml": "^2.8.3"
   },
@@ -98,10 +99,10 @@
     "@types/babel__traverse": "^7.28.0",
     "@types/micromatch": "^4.0.10",
     "@types/node": "^25.6.0",
-    "@typescript-eslint/eslint-plugin": "^8.58.2",
-    "@typescript-eslint/parser": "^8.58.2",
-    "@vitest/coverage-istanbul": "^4.1.4",
-    "@vitest/coverage-v8": "^4.1.4",
+    "@typescript-eslint/eslint-plugin": "^8.59.0",
+    "@typescript-eslint/parser": "^8.59.0",
+    "@vitest/coverage-istanbul": "^4.1.5",
+    "@vitest/coverage-v8": "^4.1.5",
     "eslint": "^9.39.4",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-simple-import-sort": "^13.0.0",
@@ -112,12 +113,13 @@
     "rimraf": "^6.1.3",
     "tsc-alias": "^1.8.16",
     "tsx": "^4.21.0",
-    "typescript": "^6.0.2",
-    "vitest": "^4.1.4"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.5"
   },
   "overrides": {
     "lodash": "4.18.0",
-    "lodash-es": "4.18.0"
+    "lodash-es": "4.18.0",
+    "glob": "^13.0.0"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [

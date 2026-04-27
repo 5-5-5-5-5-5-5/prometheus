@@ -3,11 +3,9 @@
  * Tipos para exportadores de relatórios (JSON, Markdown, Sharded)
  */
 
-import type { Ocorrencia } from '@';
+import type { ArquetipoResult , AutoFixResult , GuardianResult } from '@cli/diagnostico/handlers';
 
-import type { ArquetipoResult } from '../../cli/diagnostico/handlers/arquetipo-handler.js';
-import type { AutoFixResult } from '../../cli/diagnostico/handlers/auto-fix-handler.js';
-import type { GuardianResult } from '../../cli/diagnostico/handlers/guardian-handler.js';
+import type { Ocorrencia } from '../index.js';
 
 /* ================================
    JSON EXPORTER TYPES
@@ -190,8 +188,8 @@ export interface DadosRelatorioMarkdown {
  * Options para fragmentação
  */
 export interface ShardingOptions {
-  /** Formato dos shards: 'json' | 'markdown' */
-  formato: 'json' | 'markdown';
+  /** Formato dos shards */
+  formato: 'json';
 
   /** Número máximo de ocorrências por shard */
   ocorrenciasPorShard: number;

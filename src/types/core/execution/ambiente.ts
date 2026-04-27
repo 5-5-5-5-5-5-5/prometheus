@@ -2,9 +2,8 @@
 
 import type { Dirent } from 'node:fs';
 
-import type { FileEntryWithAst } from '@';
-
 import type { GuardianResult } from '../../guardian/resultado.js';
+import type { FileEntryWithAst } from '../../index.js';
 
 export interface AmbienteExecucao {
   arquivosValidosSet: Set<string>;

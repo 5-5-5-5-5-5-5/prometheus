@@ -3,13 +3,13 @@ Proveniência e Autoria: Este documento integra o projeto Prometheus (licença M
 ---
 
 
-# Como Criar Analistas no Prometheus 🔬
+# Como Criar Analistas no Prometheus
 
 Guia completo para desenvolvedores que desejam criar novos analistas para o Prometheus.
 
 ---
 
-## 📚 Índice
+##  Índice
 
 1. [Conceito Básico](#conceito-básico)
 2. [Estrutura de um Analista](#estrutura-de-um-analista)
@@ -21,7 +21,7 @@ Guia completo para desenvolvedores que desejam criar novos analistas para o Prom
 
 ---
 
-## 📖 Conceito Básico
+##  Conceito Básico
 
 Um **Analista** é uma classe/função que:
 - Recebe o **AST** (Abstract Syntax Tree) de um arquivo
@@ -44,7 +44,7 @@ Um **Analista** é uma classe/função que:
 
 ---
 
-## 🏗️ Estrutura de um Analista
+##  Estrutura de um Analista
 
 ### Localização
 
@@ -87,7 +87,7 @@ export class SeuNovoDetector {
 
 ---
 
-## 🚀 Step-by-Step: Criar seu Primeiro Analista
+##  Step-by-Step: Criar seu Primeiro Analista
 
 ### Passo 1: Definir o Objetivo
 
@@ -243,7 +243,7 @@ describe('DetectorFuncoesLongas', () => {
 
 ---
 
-## 🎯 Exemplo Prático: Detector de TODO Comments
+##  Exemplo Prático: Detector de TODO Comments
 
 Aqui está um exemplo completo de um detector simples e útil:
 
@@ -292,7 +292,7 @@ export class DetectorTodoComments {
 
 ---
 
-## ✅ Testes
+##  Testes
 
 ### Padrão Recomendado
 
@@ -338,47 +338,47 @@ npm run test src/analistas/seu-analista.test.ts
 
 ---
 
-## 🎨 Boas Práticas
+##  Boas Práticas
 
 ### 1. **Performance**
 
-- ✅ Evite caregamento de todo arquivo em memória
-- ✅ Use regex compilado (`/pattern/g`)
-- ✅ Paralelize com Workers quando possível
+- Evite caregamento de todo arquivo em memória
+- Use regex compilado (`/pattern/g`)
+- Paralelize com Workers quando possível
 
 ### 2. **Código Limpo**
 
-- ✅ Nomes descritivos
-- ✅ Funções pequenas
-- ✅ Comentários explicativos
-- ✅ Type-safe (use TypeScript)
+- Nomes descritivos
+- Funções pequenas
+- Comentários explicativos
+- Type-safe (use TypeScript)
 
 ### 3. **Mensagens**
 
-- ✅ Mensagens claras e acionáveis
-- ✅ Suporte i18n (PT, EN, ZH, JA)
-- ✅ Exemplos de como corrigir
+- Mensagens claras e acionáveis
+- Suporte i18n (PT, EN, ZH, JA)
+- Exemplos de como corrigir
 
 ### 4. **Descobertas**
 
-- ✅ Sempre incluir linha/coluna exata
-- ✅ Contexto do erro
-- ✅ Sugestões de correção
-- ✅ Gravidade apropriada
+- Sempre incluir linha/coluna exata
+- Contexto do erro
+- Sugestões de correção
+- Gravidade apropriada
 
 ### 5. **Type Safety**
 
 ```typescript
-// ✅ BOM
+//  BOM
 import type { ResultadoAnalise } from '@/types/analistas/detectores.js';
 
-// ❌ EVITAR
+//  EVITAR
 import { ResultadoAnalise } from '@/types/analistas/detectores.js'; // implementação
 ```
 
 ---
 
-## 📦 Publicar seu Analista
+##  Publicar seu Analista
 
 ### Para Contribuir ao Prometheus
 
@@ -408,9 +408,9 @@ Descreva o que seu analista detecta/analisa.
 
 ### Testes
 
-- ✅ Testes unitários (>80% cobertura)
-- ✅ Teste com projeto real
-- ✅ Sem falsos positivos
+- Testes unitários (>80% cobertura)
+- Teste com projeto real
+- Sem falsos positivos
 
 ### Performance
 
@@ -420,7 +420,7 @@ Descreva o que seu analista detecta/analisa.
 
 ---
 
-## 🔗 Referências
+##  Referências
 
 - [Tipos de Analistas](../../../types/analistas/detectores.ts)
 - [Registro de Analistas](../../../src/analistas/registry/index.ts)
@@ -429,7 +429,7 @@ Descreva o que seu analista detecta/analisa.
 
 ---
 
-## 💡 Ideias para Analistas
+##  Ideias para Analistas
 
 Aqui estão algumas ideias para novos analistas que você pode criar:
 
@@ -444,7 +444,7 @@ Aqui estão algumas ideias para novos analistas que você pode criar:
 
 ---
 
-## ❓ Perguntas Frequentes
+##  Perguntas Frequentes
 
 **P: Posso usar bibliotecas externas?**
 R: Sim, mas veja a lista de dependências. Prefira soluções nativas quando possível.
@@ -460,7 +460,7 @@ R: Sim, mas retorne `Promise<ResultadoAnalise>` apropriadamente.
 
 ---
 
-## 🎓 Próximas Leituras
+##  Próximas Leituras
 
 - [Padrões de Desenvolvimento](../PADROES.md)
 - [Sistema de Plugins](../SISTEMA-PLUGINS.md)

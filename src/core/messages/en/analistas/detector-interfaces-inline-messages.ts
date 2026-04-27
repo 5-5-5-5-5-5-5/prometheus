@@ -6,7 +6,7 @@
  * to dedicated type files, as well as detecting duplicated types.
  */
 
-import type { TipoDuplicadoArgs } from '../../../../types/analistas/detectores.js';
+import type { TipoDuplicadoArgs } from '@projeto-types/analistas';
 
 export const DetectorInterfacesInlineMensagens = {
   moverTipoParaTipos: (nomeTipo: string, tiposDir = 'src/tipos') => `Move type '${nomeTipo}' to ${tiposDir.endsWith('/') ? tiposDir : `${tiposDir}/`}`,

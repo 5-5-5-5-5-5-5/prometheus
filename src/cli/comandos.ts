@@ -1,23 +1,26 @@
 // SPDX-License-Identifier: MIT
+import type { Command } from 'commander';
+
 import {
   comandoAnalistas,
   comandoAtualizar,
   comandoDiagnosticar,
   comandoFormatar,
   comandoGuardian,
+  comandoIgnore,
+  comandoImporter,
   comandoLicencas,
   comandoMetricas,
   comandoNames,
   comandoOtimizarSvg,
+  comandoPadronizador,
+  comandoPlugins,
   comandoPodar,
   comandoReestruturar,
   comandoRename,
-  comandoPlugins,
-  comandoDashboard,
   criarComandoFixTypes,
   registrarComandoReverter,
-} from '@cli/commands/index.js';
-import type { Command } from 'commander';
+} from './commands/index.js';
 
 export function registrarComandos(
   program: Command,
@@ -28,6 +31,7 @@ export function registrarComandos(
   program.addCommand(comandoFormatar(aplicarFlagsGlobais));
   program.addCommand(comandoOtimizarSvg(aplicarFlagsGlobais));
   program.addCommand(comandoPodar(aplicarFlagsGlobais));
+  program.addCommand(comandoPadronizador(aplicarFlagsGlobais));
   program.addCommand(comandoReestruturar(aplicarFlagsGlobais));
   program.addCommand(comandoAtualizar(aplicarFlagsGlobais));
   program.addCommand(comandoAnalistas());
@@ -35,12 +39,9 @@ export function registrarComandos(
   program.addCommand(criarComandoFixTypes());
   program.addCommand(comandoLicencas());
   program.addCommand(comandoPlugins());
-  program.addCommand(comandoDashboard());
-
-  // Comandos de manutenção de nomes
   program.addCommand(comandoNames(aplicarFlagsGlobais));
   program.addCommand(comandoRename(aplicarFlagsGlobais));
-
-  // Registra comando de reversão
+  program.addCommand(comandoImporter(aplicarFlagsGlobais));
+  program.addCommand(comandoIgnore());
   registrarComandoReverter(program);
 }

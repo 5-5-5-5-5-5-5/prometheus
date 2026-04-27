@@ -14,38 +14,22 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 
 ### Adicionado
 
-- **Dashboard Web Interativo**:
-  - Novo comando `prometheus dashboard` para iniciar interface web completa
-  - Visualização de workflows GitHub Actions com análise em tempo real
-  - Gráficos de saúde do projeto com métricas reais (segurança, performance, documentação, arquitetura, qualidade)
-  - Representação visual de workflows com diagramas Mermaid
-  - Sistema de notificações toast para feedback ao usuário
-  - Loading states e tratamento de erros aprimorado
+- **Servidor de API REST**:
+  - Servidor local com endpoints para análise
+  - Endpoint `/api/v1/repositorio/status` com métricas reais
+  - Endpoint `/api/v1/repositorio/metricas` para histórico
+  - Webhook para análise automática
+  - Badge de Score para README
 
 - **Métricas Automáticas do Projeto**:
   - Cálculo automático de scores baseado na estrutura real do projeto
   - Histórico de tendências com dados persistentes
-  - Barra de progresso do Guardian com indicadores visuais dinâmicos
+  - Barra de progresso do Guardian com indicadores
   - Cards informativos: segurança, performance, boas práticas, documentação
-
-- **Melhorias de UX do Dashboard**:
-  - Tooltips explicativos em todos os cards e métricas
-  - Feedback visual durante carregamento de dados
-  - Grafo Mermaid gerado dinamicamente baseado nos jobs do workflow
-  - Interface responsiva para mobile e tablet
-
-### Melhorado
-
-- **API REST**:
-  - Endpoint `/api/v1/repositorio/status` agora retorna métricas reais calculadas automaticamente
-  - Endpoint `/api/v1/repositorio/metricas` para histórico de tendências
-  - Melhor tratamento de erros HTTP em todos os endpoints
 
 ### Corrigido
 
-- Dados mockados do radar chart substituídos por métricas reais do projeto
-- Renderização do grafo Mermaid agora reflete jobs reais do workflow analisado
-- Estados de loading e empty state em todas as views do dashboard
+- Dados mockados substituídos por métricas reais do projeto
 
 ## [0.5.0] - 2026-03-15
 

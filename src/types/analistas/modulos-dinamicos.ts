@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-import type { Analista, Tecnica } from '@';
+import type { Analista, Tecnica } from '../index.js';
 
 /**
  * Tipos para módulos dinâmicos e registry de analistas

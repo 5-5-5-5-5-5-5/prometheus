@@ -7,7 +7,7 @@
  * 重複型の検出機能を提供します。
  */
 
-import type { TipoDuplicadoArgs } from '../../../../types/analistas/detectores.js';
+import type { TipoDuplicadoArgs } from '@projeto-types/analistas';
 
 export const DetectorInterfacesInlineMensagens = {
   moverTipoParaTipos: (nomeTipo: string, tiposDir = 'src/tipos') => `型 '${nomeTipo}' を ${tiposDir.endsWith('/') ? tiposDir : `${tiposDir}/`} に移動してください`,

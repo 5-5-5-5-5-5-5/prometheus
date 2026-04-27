@@ -1,17 +1,21 @@
 // SPDX-License-Identifier: MIT
 // @prometheus-disable tipo-literal-inline-complexo
 // Justificativa: tipos inline para opções de comando CLI são locais e não precisam de extração
-import { optionsDiagnosticar } from '@cli/options-diagnosticar.js';
-import { processarDiagnostico } from '@cli/processamento-diagnostico.js';
-import { CABECALHOS, messages } from '@core/messages/index.js';
-import { ativarModoJson } from '@shared/helpers/json-mode.js';
+import { CABECALHOS, messages } from '@core/messages';
+import { ativarModoJson } from '@shared/helpers';
 import { Command } from 'commander';
 import ora from 'ora';
 
 import type { ParentWithOpts } from '@';
 
+import { optionsDiagnosticar } from '../options-diagnosticar.js';
+import { processarDiagnostico } from '../processamento-diagnostico.js';
+
 const log = messages.log;
 
+/**
+ * Função de comando de diagnóstico
+ */
 export function comandoDiagnosticar(aplicarFlagsGlobais: (opts: Record<string, unknown>) => void): Command {
   const cmd = new Command('diagnosticar').alias('diag').description('Executa uma análise completa do repositório');
 
@@ -49,9 +53,9 @@ export function comandoDiagnosticar(aplicarFlagsGlobais: (opts: Record<string, u
     autoFix?: boolean;
     autoCorrecaoMode?: string;
     autoFixConservative?: boolean;
-  }, command: Command) => {
+}, command: Command) => {
     // Aplicar flags globais (merge entre flags passadas antes do subcomando e flags locais)
-    // Isso garante que opções como --export funcionem tanto quando fornecidas antes quanto depois do subcomando
+    // Isso garante que opções como --export funcionem tanto quando fornecidas antes depois do subcomando
     try {
       const parentObj = command.parent as unknown as {
         opts?: () => Record<string, unknown>;
@@ -63,6 +67,20 @@ export function comandoDiagnosticar(aplicarFlagsGlobais: (opts: Record<string, u
         ...(localFlags || {}),
         ...(opts || {})
       };
+
+      // Mapeamento de flags da CLI para as chaves de configuração internas
+      const _merged = merged as Record<string, unknown>;
+      if (_merged.export) {
+        _merged.REPORT_EXPORT_ENABLED = true;
+      }
+      if (_merged.exportFull) {
+        _merged.REPORT_EXPORT_ENABLED = true;
+        _merged.REPORT_EXPORT_FULL = true;
+      }
+      if (_merged.exportTo) {
+        _merged.REPORT_OUTPUT_DIR = _merged.exportTo;
+      }
+
       await aplicarFlagsGlobais(merged);
     } catch {
       // Em caso de erro ao aplicar flags, ainda tentamos aplicar as flags locais de forma conservadora
@@ -102,14 +120,14 @@ export function comandoDiagnosticar(aplicarFlagsGlobais: (opts: Record<string, u
       try {
         const {
           chalk
-        } = await import('@core/config/chalk-safe.js');
+        } = await import('@core/config');
         const {
           config
-        } = await import('@core/config/config.js');
+        } = await import('@core/config');
         const activeFlags: string[] = [];
         const details: string[] = [];
         const parent = command.parent as unknown as ParentWithOpts | undefined;
-        const parentOpts: Record<string, unknown> = parent && typeof parent.opts === 'function' ? parent.opts() : {};
+        const parentOpts: Record<string, unknown> = parent && typeof parent.opts === 'function' ? parent.opts() : Object.create(null);
 
         // Mapear flags relevantes e adicionar detalhes úteis
         if (opts.json) {

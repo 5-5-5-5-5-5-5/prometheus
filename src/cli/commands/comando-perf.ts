@@ -3,14 +3,14 @@ import crypto from 'node:crypto';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
-import { ExitCode, sair } from '@cli/helpers/exit-codes.js';
-import { config } from '@core/config/config.js';
-import { formatPct } from '@core/config/format.js';
-import { messages } from '@core/messages/index.js';
-import { lerEstado, salvarEstado } from '@shared/persistence/persistencia.js';
+import { config , formatPct } from '@core/config';
+import { messages } from '@core/messages';
+import { lerEstado, salvarEstado } from '@shared/persistence';
 import { Command } from 'commander';
 
 import type { MetricaExecucaoLike, SnapshotPerf } from '@';
+
+import { ExitCode, sair } from '../helpers/exit-codes.js';
 
 const { log, logSistema } = messages;
 
@@ -19,7 +19,7 @@ async function obterCommit(): Promise<string | undefined> {
     // usar helper seguro
     const {
       executarShellSeguro
-    } = await import('@core/utils/exec-safe.js');
+    } = await import('@core/utils');
     return executarShellSeguro('git rev-parse --short HEAD', {
       stdio: ['ignore', 'pipe', 'ignore']
     }).toString().trim();

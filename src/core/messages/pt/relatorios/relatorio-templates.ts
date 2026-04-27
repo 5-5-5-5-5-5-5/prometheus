@@ -4,10 +4,9 @@
  * Funções que geram seções completas de MD com formatação consistente
  */
 
-import { formatMs } from '@core/config/format.js';
-
 import type { GuardianInfo, MetadadosRelatorioEstendido, ProblemaAgrupado } from '@';
 
+import { formatMs } from '../../../config/format.js';
 import { RelatorioMensagens } from './relatorio-messages.js';
 
 // Re-exporta o tipo para compatibilidade
@@ -212,6 +211,6 @@ export function gerarFooterRelatorio(timestampISO?: string): string[] {
 export async function escreverRelatorioMarkdown(outputCaminho: string, lines: string[]): Promise<void> {
   const {
     salvarEstado
-  } = await import('@shared/persistence/persistencia.js');
+  } = await import('@shared/persistence');
   await salvarEstado(outputCaminho, lines.join('\n'));
 }

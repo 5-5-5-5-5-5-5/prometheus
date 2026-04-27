@@ -9,13 +9,11 @@ export const CliExportersMensagens = {
   },
   guardian: {
     relatoriosExportadosTitulo: `${ICONES_ACAO.export} ${ICONES_RELATORIO.detalhado} Relatórios Guardian exportados:`,
-    caminhoMarkdown: (caminhoMd: string) => `   Markdown: ${caminhoMd}`,
     caminhoJson: (caminhoJson: string) => `   JSON: ${caminhoJson}`,
     falhaExportar: (erroMensagem: string) => `Falha ao exportar relatórios Guardian: ${erroMensagem}`
   },
   fixTypes: {
     relatoriosExportadosTitulo: `${ICONES_ACAO.export} ${ICONES_RELATORIO.detalhado} Relatórios de fix-types exportados:`,
-    caminhoMarkdown: (caminhoMd: string) => `   Markdown: ${caminhoMd}`,
     caminhoJson: (caminhoJson: string) => `   JSON: ${caminhoJson}`,
     falhaExportar: (erroMensagem: string) => `Falha ao exportar relatórios de fix-types: ${erroMensagem}`
   },

@@ -2,8 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { config } from '@core/config/config.js';
-import { mesclarConfigExcludes } from '@core/config/excludes-padrao.js';
+import { config , mesclarConfigExcludes } from '@core/config';
 
 /**
  * Utilitários para processamento de filtros CLI
@@ -119,6 +118,6 @@ export function configurarFiltros(includeGroupsRaw: string[][], includeListFlat:
 // Função auxiliar para sincronizar arrays de exclusão
 
 function sincronizarArraysExclusao(_exclFiltered: string[]): void {
-  // 🔥 SIMPLIFICADO: Não há mais arrays obsoletos para sincronizar
+  //  SIMPLIFICADO: Não há mais arrays obsoletos para sincronizar
   // CLI flags dominam automaticamente via scanner.ts
 }

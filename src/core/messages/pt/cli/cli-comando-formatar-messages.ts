@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 export const CliFormatarExtraMensagens = {
-  titulo: '🧽 FORMATAR',
+  titulo: ' FORMATAR',
   scanOnlyAtivo: 'SCAN_ONLY ativo; o comando formatar precisa ler conteúdo.',
   falhaFormatar: 'Falha ao formatar {arquivo}: {erro}',
   errosEncontrados: 'Erros: {total}',

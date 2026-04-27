@@ -5,8 +5,8 @@
  */
 
 import type { Node } from '@babel/types';
-import { buildTypesRelPathPosix } from '@core/config/conventions.js';
-import { getMessages } from '@core/messages/index.js';
+import { buildTypesRelPathPosix } from '@core/config';
+import { getMessages } from '@core/messages';
 
 import type { QuickFix, QuickFixResult, TypeSafetyWarning } from '@';
 

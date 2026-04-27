@@ -3,10 +3,11 @@
  * Utilitários para trabalhar com relatórios JSON versionados
  */
 
-import { migrarParaVersaoAtual, validarSchema } from '@core/schema/version.js';
-import { lerEstado } from '@shared/persistence/persistencia.js';
+import { migrarParaVersaoAtual, validarSchema } from '@core/schema';
 
 import type { LeitorRelatorioOptions } from '@';
+
+import { lerEstado } from '../persistence/persistencia.js';
 
 // Re-exporta o tipo para compatibilidade
 export type { LeitorRelatorioOptions };

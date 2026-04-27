@@ -1,19 +1,19 @@
 // SPDX-License-Identifier: MIT
 import crypto from 'node:crypto';
 
-import { config } from '@core/config/config.js';
-import { formatMs } from '@core/config/format.js';
-import { traverse } from '@core/config/traverse.js';
-import { messages } from '@core/messages/index.js';
-import { createDefaultReporter } from '@core/reporting/default-reporter.js';
-import { WorkerPool } from '@core/workers/worker-pool.js';
-import { lerEstado, salvarEstado } from '@shared/persistence/persistencia.js';
+import { lerEstado, salvarEstado } from '@shared/persistence';
 import XXH from 'xxhashjs';
 
 import type { ContextoExecucao, EstadoIncremental, FileEntryWithAst, GuardianResult, MetricaAnalista, MetricaExecucao, MetricasGlobais, Ocorrencia, ResultadoInquisicao, Tecnica } from '@';
 import { ocorrenciaErroAnalista } from '@';
 
 import type { ExecutorEventEmitter } from '../../types/core/config/config.js';
+import { config } from '../config/config.js';
+import { formatMs } from '../config/format.js';
+import { traverse } from '../config/traverse.js';
+import { messages } from '../messages/index.js';
+import { createDefaultReporter } from '../reporting/default-reporter.js';
+import { WorkerPool } from '../workers/worker-pool.js';
 
 const { log, logCore, ExecutorExtraMensagens, logAnalistas } = messages;
 
@@ -37,7 +37,7 @@ export async function executarInquisicao(fileEntriesComAst: FileEntryWithAst[], 
 }): Promise<ResultadoInquisicao> {
   const ocorrencias: Ocorrencia[] = [];
   const metricasAnalistas: MetricaAnalista[] = [];
-  const arquivosValidosSet = new Set(fileEntriesComAst.map(f => f.relPath));
+  const arquivosValidosSet = new Set(fileEntriesComAst.map((f) => f.relPath));
   const emitter = opts?.events;
   const contextoGlobalBase: ContextoExecucao = {
     baseDir,
@@ -144,7 +144,7 @@ export async function executarInquisicao(fileEntriesComAst: FileEntryWithAst[], 
         const err = error as Error;
         const isTempoLimite = err.message.includes('Timeout: analista global');
         const nivelLog = isTempoLimite ? 'aviso' : 'erro';
-        const prefixo = isTempoLimite ? '⏰' : '❌';
+        const prefixo = isTempoLimite ? '' : '';
 
         // Log apropriado baseado no tipo de erro
         if (nivelLog === 'aviso') {
@@ -183,9 +183,9 @@ export async function executarInquisicao(fileEntriesComAst: FileEntryWithAst[], 
     // Importante: não passar funções (ex.: contexto.report) para worker threads.
     const resultadoWorkers = await workerPool.processFiles(
       fileEntriesComAst,
-      tecnicas.filter(t => !t.global),
+      tecnicas.filter((t) => !t.global),
       // Apenas técnicas não-globais
-      contextoGlobalBase,
+      contextoGlobalBase
     );
     ocorrencias.push(...resultadoWorkers.occurrences);
     metricasAnalistas.push(...resultadoWorkers.metrics);
@@ -209,8 +209,8 @@ export async function executarInquisicao(fileEntriesComAst: FileEntryWithAst[], 
         }
         await salvarEstado(config.ANALISE_INCREMENTAL_STATE_PATH, novoEstado);
       } catch {
-        /* Ignora erro ao salvar cache */
-      }
+
+        /* Ignora erro ao salvar cache */}
     }
     const metricasExecucao: MetricaExecucao = {
       totalArquivos: fileEntriesComAst.length,
@@ -226,7 +226,7 @@ export async function executarInquisicao(fileEntriesComAst: FileEntryWithAst[], 
     // Retorna resultado do processamento paralelo
     const resultadoFast: ResultadoInquisicao = {
       totalArquivos: fileEntriesComAst.length,
-      arquivosAnalisados: fileEntriesComAst.map(e => e.relPath),
+      arquivosAnalisados: fileEntriesComAst.map((e) => e.relPath),
       ocorrencias,
       timestamp: Date.now(),
       duracaoMs: duracaoTotal,
@@ -256,8 +256,8 @@ export async function executarInquisicao(fileEntriesComAst: FileEntryWithAst[], 
   };
 
   // Otimização: Identifica analistas que usam visitor compartilhado
-  type TecnicaComVisitor = { visitor?: Record<string, unknown> };
-  const visitantes = (tecnicas as unknown as TecnicaComVisitor[]).filter(t => t.visitor != null);
+  type TecnicaComVisitor = {visitor?: Record<string, unknown>;};
+  const visitantes = (tecnicas as unknown as TecnicaComVisitor[]).filter((t) => t.visitor !== null);
   const visitorCombinado: Record<string, unknown> = {};
   if (visitantes.length > 0) {
     for (const a of visitantes) {
@@ -345,7 +345,7 @@ export async function executarInquisicao(fileEntriesComAst: FileEntryWithAst[], 
       reaproveitou = true;
       if (detalharPorArquivo) logCore.reaproveitadoIncremental(entry.relPath);
       if (config.LOG_ESTRUTURADO) {
-          log.info(JSON.stringify({
+        log.info(JSON.stringify({
           tipo: 'incremental-reuse',
           arquivo: entry.relPath,
           ocorrencias: cacheAnterior.ocorrencias.length
@@ -358,15 +358,14 @@ export async function executarInquisicao(fileEntriesComAst: FileEntryWithAst[], 
     const resultadosOtimizados = new Map<string, unknown[]>();
     if (Object.keys(visitorCombinado).length > 0 && entry.ast) {
       try {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const astParam = isNodePath(entry.ast) ? (entry.ast as any).node : entry.ast;
+        const astParam = isNodePath(entry.ast) ? (entry.ast as { node: import('@babel/types').Node }).node : entry.ast;
         traverse(astParam, visitorCombinado, undefined, {
           relPath: entry.relPath,
           contexto: contextoGlobal,
           resultados: resultadosOtimizados // Mapa de analista -> achados
         });
       } catch (err) {
-        log.aviso(`⏰ Falha na travessia otimizada para ${entry.relPath}: ${(err as Error).message}`);
+        log.aviso(` Falha na travessia otimizada para ${entry.relPath}: ${(err as Error).message}`);
       }
     }
 
@@ -385,14 +384,10 @@ export async function executarInquisicao(fileEntriesComAst: FileEntryWithAst[], 
         // Implementa timeout por analista se configurado
         let resultado: Awaited<ReturnType<typeof tecnica.aplicar>> | undefined;
         if (timeoutMs > 0) {
-          // Promise.race entre execução do analista e timeout
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const astParam = (tecnica as any).visitor
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            ? { node: isNodePath(entry.ast) ? (entry.ast as any).node : entry.ast, preColetado: resultadosOtimizados.get(tecnica.nome || '') }
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            : (isNodePath(entry.ast) ? entry.ast as any : null);
-          const execPromise = tecnica.aplicar(entry.content ?? '', entry.relPath, astParam, entry.fullCaminho, contextoGlobal);
+          const astParam = (tecnica as { visitor?: unknown }).visitor
+          ? { node: isNodePath(entry.ast) ? (entry.ast as { node: import('@babel/types').Node }).node : entry.ast, preColetado: resultadosOtimizados.get(tecnica.nome || '') }
+          : isNodePath(entry.ast) ? entry.ast : null;
+          const execPromise = tecnica.aplicar(entry.content ?? '', entry.relPath, astParam as unknown as Parameters<typeof tecnica.aplicar>[2], entry.fullCaminho, contextoGlobal);
           resultado = await (async () => {
             let timer: ReturnType<typeof setTimeout> | null = null;
             try {
@@ -405,14 +400,10 @@ export async function executarInquisicao(fileEntriesComAst: FileEntryWithAst[], 
             }
           })();
         } else {
-          // Execução sem timeout
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const astParam2 = (tecnica as any).visitor
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            ? { node: isNodePath(entry.ast) ? (entry.ast as any).node : entry.ast, preColetado: resultadosOtimizados.get(tecnica.nome || '') }
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            : (isNodePath(entry.ast) ? (entry.ast as any) : null);
-          resultado = await tecnica.aplicar(entry.content ?? '', entry.relPath, astParam2, entry.fullCaminho, contextoGlobal);
+          const astParam2 = (tecnica as { visitor?: unknown }).visitor
+          ? { node: isNodePath(entry.ast) ? (entry.ast as { node: import('@babel/types').Node }).node : entry.ast, preColetado: resultadosOtimizados.get(tecnica.nome || '') }
+          : isNodePath(entry.ast) ? entry.ast : null;
+          resultado = await tecnica.aplicar(entry.content ?? '', entry.relPath, astParam2 as unknown as Parameters<typeof tecnica.aplicar>[2], entry.fullCaminho, contextoGlobal);
         }
         if (Array.isArray(resultado)) {
           ocorrencias.push(...resultado);
@@ -431,7 +422,7 @@ export async function executarInquisicao(fileEntriesComAst: FileEntryWithAst[], 
         const ocorrenciasContagem = Array.isArray(resultado) ? resultado.length : resultado ? 1 : 0;
         logAnalistas.concluido(tecnica.nome || 'analista-desconhecido', entry.relPath, ocorrenciasContagem, duracaoMs);
         if (detalharPorArquivo) {
-          log.info(`📄 '${tecnica.nome}' analisou ${entry.relPath} em ${formatMs(duracaoMs)}`);
+          log.info(` '${tecnica.nome}' analisou ${entry.relPath} em ${formatMs(duracaoMs)}`);
         }
         if (config.LOG_ESTRUTURADO) {
           log.info(JSON.stringify({
@@ -446,7 +437,7 @@ export async function executarInquisicao(fileEntriesComAst: FileEntryWithAst[], 
         const err = error as Error;
         const isTempoLimite = err.message.includes('Timeout: analista');
         const nivelLog = isTempoLimite ? 'aviso' : 'erro';
-        const prefixo = isTempoLimite ? '⏰' : '❌';
+        const prefixo = isTempoLimite ? '' : '';
 
         // Log adaptativo para erros e timeouts
         if (isTempoLimite) {
@@ -481,13 +472,13 @@ export async function executarInquisicao(fileEntriesComAst: FileEntryWithAst[], 
     }
     // Salva estado incremental do arquivo processado
     if (config.ANALISE_INCREMENTAL_ENABLED) {
-      const ocorrArq = ocorrencias.filter(o => o.relPath === entry.relPath);
+      const ocorrArq = ocorrencias.filter((o) => o.relPath === entry.relPath);
       // Extrai métricas por analista específicas do arquivo
       const analistasArquivo: Record<string, {
         ocorrencias: number;
         duracaoMs: number;
       }> = {};
-      for (const m of metricasAnalistas.filter(m => !m.global)) {
+      for (const m of metricasAnalistas.filter((m) => !m.global)) {
         analistasArquivo[m.nome] = {
           ocorrencias: m.ocorrencias,
           duracaoMs: m.duracaoMs
@@ -508,7 +499,7 @@ export async function executarInquisicao(fileEntriesComAst: FileEntryWithAst[], 
     // NOVO: Atualiza progresso por arquivo (não por analista)
     logAnalistas.arquivoProcessado();
     if (emitter) {
-      const ocorrArquivo = ocorrencias.filter(o => o.relPath === entry.relPath);
+      const ocorrArquivo = ocorrencias.filter((o) => o.relPath === entry.relPath);
       emitter.emit('file:processed', { relPath: entry.relPath, ocorrencias: ocorrArquivo.length });
     }
   }
@@ -580,7 +571,7 @@ export async function executarInquisicao(fileEntriesComAst: FileEntryWithAst[], 
   }
   const resultado: ResultadoInquisicao = {
     totalArquivos: fileEntriesComAst.length,
-    arquivosAnalisados: fileEntriesComAst.map(e => e.relPath),
+    arquivosAnalisados: fileEntriesComAst.map((e) => e.relPath),
     ocorrencias,
     timestamp: Date.now(),
     duracaoMs,
@@ -600,6 +591,6 @@ export function registrarUltimasMetricas(metricas: MetricaExecucao | undefined):
       __ULTIMAS_METRICAS_PROMETHEUS__?: MetricaExecucao | null;
     }).__ULTIMAS_METRICAS_PROMETHEUS__ = metricas || null;
   } catch {
-    /* ignore */
-  }
+
+    /* ignore */}
 }

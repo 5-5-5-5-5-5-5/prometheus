@@ -4,9 +4,8 @@ import { parse as babelParse } from '@babel/parser';
 import type { NodePath, Visitor } from '@babel/traverse';
 import traverse from '@babel/traverse';
 import * as t from '@babel/types';
-import { messages } from '@core/messages/index.js';
-import { createLineLookup } from '@shared/helpers/line-lookup.js';
-import { maskJsComments } from '@shared/helpers/masking.js';
+import { messages } from '@core/messages';
+import { createLineLookup , maskJsComments } from '@shared/helpers';
 
 import { criarAnalista, criarOcorrencia } from '@';
 

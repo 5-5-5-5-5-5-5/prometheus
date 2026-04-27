@@ -1,31 +1,31 @@
 // SPDX-License-Identifier: MIT
 import { promises as fs } from 'node:fs';
 
-import { config } from '@core/config/config.js';
-import { isMetaPath } from '@core/config/paths.js';
-import { messages } from '@core/messages/index.js';
-import { lerEstado } from '@shared/persistence/persistencia.js';
+import { lerEstado } from '@shared/persistence';
 import * as path from 'path';
 
 import type { CacheValor, EstadoIncArquivo, FileEntry, FileEntryWithAst, InquisicaoOptions, MetricasGlobais, OcorrenciaParseErro, ResultadoInquisicaoCompleto, SimbolosLog, Tecnica } from '@';
 import { ocorrenciaParseErro } from '@';
 
+import { config } from '../config/config.js';
+import { isMetaPath } from '../config/paths.js';
+import { messages } from '../messages/index.js';
 import { executarInquisicao as executarExecucao, registrarUltimasMetricas } from './executor.js';
 import { scanRepository } from './scanner.js';
 
 const { log, InquisidorExtraMensagens } = messages;
 // Fallback de símbolos para cenários de teste onde o mock de log não inclui `simbolos`.
 const SIMBOLOS_ALTERNATIVA: SimbolosLog = {
-  info: 'ℹ️',
-  sucesso: '✅',
-  erro: '❌',
-  aviso: '⚠️',
-  debug: '🐞',
-  fase: '🔶',
-  passo: '▫️',
-  scan: '🔍',
-  guardian: '🛡️',
-  pasta: '📂'
+  info: 'ℹ',
+  sucesso: '',
+  erro: '',
+  aviso: '',
+  debug: '',
+  fase: '',
+  passo: '▫',
+  scan: '',
+  guardian: '',
+  pasta: ''
 };
 const S: SimbolosLog = typeof (log as unknown as {
   simbolos?: SimbolosLog;
@@ -46,14 +46,14 @@ const __infoDestaque = (mensagem: string) => {
 // - .d.ts é propositalmente excluída pelo parser (retorna null) e aqui não entra.
 // - .map (source maps) não deve ser parseado – marcamos como NÃO pertencente ao conjunto.
 const EXTENSOES_COM_AST = new Set(
-  Array.isArray(config.SCANNER_EXTENSOES_COM_AST)
-    ? config.SCANNER_EXTENSOES_COM_AST
-    : ['.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs'],
+  Array.isArray(config.SCANNER_EXTENSOES_COM_AST) ?
+  config.SCANNER_EXTENSOES_COM_AST :
+  ['.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs']
 );
 export async function prepararComAst(
-  entries: FileEntry[],
-  baseDir: string,
-): Promise<FileEntryWithAst[]> {
+entries: FileEntry[],
+baseDir: string)
+: Promise<FileEntryWithAst[]> {
   // Cache em memória (process-level). Chave: relPath
   // Guarda: { mtimeMs, size, ast } - tipo importado de @types
   const globalStore = globalThis as unknown as Record<string, unknown>;
@@ -97,7 +97,7 @@ export async function prepararComAst(
         if (!ast) {
           const inicioParse = performance.now();
           // Usa a API decifrarSintaxe esperada pelos testes (com spies)
-          const parsed = await import('@core/parsing/parser.js').then(m => m.decifrarSintaxe(entry.content || '', extEfetiva, {
+          const parsed = await import('../parsing/parser.js').then((m) => m.decifrarSintaxe(entry.content || '', extEfetiva, {
             relPath: entry.relPath
           }));
           if (parsed && typeof parsed === 'object') {
@@ -106,7 +106,7 @@ export async function prepararComAst(
               // Sentinel convertida para o tipo NodePath via unknown cast – suficiente para diferenciar truthy
               ast = {} as unknown as import('@babel/traverse').NodePath<import('@babel/types').Node>;
             }
-          } else if (parsed == null) {
+          } else if (parsed === null) {
             // Politica: para arquivos em node_modules, não tratar falha de parsing como erro;
             // em vez disso, seguimos com um sentinel de AST para permitir analistas que não dependem de AST completa.
             const inNodeModules = /(^|\/)node_modules(\/|\\)/.test(entry.relPath);
@@ -197,10 +197,10 @@ export async function prepararComAst(
   }));
 }
 export async function iniciarInquisicao(
-  baseDir: string = process.cwd(),
-  options: InquisicaoOptions = {},
-  tecnicas?: Tecnica[],
-): Promise<ResultadoInquisicaoCompleto> {
+baseDir: string = process.cwd(),
+options: InquisicaoOptions = {},
+tecnicas?: Tecnica[])
+: Promise<ResultadoInquisicaoCompleto> {
   const {
     includeContent = true,
     incluirMetadados = true,
@@ -209,7 +209,7 @@ export async function iniciarInquisicao(
   log.info(InquisidorExtraMensagens.iniciandoInquisicao.replace('{icone}', S.scan).replace('{diretorio}', baseDir));
   const fileMap = await scanRepository(baseDir, {
     includeContent,
-    onProgress: msg => {
+    onProgress: (msg) => {
       // Só exibe diretórios e erros, e em formato legível por máquina/pessoa
       try {
         const progressData = JSON.parse(msg);
@@ -235,15 +235,15 @@ export async function iniciarInquisicao(
           log.erro(`Erro ao ${progressData.acao} ${progressData.caminho}: ${progressData.mensagem}`);
         }
       } catch {
-        // fallback para logs antigos
-        if (msg && msg.includes('⚠️')) log.aviso(msg);
-      }
-    }
-  });
+
+
+        // Não exibir mensagens de "Arquivo lido" que não são JSON
+        // Isso evita poluição visual e vazamento de memória
+      }} });
   let fileEntries: FileEntryWithAst[];
   let entriesBase = Object.values(fileMap);
   // Filtra arquivos meta com helper central: tudo fora de src/ é meta por padrão
-  const metaSet = new Set(entriesBase.filter(e => isMetaPath(e.relPath)).map(e => e.relPath));
+  const metaSet = new Set(entriesBase.filter((e) => isMetaPath(e.relPath)).map((e) => e.relPath));
   // Priorização (usa estado incremental anterior somente para ordenar)
   if (config.ANALISE_PRIORIZACAO_ENABLED && config.ANALISE_INCREMENTAL_STATE_PATH) {
     try {
@@ -261,7 +261,7 @@ export async function iniciarInquisicao(
           ocorrencias: number;
           penalidadeReuso: number;
         };
-        const scored = entriesBase.map(e => {
+        const scored = entriesBase.map((e) => {
           const hist = inc.arquivos[e.relPath];
           if (!hist) return {
             ...e,
@@ -303,12 +303,12 @@ export async function iniciarInquisicao(
         for (const s of scored) (metaSet.has(s.relPath) ? metas : prioritarios).push(s);
         const reconstituido = [...prioritarios, ...metas];
         entriesBase = reconstituido as unknown as typeof entriesBase;
-        const somentePrioritarios = reconstituido.filter(e => !metaSet.has(e.relPath));
+        const somentePrioritarios = reconstituido.filter((e) => !metaSet.has(e.relPath));
         if (config.LOG_ESTRUTURADO) {
           log.info(JSON.stringify({
             tipo: 'priorizacao',
             estrategia: 'historico-incremental',
-            top: somentePrioritarios.slice(0, 10).map(e => ({
+            top: somentePrioritarios.slice(0, 10).map((e) => ({
               arq: e.relPath,
               score: (e as unknown as {
                 __score: number;
@@ -317,7 +317,7 @@ export async function iniciarInquisicao(
             metaEmpurrados: metas.length
           }));
         } else {
-          const exibidos = somentePrioritarios.slice(0, 5).map(e => e.relPath).join(', ') || '—';
+          const exibidos = somentePrioritarios.slice(0, 5).map((e) => e.relPath).join(', ') || '—';
           log.info(InquisidorExtraMensagens.priorizacaoAplicada.replace('{exibidos}', exibidos));
           if (metas.length) {
             log.info(InquisidorExtraMensagens.arquivosMetaMovidos.replace('{icone}', S.info).replace('{total}', String(metas.length)));
@@ -331,7 +331,7 @@ export async function iniciarInquisicao(
   if (incluirMetadados) {
     fileEntries = await prepararComAst(entriesBase, baseDir);
   } else {
-    fileEntries = entriesBase.map(entry => ({
+    fileEntries = entriesBase.map((entry) => ({
       ...entry,
       ast: undefined,
       fullCaminho: typeof entry.fullCaminho === 'string' ? entry.fullCaminho : path.resolve(baseDir, entry.relPath)
@@ -354,12 +354,12 @@ export async function iniciarInquisicao(
         amostraDiretorios: amostra
       }));
     } else {
+
+
       // Em modo simples, não emite resumo redundante
-      // A mensagem "✅ Varredura concluída: X arquivos em Y diretórios" já cobre isso
-    }
-  } catch {
-    /* ignore */
-  }
+      // A mensagem " Varredura concluída: X arquivos em Y diretórios" já cobre isso
+    }} catch {
+    /* ignore */}
 
   // Agora fileEntries é FileEntryWithAst[]
   let totalArquivos = fileEntries.length;
@@ -370,7 +370,7 @@ export async function iniciarInquisicao(
     let tecnicasEfetivas = tecnicas;
     if (!tecnicasEfetivas) {
       const { registroAnalistas } = await import(
-        '@analistas/registry/registry.js'
+        '@analistas/registry'
       );
       tecnicasEfetivas = registroAnalistas as Tecnica[];
     }
@@ -378,7 +378,7 @@ export async function iniciarInquisicao(
       fileEntries,
       tecnicasEfetivas,
       baseDir,
-      undefined,
+      undefined
     );
     totalArquivos = execRes.totalArquivos;
     ocorrencias = execRes.ocorrencias;
@@ -421,7 +421,7 @@ export async function iniciarInquisicao(
   return {
     totalArquivos,
     ocorrencias,
-    arquivosAnalisados: fileEntries.map(f => f.relPath),
+    arquivosAnalisados: fileEntries.map((f) => f.relPath),
     timestamp: Date.now(),
     duracaoMs: 0,
     fileEntries,

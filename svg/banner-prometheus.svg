@@ -1,9 +1,9 @@
 <svg viewBox="0 0 1200 320" xmlns="http://www.w3.org/2000/svg" width="1200" height="320">
   <defs>
     <linearGradient id="bannerBg" x1="0%" x2="100%" y1="0%" y2="100%">
-      <stop offset="0%" stop-color="#050810"/>
-      <stop offset="50%" stop-color="#0a0e1a"/>
-      <stop offset="100%" stop-color="#030508"/>
+      <stop offset="0%" stop-color="#140d0d"/>
+      <stop offset="50%" stop-color="#0e0909"/>
+      <stop offset="100%" stop-color="#000000"/>
     </linearGradient>
     <linearGradient id="fireGrad" x1="0%" x2="100%" y1="100%" y2="0%">
       <stop offset="0%" stop-color="#cc5520"/>
@@ -67,7 +67,7 @@
   font-family="'Inter', 'Segoe UI', 'Arial', sans-serif"
   font-size="72"
   font-weight="900"
-  fill="url(#accentGrad)"
+  fill="url(#fireGrad)"
   text-anchor="middle"
   letter-spacing="8"
   filter="url(#softGlow)">

@@ -2,17 +2,18 @@
 // @prometheus-disable tipo-literal-inline-complexo
 // Justificativa: tipos inline para opções de comando CLI são locais e não precisam de extração
 // Importar handler modular do Guardian (Sprint 2)
-import { registroAnalistas } from '@analistas/registry/registry.js';
-import { executarGuardian as executarGuardianModular, type GuardianOptions } from '@cli/diagnostico/handlers/guardian-handler.js';
-import { ExitCode, sair } from '@cli/helpers/exit-codes.js';
-import { config } from '@core/config/config.js';
-import { iniciarInquisicao } from '@core/execution/inquisidor.js';
-import { messages } from '@core/messages/index.js';
-import { acceptNewBaseline } from '@guardian/sentinela.js';
+import { registroAnalistas } from '@analistas/registry';
+import { config } from '@core/config';
+import { iniciarInquisicao } from '@core/execution';
+import { messages } from '@core/messages';
+import { acceptNewBaseline } from '@guardian';
 import { Command } from 'commander';
 
 import type { FileEntry, FileEntryWithAst, Tecnica } from '@';
 import { asTecnicas, extrairMensagemErro, IntegridadeStatus } from '@';
+
+import { executarGuardian as executarGuardianModular, type GuardianOptions } from '../diagnostico/handlers/guardian-handler.js';
+import { ExitCode, sair } from '../helpers/exit-codes.js';
 
 const { log, logGuardian } = messages;
 

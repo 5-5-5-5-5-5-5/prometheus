@@ -1,15 +1,14 @@
 // SPDX-License-Identifier: MIT
-import { grafoDependencias } from '@analistas/detectores/detector-dependencias.js';
 import type { NodePath } from '@babel/traverse';
 import type { Node } from '@babel/types';
-import { config } from '@core/config/config.js';
-import { getAllExpectedDirNames, getDirVariantPattern, getNameConventions } from '@core/config/conventions.js';
-import { isInsideSrc } from '@core/config/paths.js';
-import { messages } from '@core/messages/index.js';
-import { detectarContextoProjeto } from '@shared/contexto-projeto.js';
+import { config , getAllExpectedDirNames, getDirVariantPattern, getNameConventions , isInsideSrc } from '@core/config';
+import { messages } from '@core/messages';
+import { detectarContextoProjeto } from '@shared';
 import micromatch from 'micromatch';
 
 import type { ContextoExecucao, Ocorrencia, SinaisProjeto, TecnicaAplicarResultado } from '@';
+
+import { grafoDependencias } from './detector-dependencias.js';
 
 export const sinaisDetectados: SinaisProjeto = {};
 

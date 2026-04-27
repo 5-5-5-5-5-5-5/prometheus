@@ -1,11 +1,11 @@
 export const ArquetiposExtraMensagens = {
-  naoEncontrado: '⚠️ 在 {novo} 或 {legado} 中未找到自定义原型',
-  salvo: '✅ 自定义原型已保存到 {caminho}',
-  projetoPersonalizado: '🌟 检测到自定义项目："{nome}"',
+  naoEncontrado: ' 在 {novo} 或 {legado} 中未找到自定义原型',
+  salvo: ' 自定义原型已保存到 {caminho}',
+  projetoPersonalizado: ' 检测到自定义项目："{nome}"',
   descricaoPersonalizado: 'Prometheus 识别出不匹配官方原型的项目结构，\n但您可以创建自定义原型以获得优化的建议！',
-  estruturaDetectada: '📁 检测到的结构：',
-  arquivosRaiz: '📄 根目录文件：',
-  dicaCriar: '💡 要创建自定义原型，请运行：',
+  estruturaDetectada: ' 检测到的结构：',
+  arquivosRaiz: ' 根目录文件：',
+  dicaCriar: ' 要创建自定义原型，请运行：',
   comandoCriar: '   prometheus diagnosticar --criar-arquetipo',
   explicacaoCriar: '这将基于当前结构创建 \'prometheus.repo.arquetipo.json\' 文件，\nPrometheus 将使用该文件在保持最佳实践的同时提供个性化建议。',
   validacao: {

@@ -6,10 +6,10 @@
  * formatadas usando os templates de mensagens dos detectores correspondentes.
  */
 
-import { messages } from '@core/messages/index.js';
-
 import type { Ocorrencia, ReportEvent } from '@';
 import { criarOcorrencia } from '@';
+
+import { messages } from '../messages/index.js';
 
 export function createDefaultReporter() {
   return (event: ReportEvent): Ocorrencia => {

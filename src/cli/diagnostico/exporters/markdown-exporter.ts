@@ -129,26 +129,26 @@ function gerarIndice(
   const itens: string[] = [];
 
   if (opts.includeStats && dados.stats) {
-    itens.push('- [📊 Estatísticas](#-estatísticas)');
+    itens.push('- [ Estatísticas](#-estatísticas)');
   }
   if (opts.includeGuardian && dados.guardian?.executado) {
-    itens.push('- [🛡️ Guardian](#️-guardian)');
+    itens.push('- [ Guardian](#-guardian)');
   }
   if (opts.includeArquetipos && dados.arquetipos?.executado) {
-    itens.push('- [🏗️ Arquetipos](#️-arquetipos)');
+    itens.push('- [ Arquetipos](#-arquetipos)');
   }
   if (opts.includeAutoFix && dados.autoFix?.executado) {
-    itens.push('- [🔧 Auto-fix](#-auto-fix)');
+    itens.push('- [ Auto-fix](#-auto-fix)');
   }
   if (
     opts.includeOcorrencias &&
     dados.ocorrencias &&
     dados.ocorrencias.length > 0
   ) {
-    itens.push('- [🔍 Ocorrências](#-ocorrências)');
+    itens.push('- [ Ocorrências](#-ocorrências)');
   }
   if (dados.sugestoes && dados.sugestoes.length > 0) {
-    itens.push('- [💡 Sugestões](#-sugestões)');
+    itens.push('- [ Sugestões](#-sugestões)');
   }
 
   return `## Índice\n\n${itens.join('\n')}`;
@@ -158,7 +158,7 @@ function gerarSecaoStats(
   stats: NonNullable<DadosRelatorioMarkdown['stats']>,
   linguagens?: DadosRelatorioMarkdown['linguagens'],
 ): string {
-  let md = '## 📊 Estatísticas\n\n';
+  let md = '##  Estatísticas\n\n';
 
   // Tabela principal
   md += '| Métrica | Valor |\n';
@@ -176,9 +176,9 @@ function gerarSecaoStats(
   md += '\n### Por Nível\n\n';
   md += '| Nível | Quantidade |\n';
   md += '|-------|------------|\n';
-  md += `| ❌ Erro | ${stats.porNivel.erro} |\n`;
-  md += `| ⚠️ Aviso | ${stats.porNivel.aviso} |\n`;
-  md += `| ℹ️ Info | ${stats.porNivel.info} |\n`;
+  md += `|  Erro | ${stats.porNivel.erro} |\n`;
+  md += `|  Aviso | ${stats.porNivel.aviso} |\n`;
+  md += `| ℹ Info | ${stats.porNivel.info} |\n`;
 
   // Breakdown por categoria
   if (Object.keys(stats.porCategoria).length > 0) {
@@ -214,10 +214,10 @@ function gerarSecaoStats(
 }
 
 function gerarSecaoGuardian(guardian: GuardianResult): string {
-  let md = '## 🛡️ Guardian\n\n';
+  let md = '##  Guardian\n\n';
 
   md += `**Status**: ${guardian.status ?? 'desconhecido'}\n`;
-  md += `**Problemas**: ${guardian.temProblemas ? '❌ Detectados' : '✅ Nenhum'}\n\n`;
+  md += `**Problemas**: ${guardian.temProblemas ? ' Detectados' : ' Nenhum'}\n\n`;
 
   if (guardian.resultado?.detalhes && guardian.resultado.detalhes.length > 0) {
     md += `### Detalhes\n\n`;
@@ -236,7 +236,7 @@ function gerarSecaoGuardian(guardian: GuardianResult): string {
 }
 
 function gerarSecaoArquetipos(arquetipos: ArquetipoResult): string {
-  let md = '## 🏗️ Arquetipos\n\n';
+  let md = '##  Arquetipos\n\n';
 
   if (arquetipos.principal) {
     md += `**Arquétipo Principal**: ${arquetipos.principal.tipo}\n`;
@@ -255,14 +255,14 @@ function gerarSecaoArquetipos(arquetipos: ArquetipoResult): string {
   }
 
   if (arquetipos.salvo) {
-    md += '\n✅ Arquétipo salvo em `prometheus.repo.arquetipo.json`\n';
+    md += '\n Arquétipo salvo em `prometheus.repo.arquetipo.json`\n';
   }
 
   return md;
 }
 
 function gerarSecaoAutoFix(autoFix: AutoFixResult): string {
-  let md = '## 🔧 Auto-fix\n\n';
+  let md = '##  Auto-fix\n\n';
 
   md += `**Modo**: ${autoFix.mode}\n`;
   md += `**Dry-run**: ${autoFix.dryRun ? 'Sim' : 'Não'}\n\n`;
@@ -296,7 +296,7 @@ function gerarSecaoOcorrencias(
   ocorrencias: Ocorrencia[],
   opts: MarkdownExportOptions,
 ): string {
-  let md = '## 🔍 Ocorrências\n\n';
+  let md = '##  Ocorrências\n\n';
 
   // Limitar se necessário
   let lista = ocorrencias;
@@ -352,7 +352,7 @@ function gerarOcorrenciasPorArquivo(ocorrencias: Ocorrencia[]): string {
   let md = '';
 
   for (const [arquivo, lista] of porArquivo) {
-    md += `### 📄 ${arquivo}\n\n`;
+    md += `###  ${arquivo}\n\n`;
 
     for (const ocorrencia of lista) {
       const nivel = getNivelIcon(ocorrencia.nivel || 'info');
@@ -367,7 +367,7 @@ function gerarOcorrenciasPorArquivo(ocorrencias: Ocorrencia[]): string {
 }
 
 function gerarSecaoSugestoes(sugestoes: string[]): string {
-  let md = '## 💡 Sugestões\n\n';
+  let md = '##  Sugestões\n\n';
 
   for (const sugestao of sugestoes) {
     md += `- ${sugestao}\n`;
@@ -385,11 +385,11 @@ function gerarRodape(): string {
 function getNivelIcon(nivel: string): string {
   switch (nivel) {
     case 'erro':
-      return '❌';
+      return '';
     case 'aviso':
-      return '⚠️';
+      return '';
     case 'info':
-      return 'ℹ️';
+      return 'ℹ';
     default:
       return '•';
   }

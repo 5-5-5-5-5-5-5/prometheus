@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: MIT
-import { estatisticasUsoGlobal } from '@analistas/js-ts/analista-padroes-uso.js';
-import { chalk } from '@core/config/chalk-safe.js';
-import { config } from '@core/config/config.js';
-import { getMessages } from '@core/messages/index.js';
+import { estatisticasUsoGlobal } from '@analistas/js-ts';
+import { chalk , config } from '@core/config';
+import { getMessages } from '@core/messages';
 
 import type { LogComBloco, Ocorrencia } from '@';
 
@@ -24,7 +23,7 @@ export function exibirRelatorioZeladorSaude(ocorrencias: Ocorrencia[]): void {
 
   // Moldura do cabeçalho (somente em runtime humano)
   if (!process.env.VITEST) {
-    const tituloCab = RelatorioMensagens.saude.titulo.replace('🧼 ', ''); // Remove emoji para moldura
+    const tituloCab = RelatorioMensagens.saude.titulo.replace(' ', ''); // Remove emoji para moldura
     const linhasCab: string[] = [];
     const logComBloco = log as LogComBloco;
     const larguraCab = logComBloco.calcularLargura ? logComBloco.calcularLargura(tituloCab, linhasCab, config.COMPACT_MODE ? 84 : 96) : undefined;
@@ -36,7 +35,7 @@ export function exibirRelatorioZeladorSaude(ocorrencias: Ocorrencia[]): void {
       aviso?: (m: string) => void;
       info: (m: string) => void;
     }).aviso;
-    if (typeof logAviso === 'function') logAviso('⚠️ Funções longas encontradas:');else logRelatorio.funcoesLongas();
+    if (typeof logAviso === 'function') logAviso(' Funções longas encontradas:');else logRelatorio.funcoesLongas();
     // Agrega por arquivo
     const porArquivo = new Map<string, number>();
     for (const o of ocorrencias) {

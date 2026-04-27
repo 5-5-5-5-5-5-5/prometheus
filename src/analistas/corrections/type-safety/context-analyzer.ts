@@ -20,7 +20,7 @@
  */
 import type { CategorizacaoUnknown } from '@';
 
-export { isInComment, isInString, isInStringOrComment } from '@shared/helpers/context-utils.js';
+export { isInComment, isInString, isInStringOrComment } from '@shared/helpers';
 
 /**
  * Verifica se está em contexto TypeScript específico que deve ser ignorado

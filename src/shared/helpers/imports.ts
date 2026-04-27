@@ -7,9 +7,9 @@
  */
 import path from 'node:path';
 
-import { normalizePath } from '@shared/helpers/path.js';
-
 import type { ImportReescrito } from '@';
+
+import { normalizePath } from './path.js';
 
 // Re-exporta o tipo para compatibilidade
 export type { ImportReescrito };

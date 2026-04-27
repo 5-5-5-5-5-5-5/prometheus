@@ -4,12 +4,12 @@
  * Detecta automaticamente complexidade e adapta verbosidade
  */
 
-import { config } from '@core/config/config.js';
-import { ICONES_FEEDBACK } from '@core/messages/shared/icons.js';
-import { isJsonMode } from '@shared/helpers/json-mode.js';
+import { isJsonMode } from '@shared/helpers';
 
 import type { FileMap, LogContext, LogData, LogLevel, LogTemplate, ProjetoMetricas } from '@';
 
+import { config } from '../../../config/config.js';
+import { ICONES_FEEDBACK } from '../../shared/icons.js';
 import { LogContextConfiguracao, LogMensagens } from './log-messages.js';
 
 class LogEngineAdaptativo {

@@ -15,10 +15,9 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
-import { messages } from '@core/messages/index.js';
-
 import type { MigrationResult } from '@';
 
+import { messages } from '../messages/index.js';
 import { MIGRACAO_MAPA,PROMETHEUS_ARQUIVOS, PROMETHEUS_DIRS, type PrometheusFilePath } from './paths.js';
 
 const log = messages.log;
